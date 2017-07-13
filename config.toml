@@ -1,7 +1,10 @@
 baseURL = "http://chenxiaoyu.org/"
-languageCode = "en-us"
-title = "smallfish'g blog"
+languageCode = "zh-CN"
+title = "smallfish's blog"
 pygmentsuseclasses = true
 publishDir = "docs"
+theme= "hugo-theme-crisp"
+
 [permalinks]
 posts = "/:year/:month/:day/:filename/"
+
