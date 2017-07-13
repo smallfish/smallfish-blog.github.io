@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/11/10/python-mysql-install/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Python MySQL 库安装笔记 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。一般步骤是： 安装easy_install  shell &amp;gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &amp;gt; python ez_setup.py  会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了 安装MySQL-python  shell &amp;gt; easy_install MySQL-python  到这里安装算是完成了，不过接下来测试就郁闷了。在import MySQLdb出现了两个错误：a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory  这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&amp;#39; not found  解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：shell &amp;gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &amp;gt; cd MySQL-python-1.2.2 shell &amp;gt; python setup.py install  ">
+
+<meta property="og:title" content="Python MySQL 库安装笔记 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/11/10/python-mysql-install/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。一般步骤是： 安装easy_install  shell &amp;gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &amp;gt; python ez_setup.py  会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了 安装MySQL-python  shell &amp;gt; easy_install MySQL-python  到这里安装算是完成了，不过接下来测试就郁闷了。在import MySQLdb出现了两个错误：a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory  这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&amp;#39; not found  解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：shell &amp;gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &amp;gt; cd MySQL-python-1.2.2 shell &amp;gt; python setup.py install  ">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/11/10/python-mysql-install/">
+<meta name="twitter:title" content="Python MySQL 库安装笔记 - smallfish&#39;g blog">
+<meta name="twitter:description" content="其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。一般步骤是： 安装easy_install  shell &amp;gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &amp;gt; python ez_setup.py  会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了 安装MySQL-python  shell &amp;gt; easy_install MySQL-python  到这里安装算是完成了，不过接下来测试就郁闷了。在import MySQLdb出现了两个错误：a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory  这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&amp;#39; not found  解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：shell &amp;gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &amp;gt; cd MySQL-python-1.2.2 shell &amp;gt; python setup.py install  ">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Python MySQL 库安装笔记 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-11-10T00:00:00JST",
+    "dateModified": "2009-11-10T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。
+一般步骤是：
+ 安装easy_install  shell &gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &gt; python ez_setup.py  会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了
+ 安装MySQL-python  shell &gt; easy_install MySQL-python  到这里安装算是完成了，不过接下来测试就郁闷了。
+在import MySQLdb出现了两个错误：
+a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory  这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈
+b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&#39; not found  解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：
+shell &gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &gt; cd MySQL-python-1.2.2 shell &gt; python setup.py install  "
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Python MySQL 库安装笔记</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Python MySQL 库安装笔记</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。
+做个记录，防止以后有问题无处可查。</p>
+
+<p>一般步骤是：</p>
+
+<ol>
+<li>安装easy_install</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span> <span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">peak</span><span class="o">.</span><span class="n">telecommunity</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dist</span><span class="o">/</span><span class="n">ez_setup</span><span class="o">.</span><span class="n">py</span>
+<span class="n">shell</span> <span class="o">&gt;</span> <span class="n">python</span> <span class="n">ez_setup</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+
+<p>会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了</p>
+
+<ol>
+<li>安装MySQL-python</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span> <span class="o">&gt;</span> <span class="n">easy_install</span> <span class="n">MySQL</span><span class="o">-</span><span class="n">python</span>
+</code></pre></div>
+
+
+<p>到这里安装算是完成了，不过接下来测试就郁闷了。</p>
+
+<p>在import MySQLdb出现了两个错误：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">a</span><span class="p">)</span><span class="o">.</span> <span class="ne">ImportError</span><span class="p">:</span> <span class="n">libmysqlclient_r</span><span class="o">.</span><span class="n">so</span><span class="o">.</span><span class="mi">15</span><span class="p">:</span> <span class="n">cannot</span> <span class="nb">open</span> <span class="n">shared</span> <span class="nb">object</span> <span class="nb">file</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="nb">file</span> <span class="ow">or</span> <span class="n">directory</span>
+</code></pre></div>
+
+
+<p>这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">b</span><span class="p">)</span><span class="o">.</span> <span class="ne">ImportError</span><span class="p">:</span> <span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">tls</span><span class="o">/</span><span class="n">libc</span><span class="o">.</span><span class="n">so</span><span class="o">.</span><span class="mi">6</span><span class="p">:</span> <span class="n">version</span> <span class="err">`</span><span class="n">GLIBC_2</span><span class="o">.</span><span class="mi">4</span><span class="s1">&#39; not found</span>
+</code></pre></div>
+
+
+<p>解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span> <span class="o">&gt;</span> <span class="n">tar</span> <span class="n">zxvf</span> <span class="n">MySQL</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mf">2.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">shell</span> <span class="o">&gt;</span> <span class="n">cd</span> <span class="n">MySQL</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">shell</span> <span class="o">&gt;</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>lua-resty-beanstalkd 模块教程 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="本文涉及几个名词： ngx_lua http://wiki.nginx.org/HttpLuaModuleEmbed the power of Lua into Nginx 摘自官方描述 beanstalkd http://kr.github.com/beanstalkd/一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。 lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。  下面是读写的示例： 生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &amp;#39; local beanstalkd = require &amp;quot;resty.beanstalkd&amp;quot;  local bean, err = beanstalkd:new() local ok, err = bean:connect(&amp;quot;127.0.0.1&amp;quot;, 11300) if not ok then ngx.say(&amp;quot;1: failed to connect: &amp;quot;, err) return end local ok, err = bean:use(&amp;quot;default&amp;quot;) if not ok then ngx.">
+
+<meta property="og:title" content="lua-resty-beanstalkd 模块教程 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="本文涉及几个名词： ngx_lua http://wiki.nginx.org/HttpLuaModuleEmbed the power of Lua into Nginx 摘自官方描述 beanstalkd http://kr.github.com/beanstalkd/一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。 lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。  下面是读写的示例： 生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &amp;#39; local beanstalkd = require &amp;quot;resty.beanstalkd&amp;quot;  local bean, err = beanstalkd:new() local ok, err = bean:connect(&amp;quot;127.0.0.1&amp;quot;, 11300) if not ok then ngx.say(&amp;quot;1: failed to connect: &amp;quot;, err) return end local ok, err = bean:use(&amp;quot;default&amp;quot;) if not ok then ngx.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/">
+<meta name="twitter:title" content="lua-resty-beanstalkd 模块教程 - smallfish&#39;g blog">
+<meta name="twitter:description" content="本文涉及几个名词： ngx_lua http://wiki.nginx.org/HttpLuaModuleEmbed the power of Lua into Nginx 摘自官方描述 beanstalkd http://kr.github.com/beanstalkd/一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。 lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。  下面是读写的示例： 生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &amp;#39; local beanstalkd = require &amp;quot;resty.beanstalkd&amp;quot;  local bean, err = beanstalkd:new() local ok, err = bean:connect(&amp;quot;127.0.0.1&amp;quot;, 11300) if not ok then ngx.say(&amp;quot;1: failed to connect: &amp;quot;, err) return end local ok, err = bean:use(&amp;quot;default&amp;quot;) if not ok then ngx.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "lua-resty-beanstalkd 模块教程 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-11-25T00:00:00JST",
+    "dateModified": "2012-11-25T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "本文涉及几个名词：
+ ngx_lua http://wiki.nginx.org/HttpLuaModule
+Embed the power of Lua into Nginx 摘自官方描述
+ beanstalkd http://kr.github.com/beanstalkd/
+一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。
+ lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
+基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。
+  下面是读写的示例：
+ 生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &#39; local beanstalkd = require &quot;resty.beanstalkd&quot;  local bean, err = beanstalkd:new() local ok, err = bean:connect(&quot;127.0.0.1&quot;, 11300) if not ok then ngx.say(&quot;1: failed to connect: &quot;, err) return end local ok, err = bean:use(&quot;default&quot;) if not ok then ngx."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2012/" itemprop="url"><span itemprop="title">2012</span></a></li>
+        
+        <li class="active">lua-resty-beanstalkd 模块教程</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-11-25T00:00:00JST">Nov 25, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+
+    <h1 class="title">lua-resty-beanstalkd 模块教程</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>本文涉及几个名词：</p>
+
+<ul>
+<li><p>ngx_lua <a href="http://wiki.nginx.org/HttpLuaModule">http://wiki.nginx.org/HttpLuaModule</a></p>
+
+<p>Embed the power of Lua into Nginx 摘自官方描述</p></li>
+
+<li><p>beanstalkd <a href="http://kr.github.com/beanstalkd/">http://kr.github.com/beanstalkd/</a></p>
+
+<p>一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。</p></li>
+
+<li><p>lua-resty-beanstalkd <a href="https://github.com/smallfish/lua-resty-beanstalkd">https://github.com/smallfish/lua-resty-beanstalkd</a></p>
+
+<p>基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。</p></li>
+</ul>
+
+<p>下面是读写的示例：</p>
+
+<ol>
+<li>生产者（发布消息），主要那应用了两个协议：use/put，代码如下：</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /t <span class="o">{</span>
+    content_by_lua <span class="s1">&#39;</span>
+<span class="s1">        local beanstalkd = require &quot;resty.beanstalkd&quot;</span>
+<span class="s1">        </span>
+<span class="s1">        local bean, err = beanstalkd:new()</span>
+
+<span class="s1">        local ok, err = bean:connect(&quot;127.0.0.1&quot;, 11300)</span>
+<span class="s1">        if not ok then</span>
+<span class="s1">            ngx.say(&quot;1: failed to connect: &quot;, err)</span>
+<span class="s1">            return</span>
+<span class="s1">        end</span>
+
+<span class="s1">        local ok, err = bean:use(&quot;default&quot;)</span>
+<span class="s1">        if not ok then</span>
+<span class="s1">            ngx.say(&quot;2: failed to use tube: &quot;, err)</span>
+<span class="s1">            return</span>
+<span class="s1">        end</span>
+<span class="s1">   </span>
+<span class="s1">        local id, err = bean:put(&quot;hello&quot;)</span>
+<span class="s1">        if not id then</span>
+<span class="s1">            ngx.say(&quot;3: failed to put: &quot;, err)</span>
+<span class="s1">            return</span>
+<span class="s1">        end</span>
+
+<span class="s1">        ngx.say(&quot;put: &quot;, id)</span>
+
+<span class="s1">        bean:close()</span>
+<span class="s1">    &#39;</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<ol>
+<li>消费者（消费消息），主要用了三个协议：watch/reserve/delete，代码如下：</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /t <span class="o">{</span>
+    content_by_lua <span class="s1">&#39;</span>
+<span class="s1">        local beanstalkd = require &quot;resty.beanstalkd&quot;</span>
+
+<span class="s1">        local bean, err = beanstalkd:new()</span>
+
+<span class="s1">        local ok, err = bean:connect(&quot;127.0.0.1&quot;, 11300)</span>
+<span class="s1">        if not ok then</span>
+<span class="s1">            ngx.say(&quot;1: failed to connect: &quot;, err)</span>
+<span class="s1">            return</span>
+<span class="s1">        end</span>
+
+<span class="s1">        local ok, err = bean:watch(&quot;default&quot;)</span>
+<span class="s1">        if not ok then</span>
+<span class="s1">            ngx.say(&quot;2: failed to watch: &quot;, err)</span>
+<span class="s1">            return</span>
+<span class="s1">        end</span>
+
+<span class="s1">        local id, data = bean:reserve()</span>
+<span class="s1">        if not id then</span>
+<span class="s1">            ngx.say(&quot;3: failed to reserve: &quot;, id)</span>
+<span class="s1">            return</span>
+<span class="s1">        else</span>
+<span class="s1">            ngx.say(&quot;1: reserve: &quot;, id)</span>
+<span class="s1">            local ok, err = bean:delete(id)</span>
+<span class="s1">            if not ok then</span>
+<span class="s1">                ngx.say(&quot;4: failed to delete: &quot;, id)</span>
+<span class="s1">                return</span>
+<span class="s1">            end</span>
+<span class="s1">            ngx.say(&quot;2: delete: &quot;, id)</span>
+<span class="s1">        end</span>
+
+<span class="s1">        bean:close()</span>
+<span class="s1">    &#39;</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+</p>
+
+<p>为了提升性能，可以调用 set_keepalive（提升50%以上性能），需要注意：</p>
+
+<ol>
+<li>代码中不要调用 xx:close 主动关闭连接。</li>
+<li>在对象使用后调用 xx:set_keepalive，而不是初始化 new/connect 时候调用此方法。</li>
+</ol>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2009s on smallfish&#39;g blog</title>
+    <link>http://chenxiaoyu.org/2009/</link>
+    <description>Recent content in 2009s on smallfish&#39;g blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 22 Dec 2009 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chenxiaoyu.org/2009/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>PostgreSQL Partitioning 表分区</title>
+      <link>http://chenxiaoyu.org/2009/12/22/postgresql-partitioning/</link>
+      <pubDate>Tue, 22 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/22/postgresql-partitioning/</guid>
+      <description>测试版本：pg 8.3 (ubuntu)
+在pg里表分区是通过表继承来实现的，一般都是建立一个主表，里面是空，然后每个分区都去继承它。
+创建表分区步骤如下：
+ 创建主表  CREATE TABLE users ( uid int not null primary key, name varchar(20));   创建分区表(必须继承上面的主表)  CREATE TABLE users_0 ( check (uid &amp;gt;= 0 and uid&amp;lt; 100) ) INHERITS (users); CREATE TABLE users_1 ( check (uid &amp;gt;= 100)) INHERITS (users);   在分区表上建立索引，其实这步可以省略的哦  CREATE INDEX users_0_uidindex on users_0(uid); CREATE INDEX users_1_uidindex on users_1(uid);   创建规则RULE  CREATE RULE users_insert_0 AS ON INSERT TO users WHERE (uid &amp;gt;= 0 and uid &amp;lt; 100) DO INSTEAD INSERT INTO users_0 VALUES (NEW.</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL tablespace 表空间</title>
+      <link>http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/</link>
+      <pubDate>Tue, 22 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/</guid>
+      <description>pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。
+查看pgsql当前表空间有哪些可以试试下面：
+postgres=&amp;gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows)  或：
+postgres=&amp;gt; \db Name | Owner | Location ------------+----------+---------- pg_default | postgres | pg_global | postgres |  建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。
+ 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata   进入psql  $ psql -U postgres -h 192.168.0.122  如果权限没设置好下面语句会报错
+postgres=&amp;gt; CREATE TABLESPACE space1 LOCATION &amp;#39;/home/smallfish/pgdata&amp;#39;;  建测试表
+postgres=&amp;gt; CREATE TABLE foo(i int) TABLESPACE space1;  可以查看表空间目录下多了文件</description>
+    </item>
+    
+    <item>
+      <title>C Apache Module 开发入门</title>
+      <link>http://chenxiaoyu.org/2009/12/16/hello-c-apache-module/</link>
+      <pubDate>Wed, 16 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/16/hello-c-apache-module/</guid>
+      <description>前言：
+扩展Apache模块开发网上大部分教程都是围绕Perl语言，老外的《Writing Apache Modules with Perl and C》可以算是经典之作了，可惜一直都是针对老版本开发，而且主力语言是Perl，C语言部分只是略有介绍。不过相比较而言用Perl来扩展模块功能确实比 C语言来的快速以及便捷多了，也简单容易。我自己也在工作里应用了一部分，主要是在防盗链上面写了两个简单都模块，可以参考我写的另外两篇文章：http://chenxiaoyu.org/blog/archives/120。说了那么多题外话，回到正题，这里只是用C语言实现一个简单的hello模块，模块功能是查询MySQL自带mysql数据库里都user表。
+系统环境：
+ArchLinux Apache2.2 MySQL 5.0
+具体开发步骤：
+ 利用Apache自带都apxs建立hello模块：  [root#localhost] apxs -g -n hello  这样就会在当前目录下新建一个hello模块的文件目录，可以看到里面有：Makefile mod_hello.c modules.mk这样的文件，具体apxs路径查询下本机apache/bin目录。
+ 预览下mod_hello.c，可以看到里面apxs自动帮你生成一堆代码了，我们需要的只是修改里面的代码部分，先简单都介绍下里面的函数说明。  include 部分就是引入了一些必要都头文件 hello_handler 这个就是hello模块都主体部分，所有的显示、处理请求什么的都在这里。 hello_register_hooks hello_module 这俩个是需要导出的函数所必须的，先可以不管他们，按照生成的不动即可。
+ 修改hello_handler函数，里面可以看到request_rec *r，r有很多函数和变量，具体要参见文档了。里面的ap_rputs是输出，可以简单的理解为把字符串输出到r。  static int hello_handler(request_rec *r) { if (strcmp(r-&amp;gt;handler, &amp;quot;hello&amp;quot;)) { // 判断apache配置文件里handler是否等于hello，不是就跳过 return DECLINED; } r-&amp;gt;content_type = &amp;quot;text/html&amp;quot;; // 设置content-type if (!r-&amp;gt;header_only) ap_rputs(&amp;quot;The sample page from mod_hello.c\n&amp;quot;, r); // 输出一段文字 return OK;// 返回 200 OK状态 }  增加#include &amp;ldquo;mysq.</description>
+    </item>
+    
+    <item>
+      <title>Java调用Linux SCP操作</title>
+      <link>http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/</link>
+      <pubDate>Wed, 16 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/</guid>
+      <description>先来回顾下linux下scp命令的用法：
+[shell $] scp -r /本地目录或文件 user@192.168.0.110:/远程目录  这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &amp;ndash;help
+最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考http://chenxiaoyu.org/blog/archives/133，大致代码如下：
+Runtime.getRuntime().exec(&amp;quot;scp /aa.txt root@192.168.0.110:/bb&amp;quot;);  try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。
+这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？
+后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。
+那就重新加一个user把，adduser&amp;hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。
+貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，http://www.ganymed.ethz.ch/ssh2/。貌似比较老，先来测试一下把。
+Connection conn = new Connection(“192.168.0.110”); conn.connect(); boolean isAuthenticated = conn.authenticateWithPassword(“root”, &amp;quot;***********&amp;quot;); if (isAuthenticated == false) throw new IOException(&amp;quot;Authentication failed.&amp;quot;); SCPClient client = new SCPClient(conn); client.put(&amp;quot;/aa.txt&amp;quot;, &amp;quot;/bb&amp;quot;); conn.close();  OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。
+client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。</description>
+    </item>
+    
+    <item>
+      <title>SSH, SCP 不输入密码</title>
+      <link>http://chenxiaoyu.org/2009/12/16/ssh-scp-use-none-password/</link>
+      <pubDate>Wed, 16 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/16/ssh-scp-use-none-password/</guid>
+      <description>经常在不同linux机器之间互相scp拷文件，每次总是要输入密码才可行。
+通过ssh-keygen生成公钥，在两台机器之间互相建立信任通道即可。假设本地机器client，远程机器为server。
+ 生成rsa keygen  [winter@client winter] $ ssh-keygen -b 1024 -t rsa Generating public/private rsa key pair. Enter file in which to save the key (/home/winter/.ssh/id_rsa): &amp;lt;Enter&amp;gt; Enter passphrase (empty for no passphrase): &amp;lt;Enter&amp;gt; Enter same passphrase again: &amp;lt;Enter&amp;gt; Your identification has been saved in /home/winter/.ssh/id_rsa. Your public key has been saved in /home/winter/.ssh/id_rsa.pub. The key fingerprint is: 33:d4:7b:9c:87:04:cf:14:40:22:6d:c7:15:78:97:6a winter@client  直接上面公钥和私钥存放地址可以直接回车，私钥密码可以直接回车，也可以输入。
+ 查看.ssh目录下了多私钥和公钥文件  [winter@client winter] $ ls .</description>
+    </item>
+    
+    <item>
+      <title>修改 ModPython 下 PYTHON_EGG_CACHE 报错</title>
+      <link>http://chenxiaoyu.org/2009/12/16/modpython-python_egg_cache-error/</link>
+      <pubDate>Wed, 16 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/16/modpython-python_egg_cache-error/</guid>
+      <description>环境：Linux Apache Python(mod_python)
+换了一台新机器，没有配置Mod_Python了，在一些应用里import MySQLdb出现了下面错误：
+ExtractionError: Can&amp;#39;t extract file(s) to egg cache The following error occurred while trying to extract file(s) to the Python egg cache: [Errno 13] Permission denied: &amp;#39;/root/.python-eggs&amp;#39; The Python egg cache directory is currently set to: /root/.python-eggs Perhaps your account does not have write access to this directory? You can change the cache directory by setting the PYTHON_EGG_CACHE environment variable to point to an accessible directory.  解决办法有两种：</description>
+    </item>
+    
+    <item>
+      <title>Apache Mod_Perl 防盗链</title>
+      <link>http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/</guid>
+      <description>大体思路是这样的，比如有 一个地址：http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。 但是假如在http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。
+modperl强大到可以任意应用apache内部API，官方地址是：http://perl.apache.org/ 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。
+先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：
+use strict; use lib qw(/home/httpd/modperl); # 把这个路径加入到perl lib路径 use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Request (); 1;  部分本机httpd.conf配置：
+LoadModule perl_module modules/mod_perl.so LoadModule apreq_module modules/mod_apreq2.so PerlPostConfigRequire /home/httpd/modperl/startup.pl &amp;lt;Location /down &amp;gt; SetHandler modperl # 设置该目录交给modper处理 PerlAccessHandler Down # Down是模块名称 PerlSetVar key 123 # 设置校验参数值 &amp;lt;/Location&amp;gt;  mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry
+startup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。
+修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：
+package Down; use strict; use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Const -compile =&amp;gt; qw(OK FORBIDDEN); use Apache2::Request (); sub handler { my $r = shift; my $req = Apache2::Request-&amp;gt;new($r); my $ip = $r-&amp;gt;connection-&amp;gt;remote_ip; my $k = $req-&amp;gt;param(&amp;#39;key&amp;#39;) || &amp;#39;&amp;#39;; # 判断访问时是否带key参数 my $key = $r-&amp;gt;dir_config(&amp;#39;key&amp;#39;) || &amp;#39;123&amp;#39;; # 加载httpd.</description>
+    </item>
+    
+    <item>
+      <title>Apache Mod_Perl实现 URL Rewrite</title>
+      <link>http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/</guid>
+      <description>相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！
+首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。
+修改下http.conf配置，添加一下内容：
+PerlTransHandler MyTrans # MyTrans 这个是自己添加的处理模块名  具体MyTrans.pm脚本如下：
+package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $r = shift; my $uri = $r-&amp;gt;uri; my ($id) = ($url =~ m|^/news/(.*)\.html|); $r-&amp;gt;uri(&amp;quot;/news.php&amp;quot;); $r-&amp;gt;args(&amp;quot;id=$id&amp;quot;); return Apache2::Const::DECLINED; } 1;  实现就是：/news/12345.html =&amp;gt; /news.php?id=12345</description>
+    </item>
+    
+    <item>
+      <title>Apache 虚拟主机配置笔记</title>
+      <link>http://chenxiaoyu.org/2009/12/15/apache-vhost-config/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/apache-vhost-config/</guid>
+      <description>环境：Linux Apache2.2 （路径 /usr/local/apache）
+步骤：
+ 修改 conf/httpd.conf，找到如下位置，去除 # 注释符  # Virtual hosts Include conf/extra/httpd-vhosts.conf  2.修改 conf/extra/httpd-vhosts.conf
+&amp;lt;VirtualHost *:80&amp;gt; ServerAdmin webmaster@aa.com DocumentRoot &amp;quot;/usr/aa&amp;quot; ServerName ww.aa.com ServerAlias ww.aa.com ErrorLog &amp;quot;logs/ww.aa.com-error_log&amp;quot; CustomLog &amp;quot;logs/ww.aa.com-access_log&amp;quot; common &amp;lt;/VirtualHost&amp;gt;  注意CustomLog这行，默认给的配置是：&amp;rdquo;logs/dummy-host.example.com-access_log common&amp;rdquo;
+这个其实是错误的，Apache启动时候会报错，common这个应该放在双引号外面：
+Syntax error on line 32 of /usr/local/apache/conf/extra/httpd-vhosts.conf: CustomLog takes two or three arguments, a file name, a custom log format string or format name, and an optional &amp;quot;env=&amp;quot; clause (see docs)  另外还有个问题，在Apache+Tomcat时候出现的，在配置好mod_jk之后，通过默认80端口访问jsp总会提示403禁止访问，纳闷了！后来 才发现是Directory配置问题，因为每个VirtualHost配置的目录不是默认的DocumentRoot目录，在Apache2以后对于权限 和安全有了更高的要求，所以必须手动配置下每个Directory属性。</description>
+    </item>
+    
+    <item>
+      <title>Memcached Java/Python Client API 共享</title>
+      <link>http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/</guid>
+      <description>用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。
+然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。
+然后发现值一直是null，再tail日志看看，异常不断：
+com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - ++++ exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270)  晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？
+然后手动试了下：
+shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23  经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。
+然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。</description>
+    </item>
+    
+    <item>
+      <title>Perl 批量跳过 MySQL Slave 复制错误</title>
+      <link>http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/</guid>
+      <description>发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。
+slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start;  一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：
+#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &amp;#39;show slave status\\G;&amp;#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;amp;&amp;amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &amp;quot;slave error **\n&amp;quot;; system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave stop;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave start;&amp;#39;&amp;quot;); } my @hosts = qw/ 192.</description>
+    </item>
+    
+    <item>
+      <title>Pexpect通过SSH执行远程命令</title>
+      <link>http://chenxiaoyu.org/2009/12/15/use-pexpect-for-ssh-remote/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/use-pexpect-for-ssh-remote/</guid>
+      <description>pexpect是python一个模块，可以通过：easy_install pexpect 来安装。
+这里主要是用pexpect执行ssh，查看远程uptime和df -h看硬盘状况。
+#ssh_cmd.py #coding:utf-8 import pexpect def ssh_cmd(ip, user, passwd, cmd): ssh = pexpect.spawn(&amp;#39;ssh %s@%s&amp;quot;%s&amp;quot;&amp;#39; % (user, ip, cmd)) r = &amp;#39;&amp;#39; try: i = ssh.expect([&amp;#39;password: &amp;#39;, &amp;#39;continue connecting (yes/no)?&amp;#39;]) if i == 0 : ssh.sendline(passwd) elif i == 1: ssh.sendline(&amp;#39;yes&amp;#39;) except pexpect.EOF: ssh.close() else: r = ssh.read() ssh.expect(pexpect.EOF) ssh.close() return r hosts = &amp;#39;&amp;#39;&amp;#39; 192.168.0.12:smallfish:1234:df -h,uptime 192.168.0.13:smallfish:1234:df -h,uptime &amp;#39;&amp;#39;&amp;#39; for host in hosts.split(&amp;quot;\n&amp;quot;): if host: ip, user, passwd, cmds = host.</description>
+    </item>
+    
+    <item>
+      <title>SSH Tunnel Memcached</title>
+      <link>http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/</guid>
+      <description>最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。
+依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。
+上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：
+移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx
+在移动机器上执行：
+shell &amp;gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx  11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &amp;ndash;help。
+shell &amp;gt; ps aux  可以看见进程已经在了，下面开始测试代码。
+&amp;gt;&amp;gt;&amp;gt; import memcache &amp;gt;&amp;gt;&amp;gt; mc = memcache.Client([&amp;#39;127.0.0.1:11211&amp;#39;],debug=True) &amp;gt;&amp;gt;&amp;gt; print mc.get(&amp;#39;name&amp;#39;)  </description>
+    </item>
+    
+    <item>
+      <title>mysqldumpslow 慢查询日志分析工具</title>
+      <link>http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/</guid>
+      <description>mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。
+首先得配置my.cnf：
+log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限  具体的使法如下：
+mysqldumpslow -s c -t 40 /path/slow.log  出来的结果是访问次数最多的40个sql，几个参数大概意思如下：
+-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句  可以参考mysqldumpslow &amp;ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！</description>
+    </item>
+    
+    <item>
+      <title>使用 Perl 快速解析 Apache Log</title>
+      <link>http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/</guid>
+      <description>功能简述
+统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。
+实现简述
+Apache单个日志文件800M。
+最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了http://www.dup2.org/node/1006博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。
+然后随意用了Perl写了一个，用了最土鳖的这样的按行分析，最后正则匹配，然后++，速度竟然在40-50秒之间，惊叹！后来经过http://shucho.org/blog/指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！
+程序片段
+# -------------------------------------------------------------------- use strict; use Benchmark; my $LOG_FILE = &amp;#39;/usr/local/apache/logs/access.log&amp;#39;; # 下面qr部分起了关键作用，预编译了表达式 my @EXT_LIST = map {qr/$_/} qw{ aaServlet bbServlet }; my $startime = new Benchmark; my %result; map {$result{$_} = 0} @EXT_LIST; open LOG_FILE, $LOG_FILE; while (&amp;lt;LOG_FILE&amp;gt;){ foreach my $ext (@EXT_LIST){ $result{$ext}++ if $_ =~ /$ext/; } } close LOG_FILE; while (my ($key, $value) = each(%result)){ $key =~ s/\(\?-xism:(.*?)\)/$1/g; print &amp;quot;$key:\t$value\n&amp;quot;; } printf &amp;quot;** %s\n\n&amp;quot;, timestr(timediff(new Benchmark, $startime));  </description>
+    </item>
+    
+    <item>
+      <title>emacs windows配置笔记</title>
+      <link>http://chenxiaoyu.org/2009/12/10/emacs-windows-config/</link>
+      <pubDate>Thu, 10 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/10/emacs-windows-config/</guid>
+      <description>俺最新.emcas配置地址是：http://github.com/smallfish/editor/blob/master/emacs/.emacs
+最近手痒，看到不少牛x人物都是用emacs，遂在windows下装一个玩玩。
+下载地址：http://ftp.gnu.org/pub/gnu/emacs/windows/emacs-23.1-bin-i386.zip
+解压到：D:\emacs-23.1
+可以看到bin、etc、lisp等目录。主要运行都在bin目录。
+runemacs.exe 这个就是运行文件拉，可以发送到桌面快捷方式。
+可以运行一下addpm.exe这个，其作用就是把emacs加入到开始程序菜单里。
+试着运行一下runemacs.exe，可以发现默认光标的位置，那是一个入门教程喔，还是中文的耶~
+建议都看下这个入门的教程，常用的快捷键都有说明。
+接下来加点常用的功能把，比如显示行号，goto line的功能。(俺也只配置了这个两项)
+配置文件主要是_emacs或者.emacs，win下建议_emacs，点号开头的文件需要到cmd下才行。
+_emacs文件放到哪儿呢？俺是直接修改了win注册表选项。
+选项是：HKEY_CURRENT_USER\Software\GNU\Emacs，注意GNU\Emacs是需要新建的。接下来在Emacs里新建一个HOME项，值是你的emacs路径，比如我的：D:\emacs-23.1\bin。
+然后需要做的就是把_emacs文件在这个bin目录下。
+经过几经周折，显示行号和goto功能的配置如下：
+(global-linum-mode 1) (global-set-key [(meta g)] &amp;#39;goto-line)  第一行是显示行号
+第二行是设置meta+g转到goto功能，meta在windows下可以用alt来操作。
+其他功能以后在后续补上，快捷键挺多，用了一会手指发酸。C-x 数字(1 2 3)挺好，可以开多窗口浏览了。</description>
+    </item>
+    
+    <item>
+      <title>使用Git维护你的网站</title>
+      <link>http://chenxiaoyu.org/2009/12/08/use-git-for-web/</link>
+      <pubDate>Tue, 08 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/08/use-git-for-web/</guid>
+      <description>简介
+git是由http://en.wikipedia.org/wiki/Linus_Torvalds编写的一个开放源码的版本控制系统. 它的主要目标是高度分散, 效率超过其他竞争对手.
+我就是使用git维护本网站. 我知道git不应该这样的粗重任务的使用, 即每一个开发者维护一份代码拷贝, 但是它工作的很好, 所有我使用它.
+本文的目的就是说明如何在家里或者笔记本里维护一个本地拷贝, 然后让这些修改提交到互联网主机上. 下面就是介绍如何设置.
+安装
+# Gentoo emerge git  # Debian/Ubuntu apt-get install git-core  # RedHat/Fedora yum install git  初始化
+你会进入你的服务器的目录和初始化git仓库.
+# 进入你的web目录 cd /$wherever/html/  # 初始化仓库 git init  # 添加所有内容 git add .  # 提交 -m备注 git commit -a -m &amp;quot;The Initial Import.&amp;quot;  然后返回你的html父目录, 克隆新的git-ized web目录.
+# 返回你的html目录 cd ..  # 克隆你的web目录到 html.git git clone --bare html html.</description>
+    </item>
+    
+    <item>
+      <title>tornado.database添加PooledDB连接池功能</title>
+      <link>http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/</link>
+      <pubDate>Tue, 01 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/</guid>
+      <description>tornado.database模块简单包装了下对MySQL的操作，短小精悍。
+无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。
+主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)
+原代码如下：
+ def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  修改后：
+ def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：
+easy_install -U DBUtils  PooledDB有这么几个参数：
+* creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&amp;quot;set datestyle to german&amp;quot;, .</description>
+    </item>
+    
+    <item>
+      <title>Pysvn 程序员指南</title>
+      <link>http://chenxiaoyu.org/2009/11/20/pysvn-tutorial/</link>
+      <pubDate>Fri, 20 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/20/pysvn-tutorial/</guid>
+      <description>这是一篇关于pysvn模块的指南.
+完整和详细的API请参考 http://pysvn.tigris.org/docs/pysvn_prog_ref.html.
+pysvn是操作Subversion版本控制的Python接口模块. 这个API接口可以管理一个工作副本, 查询档案库, 和同步两个.
+该API不能创建新的仓库; 只能作用在现有仓库上. 如果你需要创建一个仓库, 请使用Subversion的svnadmin命令.
+使用这个API, 你可以check out一份工作拷贝, 添加, 编辑, 和删除工作文件, 和check in, 比较, 或者放弃更改. 仓库属性, 如关键字扩展, 行字符结束, 或者忽略的列表也可以检查和控制.
+Subversion 模型
+Subversion是一个更新-编辑-提交的模型. 首先在本地建立一个工作副本. 在工作副本上进行修改, 最后提交到中央仓库 (可以是本地或者远程).
+这个模型允许多人偶尔会同时修改同一个文件. 大多情况下. Subversion不会干预合并这些不同修改, 如果一个提交失败, 用户或者应用则要重新检查和修改然后再次提交.
+常见任务
+本节给出一些使用pysvn接口的常用例子. 业务可以会递归的处理目录. 添加参数recurse=False以防止这种行为; 例如, 你可以需要添加内容没有增加一个目录.
+check out一份工作副本
+import pysvn client = pysvn.Client() #check out the current version of the pysvn project client.checkout(&amp;#39;http://localhost/example/trunk&amp;#39;, &amp;#39;./examples/pysvn&amp;#39;) #check out revision 11 of the pysvn project client.checkout(&amp;#39;http://localhost/example/trunk&amp;#39;, &amp;#39;.</description>
+    </item>
+    
+    <item>
+      <title>Cython参考指南 - 编译</title>
+      <link>http://chenxiaoyu.org/2009/11/19/cython-compile/</link>
+      <pubDate>Thu, 19 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/19/cython-compile/</guid>
+      <description>Cython代码跟Python不一样，必须要编译。
+编译经过两个阶段：
+ Cython编译.pyx文件为.c文件
+ C编译器会把.c文件编译成.so文件(Windows上是.pyd)
+  以下会分节介绍几种方式来建立你的扩展模块。
+注意： -a 选项，如果使用该选项将会为.c文件生成一份很漂亮的HTML文件，双击高亮的章节部分会展开代码，这对理解，优化和调试模块将会非常有帮助。
+命令行
+从命令行执行Cython编译器，输入选项和.pyx文件列表。
+$ cython -a yourmod.pyx  会生成一个yourmod.c文件（指定-a选项会生成一个HTML文件）
+编译.c文件取决于你的操作系统，请参考下如何在你的系统写Python扩展模块文档。
+下面是一个Linux系统的例子：
+$ gcc -shared -pthread -fPIC -fwrapv -O2 -Wall -fno-strict-aliasing \ -I/usr/include/python2.5 -o yourmod.so yourmod.c  gcc需要提供包含的文件和扩展库的链接。
+在目录里会生成yourmod.so文件。
+现在只需要导入你的yourmod模块就可以了。
+Distutils
+确保你的系统已经安装好Distutils。
+下面假设需要编译的文件叫hello.pyx。
+建立一个setup.py的脚本：
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules = [Extension(&amp;quot;hello&amp;quot;, [&amp;quot;hello.pyx&amp;quot;])] setup( name = ’Hello world app’, cmdclass = {’build_ext’: build_ext}, ext_modules = ext_modules )  在命令行执行：python setup.</description>
+    </item>
+    
+    <item>
+      <title>Win Python Pyrex 扩展</title>
+      <link>http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/</link>
+      <pubDate>Tue, 17 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/</guid>
+      <description>在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。
+需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C++ http://www.bloodshed.net/devcpp.html
+Pyrex 可以通过easy_install Pyrex来安装。 Dev C++ 安装完在系统环境变量Path里加上Dev C++安装目录/bin 目录。
+测试扩展代码：
+# file: foo.pyx &amp;quot;&amp;quot;&amp;quot; simple pyrex module &amp;quot;&amp;quot;&amp;quot; cdef class Foo: &amp;quot;&amp;quot;&amp;quot; foo doc ... &amp;quot;&amp;quot;&amp;quot; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &amp;quot;foo names: %s&amp;quot; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&amp;#39;foo&amp;#39;, ext_modules=[Extension(&amp;quot;foo&amp;quot;, [&amp;quot;foo.</description>
+    </item>
+    
+    <item>
+      <title>MySQL Query Profile 简单使用</title>
+      <link>http://chenxiaoyu.org/2009/11/16/mysql-query-profile/</link>
+      <pubDate>Mon, 16 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/16/mysql-query-profile/</guid>
+      <description>MySQL Query Profile MySQL 5.0.37 以上开始支持 MySQL Query Profiler, 可以查询到此 SQL 会执行多少时间, 并看出 CPU/Memory 使用量, 执行过程中 System lock, Table lock 花多少时间等等.
+详细可以参见官方文档：http://dev.mysql.com/tech-resources/articles/using-new-query-profiler.html
+启动
+mysql&amp;gt; set profiling=1; Query OK, 0 rows affected (0.00 sec)  测试查询
+mysql&amp;gt; select count(*) from client where broker_id=2; +----------+ | count(*) | +----------+ | 200 | +----------+ 1 row in set (0.00 sec)  查看profiles
+mysql&amp;gt; show profiles; +----------+------------+-----------------------------------------------+ | Query_ID | Duration | Query | +----------+------------+-----------------------------------------------+ | 0 | 0.</description>
+    </item>
+    
+    <item>
+      <title>Google App Engine 上试用 web.py 笔记</title>
+      <link>http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/</link>
+      <pubDate>Tue, 10 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/</guid>
+      <description>看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改：
+ 复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes
+ 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py  home.py
+import web render = web.template.render(&amp;#39;templates/&amp;#39;) urls = ( &amp;#39;/&amp;#39;, &amp;#39;index&amp;#39; ) class index: def GET(self): web.header(&amp;#39;Content-type&amp;#39;, &amp;#39;text/html&amp;#39;) name = &amp;#39;smallfish&amp;#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键  templates/index.html
+$def with (name) hello, $name. test by web.py   发布到GAE，测试  e:\googleapp&amp;gt;appcfg.</description>
+    </item>
+    
+    <item>
+      <title>Python Mako Template 学习笔记</title>
+      <link>http://chenxiaoyu.org/2009/11/10/python-mako-template/</link>
+      <pubDate>Tue, 10 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/10/python-mako-template/</guid>
+      <description>Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。
+(Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)
+from mako.template import Template mytemplate = Template(&amp;quot;hello world!&amp;quot;) print mytemplate.render() mytemplate = Template(&amp;quot;hello, ${name}!&amp;quot;) print mytemplate.render(name=&amp;quot;jack&amp;quot;)  代码可以参考官方doc部分
+mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;) print mytemplate.render()  还可以从设置模板为文件，设置filename属性
+mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;, module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) print mytemplate.render()  文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.py
+from mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;]) mytemplate = Template(&amp;quot;&amp;quot;&amp;quot;&amp;lt;%include file=&amp;quot;header.txt&amp;quot;/&amp;gt; hello world!&amp;quot;&amp;quot;&amp;quot;, lookup=mylookup)  查找模板，方便统一模板路径使用。
+mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)  改良了上面的查找方式
+mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], output_encoding=&amp;#39;utf-8&amp;#39;, encoding_errors=&amp;#39;replace&amp;#39;) mytemplate = mylookup.</description>
+    </item>
+    
+    <item>
+      <title>Python MySQL 库安装笔记</title>
+      <link>http://chenxiaoyu.org/2009/11/10/python-mysql-install/</link>
+      <pubDate>Tue, 10 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/10/python-mysql-install/</guid>
+      <description>其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。
+一般步骤是：
+ 安装easy_install  shell &amp;gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &amp;gt; python ez_setup.py  会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了
+ 安装MySQL-python  shell &amp;gt; easy_install MySQL-python  到这里安装算是完成了，不过接下来测试就郁闷了。
+在import MySQLdb出现了两个错误：
+a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory  这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈
+b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&amp;#39; not found  解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：
+shell &amp;gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &amp;gt; cd MySQL-python-1.2.2 shell &amp;gt; python setup.py install  </description>
+    </item>
+    
+    <item>
+      <title>Python MySQLdb 查询返回字典结构</title>
+      <link>http://chenxiaoyu.org/2009/11/10/python-mysqldb-return-dict/</link>
+      <pubDate>Tue, 10 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/11/10/python-mysqldb-return-dict/</guid>
+      <description>MySQLdb默认查询结果都是返回tuple，输出时候不是很方便，必须按照0，1这样读取，无意中在网上找到简单的修改方法，就是传递一个cursors.DictCursor就行。
+默认程序：
+import MySQLdb db = MySQLdb.connect(host=&amp;#39;localhost&amp;#39;, user=&amp;#39;root&amp;#39;, passwd=&amp;#39;123456&amp;#39;, db=&amp;#39;test&amp;#39;) cur = db.cursor() cur.execute(&amp;#39;select * from user&amp;#39;) rs = cur.fetchall() print rs # 返回类似如下 # ((1000L, 0L), (2000L, 0L), (3000L, 0L))  修改后：
+import MySQLdb import MySQLdb.cursors db = MySQLdb.connect(host=&amp;#39;localhost&amp;#39;, user=&amp;#39;root&amp;#39;, passwd=&amp;#39;123456&amp;#39;, db=&amp;#39;test&amp;#39;, cursorclass=MySQLdb.cursors.DictCursor) cur = db.cursor() cur.execute(&amp;#39;select * from user&amp;#39;) rs = cur.fetchall() print rs # 返回类似如下 # ({&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 1000L}, {&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 2000L}, {&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 3000L})  或者也可以用下面替换connect和cursor部分</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Apache Mod_Perl实现 URL Rewrite - smallfish&#39;g blog</title>
+    
+<meta name="description" content="相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。修改下http.conf配置，添加一下内容：PerlTransHandler MyTrans # MyTrans 这个是自己添加的处理模块名  具体MyTrans.pm脚本如下：package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $r = shift; my $uri = $r-&amp;gt;uri; my ($id) = ($url =~ m|^/news/(.*)\.html|); $r-&amp;gt;uri(&amp;quot;/news.php&amp;quot;); $r-&amp;gt;args(&amp;quot;id=$id&amp;quot;); return Apache2::Const::DECLINED; } 1;  实现就是：/news/12345.html =&amp;gt; /news.php?id=12345">
+
+<meta property="og:title" content="Apache Mod_Perl实现 URL Rewrite - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。修改下http.conf配置，添加一下内容：PerlTransHandler MyTrans # MyTrans 这个是自己添加的处理模块名  具体MyTrans.pm脚本如下：package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $r = shift; my $uri = $r-&amp;gt;uri; my ($id) = ($url =~ m|^/news/(.*)\.html|); $r-&amp;gt;uri(&amp;quot;/news.php&amp;quot;); $r-&amp;gt;args(&amp;quot;id=$id&amp;quot;); return Apache2::Const::DECLINED; } 1;  实现就是：/news/12345.html =&amp;gt; /news.php?id=12345">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/">
+<meta name="twitter:title" content="Apache Mod_Perl实现 URL Rewrite - smallfish&#39;g blog">
+<meta name="twitter:description" content="相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。修改下http.conf配置，添加一下内容：PerlTransHandler MyTrans # MyTrans 这个是自己添加的处理模块名  具体MyTrans.pm脚本如下：package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $r = shift; my $uri = $r-&amp;gt;uri; my ($id) = ($url =~ m|^/news/(.*)\.html|); $r-&amp;gt;uri(&amp;quot;/news.php&amp;quot;); $r-&amp;gt;args(&amp;quot;id=$id&amp;quot;); return Apache2::Const::DECLINED; } 1;  实现就是：/news/12345.html =&amp;gt; /news.php?id=12345">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Apache Mod_Perl实现 URL Rewrite - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！
+首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。
+修改下http.conf配置，添加一下内容：
+PerlTransHandler MyTrans # MyTrans 这个是自己添加的处理模块名  具体MyTrans.pm脚本如下：
+package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $r = shift; my $uri = $r-&gt;uri; my ($id) = ($url =~ m|^/news/(.*)\.html|); $r-&gt;uri(&quot;/news.php&quot;); $r-&gt;args(&quot;id=$id&quot;); return Apache2::Const::DECLINED; } 1;  实现就是：/news/12345.html =&gt; /news.php?id=12345"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Apache Mod_Perl实现 URL Rewrite</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Apache Mod_Perl实现 URL Rewrite</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！</p>
+
+<p>首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。</p>
+
+<p>修改下http.conf配置，添加一下内容：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">PerlTransHandler</span> <span class="n">MyTrans</span> <span class="c1"># MyTrans 这个是自己添加的处理模块名</span>
+</code></pre></div>
+
+
+<p>具体MyTrans.pm脚本如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">MyTrans</span><span class="p">;</span>
+
+<span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span> <span class="n">qw</span><span class="p">(</span><span class="n">DECLINED</span><span class="p">);</span>
+
+<span class="n">sub</span> <span class="n">handler</span> <span class="p">{</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">r</span> <span class="o">=</span> <span class="n">shift</span><span class="p">;</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">uri</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">;</span>
+    <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="nb">id</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="err">$</span><span class="n">url</span> <span class="o">=~</span> <span class="n">m</span><span class="o">|^/</span><span class="n">news</span><span class="o">/</span><span class="p">(</span><span class="o">.*</span><span class="p">)</span>\<span class="o">.</span><span class="n">html</span><span class="o">|</span><span class="p">);</span>
+    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">(</span><span class="s2">&quot;/news.php&quot;</span><span class="p">);</span>
+    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">(</span><span class="s2">&quot;id=$id&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">DECLINED</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="mi">1</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>实现就是：/news/12345.html  =&gt; /news.php?id=12345</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

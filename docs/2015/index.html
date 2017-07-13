@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/2015/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/2015/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>2015s - smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+    <header class="page-header">
+      <h1>2015s</h1>
+    </header>
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2015-01-17T00:00:00JST">Jan 17, 2015</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2015/">2015</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/">Go flag/kingpin 命令行解析多个同名参数</a></h2>
+  </header>
+
+  
+  <div class="summary">想了半天标题应该怎么写，都不太好表达，要的效果如下：
+xx --name=aa --name=bb  需要解析出 name 参数，默认 flag 解析后返回的是最后一个值，即：bb
+放出 Google 大法，搜出一篇早期文字：Issue 842041: Flags: add user-defined flag types
+代码示例已经久远，直接拷贝代码运行会报错，原因是 Set() 应该返回 error 类型，而不是 bool 啦。
+需要注意的是，如果想实现解析数组，需要：
+ 定义类型 type xx 类型 xx 实现 String() 和 Set() 函数  示例输出：
+$ ./xx --name=xx -name=yy v = [xx yy]  上面的示例是基于 Go 语言自带的 flag 模块，这个稍繁琐了点，我自己用了另外一个模块：alecthomas/kingpin
+作者在源码 values.go#L203里也有类似的封装，但是只有一个：Strings（注意末尾多了一个 s）
+同样也是实现了上述函数，另外还有一个：IsCumulative()
+话不多说，还是上个示例：
+package main import ( &quot;fmt&quot; &quot;gopkg.in/alecthomas/kingpin.v1&quot; ) var ( names = kingpin.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" title="Go flag/kingpin 命令行解析多个同名参数">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

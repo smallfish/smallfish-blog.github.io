@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/05/30/cython-extern-c/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Cython 教程 - 调用外部C语言函数 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：cdef extern from &amp;quot;math.h&amp;quot;: double sin(double) cdef double f(double x): return sin(x*x)  请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;quot;demo&amp;quot;, [&amp;quot;demo.pyx&amp;quot;], libraries=[&amp;quot;m&amp;quot;]) # Unix-like specific ] setup( name = &amp;quot;Demos&amp;quot;, cmdclass = {&amp;quot;build_ext&amp;quot;: build_ext}, ext_modules = ext_modules )  跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。">
+
+<meta property="og:title" content="Cython 教程 - 调用外部C语言函数 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/05/30/cython-extern-c/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：cdef extern from &amp;quot;math.h&amp;quot;: double sin(double) cdef double f(double x): return sin(x*x)  请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;quot;demo&amp;quot;, [&amp;quot;demo.pyx&amp;quot;], libraries=[&amp;quot;m&amp;quot;]) # Unix-like specific ] setup( name = &amp;quot;Demos&amp;quot;, cmdclass = {&amp;quot;build_ext&amp;quot;: build_ext}, ext_modules = ext_modules )  跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/05/30/cython-extern-c/">
+<meta name="twitter:title" content="Cython 教程 - 调用外部C语言函数 - smallfish&#39;g blog">
+<meta name="twitter:description" content="一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：cdef extern from &amp;quot;math.h&amp;quot;: double sin(double) cdef double f(double x): return sin(x*x)  请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;quot;demo&amp;quot;, [&amp;quot;demo.pyx&amp;quot;], libraries=[&amp;quot;m&amp;quot;]) # Unix-like specific ] setup( name = &amp;quot;Demos&amp;quot;, cmdclass = {&amp;quot;build_ext&amp;quot;: build_ext}, ext_modules = ext_modules )  跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Cython 教程 - 调用外部C语言函数 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-05-30T00:00:00JST",
+    "dateModified": "2010-05-30T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：
+cdef extern from &quot;math.h&quot;: double sin(double) cdef double f(double x): return sin(x*x)  请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。
+当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&quot;demo&quot;, [&quot;demo.pyx&quot;], libraries=[&quot;m&quot;]) # Unix-like specific ] setup( name = &quot;Demos&quot;, cmdclass = {&quot;build_ext&quot;: build_ext}, ext_modules = ext_modules )  跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">Cython 教程 - 调用外部C语言函数</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-05-30T00:00:00JST">May 30, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">Cython 教程 - 调用外部C语言函数</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">cdef</span> <span class="n">extern</span> <span class="kn">from</span> <span class="s2">&quot;math.h&quot;</span><span class="p">:</span>
+    <span class="n">double</span> <span class="n">sin</span><span class="p">(</span><span class="n">double</span><span class="p">)</span>
+
+<span class="n">cdef</span> <span class="n">double</span> <span class="n">f</span><span class="p">(</span><span class="n">double</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。</p>
+
+<p>当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
+<span class="kn">from</span> <span class="nn">distutils.extension</span> <span class="kn">import</span> <span class="n">Extension</span>
+<span class="kn">from</span> <span class="nn">Cython.Distutils</span> <span class="kn">import</span> <span class="n">build_ext</span>
+
+<span class="n">ext_modules</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">Extension</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+              <span class="p">[</span><span class="s2">&quot;demo.pyx&quot;</span><span class="p">],</span>
+              <span class="n">libraries</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m&quot;</span><span class="p">])</span> <span class="c1"># Unix-like specific</span>
+<span class="p">]</span>
+
+<span class="n">setup</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Demos&quot;</span><span class="p">,</span>
+  <span class="n">cmdclass</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;build_ext&quot;</span><span class="p">:</span> <span class="n">build_ext</span><span class="p">},</span>
+  <span class="n">ext_modules</span> <span class="o">=</span> <span class="n">ext_modules</span>
+<span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。</p>
+
+<p>参考：<a href="http://docs.cython.org/src/tutorial/external.html">http://docs.cython.org/src/tutorial/external.html</a></p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

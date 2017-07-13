@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Docker Volume 属主设置 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="最近在测试 Volume 挂载时候有点问题，描述如下： Docker 启动时候，设置挂载目录用户为 foo 宿主机源目录属主为 smallfish  尝试了几种办法，比如： container 启动后执行 chown 构建镜像时候加入 RUN chown foo /data，这里不仅仅是这种尝试  不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。原因无非是两个系统里用户 uid/gid 不一样，也可以很猥琐的在 container 里面 adduser 指定 --uid 参数。百无聊赖的放狗继续搜啊搜，竟然搜到一篇：Understanding Volumes in Docker尝试了下，竟然可以：RUN useradd foo RUN mkdir /data &amp;amp;&amp;amp; touch /data/a.txt RUN chown foo:foo /data VOLUME /data  上面要注意 VOLUME 一定要放在最后，然后要先建立目录，再写个文件，文件随意。重新构建之后，进入交互式：# docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash root@527f8eceacca:/# ls -al /data drwxr-xr-x 1 foo staff 136 Dec 26 06:17 .">
+
+<meta property="og:title" content="Docker Volume 属主设置 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="最近在测试 Volume 挂载时候有点问题，描述如下： Docker 启动时候，设置挂载目录用户为 foo 宿主机源目录属主为 smallfish  尝试了几种办法，比如： container 启动后执行 chown 构建镜像时候加入 RUN chown foo /data，这里不仅仅是这种尝试  不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。原因无非是两个系统里用户 uid/gid 不一样，也可以很猥琐的在 container 里面 adduser 指定 --uid 参数。百无聊赖的放狗继续搜啊搜，竟然搜到一篇：Understanding Volumes in Docker尝试了下，竟然可以：RUN useradd foo RUN mkdir /data &amp;amp;&amp;amp; touch /data/a.txt RUN chown foo:foo /data VOLUME /data  上面要注意 VOLUME 一定要放在最后，然后要先建立目录，再写个文件，文件随意。重新构建之后，进入交互式：# docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash root@527f8eceacca:/# ls -al /data drwxr-xr-x 1 foo staff 136 Dec 26 06:17 .">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/">
+<meta name="twitter:title" content="Docker Volume 属主设置 - smallfish&#39;g blog">
+<meta name="twitter:description" content="最近在测试 Volume 挂载时候有点问题，描述如下： Docker 启动时候，设置挂载目录用户为 foo 宿主机源目录属主为 smallfish  尝试了几种办法，比如： container 启动后执行 chown 构建镜像时候加入 RUN chown foo /data，这里不仅仅是这种尝试  不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。原因无非是两个系统里用户 uid/gid 不一样，也可以很猥琐的在 container 里面 adduser 指定 --uid 参数。百无聊赖的放狗继续搜啊搜，竟然搜到一篇：Understanding Volumes in Docker尝试了下，竟然可以：RUN useradd foo RUN mkdir /data &amp;amp;&amp;amp; touch /data/a.txt RUN chown foo:foo /data VOLUME /data  上面要注意 VOLUME 一定要放在最后，然后要先建立目录，再写个文件，文件随意。重新构建之后，进入交互式：# docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash root@527f8eceacca:/# ls -al /data drwxr-xr-x 1 foo staff 136 Dec 26 06:17 .">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Docker Volume 属主设置 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-12-26T00:00:00JST",
+    "dateModified": "2014-12-26T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "最近在测试 Volume 挂载时候有点问题，描述如下：
+ Docker 启动时候，设置挂载目录用户为 foo 宿主机源目录属主为 smallfish  尝试了几种办法，比如：
+ container 启动后执行 chown 构建镜像时候加入 RUN chown foo /data，这里不仅仅是这种尝试  不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。
+原因无非是两个系统里用户 uid/gid 不一样，也可以很猥琐的在 container 里面 adduser 指定 --uid 参数。
+百无聊赖的放狗继续搜啊搜，竟然搜到一篇：Understanding Volumes in Docker
+尝试了下，竟然可以：
+RUN useradd foo RUN mkdir /data &amp;&amp; touch /data/a.txt RUN chown foo:foo /data VOLUME /data  上面要注意 VOLUME 一定要放在最后，然后要先建立目录，再写个文件，文件随意。
+重新构建之后，进入交互式：
+# docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash root@527f8eceacca:/# ls -al /data drwxr-xr-x 1 foo staff 136 Dec 26 06:17 ."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2014/" itemprop="url"><span itemprop="title">2014</span></a></li>
+        
+        <li class="active">Docker Volume 属主设置</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-12-26T00:00:00JST">Dec 26, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2014/">2014</a></li>
+      
+    </ul>
+
+    <h1 class="title">Docker Volume 属主设置</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>最近在测试 Volume 挂载时候有点问题，描述如下：</p>
+
+<ol>
+<li>Docker 启动时候，设置挂载目录用户为 foo</li>
+<li>宿主机源目录属主为 smallfish</li>
+</ol>
+
+<p>尝试了几种办法，比如：</p>
+
+<ol>
+<li>container 启动后执行 <code>chown</code></li>
+<li>构建镜像时候加入 <code>RUN chown foo /data</code>，这里不仅仅是这种尝试</li>
+</ol>
+
+<p>不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。</p>
+
+<p>原因无非是两个系统里用户 <code>uid/gid</code> 不一样，也可以很猥琐的在 container 里面 <code>adduser</code> 指定 <code>--uid</code> 参数。</p>
+
+<p>百无聊赖的放狗继续搜啊搜，竟然搜到一篇：<a href="http://container-solutions.com/2014/12/understanding-volumes-docker/">Understanding Volumes in Docker</a></p>
+
+<p>尝试了下，竟然可以：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>RUN useradd foo
+RUN mkdir /data <span class="o">&amp;&amp;</span> touch /data/a.txt
+RUN chown foo:foo /data
+VOLUME /data
+</code></pre></div>
+
+
+<p>上面要注意 <code>VOLUME</code> 一定要放在最后，然后要先建立目录，再写个文件，文件随意。</p>
+
+<p>重新构建之后，进入交互式：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="c1"># docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash</span>
+root@527f8eceacca:/# ls -al /data
+drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">136</span> Dec <span class="m">26</span> <span class="m">06</span>:17 .
+drwxr-xr-x <span class="m">51</span> root root  <span class="m">4096</span> Dec <span class="m">26</span> <span class="m">06</span>:17 ..
+drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">170</span> Jul  <span class="m">4</span> <span class="m">15</span>:57 xxx
+</code></pre></div>
+
+
+<p>很惊喜的发现竟然属主变成 foo 了，我了个呵呵。。。</p>
+
+<p>官方文档：<a href="https://docs.docker.com/userguide/dockervolumes/">https://docs.docker.com/userguide/dockervolumes/</a>，其实也有提到一些描述，还是贴下之前参考那篇博客的原文：</p>
+
+<pre><code>Docker is clever enough to copy any files that exist in the image under the volume mount into the volume and set the ownership correctly. This won’t happen if you specify a host directory for the volume (so that host files aren’t accidentally overwritten).
+</code></pre>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

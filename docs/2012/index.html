@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/2012/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>2012s - smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+    <header class="page-header">
+      <h1>2012s</h1>
+    </header>
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-12-19T00:00:00JST">Dec 19, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/12/19/rabbitmq-trace/">RabbitMQ trace 日志调试</a></h2>
+  </header>
+
+  
+  <div class="summary">RabbitMQ 默认日志里只有类似客户端“accpet/close”等信息，对于有异常或者跟踪消息内部结构就比较麻烦了。
+翻阅官方教程意外发现了 rabbitmq_tracing 插件和 firehose。
+注意：打开 trace 会影响消息写入功能，适当打开后请关闭。
+自己顺手写了一个封装脚本，参考：https://github.com/smallfish/rabbitmq-trace
+安装上面的插件并开启 trace_on 之后，会发现多了两个 exchange：amq.rabbitmq.trace 和 amq.rabbitmq.log，类型均为：topic。
+懂了吧，只要订阅这两个主题，就能收到：客户端连接、消息发收等具体信息了。
+下面开始测试吧，先安装插件，并打开 trace_on：
+$ sudo rabbitmq-plugins enable rabbitmq_tracing $ （略去重启RabbitMQ命令） $ sudo rabbitmqctl trace_on Starting tracing for vhost &quot;/&quot; ... ...done.  测试代码采用 Python 的 pika 库，片段如下：
+import pika def _on_message(ch, method, properties, body): ret = {} ret[&#39;routing_key&#39;] = method.routing_key ret[&#39;headers&#39;] = properties.headers ret[&#39;body&#39;] = body print ret conn = pika.BlockingConnection(pika.ConnectionParameters()) chan.queue_declare(exclusive=False, auto_delete=True) # 临时队列 queue = ret.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/12/19/rabbitmq-trace/" title="RabbitMQ trace 日志调试">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-12-07T00:00:00JST">Dec 7, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/12/07/golang-module-test-benchmark/">Go 模块测试</a></h2>
+  </header>
+
+  
+  <div class="summary">Go 很多地方都透露着“约定大于配置”的理论，比如测试、可见性、语法等等。
+本文示例模块为：foo.go，则对应的测试模块为：foo_test.go，测试版本为：go v1.0.3。
+先写好示例代码： foo.go
+package foo func Add(a, b int) int { return a + b }  对应的测试代码：foo_test.go
+package foo import &quot;testing&quot; func TestAdd(t *testing.T) { if (Add(1, 2) != 3) { t.Error(&quot;test foo:Addr failed&quot;) } else { t.Log(&quot;test foo:Addr pass&quot;) } }  到这里可以运行测试了：
+$ go test PASS ok _/Users/smallfish/test/go/foo 0.080s  或者详细一点的输出：
+$ go test -v === RUN TestAdd --- PASS: TestAdd (0.00 seconds) foo_test.go:9: test foo:Addr pass PASS ok _/Users/smallfish/test/go/foo 0.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/12/07/golang-module-test-benchmark/" title="Go 模块测试">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-11-25T00:00:00JST">Nov 25, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/">lua-resty-beanstalkd 模块教程</a></h2>
+  </header>
+
+  
+  <div class="summary">本文涉及几个名词：
+ ngx_lua http://wiki.nginx.org/HttpLuaModule
+Embed the power of Lua into Nginx 摘自官方描述
+ beanstalkd http://kr.github.com/beanstalkd/
+一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。
+ lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
+基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。
+  下面是读写的示例：
+ 生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &#39; local beanstalkd = require &quot;resty.beanstalkd&quot;  local bean, err = beanstalkd:new() local ok, err = bean:connect(&quot;127.0.0.1&quot;, 11300) if not ok then ngx.say(&quot;1: failed to connect: &quot;, err) return end local ok, err = bean:use(&quot;default&quot;) if not ok then ngx.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/" title="lua-resty-beanstalkd 模块教程">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-10-11T00:00:00JST">Oct 11, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/">LuaJIT FFI 调用 Curl 示例</a></h2>
+  </header>
+
+  
+  <div class="summary">LuaJIT 是一个好东西，比官方 Lua 解释器性能上提升很多。ngx_lua/ngx_openresty 都推荐用 LuaJIT 来加速 Lua 代码。
+除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。
+下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：
+操作系统： Mac OS X 10.8.2 LuaJIT版本：LuaJIT-2.0.0-beta10 Curl版本： 7.24.0  测试代码如下：
+local ffi = require &#39;ffi&#39; ffi.cdef[[ void *curl_easy_init(); int curl_easy_setopt(void *curl, int option, ...); int curl_easy_perform(void *curl); void curl_easy_cleanup(void *curl); char *curl_easy_strerror(int code); ]] local libcurl = ffi.load(&#39;libcurl&#39;) local curl = libcurl.curl_easy_init() local CURLOPT_URL = 10002 -- 参考 curl/curl.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/" title="LuaJIT FFI 调用 Curl 示例">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-08-30T00:00:00JST">Aug 30, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/08/30/deploy-with-fabric/">Fabric 部署工具</a></h2>
+  </header>
+
+  
+  <div class="summary">Fabric 是基于 SSH 协议的 Python 工具，相比传统的 ssh/scp 方式，用 Python 的语法写管理命令更易读也更容易扩展，管理单台或者多台机器犹如本地操作一般。
+官网地址：http://fabfile.org 安装方法这里不在说明，推荐使用：pip 或者 easy_install 来安装。
+传统维护方法：
+$ ssh x.x.x.x &#39;uname -a&#39; -- 输出略  Fabric 示例：
+$ cat fabfile.py from fabric.api import run def uname(): run(&#39;uname -a&#39;) $ fab -H x.x.x.x uname -- 输出略  肉眼直观看上去，貌似比 ssh 方式要写不少代码，但是基于 ssh 方式中间可控环节比较少，例如：你想判断某服务是否已经启动，没有启动则执行启动等等操作。ssh 命令式的做法稍显麻烦。（当然龌龊一点可以在被操作机器上写好一个脚本，ssh 调用这个脚本）
+说几个 Fabric 的优点吧：
+ 角色定义 代码易读 封装了本地、远程操作（还需要自己封装system/popen/ssh操作么？） 参数灵活（动态指定 host/role 等，还有并发执行 基于multiprocessing ） 完整的日志输出  罗列的这些，其实日常工作里基本都有类似的封装了，但是有现成的一个成熟的工具，干啥不用呢？对吧。
+常用的配置：
+env.host -- 主机ip，当然也可以-H参数指定 env.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/08/30/deploy-with-fabric/" title="Fabric 部署工具">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-03-14T00:00:00JST">Mar 14, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/">如何编写 Go 程序（最新版）</a></h2>
+  </header>
+
+  
+  <div class="summary">官网文档（weekly）：http://weekly.golang.org/doc/code.html
+中文版（旧版）：http://chenxiaoyu.org/2010/06/29/how-to-write-go.html
+本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。
+本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。
+鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。
+可以自己试试下：
+$ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files doc run godoc on package sources env print Go environment information … 略去若干字  言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：$GOPATH
+在类似 Unix 环境大概这样设置：
+GOPATH=/home/user/ext:/home/user/mygo  Windows 系统请注意分隔符，是分号（非冒号）。
+以上 $GOPATH 目录约定有三个子目录：</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/" title="如何编写 Go 程序（最新版）">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-03-08T00:00:00JST">Mar 8, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/03/08/nginx-gzip/">Nginx GZip 压缩</a></h2>
+  </header>
+
+  
+  <div class="summary">Nginx GZip 模块文档详见：http://wiki.nginx.org/HttpGzipModule
+常用配置片段如下：
+gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &quot;MSIE [1-6]\.&quot;; # 无视IE6这个笨蛋~  其中 gzip_types 选项默认只压缩 text/html，源码见：
+src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&quot;text/html&quot;),  常用的静态 type 有，看自己需要压缩的情况而定：
+text/html text/plain text/css application/x-javascript text/javascript application/xml  OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
+下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：
+查看是否开启gzip，需要客户端加入：&quot;Accept-Encoding: gzip, deflate&quot; 头信息。 $ curl -I -H &quot;Accept-Encoding: gzip, deflate&quot; &quot;http://localhost/tag.php&quot; HTTP/1.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/03/08/nginx-gzip/" title="Nginx GZip 压缩">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-02-08T00:00:00JST">Feb 8, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/">Nginx-Lua HTTP 401 认证校验</a></h2>
+  </header>
+
+  
+  <div class="summary">本文示例依赖模块：
+ lua-nginx-module ngx_coolkit（获取$remote_passwd 输入值）  如何编译Nginx这些扩展模块，请参考以前《Nginx 第三方模块试用记》。
+基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。
+比如 PHP 401发送示例，或者 Apache 配置：
+&lt;Directory &quot;/path/a&quot;&gt; AuthType Basic AuthName &quot;localhost&quot; AuthUserFile /usr/local/apache/.htpasswd Require valid-user &lt;/Directory&gt;  这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。
+本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。
+nginx.conf 配置片段：
+location /ubuntu { access_by_lua &#39; -- 用户和密码正确 access 则通过，并转向 proxy 部分。 if ngx.var.remote_user == &quot;smallfish&quot; and ngx.var.remote_passwd == &quot;12&quot; then return end -- 返回 HTTP 401 认证输入框 ngx.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/" title="Nginx-Lua HTTP 401 认证校验">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-01-04T00:00:00JST">Jan 4, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/">Nginx-Lua过滤POST请求</a></h2>
+  </header>
+
+  
+  <div class="summary">注：此文章会持续更新
+2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。
+看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。
+刚好可以尝试一下 nginx-lua 模块，这里简单贴一些代码，编译步骤就略去。
+本文只是根据 POST 参数个数进行简单校验的测试。
+这里大概有几个步骤：
+加载 conf/post-limit.lua，文件内容在下一段
+access_by_lua_file &#39;conf/post-limit.lua&#39;;  conf/post-limit.lua 文件内容：
+ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 参数最多个数，这里测试用，2个 if method == &#39;POST&#39; then -- 只过滤 POST 请求 local data = ngx.req.get_body_data() if data then local count = 0 local i = 0 while true do if count &gt; max_size then -- 大于2次，重定向错误页面 ngx.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/" title="Nginx-Lua过滤POST请求">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

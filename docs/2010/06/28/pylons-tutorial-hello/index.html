@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/06/28/pylons-tutorial-hello/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Pylons 入门实例教程 - Hello - smallfish&#39;g blog</title>
+    
+<meta name="description" content="http://pylonshq.com/，当然，这些组件只是默认，你还可以根据自己喜好来选择其他组件，比如你可以采用 Jinja2 或 Genshi 模板，ORM也可以采用 SQLObject。完全是自由组合。废话少说，现在开始安装吧。smallfish@debian:~$ sudo aptitude install python-pylons  Debian/Ubuntu 系列系统可以直接 aptitude 安装，当然你也可以使用 easy_install 或者源码安装。smallfish@debian:~$ sudo easy_install Pylons  更多安装文档请参考官网安装部分，http://pylonshq.com/docs/en/1.0/gettingstarted/#installing好了，安装结束，来一个经典的Hello程序吧。smallfish@debian:~/workspace/python$ paster create -t pylons hello Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hello package: hello project: hello Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.5 configuration) [False]: Creating template pylons Creating directory ./hello  下面输出略过，大致解说一下。Pylons 程序可以用 Paste 自动生成一些代码，包括controller。还可以运行 HTTP 服务来测试。">
+
+<meta property="og:title" content="Pylons 入门实例教程 - Hello - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/06/28/pylons-tutorial-hello/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="http://pylonshq.com/，当然，这些组件只是默认，你还可以根据自己喜好来选择其他组件，比如你可以采用 Jinja2 或 Genshi 模板，ORM也可以采用 SQLObject。完全是自由组合。废话少说，现在开始安装吧。smallfish@debian:~$ sudo aptitude install python-pylons  Debian/Ubuntu 系列系统可以直接 aptitude 安装，当然你也可以使用 easy_install 或者源码安装。smallfish@debian:~$ sudo easy_install Pylons  更多安装文档请参考官网安装部分，http://pylonshq.com/docs/en/1.0/gettingstarted/#installing好了，安装结束，来一个经典的Hello程序吧。smallfish@debian:~/workspace/python$ paster create -t pylons hello Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hello package: hello project: hello Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.5 configuration) [False]: Creating template pylons Creating directory ./hello  下面输出略过，大致解说一下。Pylons 程序可以用 Paste 自动生成一些代码，包括controller。还可以运行 HTTP 服务来测试。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/06/28/pylons-tutorial-hello/">
+<meta name="twitter:title" content="Pylons 入门实例教程 - Hello - smallfish&#39;g blog">
+<meta name="twitter:description" content="http://pylonshq.com/，当然，这些组件只是默认，你还可以根据自己喜好来选择其他组件，比如你可以采用 Jinja2 或 Genshi 模板，ORM也可以采用 SQLObject。完全是自由组合。废话少说，现在开始安装吧。smallfish@debian:~$ sudo aptitude install python-pylons  Debian/Ubuntu 系列系统可以直接 aptitude 安装，当然你也可以使用 easy_install 或者源码安装。smallfish@debian:~$ sudo easy_install Pylons  更多安装文档请参考官网安装部分，http://pylonshq.com/docs/en/1.0/gettingstarted/#installing好了，安装结束，来一个经典的Hello程序吧。smallfish@debian:~/workspace/python$ paster create -t pylons hello Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hello package: hello project: hello Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.5 configuration) [False]: Creating template pylons Creating directory ./hello  下面输出略过，大致解说一下。Pylons 程序可以用 Paste 自动生成一些代码，包括controller。还可以运行 HTTP 服务来测试。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Pylons 入门实例教程 - Hello - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-06-28T00:00:00JST",
+    "dateModified": "2010-06-28T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "http://pylonshq.com/，当然，这些组件只是默认，你还可以根据自己喜好来选择其他组件，比如你可以采用 Jinja2 或 Genshi 模板，ORM也可以采用 SQLObject。完全是自由组合。
+废话少说，现在开始安装吧。
+smallfish@debian:~$ sudo aptitude install python-pylons  Debian/Ubuntu 系列系统可以直接 aptitude 安装，当然你也可以使用 easy_install 或者源码安装。
+smallfish@debian:~$ sudo easy_install Pylons  更多安装文档请参考官网安装部分，http://pylonshq.com/docs/en/1.0/gettingstarted/#installing
+好了，安装结束，来一个经典的Hello程序吧。
+smallfish@debian:~/workspace/python$ paster create -t pylons hello Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hello package: hello project: hello Enter template_engine (mako/genshi/jinja2/etc: Template language) [&#39;mako&#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.5 configuration) [False]: Creating template pylons Creating directory ./hello  下面输出略过，大致解说一下。Pylons 程序可以用 Paste 自动生成一些代码，包括controller。还可以运行 HTTP 服务来测试。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">Pylons 入门实例教程 - Hello</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-06-28T00:00:00JST">Jun 28, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">Pylons 入门实例教程 - Hello</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p><a href="http://pylonshq.com/">http://pylonshq.com/</a>，当然，这些组件只是默认，你还可以根据自己喜好来选择其他组件，比如你可以采用 Jinja2 或 Genshi 模板，ORM也可以采用 SQLObject。完全是自由组合。</p>
+
+<p>废话少说，现在开始安装吧。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">pylons</span>
+</code></pre></div>
+
+
+<p>Debian/Ubuntu 系列系统可以直接 aptitude 安装，当然你也可以使用 easy_install 或者源码安装。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">sudo</span> <span class="n">easy_install</span> <span class="n">Pylons</span>
+</code></pre></div>
+
+
+<p>更多安装文档请参考官网安装部分，<a href="http://pylonshq.com/docs/en/1.0/gettingstarted/#installing">http://pylonshq.com/docs/en/1.0/gettingstarted/#installing</a></p>
+
+<p>好了，安装结束，来一个经典的Hello程序吧。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">-</span><span class="n">t</span> <span class="n">pylons</span> <span class="n">hello</span>
+<span class="n">Selected</span> <span class="ow">and</span> <span class="n">implied</span> <span class="n">templates</span><span class="p">:</span>
+  <span class="n">Pylons</span><span class="c1">#pylons  Pylons application template</span>
+
+<span class="n">Variables</span><span class="p">:</span>
+  <span class="n">egg</span><span class="p">:</span>      <span class="n">hello</span>
+  <span class="n">package</span><span class="p">:</span>  <span class="n">hello</span>
+  <span class="n">project</span><span class="p">:</span>  <span class="n">hello</span>
+<span class="n">Enter</span> <span class="n">template_engine</span> <span class="p">(</span><span class="n">mako</span><span class="o">/</span><span class="n">genshi</span><span class="o">/</span><span class="n">jinja2</span><span class="o">/</span><span class="n">etc</span><span class="p">:</span> <span class="n">Template</span> <span class="n">language</span><span class="p">)</span> <span class="p">[</span><span class="s1">&#39;mako&#39;</span><span class="p">]:</span>
+<span class="n">Enter</span> <span class="n">sqlalchemy</span> <span class="p">(</span><span class="bp">True</span><span class="o">/</span><span class="bp">False</span><span class="p">:</span> <span class="n">Include</span> <span class="n">SQLAlchemy</span> <span class="mf">0.5</span> <span class="n">configuration</span><span class="p">)</span> <span class="p">[</span><span class="bp">False</span><span class="p">]:</span>
+<span class="n">Creating</span> <span class="n">template</span> <span class="n">pylons</span>
+<span class="n">Creating</span> <span class="n">directory</span> <span class="o">./</span><span class="n">hello</span>
+</code></pre></div>
+
+
+<p>下面输出略过，大致解说一下。Pylons 程序可以用 Paste 自动生成一些代码，包括controller。还可以运行 HTTP 服务来测试。</p>
+
+<p>-t  表示自动创建的模板，可以如下来查看有哪些选项，更多就参考 help 吧。</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">templates</span>
+<span class="n">Available</span> <span class="n">templates</span><span class="p">:</span>
+  <span class="n">basic_package</span><span class="p">:</span>   <span class="n">A</span> <span class="n">basic</span> <span class="n">setuptools</span><span class="o">-</span><span class="n">enabled</span> <span class="n">package</span>
+  <span class="n">paste_deploy</span><span class="p">:</span>    <span class="n">A</span> <span class="n">web</span> <span class="n">application</span> <span class="n">deployed</span> <span class="n">through</span> <span class="n">paste</span><span class="o">.</span><span class="n">deploy</span>
+  <span class="n">pylons</span><span class="p">:</span>          <span class="n">Pylons</span> <span class="n">application</span> <span class="n">template</span>
+  <span class="n">pylons_minimal</span><span class="p">:</span>  <span class="n">Pylons</span> <span class="n">minimal</span> <span class="n">application</span> <span class="n">template</span>
+</code></pre></div>
+</p>
+
+<p>看一下hello的目录结构：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">ls</span>
+<span class="n">development</span><span class="o">.</span><span class="n">ini</span>  <span class="n">ez_setup</span><span class="o">.</span><span class="n">py</span>  <span class="n">hello</span><span class="o">.</span><span class="n">egg</span><span class="o">-</span><span class="n">info</span>  <span class="n">README</span><span class="o">.</span><span class="n">txt</span>  <span class="n">setup</span><span class="o">.</span><span class="n">py</span>
+<span class="n">docs</span>             <span class="n">hello</span>        <span class="n">MANIFEST</span><span class="o">.</span><span class="ow">in</span>     <span class="n">setup</span><span class="o">.</span><span class="n">cfg</span>   <span class="n">test</span><span class="o">.</span><span class="n">ini</span>
+</code></pre></div>
+
+
+<p>这里具体各个文件意思就不讲解了，程序主体部分都在hello/hello目录下，development.ini 和 test.ini 分别是服务启动的配置文件，用于测试和开发环境。开始先运行一下，看效果吧。。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">paster</span> <span class="n">serve</span> <span class="o">--</span><span class="nb">reload</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>
+<span class="n">Starting</span> <span class="n">subprocess</span> <span class="k">with</span> <span class="nb">file</span> <span class="n">monitor</span>
+<span class="n">Starting</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">PID</span> <span class="mf">1519.</span>
+<span class="n">serving</span> <span class="n">on</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5000</span>
+</code></pre></div>
+
+
+<p>在浏览器中打开：<a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> 看到页面了吧？恭喜。</p>
+
+<p>继续，写一个简单的显示 hi的 controller 程序吧。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">paster</span> <span class="n">controller</span> <span class="n">hi</span>
+<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="o">/</span><span class="n">hello</span><span class="o">/</span><span class="n">controllers</span><span class="o">/</span><span class="n">hi</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="o">/</span><span class="n">hello</span><span class="o">/</span><span class="n">tests</span><span class="o">/</span><span class="n">functional</span><span class="o">/</span><span class="n">test_hi</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+
+<p>自动生成程序和 test 文件。paster 启动服务不需要重启会自动加载，可以浏览器访问：<a href="http://127.0.0.1:5000/hi/index">http://127.0.0.1:5000/hi/index</a></p>
+
+<p>很简单吧，打开 hi.py，基本如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">class</span> <span class="nc">HiController</span><span class="p">(</span><span class="n">BaseController</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Return a rendered template</span>
+        <span class="c1">#return render(&#39;/hi.mako&#39;)</span>
+        <span class="c1"># or, return a response</span>
+        <span class="k">return</span> <span class="s1">&#39;Hello World&#39;</span>
+</code></pre></div>
+
+
+<p>上面注释部分可以 return 一个模板文件，模板放入 templates 目录下即可。</p>
+
+<p>去除上面的 return &lsquo;Hello&rsquo; 返回 return render(&lsquo;/hi.mako&rsquo;)</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">vi</span> <span class="n">hello</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">hi</span><span class="o">.</span><span class="n">mako</span>
+<span class="o">%</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+ <span class="err">$</span><span class="p">{</span><span class="n">key</span><span class="p">}</span> <span class="o">=</span> <span class="err">$</span><span class="p">{</span><span class="n">value</span><span class="p">}</span>
+<span class="o">%</span> <span class="n">endfor</span>
+</code></pre></div>
+
+
+<p>刷新 <a href="http://127.0.0.1:5000/hi/index">http://127.0.0.1:5000/hi/index</a> ，可以看到一些环境变量的输出了吧。</p>
+
+<p>今天就简单的说到这里吧，下回来一个完整的例子，包括URL、模板、数据库和Session的实例。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

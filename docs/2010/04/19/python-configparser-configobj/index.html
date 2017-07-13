@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Python ConfigParser 与 ConfigObj INI 配置读写顺序 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：&amp;gt;&amp;gt;&amp;gt; from ConfigParser import ConfigParser &amp;gt;&amp;gt;&amp;gt; cf = ConfigParser() &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;d&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;d&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;a&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;a&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish2&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.write(open(&amp;#39;d:/a.ini&amp;#39;, &amp;#39;w&amp;#39;)) &amp;gt;&amp;gt;&amp;gt; cf = None  生成配置如下：[a] name = smallfish2 [d] name = smallfish  翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html代码片段如下：&amp;gt;&amp;gt;&amp;gt; from configobj import ConfigObj &amp;gt;&amp;gt;&amp;gt; config = ConfigObj() &amp;gt;&amp;gt;&amp;gt; config.filename = &amp;#39;d:/a.ini&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish2&amp;#39; &amp;gt;&amp;gt;&amp;gt; config.">
+
+<meta property="og:title" content="Python ConfigParser 与 ConfigObj INI 配置读写顺序 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：&amp;gt;&amp;gt;&amp;gt; from ConfigParser import ConfigParser &amp;gt;&amp;gt;&amp;gt; cf = ConfigParser() &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;d&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;d&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;a&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;a&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish2&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.write(open(&amp;#39;d:/a.ini&amp;#39;, &amp;#39;w&amp;#39;)) &amp;gt;&amp;gt;&amp;gt; cf = None  生成配置如下：[a] name = smallfish2 [d] name = smallfish  翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html代码片段如下：&amp;gt;&amp;gt;&amp;gt; from configobj import ConfigObj &amp;gt;&amp;gt;&amp;gt; config = ConfigObj() &amp;gt;&amp;gt;&amp;gt; config.filename = &amp;#39;d:/a.ini&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish2&amp;#39; &amp;gt;&amp;gt;&amp;gt; config.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/">
+<meta name="twitter:title" content="Python ConfigParser 与 ConfigObj INI 配置读写顺序 - smallfish&#39;g blog">
+<meta name="twitter:description" content="默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：&amp;gt;&amp;gt;&amp;gt; from ConfigParser import ConfigParser &amp;gt;&amp;gt;&amp;gt; cf = ConfigParser() &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;d&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;d&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;a&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;a&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish2&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.write(open(&amp;#39;d:/a.ini&amp;#39;, &amp;#39;w&amp;#39;)) &amp;gt;&amp;gt;&amp;gt; cf = None  生成配置如下：[a] name = smallfish2 [d] name = smallfish  翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html代码片段如下：&amp;gt;&amp;gt;&amp;gt; from configobj import ConfigObj &amp;gt;&amp;gt;&amp;gt; config = ConfigObj() &amp;gt;&amp;gt;&amp;gt; config.filename = &amp;#39;d:/a.ini&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish2&amp;#39; &amp;gt;&amp;gt;&amp;gt; config.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Python ConfigParser 与 ConfigObj INI 配置读写顺序 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-04-19T00:00:00JST",
+    "dateModified": "2010-04-19T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：
+&gt;&gt;&gt; from ConfigParser import ConfigParser &gt;&gt;&gt; cf = ConfigParser() &gt;&gt;&gt; cf.add_section(&#39;d&#39;) &gt;&gt;&gt; cf.set(&#39;d&#39;, &#39;name&#39;, &#39;smallfish&#39;) &gt;&gt;&gt; cf.add_section(&#39;a&#39;) &gt;&gt;&gt; cf.set(&#39;a&#39;, &#39;name&#39;, &#39;smallfish2&#39;) &gt;&gt;&gt; cf.write(open(&#39;d:/a.ini&#39;, &#39;w&#39;)) &gt;&gt;&gt; cf = None  生成配置如下：
+[a] name = smallfish2 [d] name = smallfish  翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html
+代码片段如下：
+&gt;&gt;&gt; from configobj import ConfigObj &gt;&gt;&gt; config = ConfigObj() &gt;&gt;&gt; config.filename = &#39;d:/a.ini&#39; &gt;&gt;&gt; config[&#39;d&#39;] = {} &gt;&gt;&gt; config[&#39;d&#39;][&#39;name&#39;] = &#39;smallfish&#39; &gt;&gt;&gt; config[&#39;a&#39;] = {} &gt;&gt;&gt; config[&#39;a&#39;][&#39;name&#39;] = &#39;smallfish2&#39; &gt;&gt;&gt; config."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">Python ConfigParser 与 ConfigObj INI 配置读写顺序</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-04-19T00:00:00JST">Apr 19, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">Python ConfigParser 与 ConfigObj INI 配置读写顺序</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">ConfigParser</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;smallfish&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;smallfish2&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;d:/a.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span> <span class="o">=</span> <span class="bp">None</span>
+</code></pre></div>
+
+
+<p>生成配置如下：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish2</span>
+<span class="p">[</span><span class="n">d</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish</span>
+</code></pre></div>
+</p>
+
+<p>翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：<a href="http://www.voidspace.org.uk/python/configobj.html">http://www.voidspace.org.uk/python/configobj.html</a></p>
+
+<p>代码片段如下：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">configobj</span> <span class="kn">import</span> <span class="n">ConfigObj</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigObj</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;d:/a.ini&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;smallfish&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;smallfish2&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
+</code></pre></div>
+</p>
+
+<p>生成配置如下：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish</span>
+<span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish2</span>
+</code></pre></div>
+</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

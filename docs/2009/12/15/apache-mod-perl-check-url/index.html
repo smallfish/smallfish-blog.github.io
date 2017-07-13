@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Apache Mod_Perl 防盗链 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="大体思路是这样的，比如有 一个地址：http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。 但是假如在http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。modperl强大到可以任意应用apache内部API，官方地址是：http://perl.apache.org/ 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：use strict; use lib qw(/home/httpd/modperl); # 把这个路径加入到perl lib路径 use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Request (); 1;  部分本机httpd.conf配置：LoadModule perl_module modules/mod_perl.so LoadModule apreq_module modules/mod_apreq2.so PerlPostConfigRequire /home/httpd/modperl/startup.pl &amp;lt;Location /down &amp;gt; SetHandler modperl # 设置该目录交给modper处理 PerlAccessHandler Down # Down是模块名称 PerlSetVar key 123 # 设置校验参数值 &amp;lt;/Location&amp;gt;  mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entrystartup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：package Down; use strict; use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Const -compile =&amp;gt; qw(OK FORBIDDEN); use Apache2::Request (); sub handler { my $r = shift; my $req = Apache2::Request-&amp;gt;new($r); my $ip = $r-&amp;gt;connection-&amp;gt;remote_ip; my $k = $req-&amp;gt;param(&amp;#39;key&amp;#39;) || &amp;#39;&amp;#39;; # 判断访问时是否带key参数 my $key = $r-&amp;gt;dir_config(&amp;#39;key&amp;#39;) || &amp;#39;123&amp;#39;; # 加载httpd.">
+
+<meta property="og:title" content="Apache Mod_Perl 防盗链 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="大体思路是这样的，比如有 一个地址：http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。 但是假如在http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。modperl强大到可以任意应用apache内部API，官方地址是：http://perl.apache.org/ 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：use strict; use lib qw(/home/httpd/modperl); # 把这个路径加入到perl lib路径 use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Request (); 1;  部分本机httpd.conf配置：LoadModule perl_module modules/mod_perl.so LoadModule apreq_module modules/mod_apreq2.so PerlPostConfigRequire /home/httpd/modperl/startup.pl &amp;lt;Location /down &amp;gt; SetHandler modperl # 设置该目录交给modper处理 PerlAccessHandler Down # Down是模块名称 PerlSetVar key 123 # 设置校验参数值 &amp;lt;/Location&amp;gt;  mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entrystartup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：package Down; use strict; use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Const -compile =&amp;gt; qw(OK FORBIDDEN); use Apache2::Request (); sub handler { my $r = shift; my $req = Apache2::Request-&amp;gt;new($r); my $ip = $r-&amp;gt;connection-&amp;gt;remote_ip; my $k = $req-&amp;gt;param(&amp;#39;key&amp;#39;) || &amp;#39;&amp;#39;; # 判断访问时是否带key参数 my $key = $r-&amp;gt;dir_config(&amp;#39;key&amp;#39;) || &amp;#39;123&amp;#39;; # 加载httpd.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/">
+<meta name="twitter:title" content="Apache Mod_Perl 防盗链 - smallfish&#39;g blog">
+<meta name="twitter:description" content="大体思路是这样的，比如有 一个地址：http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。 但是假如在http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。modperl强大到可以任意应用apache内部API，官方地址是：http://perl.apache.org/ 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：use strict; use lib qw(/home/httpd/modperl); # 把这个路径加入到perl lib路径 use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Request (); 1;  部分本机httpd.conf配置：LoadModule perl_module modules/mod_perl.so LoadModule apreq_module modules/mod_apreq2.so PerlPostConfigRequire /home/httpd/modperl/startup.pl &amp;lt;Location /down &amp;gt; SetHandler modperl # 设置该目录交给modper处理 PerlAccessHandler Down # Down是模块名称 PerlSetVar key 123 # 设置校验参数值 &amp;lt;/Location&amp;gt;  mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entrystartup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：package Down; use strict; use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Const -compile =&amp;gt; qw(OK FORBIDDEN); use Apache2::Request (); sub handler { my $r = shift; my $req = Apache2::Request-&amp;gt;new($r); my $ip = $r-&amp;gt;connection-&amp;gt;remote_ip; my $k = $req-&amp;gt;param(&amp;#39;key&amp;#39;) || &amp;#39;&amp;#39;; # 判断访问时是否带key参数 my $key = $r-&amp;gt;dir_config(&amp;#39;key&amp;#39;) || &amp;#39;123&amp;#39;; # 加载httpd.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Apache Mod_Perl 防盗链 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "大体思路是这样的，比如有 一个地址：http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。 但是假如在http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。
+modperl强大到可以任意应用apache内部API，官方地址是：http://perl.apache.org/ 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。
+先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：
+use strict; use lib qw(/home/httpd/modperl); # 把这个路径加入到perl lib路径 use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Request (); 1;  部分本机httpd.conf配置：
+LoadModule perl_module modules/mod_perl.so LoadModule apreq_module modules/mod_apreq2.so PerlPostConfigRequire /home/httpd/modperl/startup.pl &lt;Location /down &gt; SetHandler modperl # 设置该目录交给modper处理 PerlAccessHandler Down # Down是模块名称 PerlSetVar key 123 # 设置校验参数值 &lt;/Location&gt;  mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry
+startup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。
+修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：
+package Down; use strict; use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Const -compile =&gt; qw(OK FORBIDDEN); use Apache2::Request (); sub handler { my $r = shift; my $req = Apache2::Request-&gt;new($r); my $ip = $r-&gt;connection-&gt;remote_ip; my $k = $req-&gt;param(&#39;key&#39;) || &#39;&#39;; # 判断访问时是否带key参数 my $key = $r-&gt;dir_config(&#39;key&#39;) || &#39;123&#39;; # 加载httpd."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Apache Mod_Perl 防盗链</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Apache Mod_Perl 防盗链</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>大体思路是这样的，比如有 一个地址：<a href="http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。">http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。</a> 但是假如在<a href="http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校">http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校</a> 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。</p>
+
+<p>modperl强大到可以任意应用apache内部API，官方地址是：<a href="http://perl.apache.org/">http://perl.apache.org/</a> 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。</p>
+
+<p>先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
+
+<span class="n">use</span> <span class="n">lib</span> <span class="n">qw</span><span class="p">(</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">modperl</span><span class="p">);</span> <span class="c1"># 把这个路径加入到perl lib路径</span>
+
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestRec</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestIO</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Connection</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestUtil</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">ServerUtil</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Log</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Request</span> <span class="p">();</span>
+
+<span class="mi">1</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>部分本机httpd.conf配置：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">LoadModule</span> <span class="n">perl_module</span><span class="err">            </span>    <span class="n">modules</span><span class="o">/</span><span class="n">mod_perl</span><span class="o">.</span><span class="n">so</span>
+<span class="n">LoadModule</span> <span class="n">apreq_module</span><span class="err">         </span>    <span class="n">modules</span><span class="o">/</span><span class="n">mod_apreq2</span><span class="o">.</span><span class="n">so</span>
+<span class="n">PerlPostConfigRequire</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">modperl</span><span class="o">/</span><span class="n">startup</span><span class="o">.</span><span class="n">pl</span>
+<span class="o">&lt;</span><span class="n">Location</span> <span class="o">/</span><span class="n">down</span> <span class="o">&gt;</span>
+    <span class="n">SetHandler</span> <span class="n">modperl</span> <span class="c1"># 设置该目录交给modper处理</span>
+    <span class="n">PerlAccessHandler</span> <span class="n">Down</span> <span class="c1"># Down是模块名称</span>
+    <span class="n">PerlSetVar</span> <span class="n">key</span> <span class="mi">123</span> <span class="c1"># 设置校验参数值</span>
+<span class="o">&lt;/</span><span class="n">Location</span><span class="o">&gt;</span>
+</code></pre></div>
+
+
+<p>mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：<a href="http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry">http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry</a></p>
+
+<p>startup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。</p>
+
+<p>修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">Down</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestRec</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestIO</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Connection</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestUtil</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">ServerUtil</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Log</span> <span class="p">();</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span> <span class="o">-</span><span class="nb">compile</span> <span class="o">=&gt;</span> <span class="n">qw</span><span class="p">(</span><span class="n">OK</span> <span class="n">FORBIDDEN</span><span class="p">);</span>
+<span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Request</span> <span class="p">();</span>
+
+<span class="n">sub</span> <span class="n">handler</span> <span class="p">{</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">r</span> <span class="o">=</span> <span class="n">shift</span><span class="p">;</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">req</span> <span class="o">=</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Request</span><span class="o">-&gt;</span><span class="n">new</span><span class="p">(</span><span class="err">$</span><span class="n">r</span><span class="p">);</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">ip</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">remote_ip</span><span class="p">;</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">k</span> <span class="o">=</span> <span class="err">$</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1"># 判断访问时是否带key参数</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">key</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">dir_config</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;123&#39;</span><span class="p">;</span> <span class="c1"># 加载httpd.conf配置中的key值</span>
+    <span class="k">if</span> <span class="p">(</span><span class="err">$</span><span class="n">key</span> <span class="n">eq</span> <span class="err">$</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span> <span class="c1"># 相等可以正常访问</span>
+        <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">OK</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1"># 否则显示拒绝访问</span>
+        <span class="n">my</span> <span class="err">$</span><span class="n">s</span> <span class="o">=</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">ServerUtil</span><span class="o">-&gt;</span><span class="n">server</span><span class="p">;</span>
+        <span class="err">$</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">log_error</span><span class="p">(</span><span class="s2">&quot;[$ip--------forbidden.]&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">FORBIDDEN</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="mi">1</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>提示一下，以上两个perl脚本文件末尾记得加上1;</p>
+
+<p>重启下apache。现在可以通过<a href="http://www.aa.com/down/1.mp3和http://www.aa.com/down">http://www.aa.com/down/1.mp3和http://www.aa.com/down</a> /1.mp3?key=123测试下。可以看见不加参数拒绝访问了把。这里只是简单的判断，实际上可以根据日期或者IP加密生成一个字符串来判断。</p>
+
+<p>写这个帖子完全是无意中搜索modperl应用时候发现了，具体可以参见：
+<a href="http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21140.entry">http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21140.entry</a></p>
+
+<p>上面的文档已经写都很详细了，包括怎么安装modperl、Apache2::Request等模块以及配置apache的http.conf就不在累赘都重复了。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

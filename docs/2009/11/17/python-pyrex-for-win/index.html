@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Win Python Pyrex 扩展 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C&#43;&#43; http://www.bloodshed.net/devcpp.htmlPyrex 可以通过easy_install Pyrex来安装。 Dev C&#43;&#43; 安装完在系统环境变量Path里加上Dev C&#43;&#43;安装目录/bin 目录。测试扩展代码：# file: foo.pyx &amp;quot;&amp;quot;&amp;quot; simple pyrex module &amp;quot;&amp;quot;&amp;quot; cdef class Foo: &amp;quot;&amp;quot;&amp;quot; foo doc ... &amp;quot;&amp;quot;&amp;quot; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &amp;quot;foo names: %s&amp;quot; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&amp;#39;foo&amp;#39;, ext_modules=[Extension(&amp;quot;foo&amp;quot;, [&amp;quot;foo.">
+
+<meta property="og:title" content="Win Python Pyrex 扩展 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C&#43;&#43; http://www.bloodshed.net/devcpp.htmlPyrex 可以通过easy_install Pyrex来安装。 Dev C&#43;&#43; 安装完在系统环境变量Path里加上Dev C&#43;&#43;安装目录/bin 目录。测试扩展代码：# file: foo.pyx &amp;quot;&amp;quot;&amp;quot; simple pyrex module &amp;quot;&amp;quot;&amp;quot; cdef class Foo: &amp;quot;&amp;quot;&amp;quot; foo doc ... &amp;quot;&amp;quot;&amp;quot; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &amp;quot;foo names: %s&amp;quot; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&amp;#39;foo&amp;#39;, ext_modules=[Extension(&amp;quot;foo&amp;quot;, [&amp;quot;foo.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/">
+<meta name="twitter:title" content="Win Python Pyrex 扩展 - smallfish&#39;g blog">
+<meta name="twitter:description" content="在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C&#43;&#43; http://www.bloodshed.net/devcpp.htmlPyrex 可以通过easy_install Pyrex来安装。 Dev C&#43;&#43; 安装完在系统环境变量Path里加上Dev C&#43;&#43;安装目录/bin 目录。测试扩展代码：# file: foo.pyx &amp;quot;&amp;quot;&amp;quot; simple pyrex module &amp;quot;&amp;quot;&amp;quot; cdef class Foo: &amp;quot;&amp;quot;&amp;quot; foo doc ... &amp;quot;&amp;quot;&amp;quot; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &amp;quot;foo names: %s&amp;quot; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&amp;#39;foo&amp;#39;, ext_modules=[Extension(&amp;quot;foo&amp;quot;, [&amp;quot;foo.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Win Python Pyrex 扩展 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-11-17T00:00:00JST",
+    "dateModified": "2009-11-17T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。
+需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C++ http://www.bloodshed.net/devcpp.html
+Pyrex 可以通过easy_install Pyrex来安装。 Dev C++ 安装完在系统环境变量Path里加上Dev C++安装目录/bin 目录。
+测试扩展代码：
+# file: foo.pyx &quot;&quot;&quot; simple pyrex module &quot;&quot;&quot; cdef class Foo: &quot;&quot;&quot; foo doc ... &quot;&quot;&quot; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &quot;foo names: %s&quot; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&#39;foo&#39;, ext_modules=[Extension(&quot;foo&quot;, [&quot;foo."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Win Python Pyrex 扩展</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-17T00:00:00JST">Nov 17, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Win Python Pyrex 扩展</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。</p>
+
+<p>需要的工具有：
+- Pyrex <a href="http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/">http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/</a>
+- Dev C++ <a href="http://www.bloodshed.net/devcpp.html">http://www.bloodshed.net/devcpp.html</a></p>
+
+<p>Pyrex 可以通过easy_install Pyrex来安装。
+Dev C++ 安装完在系统环境变量Path里加上Dev C++安装目录/bin 目录。</p>
+
+<p>测试扩展代码：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># file: foo.pyx</span>
+<span class="sd">&quot;&quot;&quot; simple pyrex module &quot;&quot;&quot;</span>
+<span class="n">cdef</span> <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; foo doc ... &quot;&quot;&quot;</span>
+    <span class="n">cdef</span> <span class="n">char</span> <span class="o">*</span><span class="n">name</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;foo names: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<span class="c1"># file: setup.py</span>
+<span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
+<span class="kn">from</span> <span class="nn">distutils.extension</span> <span class="kn">import</span> <span class="n">Extension</span>
+<span class="kn">from</span> <span class="nn">Pyrex.Distutils</span> <span class="kn">import</span> <span class="n">build_ext</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">ext_modules</span><span class="o">=</span><span class="p">[</span><span class="n">Extension</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;foo.pyx&quot;</span><span class="p">])],</span>
+    <span class="n">cmdclass</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;build_ext&#39;</span><span class="p">:</span><span class="n">build_ext</span><span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>写好两个文件后，进入命令提示符：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span> <span class="o">-</span><span class="n">c</span> <span class="n">mingw32</span>
+<span class="n">running</span> <span class="n">build_ext</span>
+<span class="n">pyrexc</span> <span class="n">foo</span><span class="o">.</span><span class="n">pyx</span> <span class="o">--&gt;</span> <span class="n">foo</span><span class="o">.</span><span class="n">c</span>
+<span class="n">building</span> <span class="s1">&#39;foo&#39;</span> <span class="n">extension</span>
+<span class="n">creating</span> <span class="n">build</span>
+<span class="n">creating</span> <span class="n">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>
+<span class="n">creating</span> <span class="n">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>\<span class="n">Release</span>
+<span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">DEV</span><span class="o">-</span><span class="n">CPP</span>\<span class="n">Bin</span>\<span class="n">gcc</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">mno</span><span class="o">-</span><span class="n">cygwin</span> <span class="o">-</span><span class="n">mdll</span> <span class="o">-</span><span class="n">O</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">ID</span><span class="p">:</span>\<span class="n">Python25</span>\<span class="n">include</span> <span class="o">-</span><span class="n">ID</span><span class="p">:</span>\<span class="n">Python25</span>\<span class="n">PC</span> <span class="o">-</span><span class="n">c</span> <span class="n">foo</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span><span class="n">o</span> <span class="n">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>\<span class="n">Release</span>\<span class="n">foo</span><span class="o">.</span><span class="n">o</span> <span class="n">writing</span> <span class="n">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>\<span class="n">Release</span>\<span class="n">foo</span><span class="o">.</span><span class="k">def</span> <span class="nf">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">DEV</span><span class="o">-</span><span class="n">CPP</span>\<span class="n">Bin</span>\<span class="n">dllwrap</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">mno</span><span class="o">-</span><span class="n">cygwin</span> <span class="o">-</span><span class="n">mdll</span> <span class="o">-</span><span class="n">static</span> <span class="o">--</span><span class="n">entry</span> <span class="n">_DllMain</span><span class="nd">@12</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">lib</span> <span class="n">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>\<span class="n">Release</span>\<span class="n">libfoo</span><span class="o">.</span><span class="n">a</span> <span class="o">--</span><span class="k">def</span> <span class="nf">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>\<span class="n">Release</span>\<span class="n">foo</span><span class="o">.</span><span class="k">def</span> <span class="o">-</span><span class="n">s</span> <span class="n">build</span>\<span class="n">temp</span><span class="o">.</span><span class="n">win32</span><span class="o">-</span><span class="mf">2.5</span>\<span class="n">Release</span>\<span class="n">foo</span><span class="o">.</span><span class="n">o</span> <span class="o">-</span><span class="n">LD</span><span class="p">:</span>\<span class="n">Python25</span>\<span class="n">libs</span> <span class="o">-</span><span class="n">L</span> <span class="n">D</span><span class="p">:</span>\<span class="n">Python25</span>\<span class="n">PCBuild</span> <span class="o">-</span><span class="n">lpython25</span> <span class="o">-</span><span class="n">lmsvcr71</span> <span class="o">-</span><span class="n">o</span> <span class="n">foo</span><span class="o">.</span><span class="n">pyd</span>
+</code></pre></div>
+</p>
+
+<p>编译完毕，可以看到当前目录下多了：build目录、foo.c、foo.pyd。foo.pyd 即是编译好的二进制扩展。</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span><span class="n">python</span>
+<span class="n">ActivePython</span> <span class="mf">2.5</span><span class="o">.</span><span class="mf">0.0</span> <span class="p">(</span><span class="n">ActiveState</span> <span class="n">Software</span> <span class="n">Inc</span><span class="o">.</span><span class="p">)</span> <span class="n">based</span> <span class="n">on</span>
+<span class="n">Python</span> <span class="mf">2.5</span> <span class="p">(</span><span class="n">r25</span><span class="p">:</span><span class="mi">51908</span><span class="p">,</span> <span class="n">Mar</span> <span class="mi">9</span> <span class="mi">2007</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">28</span><span class="p">)</span> <span class="p">[</span><span class="n">MSC</span> <span class="n">v</span><span class="o">.</span><span class="mi">1310</span> <span class="mi">32</span> <span class="n">bit</span> <span class="p">(</span><span class="n">Intel</span><span class="p">)]</span> <span class="n">on</span> <span class="n">win32</span>
+<span class="n">Type</span> <span class="s2">&quot;help&quot;</span><span class="p">,</span> <span class="s2">&quot;copyright&quot;</span><span class="p">,</span> <span class="s2">&quot;credits&quot;</span> <span class="ow">or</span> <span class="s2">&quot;license&quot;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span><span class="o">.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">foo</span>
+<span class="o">&lt;</span><span class="n">module</span> <span class="s1">&#39;foo&#39;</span> <span class="kn">from</span> <span class="s1">&#39;foo.pyd&#39;</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">foo</span><span class="o">.</span><span class="n">Foo</span><span class="p">(</span><span class="s2">&quot;smallfish&quot;</span><span class="p">)</span>
+<span class="n">foo</span> <span class="n">names</span><span class="p">:</span> <span class="n">smallfish</span>
+</code></pre></div>
+</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>tornado.database添加PooledDB连接池功能 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="tornado.database模块简单包装了下对MySQL的操作，短小精悍。无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)原代码如下： def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  修改后： def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：easy_install -U DBUtils  PooledDB有这么几个参数：* creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&amp;quot;set datestyle to german&amp;quot;, .">
+
+<meta property="og:title" content="tornado.database添加PooledDB连接池功能 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="tornado.database模块简单包装了下对MySQL的操作，短小精悍。无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)原代码如下： def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  修改后： def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：easy_install -U DBUtils  PooledDB有这么几个参数：* creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&amp;quot;set datestyle to german&amp;quot;, .">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/">
+<meta name="twitter:title" content="tornado.database添加PooledDB连接池功能 - smallfish&#39;g blog">
+<meta name="twitter:description" content="tornado.database模块简单包装了下对MySQL的操作，短小精悍。无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)原代码如下： def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  修改后： def reconnect(self): &amp;quot;&amp;quot;&amp;quot;Closes the existing database connection and re-opens it.&amp;quot;&amp;quot;&amp;quot; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：easy_install -U DBUtils  PooledDB有这么几个参数：* creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&amp;quot;set datestyle to german&amp;quot;, .">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "tornado.database添加PooledDB连接池功能 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-01T00:00:00JST",
+    "dateModified": "2009-12-01T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "tornado.database模块简单包装了下对MySQL的操作，短小精悍。
+无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。
+主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)
+原代码如下：
+ def reconnect(self): &quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  修改后：
+ def reconnect(self): &quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：
+easy_install -U DBUtils  PooledDB有这么几个参数：
+* creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&quot;set datestyle to german&quot;, ."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">tornado.database添加PooledDB连接池功能</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-01T00:00:00JST">Dec 1, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">tornado.database添加PooledDB连接池功能</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>tornado.database模块简单包装了下对MySQL的操作，短小精悍。</p>
+
+<p>无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。</p>
+
+<p>主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)</p>
+
+<p>原代码如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>修改后：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">DBUtils</span> <span class="kn">import</span> <span class="n">PooledDB</span>
+            <span class="n">pool_con</span> <span class="o">=</span> <span class="n">PooledDB</span><span class="o">.</span><span class="n">PooledDB</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="n">MySQLdb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">pool_con</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>至于安装DBUtils模块可以去<a href="http://pypi.python.org/pypi/DBUtils/">http://pypi.python.org/pypi/DBUtils/</a>下载，也可以简单的用easy_install：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">easy_install</span> <span class="o">-</span><span class="n">U</span> <span class="n">DBUtils</span>
+</code></pre></div>
+</p>
+
+<p>PooledDB有这么几个参数：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">*</span> <span class="n">creator</span>
+    <span class="err">可以生成</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="err">连接的任何函数或</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="err">兼容的数据库连接模块。</span>
+<span class="o">*</span> <span class="n">mincached</span>
+    <span class="err">启动时开启的空连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">意味着开始时不创建连接</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">maxcached</span>
+    <span class="err">连接池使用的最多连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">代表不限制连接池大小</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">maxshared</span>
+    <span class="err">最大允许的共享连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">代表所有连接都是专用的</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">maxconnections</span>
+    <span class="err">最大允许连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">代表不限制</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">blocking</span>
+    <span class="err">设置在达到最大数量时的行为</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">或</span> <span class="bp">False</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">maxusage</span>
+    <span class="err">单个连接的最大允许复用次数</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">或</span> <span class="bp">False</span> <span class="err">代表不限制的复用</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">setsession</span><span class="p">:</span>
+    <span class="err">一个可选的</span><span class="n">SQL</span><span class="err">命令列表用于准备每个会话，如</span> <span class="p">[</span><span class="s2">&quot;set datestyle to german&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+
+
+<p>creator 函数或可以生成连接的函数可以接受这里传入的其他参数，例如主机名、数据库、用户名、密码等。你还可以选择传入creator函数的其他参数，允许失败重连和负载均衡。</p>
+
+<p>具体可以参照下：<a href="http://www.webwareforpython.org/DBUtils/Docs/UsersGuide.zh.html">http://www.webwareforpython.org/DBUtils/Docs/UsersGuide.zh.html</a></p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

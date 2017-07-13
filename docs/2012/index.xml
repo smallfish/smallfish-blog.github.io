@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2012s on smallfish&#39;g blog</title>
+    <link>http://chenxiaoyu.org/2012/</link>
+    <description>Recent content in 2012s on smallfish&#39;g blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Dec 2012 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chenxiaoyu.org/2012/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>RabbitMQ trace 日志调试</title>
+      <link>http://chenxiaoyu.org/2012/12/19/rabbitmq-trace/</link>
+      <pubDate>Wed, 19 Dec 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/12/19/rabbitmq-trace/</guid>
+      <description>RabbitMQ 默认日志里只有类似客户端“accpet/close”等信息，对于有异常或者跟踪消息内部结构就比较麻烦了。
+翻阅官方教程意外发现了 rabbitmq_tracing 插件和 firehose。
+注意：打开 trace 会影响消息写入功能，适当打开后请关闭。
+自己顺手写了一个封装脚本，参考：https://github.com/smallfish/rabbitmq-trace
+安装上面的插件并开启 trace_on 之后，会发现多了两个 exchange：amq.rabbitmq.trace 和 amq.rabbitmq.log，类型均为：topic。
+懂了吧，只要订阅这两个主题，就能收到：客户端连接、消息发收等具体信息了。
+下面开始测试吧，先安装插件，并打开 trace_on：
+$ sudo rabbitmq-plugins enable rabbitmq_tracing $ （略去重启RabbitMQ命令） $ sudo rabbitmqctl trace_on Starting tracing for vhost &amp;quot;/&amp;quot; ... ...done.  测试代码采用 Python 的 pika 库，片段如下：
+import pika def _on_message(ch, method, properties, body): ret = {} ret[&amp;#39;routing_key&amp;#39;] = method.routing_key ret[&amp;#39;headers&amp;#39;] = properties.headers ret[&amp;#39;body&amp;#39;] = body print ret conn = pika.BlockingConnection(pika.ConnectionParameters()) chan.queue_declare(exclusive=False, auto_delete=True) # 临时队列 queue = ret.</description>
+    </item>
+    
+    <item>
+      <title>Go 模块测试</title>
+      <link>http://chenxiaoyu.org/2012/12/07/golang-module-test-benchmark/</link>
+      <pubDate>Fri, 07 Dec 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/12/07/golang-module-test-benchmark/</guid>
+      <description>Go 很多地方都透露着“约定大于配置”的理论，比如测试、可见性、语法等等。
+本文示例模块为：foo.go，则对应的测试模块为：foo_test.go，测试版本为：go v1.0.3。
+先写好示例代码： foo.go
+package foo func Add(a, b int) int { return a + b }  对应的测试代码：foo_test.go
+package foo import &amp;quot;testing&amp;quot; func TestAdd(t *testing.T) { if (Add(1, 2) != 3) { t.Error(&amp;quot;test foo:Addr failed&amp;quot;) } else { t.Log(&amp;quot;test foo:Addr pass&amp;quot;) } }  到这里可以运行测试了：
+$ go test PASS ok _/Users/smallfish/test/go/foo 0.080s  或者详细一点的输出：
+$ go test -v === RUN TestAdd --- PASS: TestAdd (0.00 seconds) foo_test.go:9: test foo:Addr pass PASS ok _/Users/smallfish/test/go/foo 0.</description>
+    </item>
+    
+    <item>
+      <title>lua-resty-beanstalkd 模块教程</title>
+      <link>http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/</link>
+      <pubDate>Sun, 25 Nov 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/</guid>
+      <description>本文涉及几个名词：
+ ngx_lua http://wiki.nginx.org/HttpLuaModule
+Embed the power of Lua into Nginx 摘自官方描述
+ beanstalkd http://kr.github.com/beanstalkd/
+一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。
+ lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
+基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。
+  下面是读写的示例：
+ 生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &amp;#39; local beanstalkd = require &amp;quot;resty.beanstalkd&amp;quot;  local bean, err = beanstalkd:new() local ok, err = bean:connect(&amp;quot;127.0.0.1&amp;quot;, 11300) if not ok then ngx.say(&amp;quot;1: failed to connect: &amp;quot;, err) return end local ok, err = bean:use(&amp;quot;default&amp;quot;) if not ok then ngx.</description>
+    </item>
+    
+    <item>
+      <title>LuaJIT FFI 调用 Curl 示例</title>
+      <link>http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/</link>
+      <pubDate>Thu, 11 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/</guid>
+      <description>LuaJIT 是一个好东西，比官方 Lua 解释器性能上提升很多。ngx_lua/ngx_openresty 都推荐用 LuaJIT 来加速 Lua 代码。
+除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。
+下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：
+操作系统： Mac OS X 10.8.2 LuaJIT版本：LuaJIT-2.0.0-beta10 Curl版本： 7.24.0  测试代码如下：
+local ffi = require &amp;#39;ffi&amp;#39; ffi.cdef[[ void *curl_easy_init(); int curl_easy_setopt(void *curl, int option, ...); int curl_easy_perform(void *curl); void curl_easy_cleanup(void *curl); char *curl_easy_strerror(int code); ]] local libcurl = ffi.load(&amp;#39;libcurl&amp;#39;) local curl = libcurl.curl_easy_init() local CURLOPT_URL = 10002 -- 参考 curl/curl.</description>
+    </item>
+    
+    <item>
+      <title>Fabric 部署工具</title>
+      <link>http://chenxiaoyu.org/2012/08/30/deploy-with-fabric/</link>
+      <pubDate>Thu, 30 Aug 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/08/30/deploy-with-fabric/</guid>
+      <description>Fabric 是基于 SSH 协议的 Python 工具，相比传统的 ssh/scp 方式，用 Python 的语法写管理命令更易读也更容易扩展，管理单台或者多台机器犹如本地操作一般。
+官网地址：http://fabfile.org 安装方法这里不在说明，推荐使用：pip 或者 easy_install 来安装。
+传统维护方法：
+$ ssh x.x.x.x &amp;#39;uname -a&amp;#39; -- 输出略  Fabric 示例：
+$ cat fabfile.py from fabric.api import run def uname(): run(&amp;#39;uname -a&amp;#39;) $ fab -H x.x.x.x uname -- 输出略  肉眼直观看上去，貌似比 ssh 方式要写不少代码，但是基于 ssh 方式中间可控环节比较少，例如：你想判断某服务是否已经启动，没有启动则执行启动等等操作。ssh 命令式的做法稍显麻烦。（当然龌龊一点可以在被操作机器上写好一个脚本，ssh 调用这个脚本）
+说几个 Fabric 的优点吧：
+ 角色定义 代码易读 封装了本地、远程操作（还需要自己封装system/popen/ssh操作么？） 参数灵活（动态指定 host/role 等，还有并发执行 基于multiprocessing ） 完整的日志输出  罗列的这些，其实日常工作里基本都有类似的封装了，但是有现成的一个成熟的工具，干啥不用呢？对吧。
+常用的配置：
+env.host -- 主机ip，当然也可以-H参数指定 env.</description>
+    </item>
+    
+    <item>
+      <title>如何编写 Go 程序（最新版）</title>
+      <link>http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/</link>
+      <pubDate>Wed, 14 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/</guid>
+      <description>官网文档（weekly）：http://weekly.golang.org/doc/code.html
+中文版（旧版）：http://chenxiaoyu.org/2010/06/29/how-to-write-go.html
+本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。
+本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。
+鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。
+可以自己试试下：
+$ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files doc run godoc on package sources env print Go environment information … 略去若干字  言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：$GOPATH
+在类似 Unix 环境大概这样设置：
+GOPATH=/home/user/ext:/home/user/mygo  Windows 系统请注意分隔符，是分号（非冒号）。
+以上 $GOPATH 目录约定有三个子目录：</description>
+    </item>
+    
+    <item>
+      <title>Nginx GZip 压缩</title>
+      <link>http://chenxiaoyu.org/2012/03/08/nginx-gzip/</link>
+      <pubDate>Thu, 08 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/03/08/nginx-gzip/</guid>
+      <description>Nginx GZip 模块文档详见：http://wiki.nginx.org/HttpGzipModule
+常用配置片段如下：
+gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &amp;quot;MSIE [1-6]\.&amp;quot;; # 无视IE6这个笨蛋~  其中 gzip_types 选项默认只压缩 text/html，源码见：
+src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&amp;quot;text/html&amp;quot;),  常用的静态 type 有，看自己需要压缩的情况而定：
+text/html text/plain text/css application/x-javascript text/javascript application/xml  OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
+下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：
+查看是否开启gzip，需要客户端加入：&amp;quot;Accept-Encoding: gzip, deflate&amp;quot; 头信息。 $ curl -I -H &amp;quot;Accept-Encoding: gzip, deflate&amp;quot; &amp;quot;http://localhost/tag.php&amp;quot; HTTP/1.</description>
+    </item>
+    
+    <item>
+      <title>Nginx-Lua HTTP 401 认证校验</title>
+      <link>http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/</link>
+      <pubDate>Wed, 08 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/</guid>
+      <description>本文示例依赖模块：
+ lua-nginx-module ngx_coolkit（获取$remote_passwd 输入值）  如何编译Nginx这些扩展模块，请参考以前《Nginx 第三方模块试用记》。
+基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。
+比如 PHP 401发送示例，或者 Apache 配置：
+&amp;lt;Directory &amp;quot;/path/a&amp;quot;&amp;gt; AuthType Basic AuthName &amp;quot;localhost&amp;quot; AuthUserFile /usr/local/apache/.htpasswd Require valid-user &amp;lt;/Directory&amp;gt;  这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。
+本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。
+nginx.conf 配置片段：
+location /ubuntu { access_by_lua &amp;#39; -- 用户和密码正确 access 则通过，并转向 proxy 部分。 if ngx.var.remote_user == &amp;quot;smallfish&amp;quot; and ngx.var.remote_passwd == &amp;quot;12&amp;quot; then return end -- 返回 HTTP 401 认证输入框 ngx.</description>
+    </item>
+    
+    <item>
+      <title>Nginx-Lua过滤POST请求</title>
+      <link>http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/</link>
+      <pubDate>Wed, 04 Jan 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/</guid>
+      <description>注：此文章会持续更新
+2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。
+看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。
+刚好可以尝试一下 nginx-lua 模块，这里简单贴一些代码，编译步骤就略去。
+本文只是根据 POST 参数个数进行简单校验的测试。
+这里大概有几个步骤：
+加载 conf/post-limit.lua，文件内容在下一段
+access_by_lua_file &amp;#39;conf/post-limit.lua&amp;#39;;  conf/post-limit.lua 文件内容：
+ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 参数最多个数，这里测试用，2个 if method == &amp;#39;POST&amp;#39; then -- 只过滤 POST 请求 local data = ngx.req.get_body_data() if data then local count = 0 local i = 0 while true do if count &amp;gt; max_size then -- 大于2次，重定向错误页面 ngx.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2011/11/09/nginx-session/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Nginx Session 模块 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="上一篇《Nginx第三方模块》涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。这里还是需要感谢一下@agentzh，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下： ngx_devel_kit encrypted-session-nginx-module  编译很简单，类似如下：./configure --prefix=/opt/nginx \ --add-module=../ngx_devel_kit \ --add-module=../encrypted-session-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload  在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。encrypted_session_key &amp;quot;abcdefghijklmnopqrstuvwxyz123456&amp;quot;; encrypted_session_iv &amp;quot;1234567812345678&amp;quot;; encrypted_session_expires 5; # 默认过期时间是1d（一天）  话不到多说，直接来读写示例： 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &amp;#39;smallfish&amp;#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &amp;quot;Set-Cookie&amp;quot; &amp;quot;name=$session_name&amp;quot;; echo &amp;quot;write name: $session_name&amp;quot;; }   读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &amp;quot;read name: $name&amp;quot;; }  ">
+
+<meta property="og:title" content="Nginx Session 模块 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2011/11/09/nginx-session/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="上一篇《Nginx第三方模块》涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。这里还是需要感谢一下@agentzh，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下： ngx_devel_kit encrypted-session-nginx-module  编译很简单，类似如下：./configure --prefix=/opt/nginx \ --add-module=../ngx_devel_kit \ --add-module=../encrypted-session-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload  在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。encrypted_session_key &amp;quot;abcdefghijklmnopqrstuvwxyz123456&amp;quot;; encrypted_session_iv &amp;quot;1234567812345678&amp;quot;; encrypted_session_expires 5; # 默认过期时间是1d（一天）  话不到多说，直接来读写示例： 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &amp;#39;smallfish&amp;#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &amp;quot;Set-Cookie&amp;quot; &amp;quot;name=$session_name&amp;quot;; echo &amp;quot;write name: $session_name&amp;quot;; }   读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &amp;quot;read name: $name&amp;quot;; }  ">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2011/11/09/nginx-session/">
+<meta name="twitter:title" content="Nginx Session 模块 - smallfish&#39;g blog">
+<meta name="twitter:description" content="上一篇《Nginx第三方模块》涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。这里还是需要感谢一下@agentzh，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下： ngx_devel_kit encrypted-session-nginx-module  编译很简单，类似如下：./configure --prefix=/opt/nginx \ --add-module=../ngx_devel_kit \ --add-module=../encrypted-session-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload  在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。encrypted_session_key &amp;quot;abcdefghijklmnopqrstuvwxyz123456&amp;quot;; encrypted_session_iv &amp;quot;1234567812345678&amp;quot;; encrypted_session_expires 5; # 默认过期时间是1d（一天）  话不到多说，直接来读写示例： 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &amp;#39;smallfish&amp;#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &amp;quot;Set-Cookie&amp;quot; &amp;quot;name=$session_name&amp;quot;; echo &amp;quot;write name: $session_name&amp;quot;; }   读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &amp;quot;read name: $name&amp;quot;; }  ">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Nginx Session 模块 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2011-11-09T00:00:00JST",
+    "dateModified": "2011-11-09T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "上一篇《Nginx第三方模块》涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。
+这里还是需要感谢一下@agentzh，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下：
+ ngx_devel_kit encrypted-session-nginx-module  编译很简单，类似如下：
+./configure --prefix=/opt/nginx \ --add-module=../ngx_devel_kit \ --add-module=../encrypted-session-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：
+1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload  在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。
+encrypted_session_key &quot;abcdefghijklmnopqrstuvwxyz123456&quot;; encrypted_session_iv &quot;1234567812345678&quot;; encrypted_session_expires 5; # 默认过期时间是1d（一天）  话不到多说，直接来读写示例：
+ 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &#39;smallfish&#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &quot;Set-Cookie&quot; &quot;name=$session_name&quot;; echo &quot;write name: $session_name&quot;; }   读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &quot;read name: $name&quot;; }  "
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2011/" itemprop="url"><span itemprop="title">2011</span></a></li>
+        
+        <li class="active">Nginx Session 模块</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-11-09T00:00:00JST">Nov 9, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+
+    <h1 class="title">Nginx Session 模块</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>上一篇<a href="http://chenxiaoyu.org/2011/10/30/nginx-modules.html">《Nginx第三方模块》</a>涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。</p>
+
+<p>这里还是需要感谢一下<a href="http://weibo.com/agentzh">@agentzh</a>，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下：</p>
+
+<ul>
+<li><a href="https://github.com/simpl/ngx_devel_kit">ngx_devel_kit</a></li>
+<li><a href="https://github.com/agentzh/encrypted-session-nginx-module">encrypted-session-nginx-module</a></li>
+</ul>
+
+<p>编译很简单，类似如下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>./configure --prefix<span class="o">=</span>/opt/nginx <span class="se">\</span>
+    --add-module<span class="o">=</span>../ngx_devel_kit <span class="se">\</span>
+    --add-module<span class="o">=</span>../encrypted-session-nginx-module
+</code></pre></div>
+
+
+<p>重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="m">1</span>. <span class="nb">kill</span> -HUP <span class="sb">`</span>cat /path/nginx/logs/nginx.pid<span class="sb">`</span>
+<span class="m">2</span>. /path/nginx/sbin/nginx -s reload
+</code></pre></div>
+
+
+<p>在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>encrypted_session_key <span class="s2">&quot;abcdefghijklmnopqrstuvwxyz123456&quot;</span><span class="p">;</span>
+encrypted_session_iv <span class="s2">&quot;1234567812345678&quot;</span><span class="p">;</span>
+encrypted_session_expires <span class="m">5</span><span class="p">;</span> <span class="c1"># 默认过期时间是1d（一天）</span>
+</code></pre></div>
+
+
+<p>话不到多说，直接来读写示例：</p>
+
+<ul>
+<li>写入session，测试session名为name，值是smallfish。</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /session-write <span class="o">{</span>
+    <span class="nb">set</span> <span class="nv">$name</span> <span class="s1">&#39;smallfish&#39;</span><span class="p">;</span>
+    set_encrypt_session <span class="nv">$session_name</span> <span class="nv">$name</span><span class="p">;</span>
+    set_encode_base32 <span class="nv">$session_name</span><span class="p">;</span>
+    add_header <span class="s2">&quot;Set-Cookie&quot;</span> <span class="s2">&quot;name=</span><span class="nv">$session_name</span><span class="s2">&quot;</span><span class="p">;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;write name: </span><span class="nv">$session_name</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<ul>
+<li>读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /session-read <span class="o">{</span>
+    set_decode_base32 <span class="nv">$session_name</span> <span class="nv">$cookie_name</span><span class="p">;</span>
+    set_decrypt_session <span class="nv">$name</span> <span class="nv">$session_name</span><span class="p">;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;read name: </span><span class="nv">$name</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

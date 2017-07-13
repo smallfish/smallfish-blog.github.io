@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-11-24T00:00:00JST">Nov 24, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/11/24/json-format/">JSON 美化输出</a></h2>
+  </header>
+
+  
+  <div class="summary">经常会碰到一些返回 JSON 格式的应用，默认都是一大坨字一起显示，完全是虐待自己的眼睛。
+比如以下JSON：
+mac:~ smallfish$ curl http://127.0.0.1:8108/postgres [{&quot;datname&quot;:&quot;postgres&quot;,&quot;datdba&quot;:&quot;10&quot;,&quot;encoding&quot;:6,&quot;datcollate&quot;:&quot;zh_CN.UTF-8&quot;,&quot;datctype&quot;:&quot;zh_CN.UTF-8&quot;, &quot;datistemplate&quot;:false,&quot;datallowconn&quot;:true,&quot;datconnlimit&quot;:-1,&quot;datlastsysoid&quot;:&quot;12172&quot;,&quot;datfrozenxid&quot;:&quot;985&quot;, &quot;dattablespace&quot;:&quot;1663&quot;,&quot;datacl&quot;:null},{&quot;datname&quot;:&quot;smallfish&quot;,&quot;datdba&quot;:&quot;16384&quot;,&quot;encoding&quot;:6, &quot;datcollate&quot;:&quot;zh_CN.UTF-8&quot;,&quot;datctype&quot;:&quot;zh_CN.UTF-8&quot;,&quot;datistemplate&quot;:false,&quot;datallowconn&quot;:true, &quot;datconnlimit&quot;:-1,&quot;datlastsysoid&quot;:&quot;12172&quot;,&quot;datfrozenxid&quot;:&quot;985&quot;,&quot;dattablespace&quot;:&quot;1663&quot;,&quot;datacl&quot;:null}]  顺手 Google 了下，发现了两种浏览方式：命令行查看和浏览器查看。
+一、浏览器查看方式，需要安装 Chrome 插件：JSONView。
+二、命令行查看，需要安装 Python。
+mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool  是不是美观很多了？</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/11/24/json-format/" title="JSON 美化输出">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-11-09T00:00:00JST">Nov 9, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/11/09/nginx-session/">Nginx Session 模块</a></h2>
+  </header>
+
+  
+  <div class="summary">上一篇《Nginx第三方模块》涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。
+这里还是需要感谢一下@agentzh，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下：
+ ngx_devel_kit encrypted-session-nginx-module  编译很简单，类似如下：
+./configure --prefix=/opt/nginx \ --add-module=../ngx_devel_kit \ --add-module=../encrypted-session-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：
+1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload  在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。
+encrypted_session_key &quot;abcdefghijklmnopqrstuvwxyz123456&quot;; encrypted_session_iv &quot;1234567812345678&quot;; encrypted_session_expires 5; # 默认过期时间是1d（一天）  话不到多说，直接来读写示例：
+ 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &#39;smallfish&#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &quot;Set-Cookie&quot; &quot;name=$session_name&quot;; echo &quot;write name: $session_name&quot;; }   读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &quot;read name: $name&quot;; }  </div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/11/09/nginx-session/" title="Nginx Session 模块">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-10-30T00:00:00JST">Oct 30, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/10/30/nginx-modules/">Nginx 第三方模块试用记</a></h2>
+  </header>
+
+  
+  <div class="summary">最近试用了几个@agentzh写的第三方Nginx模块，甚为愉悦，没想到在Nginx可以玩很多技巧和扩展，分享一下。
+本文尝试的几个模块大概分为：
+ echo memcached nginx lua  详细模块地址分别为：
+ ngx_devel_kit https://github.com/simpl/ngx_devel_kit set-misc-nginx-module https://github.com/agentzh/set-misc-nginx-module memc-nginx-module https://github.com/agentzh/memc-nginx-module echo-nginx-module https://github.com/agentzh/echo-nginx-module lua-nginx-module https://github.com/chaoslawful/lua-nginx-module srcache-nginx-module https://github.com/agentzh/srcache-nginx-module drizzle-nginx-module https://github.com/chaoslawful/drizzle-nginx-module rds-json-nginx-module https://github.com/agentzh/rds-json-nginx-module  为了省事这里一股脑把上面的module全部下载好，一起编译。PS：如果更懒惰的可以尝试下openresty项目，它帮你打包好Nginx和一堆扩展模块，得感谢@agentzh。
+这里编译和drizzle和lua模块，在编译Nginx之前需要设置一下这两个库的LIB和INCLUDE文件地址：
+-- lua -- export LUA_LIB=/path/to/lua/lib export LUA_INC=/path/to/lua/include -- drizzle -- export LIBDRIZZLE_INC=/opt/drizzle/include/libdrizzle-1.0 export LIBDRIZZLE_LIB=/opt/drizzle/lib  Nginx编译选项如下，请注意先后顺序：
+./configure --prefix=/opt/nginx \ --with-pcre=../pcre \ --add-module=../ngx_devel_kit \ --add-module=../set-misc-nginx-module \ --add-module=../memc-nginx-module \ --add-module=../echo-nginx-module \ --add-module=../lua-nginx-module \ --add-module=../srcache-nginx-module \ --add-module=../drizzle-nginx-module \ --add-module=../rds-json-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：
+1. kill -HUP `cat /path/nginx/logs/nginx.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/10/30/nginx-modules/" title="Nginx 第三方模块试用记">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-09-15T00:00:00JST">Sep 15, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/09/15/php-auto-xhprof/">auto-xhprof PHP自动性能测试工具</a></h2>
+  </header>
+
+  
+  <div class="summary">auto-xhprof 项目地址： https://github.com/smallfish/auto-xhprof
+最近需要对一些PHP应用和底层函数进行一些排错和性能方面的分析，不由得想起xhprof这个小强的利器。
+当然也可以按照官方的示例来监控应用或者页面的数据，使用起来还是有点不爽。比如想监控所有访问超过2秒的页面性能情况，或者自动打开/关闭分析，请求url、响应时间等。
+随手基于xhprof写了一个扩展小工具。
+主要思路如下：
+通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。 ;php.ini auto_prepend_file = &#39;/path/prepend.php&#39; ; &lt;?php ; include_once &#39;/path/auto-xhprof.php&#39;; ; ?&gt;  主要功能点有如下：
+ 参数配置是否自动开启xhprof。 参数配置超时的阀值，比如2秒。 保存分析后的数据到MySQL中，供集中统一分析。 数据内容含：请求的URL、相应时间。 支持gearman异步保存数据。 提供封装的xhprof_start/xhprof_end对部分程序进行手动分析。 自动记录错误信息  图一（列表显示）： 图二（部分函数显示）： 源码文件说明：
+auto-xhprof.php 全局加载文件。 auto-xhprof-config.php 全局配置文件，设置MySQL数据库和参数等。 gearman-worker.php gearman后台处理worker进程。 web/ web显示目录，xhprof列表页面和原xhprof展示部分 xhprof_lib/ xhprof库文件。  &mdash;&mdash;&mdash; 扩展安装步骤 &mdash;&mdash;&mdash;
+ 编译xhprof.so扩展 % cd &lt;xhprof_source_directory&gt;/extension/ % phpize % ./configure --with-php-config=&lt;path to php-config&gt; % make % make install   修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&lt;directory&gt; ; 需要有写入权限，可以写/tmp，或者不设置   从github上下载auto-xhprof，并配置。 1.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/09/15/php-auto-xhprof/" title="auto-xhprof PHP自动性能测试工具">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-05-31T00:00:00JST">May 31, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/05/31/python-supervisor/">supervisor - Python进程管理工具</a></h2>
+  </header>
+
+  
+  <div class="summary">经常会碰到要写一些守护进程，简单做法放入后台：
+shell&gt; nohup python xxx.py &amp;  偶尔这么做还可以接受，如果一堆这样的呢？
+当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。
+如果可以统一管理这些应用，是不是很哈皮？
+按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！
+supervisor地址：http://supervisord.org，官方标语就是：一个进程管理工具。
+安装：
+shell&gt; sudo aptitude install supervisor # pip/easy_install  也可以通过其他包管理来安装，比如apt/yum等。
+安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：
+/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等  下面来一个示例，用web.py写一个hello的程序：
+import web urls = ( &#39;/(.*)&#39;,&#39;hello&#39; ) app = web.application(urls, globals()) class hello: def GET(self, name): return &#39;hello: &#39; + name if __name__ == &#39;__main__&#39;: app.run()  这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：
+[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log  上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/05/31/python-supervisor/" title="supervisor - Python进程管理工具">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-04-03T00:00:00JST">Apr 3, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/04/03/multi-python-manage-pythonbrew/">pythonbrew - Python多版本管理利器</a></h2>
+  </header>
+
+  
+  <div class="summary">相信不少人在自己机器上有多个Python版本，我的机器上Python有四个版本：2.5.x、2.6.x、2.7和stackless。
+测试Google App Engine时候需要切换到2.5，正式调试时候回归到2.6，自己玩的时候会选择2.7或者stackless，每次都是通过bash profile来调整，或者手动加link。真麻烦那。。。
+无意间看到有一个Perl版本的brew工具：http://search.cpan.org/~gugod/App-perlbrew-0.18/bin/perlbrew！
+安装：
+$ easy_install pythonbrew $ pythonbrew_install # 或手动下载 $ curl -kLO http://github.com/utahta/pythonbrew/raw/master/pythonbrew-install $ chmod +x pythonbrew-install $ ./pythonbrew-install  把 source /xxx/.pythonbrew/etc/bashrc 加入到自己profile或者bashrc中去（xxx是自己的用户目录）
+pythonbrew 常用命令如下：
+install 安装版本：
+$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6  switch 选择版本：
+$ pythonbrew switch 2.6.6  list 查看版本：
+$ pythonbrew list # 列出目前已安装的版本 pythonbrew list -k # 列出可以下载和安装的版本  uninstall 卸载版本：
+$ pythonbrew uninstall 2.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/04/03/multi-python-manage-pythonbrew/" title="pythonbrew - Python多版本管理利器">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-02-19T00:00:00JST">Feb 19, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/02/19/my-2010/">2010 – 继续前行的路上</a></h2>
+  </header>
+
+  
+  <div class="summary">每一天都在前行的路上，而这一年似乎去的特别的快，特别的短暂。
+一年的时间辗转三个城市，从南京到杭州，再到上海。一切的一切似乎都是昨天，那般的清晰。
+其实很早就想离开工作快五年的公司，只不过是自己一直下不了决心。性格和患得患失一直左右着自己的思绪。时间的流逝，青春不再，或许再过些时间，或许什么都不是了。
+偶然的机会，很荣幸的进入淘宝工作。能够从自己的小圈子走出来，去接触外面的世界。短短的几个月中，成长的内容明显的超过了前几年的积累。这不仅仅是技术的成长，更多的是人，是视野，是想法。这一切的一切，都得感谢淘宝的师兄和主管。回想前几年，自己的世界里只有去完成一些事情，而现在更多的是应该觉得自己主动解决一些事情。当然，沟通上面来的更为明显。程序久了，思维的方式都会定死，而接触其他的岗位，去了解他们人的思路和想法，很多思绪都会豁然开朗。
+杭州之行匆匆而逝，来到了大上海，这个充满魔力和摩登的都市。说真的，自己尚未体会。换了新环境，适应是必须的。在试用期内很快直接切入项目，几个月很快过去了。虽然在一些问题上自己不能决定什么，但是还是很幸运，可以从项目最初的雏形，到现在已经测试发布，自己都在其中。其实这个正是自己所擅长的。我想的就是自己能够决定更多，能够参与的更多，当然，或许这个可能性还需要自己去努力，或许现实总是那般无力，或许。
+一年的流水账，想说，并不容易。希望自己一直能够如此前行，走自己的路，知道自己需要什么，能够得到什么。足矣。
+零点的钟声已过，回忆这一年，许许多多的人，给了自己很多很多的帮助，感谢一下。
+何伟平：很感谢何老师的推荐，才能有机会进入淘宝这样的大公司。何老师的谦虚和热心，很值得自己去学习。很遗憾，至今未有机会请何老师吃顿饭。 康伯：在淘宝时候我的主管。很感谢他跟自己多次的交流，有想法就说，就交流。给了自己很多机会。他是我至今为止唯一一个在系统方面很膜拜的人。 大舞：淘宝入职时候的师兄。试用期内给了自己很多建议和指导，一个很帅很帅的男人。@kemin_ukl 春哥：非芒果台的那位。感谢春哥推荐了自己来盛大，还混了不少饭，春哥工作和生活的太多很值得码农学习和借鉴。@mcspring 道神：灰常牛叉的DD，感谢刚来魔都时候收留了俺这个码农。回头还要多搭讪，求其在Debian方面的经验。@lidaobing 群众：鄙人群里那些哥们，你们都是神一样的男人！因为有了你们，才有了欢乐！@marchliu @xiaoxiaolu @guangfengio 等等大牛们。  话不多说，祝愿那些把帮助和关心过我的人，新年能够身体健康，幸福快乐！
+去迎接新的一年，我，继续在路上。
+&nbsp;</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/02/19/my-2010/" title="2010 – 继续前行的路上">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-02-19T00:00:00JST">Feb 19, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore/">PostgreSQL Key-Value 数据类型 hstore 使用教程</a></h2>
+  </header>
+
+  
+  <div class="summary">现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。
+官网文档请参考：http://www.postgresql.org/docs/current/static/hstore.html
+本文测试环境在 Mac OS 下，Pg采用源码编译。
+编译 hstore 扩展
+mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install  导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。
+mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令  进入数据库，建一个测试表
+postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &quot;testhstore_id_seq&quot; for serial column &quot;testhstore.id&quot; CREATE TABLE  查看下表结构
+postgres=# \d List of relations Schema | Name | Type | Owner --------+-------------------+----------+---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &quot;public.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore/" title="PostgreSQL Key-Value 数据类型 hstore 使用教程">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-02-19T00:00:00JST">Feb 19, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/02/19/pylons-tutorial-deploy-application/">Pylons 入门实例教程 – 发布应用</a></h2>
+  </header>
+
+  
+  <div class="summary">前面几篇教程简单讲述了如何使用 Pylons 进行 WEB 方面开发的步骤，包括简单的 Hello、表单和数据库操作等内容。本篇将描述一下如何在正式环境中发布基于 Pylons 的 WEB 应用。
+测试环境：Nginx 0.8.53 + FastCGI 模式 （需要安装 flup 模块）
+pip install flup # easy_install -U flup  测试代码，延用前面的 Hello 示例。
+mac:python smallfish$ paster create -t pylons hello mac:python smallfish$ cd hello/ mac:hello smallfish$ paster controller hi mac:hello smallfish$ paster serve --reload development.ini  确保以上过程无错，访问：http://127.0.0.1:5000 可以看到默认页面。
+好把，开始配置发布环境。 需要修改 development.ini 配置文件，找到 [server:main] 节点，修改其中的 use 方式（默认是 egg:Paste#http）。
+[server:main] use = egg:PasteScript#flup_fcgi_thread host = 0.0.0.0 port = 5000  另外建议修改 [DEFAULT] 节点中 debug = false，以免错误会打印具体的环境和堆栈信息。</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/02/19/pylons-tutorial-deploy-application/" title="Pylons 入门实例教程 – 发布应用">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-02-19T00:00:00JST">Feb 19, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2011/02/19/python-story/">Python Story</a></h2>
+  </header>
+
+  
+  <div class="summary">http://www.slideshare.net/nnfish/python-story
+http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-phpapp01&amp;stripped_title=python-story&amp;userName=nnfish</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2011/02/19/python-story/" title="Python Story">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+<nav>
+  <ul class="pager">
+
+    
+    <li><a href="/page/2/">上页</a></li>
+    
+
+    
+    <li><a href="/page/4/">下页</a></li>
+    
+
+  </ul>
+</nav>
+
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

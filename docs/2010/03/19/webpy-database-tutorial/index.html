@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/03/19/webpy-database-tutorial/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>web.py 数据库操作指南 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="官网地址：http://webpy.org/web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。废话不多，先来安装，有两种方式： easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py   下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install  web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。下面开始使用吧！ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;)   select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;quot;Bob&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;quot;name = $name&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;quot;id&amp;gt;100&amp;quot;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;quot;id,name&amp;quot;) # order by results = db.">
+
+<meta property="og:title" content="web.py 数据库操作指南 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/03/19/webpy-database-tutorial/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="官网地址：http://webpy.org/web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。废话不多，先来安装，有两种方式： easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py   下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install  web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。下面开始使用吧！ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;)   select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;quot;Bob&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;quot;name = $name&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;quot;id&amp;gt;100&amp;quot;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;quot;id,name&amp;quot;) # order by results = db.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/03/19/webpy-database-tutorial/">
+<meta name="twitter:title" content="web.py 数据库操作指南 - smallfish&#39;g blog">
+<meta name="twitter:description" content="官网地址：http://webpy.org/web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。废话不多，先来安装，有两种方式： easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py   下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install  web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。下面开始使用吧！ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;)   select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;quot;Bob&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;quot;name = $name&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;quot;id&amp;gt;100&amp;quot;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;quot;id,name&amp;quot;) # order by results = db.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "web.py 数据库操作指南 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-03-19T00:00:00JST",
+    "dateModified": "2010-03-19T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "官网地址：http://webpy.org/
+web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。
+很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。
+废话不多，先来安装，有两种方式：
+ easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py   下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install  web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。
+下面开始使用吧！
+ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&#39;postgres&#39;, db=&#39;mydata&#39;, user=&#39;dbuser&#39;, pw=&#39;&#39;)   select 查询  # 查询表 entries = db.select(&#39;mytable&#39;) # where 条件 myvar = dict(name=&quot;Bob&quot;) results = db.select(&#39;mytable&#39;, myvar, where=&quot;name = $name&quot;) results = db.select(&#39;mytable&#39;, where=&quot;id&gt;100&quot;) # 查询具体列 results = db.select(&#39;mytable&#39;, what=&quot;id,name&quot;) # order by results = db."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">web.py 数据库操作指南</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-03-19T00:00:00JST">Mar 19, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">web.py 数据库操作指南</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>官网地址：<a href="http://webpy.org/">http://webpy.org/</a></p>
+
+<p>web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。</p>
+
+<p>很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。</p>
+
+<p>废话不多，先来安装，有两种方式：</p>
+
+<ol>
+<li>easy_install方式，如果木有此工具，可以参考：<a href="http://chenxiaoyu.org/blog/archives/23">http://chenxiaoyu.org/blog/archives/23</a></li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">easy_install</span> <span class="n">web</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+
+<ol>
+<li>下载源码编译。地址： <a href="http://webpy.org/static/web.py-0.33.tar.gz">http://webpy.org/static/web.py-0.33.tar.gz</a> ，解压后执行：</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</code></pre></div>
+
+
+<p>web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。</p>
+
+<p>下面开始使用吧！</p>
+
+<ol>
+<li>导入模块，定义数据库连接db。</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">web</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="s1">&#39;postgres&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;mydata&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;dbuser&#39;</span><span class="p">,</span> <span class="n">pw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<ol>
+<li>select 查询</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 查询表</span>
+<span class="n">entries</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">)</span>
+
+<span class="c1"># where 条件</span>
+<span class="n">myvar</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Bob&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">myvar</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;name = $name&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;id&gt;100&quot;</span><span class="p">)</span>
+
+<span class="c1"># 查询具体列</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s2">&quot;id,name&quot;</span><span class="p">)</span>
+
+<span class="c1"># order by</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;post_date DESC&quot;</span><span class="p">)</span>
+
+<span class="c1"># group</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;color&quot;</span><span class="p">)</span>
+
+<span class="c1"># limit</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># offset</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+
+
+<ol>
+<li>更新</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;id = 10&quot;</span><span class="p">,</span> <span class="n">value1</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>删除</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;id=10&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<ol>
+<li>复杂查询</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># count</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) AS total_users FROM users&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">total_users</span>
+
+<span class="c1"># join</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM entries JOIN users WHERE entries.author_id = users.id&quot;</span><span class="p">)</span>
+
+<span class="c1"># 防止SQL注入可以这么干</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users WHERE id=$id&quot;</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+</code></pre></div>
+
+
+<p>6 多数据库操作 (web.py大于0.3)</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">db1</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;dbname1&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="n">db2</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;dbname2&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">db1</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;id=1&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">db2</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;id=5&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<ol>
+<li>事务</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+    <span class="k">raise</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># Python 2.5+ 可以用with</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+</code></pre></div>
+</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

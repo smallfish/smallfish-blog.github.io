@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/2009/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>2009s - smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+    <header class="page-header">
+      <h1>2009s</h1>
+    </header>
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-22T00:00:00JST">Dec 22, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/22/postgresql-partitioning/">PostgreSQL Partitioning 表分区</a></h2>
+  </header>
+
+  
+  <div class="summary">测试版本：pg 8.3 (ubuntu)
+在pg里表分区是通过表继承来实现的，一般都是建立一个主表，里面是空，然后每个分区都去继承它。
+创建表分区步骤如下：
+ 创建主表  CREATE TABLE users ( uid int not null primary key, name varchar(20));   创建分区表(必须继承上面的主表)  CREATE TABLE users_0 ( check (uid &gt;= 0 and uid&lt; 100) ) INHERITS (users); CREATE TABLE users_1 ( check (uid &gt;= 100)) INHERITS (users);   在分区表上建立索引，其实这步可以省略的哦  CREATE INDEX users_0_uidindex on users_0(uid); CREATE INDEX users_1_uidindex on users_1(uid);   创建规则RULE  CREATE RULE users_insert_0 AS ON INSERT TO users WHERE (uid &gt;= 0 and uid &lt; 100) DO INSTEAD INSERT INTO users_0 VALUES (NEW.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/22/postgresql-partitioning/" title="PostgreSQL Partitioning 表分区">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-22T00:00:00JST">Dec 22, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/">PostgreSQL tablespace 表空间</a></h2>
+  </header>
+
+  
+  <div class="summary">pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。
+查看pgsql当前表空间有哪些可以试试下面：
+postgres=&gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows)  或：
+postgres=&gt; \db Name | Owner | Location ------------+----------+---------- pg_default | postgres | pg_global | postgres |  建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。
+ 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata   进入psql  $ psql -U postgres -h 192.168.0.122  如果权限没设置好下面语句会报错
+postgres=&gt; CREATE TABLESPACE space1 LOCATION &#39;/home/smallfish/pgdata&#39;;  建测试表
+postgres=&gt; CREATE TABLE foo(i int) TABLESPACE space1;  可以查看表空间目录下多了文件</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/" title="PostgreSQL tablespace 表空间">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-16T00:00:00JST">Dec 16, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/16/hello-c-apache-module/">C Apache Module 开发入门</a></h2>
+  </header>
+
+  
+  <div class="summary">前言：
+扩展Apache模块开发网上大部分教程都是围绕Perl语言，老外的《Writing Apache Modules with Perl and C》可以算是经典之作了，可惜一直都是针对老版本开发，而且主力语言是Perl，C语言部分只是略有介绍。不过相比较而言用Perl来扩展模块功能确实比 C语言来的快速以及便捷多了，也简单容易。我自己也在工作里应用了一部分，主要是在防盗链上面写了两个简单都模块，可以参考我写的另外两篇文章：http://chenxiaoyu.org/blog/archives/120。说了那么多题外话，回到正题，这里只是用C语言实现一个简单的hello模块，模块功能是查询MySQL自带mysql数据库里都user表。
+系统环境：
+ArchLinux Apache2.2 MySQL 5.0
+具体开发步骤：
+ 利用Apache自带都apxs建立hello模块：  [root#localhost] apxs -g -n hello  这样就会在当前目录下新建一个hello模块的文件目录，可以看到里面有：Makefile mod_hello.c modules.mk这样的文件，具体apxs路径查询下本机apache/bin目录。
+ 预览下mod_hello.c，可以看到里面apxs自动帮你生成一堆代码了，我们需要的只是修改里面的代码部分，先简单都介绍下里面的函数说明。  include 部分就是引入了一些必要都头文件 hello_handler 这个就是hello模块都主体部分，所有的显示、处理请求什么的都在这里。 hello_register_hooks hello_module 这俩个是需要导出的函数所必须的，先可以不管他们，按照生成的不动即可。
+ 修改hello_handler函数，里面可以看到request_rec *r，r有很多函数和变量，具体要参见文档了。里面的ap_rputs是输出，可以简单的理解为把字符串输出到r。  static int hello_handler(request_rec *r) { if (strcmp(r-&gt;handler, &quot;hello&quot;)) { // 判断apache配置文件里handler是否等于hello，不是就跳过 return DECLINED; } r-&gt;content_type = &quot;text/html&quot;; // 设置content-type if (!r-&gt;header_only) ap_rputs(&quot;The sample page from mod_hello.c\n&quot;, r); // 输出一段文字 return OK;// 返回 200 OK状态 }  增加#include &ldquo;mysq.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/16/hello-c-apache-module/" title="C Apache Module 开发入门">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-16T00:00:00JST">Dec 16, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/">Java调用Linux SCP操作</a></h2>
+  </header>
+
+  
+  <div class="summary">先来回顾下linux下scp命令的用法：
+[shell $] scp -r /本地目录或文件 user@192.168.0.110:/远程目录  这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &ndash;help
+最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考http://chenxiaoyu.org/blog/archives/133，大致代码如下：
+Runtime.getRuntime().exec(&quot;scp /aa.txt root@192.168.0.110:/bb&quot;);  try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。
+这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？
+后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。
+那就重新加一个user把，adduser&hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。
+貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，http://www.ganymed.ethz.ch/ssh2/。貌似比较老，先来测试一下把。
+Connection conn = new Connection(“192.168.0.110”); conn.connect(); boolean isAuthenticated = conn.authenticateWithPassword(“root”, &quot;***********&quot;); if (isAuthenticated == false) throw new IOException(&quot;Authentication failed.&quot;); SCPClient client = new SCPClient(conn); client.put(&quot;/aa.txt&quot;, &quot;/bb&quot;); conn.close();  OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。
+client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/" title="Java调用Linux SCP操作">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-16T00:00:00JST">Dec 16, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/16/ssh-scp-use-none-password/">SSH, SCP 不输入密码</a></h2>
+  </header>
+
+  
+  <div class="summary">经常在不同linux机器之间互相scp拷文件，每次总是要输入密码才可行。
+通过ssh-keygen生成公钥，在两台机器之间互相建立信任通道即可。假设本地机器client，远程机器为server。
+ 生成rsa keygen  [winter@client winter] $ ssh-keygen -b 1024 -t rsa Generating public/private rsa key pair. Enter file in which to save the key (/home/winter/.ssh/id_rsa): &lt;Enter&gt; Enter passphrase (empty for no passphrase): &lt;Enter&gt; Enter same passphrase again: &lt;Enter&gt; Your identification has been saved in /home/winter/.ssh/id_rsa. Your public key has been saved in /home/winter/.ssh/id_rsa.pub. The key fingerprint is: 33:d4:7b:9c:87:04:cf:14:40:22:6d:c7:15:78:97:6a winter@client  直接上面公钥和私钥存放地址可以直接回车，私钥密码可以直接回车，也可以输入。
+ 查看.ssh目录下了多私钥和公钥文件  [winter@client winter] $ ls .</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/16/ssh-scp-use-none-password/" title="SSH, SCP 不输入密码">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-16T00:00:00JST">Dec 16, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/16/modpython-python_egg_cache-error/">修改 ModPython 下 PYTHON_EGG_CACHE 报错</a></h2>
+  </header>
+
+  
+  <div class="summary">环境：Linux Apache Python(mod_python)
+换了一台新机器，没有配置Mod_Python了，在一些应用里import MySQLdb出现了下面错误：
+ExtractionError: Can&#39;t extract file(s) to egg cache The following error occurred while trying to extract file(s) to the Python egg cache: [Errno 13] Permission denied: &#39;/root/.python-eggs&#39; The Python egg cache directory is currently set to: /root/.python-eggs Perhaps your account does not have write access to this directory? You can change the cache directory by setting the PYTHON_EGG_CACHE environment variable to point to an accessible directory.  解决办法有两种：</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/16/modpython-python_egg_cache-error/" title="修改 ModPython 下 PYTHON_EGG_CACHE 报错">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/">Apache Mod_Perl 防盗链</a></h2>
+  </header>
+
+  
+  <div class="summary">大体思路是这样的，比如有 一个地址：http://www.aa.com/down/1.mp3，不幸搜索引擎或者迅雷扒到了，就无偿为他们奉献流量了。 但是假如在http://www.aa.com/down/1.mp3?key=123，key参数每天变化或者几分钟变化一次，在apache服务端校 验下这个参数，不正确则显示拒绝访问或者找不到的话，那样防盗链的效果就算达到了把。
+modperl强大到可以任意应用apache内部API，官方地址是：http://perl.apache.org/ 。根据apache版本选择相应的modperl版本，现在大部分都apache2了，就选择modperl2把。具体安装配置可以看官方文档。
+先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：
+use strict; use lib qw(/home/httpd/modperl); # 把这个路径加入到perl lib路径 use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Request (); 1;  部分本机httpd.conf配置：
+LoadModule perl_module modules/mod_perl.so LoadModule apreq_module modules/mod_apreq2.so PerlPostConfigRequire /home/httpd/modperl/startup.pl &lt;Location /down &gt; SetHandler modperl # 设置该目录交给modper处理 PerlAccessHandler Down # Down是模块名称 PerlSetVar key 123 # 设置校验参数值 &lt;/Location&gt;  mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry
+startup.pl文件一般modperl应用都有，加载一些常用库，可以在apache启动时预先载入，避免重复加载。
+修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：
+package Down; use strict; use Apache2::RequestRec (); use Apache2::RequestIO (); use Apache2::Connection (); use Apache2::RequestUtil (); use Apache2::ServerUtil (); use Apache2::Log (); use Apache2::Const -compile =&gt; qw(OK FORBIDDEN); use Apache2::Request (); sub handler { my $r = shift; my $req = Apache2::Request-&gt;new($r); my $ip = $r-&gt;connection-&gt;remote_ip; my $k = $req-&gt;param(&#39;key&#39;) || &#39;&#39;; # 判断访问时是否带key参数 my $key = $r-&gt;dir_config(&#39;key&#39;) || &#39;123&#39;; # 加载httpd.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-check-url/" title="Apache Mod_Perl 防盗链">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/">Apache Mod_Perl实现 URL Rewrite</a></h2>
+  </header>
+
+  
+  <div class="summary">相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！
+首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。
+修改下http.conf配置，添加一下内容：
+PerlTransHandler MyTrans # MyTrans 这个是自己添加的处理模块名  具体MyTrans.pm脚本如下：
+package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $r = shift; my $uri = $r-&gt;uri; my ($id) = ($url =~ m|^/news/(.*)\.html|); $r-&gt;uri(&quot;/news.php&quot;); $r-&gt;args(&quot;id=$id&quot;); return Apache2::Const::DECLINED; } 1;  实现就是：/news/12345.html =&gt; /news.php?id=12345</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/apache-mod-perl-urlrewrite/" title="Apache Mod_Perl实现 URL Rewrite">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/apache-vhost-config/">Apache 虚拟主机配置笔记</a></h2>
+  </header>
+
+  
+  <div class="summary">环境：Linux Apache2.2 （路径 /usr/local/apache）
+步骤：
+ 修改 conf/httpd.conf，找到如下位置，去除 # 注释符  # Virtual hosts Include conf/extra/httpd-vhosts.conf  2.修改 conf/extra/httpd-vhosts.conf
+&lt;VirtualHost *:80&gt; ServerAdmin webmaster@aa.com DocumentRoot &quot;/usr/aa&quot; ServerName ww.aa.com ServerAlias ww.aa.com ErrorLog &quot;logs/ww.aa.com-error_log&quot; CustomLog &quot;logs/ww.aa.com-access_log&quot; common &lt;/VirtualHost&gt;  注意CustomLog这行，默认给的配置是：&rdquo;logs/dummy-host.example.com-access_log common&rdquo;
+这个其实是错误的，Apache启动时候会报错，common这个应该放在双引号外面：
+Syntax error on line 32 of /usr/local/apache/conf/extra/httpd-vhosts.conf: CustomLog takes two or three arguments, a file name, a custom log format string or format name, and an optional &quot;env=&quot; clause (see docs)  另外还有个问题，在Apache+Tomcat时候出现的，在配置好mod_jk之后，通过默认80端口访问jsp总会提示403禁止访问，纳闷了！后来 才发现是Directory配置问题，因为每个VirtualHost配置的目录不是默认的DocumentRoot目录，在Apache2以后对于权限 和安全有了更高的要求，所以必须手动配置下每个Directory属性。</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/apache-vhost-config/" title="Apache 虚拟主机配置笔记">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/">Memcached Java/Python Client API 共享</a></h2>
+  </header>
+
+  
+  <div class="summary">用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。
+然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。
+然后发现值一直是null，再tail日志看看，异常不断：
+com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - ++++ exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270)  晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？
+然后手动试了下：
+shell&gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23  经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。
+然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/" title="Memcached Java/Python Client API 共享">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+<nav>
+  <ul class="pager">
+
+    
+    <li class="disabled"><a href="#">上页</a></li>
+    
+
+    
+    <li><a href="/2009/page/2/">下页</a></li>
+    
+
+  </ul>
+</nav>
+
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

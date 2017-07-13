@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2010s on smallfish&#39;g blog</title>
+    <link>http://chenxiaoyu.org/2010/</link>
+    <description>Recent content in 2010s on smallfish&#39;g blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 07 Aug 2010 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chenxiaoyu.org/2010/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Pythonic 分享</title>
+      <link>http://chenxiaoyu.org/2010/08/07/pythonic-ppt/</link>
+      <pubDate>Sat, 07 Aug 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/08/07/pythonic-ppt/</guid>
+      <description>很荣幸收到龙哥 @hoorace 邀请去参加了杭州第四期程序员圆桌会议，顺带介绍了下最近在公司内部做的关于《Pythonic》分享。喜欢Python的可以下载看看把。 Pythonichttp://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonic-100807044344-phpapp02&amp;amp;stripped_title=pythonic&amp;amp;userName=nnfish&amp;nbsp; View more http://www.slideshare.net/.  收获还是颇丰，多接触了点其他工种的朋友。
+话题比较宽泛，基本我就是纯酱油飘过。感谢网新的朋友做的Vim的分享，另外威猛的升哥topic也不错，对RedHat系统安装和启动加载有了更多的了解。
+另外很遗憾的就是威大师竟然没说点啥，可惜了那么好的水果茶啊。。。残念残念。。</description>
+    </item>
+    
+    <item>
+      <title>Pylons 入门实例教程 – cookie 和 session</title>
+      <link>http://chenxiaoyu.org/2010/07/03/pylons-tutorial-cookie-session/</link>
+      <pubDate>Sat, 03 Jul 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/07/03/pylons-tutorial-cookie-session/</guid>
+      <description>本篇讲述在 Pylons 里使用 cookie 和 session。
+示例还是在上篇《Pylons 入门实例教程 – cookie 和 session》的代码里继续添加。先来尝试下 cookie，添加新的 cookietest controller。
+修改 index 方法，添加显示部分：
+ def index(self): name = &amp;#39;NULL&amp;#39; if request.cookies.has_key(&amp;#39;name&amp;#39;): name = request.cookies[&amp;#39;name&amp;#39;] return &amp;#39;cookie name=%s&amp;#39; % name  cookie 读取可以通过 request.cookies 对象，类似一个字典结构。需要注意的是读取时候用最好 has_key 判断下，这样避免抛 KeyError 异常。当然你也可以 try&amp;hellip;catch 捕获一下。
+再重新写一个方法，用来写 cookie。
+ def writecookie(self): response.set_cookie(&amp;quot;name&amp;quot;, &amp;quot;smallfish&amp;quot;) return &amp;quot;write cookie ok&amp;quot;  这里只是简单设置一个值得，set_cookie 还有其他参数，具体如下：
+set_cookie(self, key, value=&amp;#39;&amp;#39;, max_age=None, path=&amp;#39;/&amp;#39;, domain=None, secure=None, httponly=False, version=None, comment=None, expires=None, overwrite=False)  基本一般需要设置：max_age，path，domain，expires 这几个参数。</description>
+    </item>
+    
+    <item>
+      <title>Pylons 入门实例教程 – 数据库操作</title>
+      <link>http://chenxiaoyu.org/2010/07/01/pylons-tutorial-database/</link>
+      <pubDate>Thu, 01 Jul 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/07/01/pylons-tutorial-database/</guid>
+      <description>前面两篇入门，讲述了 Pylons 大致开发的流程、表单以及文件上传，思路大致跟传统的开发类似。本篇简单讲述下在 Pylons 如何使用数据库。
+本篇侧重点是使用 ORM 框架 http://www.sqlalchemy.org/。其实本人最早是研究了一下 Storm，后来听虾哥（@marchliu）在应用里不是很爽之，遂关注了下他推荐的 SQLAlchemy。当然，你也可以对应数据库的 DB-API 库来进行操作。
+示例代码的数据库是 http://www.postgresql.org。至于 Pg 配置和使用这里不再累赘，请狗之。
+Debian/Ubuntu 安装很简单：
+sudo aptitude install python-psycopg2  建立一个测试数据库，比如 test：
+smallfish@debian:~/workspace/python/hello$ su postgres postgres@debian:/home/smallfish/workspace/python/hello$ createdb -O smallfish test postgres@debian:/home/smallfish/workspace/python/hello$ exit smallfish@debian:~/workspace/python/hello$ psql -h 127.0.0.1 -p 5432 -U smallfish test 用户 smallfish 的口令： psql (8.4.4) SSL连接 (加密：DHE-RSA-AES256-SHA，位元：256) 输入 &amp;quot;help&amp;quot; 来获取帮助信息. test=#  数据库的部分已经OK，下面就是来倒腾 Pylons 啦。
+建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：
+smallfish@debian:~/workspace/python$ paster create -t pylons hellodb Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hellodb package: hellodb project: hellodb Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.</description>
+    </item>
+    
+    <item>
+      <title>Pylons 入门实例教程 – 表单和文件上传</title>
+      <link>http://chenxiaoyu.org/2010/06/30/pylons-tutorial-form-upload-file/</link>
+      <pubDate>Wed, 30 Jun 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/06/30/pylons-tutorial-form-upload-file/</guid>
+      <description>继续上一篇《Pylons 入门实例教程 - Hello》，现在开始讲在 Pylons 里如何提交表单和上传文件。
+继续延用上篇里面的 hello 工程，在 HiController 里添加 form 方法：
+ def form(self): return render(&amp;#39;/form.mako&amp;#39;)  加完以后可以访问：http://127.0.0.1:5000/hi/form，会报错。
+Server Error，根据报错内容大致就知道模板文件不存在了。如果有其他错误，也可以通过这个页面查看，当然还有很强大的 Debug 个功能哦。当然正式环境一般都是关闭这个功能的。这个，你懂得。。。
+好吧，写一个表单的模板，只包含一个简单的文本框和提交按钮示例。
+&amp;lt;form action=&amp;quot;/hi/submit&amp;quot; method=&amp;quot;post&amp;quot;&amp;gt; name: &amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;name&amp;quot; /&amp;gt; &amp;lt;br /&amp;gt; &amp;lt;input type=&amp;quot;submit&amp;quot; value=&amp;quot;submit&amp;quot; /&amp;gt; &amp;lt;/form&amp;gt;  再添加一个 submit 方法来处理表单提交，
+ def submit(self): return &amp;quot;hello, name: %s&amp;quot; % request.params[&amp;#39;name&amp;#39;]  request.params 包含了表单或者URL提交的参数，建议 POST 数据参照下面的上传部分。想获取更详细的列表，可以查看文档或者自己手动 dir()查阅。
+下面尝试一下文件上传，首先在 development.ini 添加一个变量，用来存放文件上传后的文件夹。
+[app:main] upload_dir = %(here)s/upload  %(here) 启动后 server 会替换到当前目录地址，上面的地址就是当前路径下的upload文件夹。</description>
+    </item>
+    
+    <item>
+      <title>如何写 Go 代码？</title>
+      <link>http://chenxiaoyu.org/2010/06/29/how-to-write-go/</link>
+      <pubDate>Tue, 29 Jun 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/06/29/how-to-write-go/</guid>
+      <description>原文：http://golang.org/doc/code.html
+简述
+这篇文档描述了如何去写一个新的 package 和怎么去测试。本文假设你已经按照http://golang.org/doc/install.html装好Go。
+在修改一个存在的 package 或者新建立一个package，确保先发一封邮件到 http://groups.google.com/group/golang-nuts，告诉大家你想做什么。这样有助于不要重复造轮子，在写代码之前最好讨论下。
+社区资源
+如果想获取实时帮助，可以加入 http://freenode.net/ 上 IRC 频道 #go-nuts。
+Go 语言官方邮件列表是 http://groups.google.com/group/golang-nuts.
+Bugs 可以参考http://code.google.com/p/go/issues/list.
+对于那些想尝试开发代码的用户，这里有另外一个邮件列表 http://groups.google.com/group/golang-checkins，邮件里包含了那些刚提交到 Go 代码库的消息。
+建立Go包
+下面的源码假设 package 的导入路径是 x/y，约定下保存的路径是：$GOROOT/src/pkg/x/y
+Makefile
+这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 http://golang.org/src/pkg/container/vector/Makefile 源码包里拷贝一份。
+include ../../../Make.$(GOARCH) TARG=container/vector GOFILES=\ intvector.go\ stringvector.go\ vector.go\ include ../../../Make.pkg  当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：
+include $(GOROOT)/src/Make.$(GOARCH) TARG=mypackage GOFILES=\ my1.go\ my2.go\ include $(GOROOT)/src/Make.pkg  第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。</description>
+    </item>
+    
+    <item>
+      <title>Pylons 入门实例教程 - Hello</title>
+      <link>http://chenxiaoyu.org/2010/06/28/pylons-tutorial-hello/</link>
+      <pubDate>Mon, 28 Jun 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/06/28/pylons-tutorial-hello/</guid>
+      <description>http://pylonshq.com/，当然，这些组件只是默认，你还可以根据自己喜好来选择其他组件，比如你可以采用 Jinja2 或 Genshi 模板，ORM也可以采用 SQLObject。完全是自由组合。
+废话少说，现在开始安装吧。
+smallfish@debian:~$ sudo aptitude install python-pylons  Debian/Ubuntu 系列系统可以直接 aptitude 安装，当然你也可以使用 easy_install 或者源码安装。
+smallfish@debian:~$ sudo easy_install Pylons  更多安装文档请参考官网安装部分，http://pylonshq.com/docs/en/1.0/gettingstarted/#installing
+好了，安装结束，来一个经典的Hello程序吧。
+smallfish@debian:~/workspace/python$ paster create -t pylons hello Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hello package: hello project: hello Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.5 configuration) [False]: Creating template pylons Creating directory ./hello  下面输出略过，大致解说一下。Pylons 程序可以用 Paste 自动生成一些代码，包括controller。还可以运行 HTTP 服务来测试。</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL COPY 导入/导出数据</title>
+      <link>http://chenxiaoyu.org/2010/06/02/postgresql-copy-dump-store/</link>
+      <pubDate>Wed, 02 Jun 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/06/02/postgresql-copy-dump-store/</guid>
+      <description>COPY 命令可以快速的导入数据到 PostgreSQL 中，文件格式类似CVS之类。适合批量导入数据，比 \i 和恢复数据表快。
+导出表数据到文件或 STDOUT ：
+COPY tablename [(column [, ...])] TO {&amp;#39;filename&amp;#39; | STDOUT} [[WITH] [BINARY] [OIDS] [DELIMITER [AS] &amp;#39;delimiter&amp;#39;] [NULL [AS] &amp;#39;null string&amp;#39;] [CSV [HEADER] [QUOTE [AS] &amp;#39;quote&amp;#39;] [ESCAPE [AS] &amp;#39;escape&amp;#39;] [FORCE NOT NULL column [, ...]]  导入文件或者 STDIN 到表中：
+COPY tablename [(column [, ...])] FROM {&amp;#39;filename&amp;#39; | STDIN} [[WITH] [BINARY] [OIDS] [DELIMITER [AS] &amp;#39;delimiter&amp;#39;] [NULL [AS] &amp;#39;null string&amp;#39;] [CSV [HEADER] [QUOTE [AS] &amp;#39;quote&amp;#39;] [ESCAPE [AS] &amp;#39;escape&amp;#39;] [FORCE QUOTE column [, .</description>
+    </item>
+    
+    <item>
+      <title>Cython 教程 - 调用外部C语言函数</title>
+      <link>http://chenxiaoyu.org/2010/05/30/cython-extern-c/</link>
+      <pubDate>Sun, 30 May 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/05/30/cython-extern-c/</guid>
+      <description>一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：
+cdef extern from &amp;quot;math.h&amp;quot;: double sin(double) cdef double f(double x): return sin(x*x)  请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。
+当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;quot;demo&amp;quot;, [&amp;quot;demo.pyx&amp;quot;], libraries=[&amp;quot;m&amp;quot;]) # Unix-like specific ] setup( name = &amp;quot;Demos&amp;quot;, cmdclass = {&amp;quot;build_ext&amp;quot;: build_ext}, ext_modules = ext_modules )  跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。</description>
+    </item>
+    
+    <item>
+      <title>Go 语言模块安装工具：goinstall</title>
+      <link>http://chenxiaoyu.org/2010/05/30/goinstall/</link>
+      <pubDate>Sun, 30 May 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/05/30/goinstall/</guid>
+      <description>文档地址：http://golang.org/cmd/goinstall/
+goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，git，svn三种版本控制系统。
+下面来举例怎么安装 web.go 模块。源地址是：http://github.com/hoisie/web.go
+smallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go  根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）
+查看下安装的目录和路径：
+smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go  代码示例：
+import (web &amp;quot;github.com/hoisie/web.go&amp;quot;)  另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</description>
+    </item>
+    
+    <item>
+      <title>其实我就是个演员</title>
+      <link>http://chenxiaoyu.org/2010/05/21/i-m-a-loser/</link>
+      <pubDate>Fri, 21 May 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/05/21/i-m-a-loser/</guid>
+      <description>注：此文系纯水贴，正经人士请绕道。 :)
+场景1 某日很HI的写着程序，凑巧做网页的美工不在，活又耽误不得，只能捋起袖子，装起了Dreamweaver+Fireworks，三下五除二搞定了前端页面。话说自从开始写程序起，就很少碰这些高级玩意了。现在只是偶尔PS修修抠抠图，享受下钢笔抠图小YY一把就足够了。 其实在做程序之前，俺一直是个美工，作图做页面只不过信手拈来。
+场景2 简历给某朋友看了之后，很惊讶道：原来你是做Java的？只好含泪不语+内流满面了。难道我博客只写Python或者Perl，不意味着俺就是折腾这些的哇。只好幽幽的坦然回答之：其实我的主业是Java开发者，做了六年多。 其实动态语言只是我的业余爱好，顺带写了点分享的博文而已。只不过对外闭口没提Java。
+场景3 有些朋友看我经常推荐PostgreSQL，就问俺：Pg和MySQL到底有哪些区别？描述种种，感觉可能他也云里雾里。遂让他自己说说需求，最后还是推荐他用MySQL。顺带讲述了一些常用优化和监控的办法。丫又惊讶的说原来你一直用的MySQL啊。好吧，只好再次内流。 其实我正儿八经用数据库最长久的就是MySQL了，基本也有六年多了把。Pg只是我的业余爱好，没事研究了下，寻找下乐趣而已。
+如此场景会继续重现，遂略过数字。。。
+其实，我就是个演员。对系统（Linux）、语言（Java/Python/Perl）、数据库（MySQL/PostgreSQL）都略懂的角色。
+不同的时间，演绎不同的角色。过去是，现在是，将来也是。</description>
+    </item>
+    
+    <item>
+      <title>[图文解说] Virtual Box 通过 NAT(默认) 共享虚拟机中的服务</title>
+      <link>http://chenxiaoyu.org/2010/05/10/virtualbox-nat-share/</link>
+      <pubDate>Mon, 10 May 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/05/10/virtualbox-nat-share/</guid>
+      <description>Virtual Box 是个不错的虚拟机，小巧，功能也齐全。好像有点推销鸟。说正题，上次有个朋友就提到怎么能主机里访问虚拟机里的服务，昨晚实验了下，颇为顺利。记录下。这里利用的是默认的NAT上网，也就是共享主机上网，而不是设置独立的IP。
+主机：Win XP 虚拟：Ubuntu 9.10
+目的：Win里ssh进Ubuntu，能访问里面提供的服务。
+主要是通过 VBoxManage setextradata 设置一些属性。
+先上几个步骤图把。注意一下修改，先得关闭虚拟机，修改完事以后再启动。
+ 查看虚拟机中的名称：ubuntu9
+ 进入本机Vbox目录，运行VBoxManage，查看下。
+ 添加三个项目   下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。
+VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&amp;quot; TCP VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&amp;quot; 22 VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&amp;quot; 22   启动虚拟机。
+ 设置putty登陆之。
+  到这里已经顺利ssh 到127.0.0.1，如果想访问虚拟机里的web服务器呢？同样很简单。
+只要如下设置，web端口为81，跟上面也雷同：
+VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&amp;quot; TCP VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&amp;quot; 81 VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&amp;quot; 81  另外如果想清空上面设置的选项，只要不设置后面的值即可：
+VBoxManage setextradata &amp;quot;ubuntu9&amp;quot; &amp;quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&amp;quot;  </description>
+    </item>
+    
+    <item>
+      <title>【译】MongoDB 入门教程</title>
+      <link>http://chenxiaoyu.org/2010/04/27/mongodb-tutorail/</link>
+      <pubDate>Tue, 27 Apr 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/04/27/mongodb-tutorail/</guid>
+      <description>原文参见：http://www.mongodb.org/display/DOCS/Tutorial
+启动数据库
+下载 http://www.mongodb.org/display/DOCS/Downloads, 解压后并启动:
+$ bin/mongod  MongoDB 默认存储数据目录为 /data/db/ (或者 c:\data\db), 当然你也可以修改成不同目录, 只需要指定 &amp;ndash;dbpath 参数:
+$ bin/mongod --dbpath /path/to/my/data/dir  获取数据库连接
+现在我们就可以使用自带的shell工具来操作数据库了. (我们也可以使用各种编程语言的驱动来使用MongoDB, 自带的shell工具可以方便我们管理数据库)
+启动 MongoDB JavaScript 工具:
+$ bin/mongo  默认 shell 连接的是本机localhost 上面的 test库, 会看到:
+MongoDB shell version: 0.9.8 url: test connecting to: test type &amp;quot;help&amp;quot; for help &amp;gt;  &amp;ldquo;connecting to:&amp;rdquo; 这个会显示你正在使用的数据库的名称. 想换数据库的话可以:
+&amp;gt; use mydb  可以输入 help 来查看所有的命令.
+插入数据到集合
+下面我们来建立一个test的集合并写入一些数据. 建立两个对象, j 和 t , 并保存到集合中去.</description>
+    </item>
+    
+    <item>
+      <title>Python ConfigParser 与 ConfigObj INI 配置读写顺序</title>
+      <link>http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/</link>
+      <pubDate>Mon, 19 Apr 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/</guid>
+      <description>默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：
+&amp;gt;&amp;gt;&amp;gt; from ConfigParser import ConfigParser &amp;gt;&amp;gt;&amp;gt; cf = ConfigParser() &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;d&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;d&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;a&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;a&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish2&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.write(open(&amp;#39;d:/a.ini&amp;#39;, &amp;#39;w&amp;#39;)) &amp;gt;&amp;gt;&amp;gt; cf = None  生成配置如下：
+[a] name = smallfish2 [d] name = smallfish  翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html
+代码片段如下：
+&amp;gt;&amp;gt;&amp;gt; from configobj import ConfigObj &amp;gt;&amp;gt;&amp;gt; config = ConfigObj() &amp;gt;&amp;gt;&amp;gt; config.filename = &amp;#39;d:/a.ini&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish2&amp;#39; &amp;gt;&amp;gt;&amp;gt; config.</description>
+    </item>
+    
+    <item>
+      <title>梦想与坚持</title>
+      <link>http://chenxiaoyu.org/2010/04/08/my-dream/</link>
+      <pubDate>Thu, 08 Apr 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/04/08/my-dream/</guid>
+      <description>经过几天的适应总算在杭州安定下来了，回归到简单而快乐的上班生活轨道上。
+夜深人静的时侯才能静下心来写点关于自己的话题，不再浮躁。
+回想这毕业后的六年多的时间，自己都在做些什么？工作的内容在不停的变化，唯一不变的就是坚持了自己的梦想，一个小小的技术梦想。梦想只是目标，而坚持应该是梦想的过程。结果不一定很绚烂，但过程一定要精彩。
+第一份工作真的很稚嫩，从文科啥也不懂，菜鸟起步，做起了Web设计和简单的程序编写。当然起步都是需要点时间和积累的。现在还记得为自己做出一个个简单的动画效果而激动无比的场景。随着时间的推移，发觉自己在创意方面的缺乏，两年之后就离开了生活的那个城市。
+第二份工作时间很长，四年半的时间。算是一个正规军把 :) 只不过后来也变得有点山寨。收获最大的就是伴随着公司的发展对技术的不断提高要求，接触的很越来越多。最初那种土鳖式的代码工已经不符合了。逐步了解了分层模式，框架，服务器，数据库等等很多有趣的东西。而不仅仅的是把代码写完就完事了。技术上面的提高，当然也带来视野上的扩展。从开始的单一语言发展到后来的多语言结合，单一的数据库到几十台的主从结构，数据应用的分离，数据的切分，缓存系统的应用，以及服务器模块的开发。现在还记得某年的夏天没有空调一帮人赤膊写代码的场景，多hi阿。回想起过去的种种，内心真的难以平静。有时侯想想真的不是想离开，有点无奈。
+最近踏上了新的起点，六年以后的第三份工作：淘宝。最初喜欢上淘宝是因为看到的网上办公环境照片，通过一些朋友的了解，里面的武侠文化很吸引自己，想想自己曾经也疯狂迷恋过武侠小说，导致正经的文学没学几篇，很是遗憾阿。经过这几天的初步接触，每天都会有着不同的收获。虽然从事的工作跟过去的内容和岗位都不太一样，但是正因为如此才有更多的好奇与向往。
+一直相信只要有坚持，就会有梦想。而不是倒过来，本子电也不多了，洗洗睡吧。祝自己好运，good night！</description>
+    </item>
+    
+    <item>
+      <title>Nginx 启动/重启脚本笔记</title>
+      <link>http://chenxiaoyu.org/2010/03/27/nginx-setup-config/</link>
+      <pubDate>Sat, 27 Mar 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/03/27/nginx-setup-config/</guid>
+      <description>Nginx本身可以通过
+kill -HUP `cat /usr/local/nginx/logs/nginx.pid`  进行平滑重启的，可以通过ps进程查看一下。效果还是挺不错的。
+这里介绍的是另外一种方式service，适合RHEL/CentOS系列。
+ kill nginx进程  kill `cat /usr/local/nginx/logs/nginx.pid`   建立 /etc/init.d/nginx 文件  #!/bin/sh # # nginx - this script starts and stops the nginx daemin # # chkconfig: - 85 15 # description: Nginx is an HTTP(S) server, HTTP(S) reverse \ # proxy and IMAP/POP3 proxy server # processname: nginx # config: /usr/local/nginx/conf/nginx.conf # pidfile: /usr/local/nginx/logs/nginx.pid # Source function library. . /etc/rc.</description>
+    </item>
+    
+    <item>
+      <title>web.py 数据库操作指南</title>
+      <link>http://chenxiaoyu.org/2010/03/19/webpy-database-tutorial/</link>
+      <pubDate>Fri, 19 Mar 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/03/19/webpy-database-tutorial/</guid>
+      <description>官网地址：http://webpy.org/
+web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。
+很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。
+废话不多，先来安装，有两种方式：
+ easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py   下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install  web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。
+下面开始使用吧！
+ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;)   select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;quot;Bob&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;quot;name = $name&amp;quot;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;quot;id&amp;gt;100&amp;quot;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;quot;id,name&amp;quot;) # order by results = db.</description>
+    </item>
+    
+    <item>
+      <title>Python(Stackless) &#43; MongoDB Apache 日志(2G)分析</title>
+      <link>http://chenxiaoyu.org/2010/03/04/python-stackless-mongodb-apache-log/</link>
+      <pubDate>Thu, 04 Mar 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/03/04/python-stackless-mongodb-apache-log/</guid>
+      <description>为何选择Stackless？ http://www.stackless.com
+Stackless可以简单的认为是Python一个增强版，最吸引眼球的非“微线程”莫属。微线程是轻量级的线程，与线程相比切换消耗的资源更小，线程内共享数据更加便捷。相比多线程代码更加简洁和可读。此项目是由EVE Online推出，在并发和性能上确实很强劲。安装和Python一样，可以考虑替换原系统Python。:)
+为何选择MongoDB？ http://www.mongodb.org
+可以在官网看到很多流行的应用采用MongoDB，比如sourceforge，github等。相比RDBMS有啥优势？首先在速度和性能上优势最为明显，不仅可以当作类似KeyValue数据库来使，还包含了一些数据库查询（Distinct、Group、随机、索引等特性）。再有一点特性就是：简单。不论是应用还是文档，还是第三方API，几乎略过一下就可以使用。不过有点遗憾的就是，存储的数据文件很大，超过正常数据的2-4倍之间。本文测试的Apache日志大小是2G，生产的数据文件有6G。寒&amp;hellip;希望在新版里能有所缩身，当然这个也是明显的以空间换速度的后果。
+本文除去上面提及到的两个软件，还需要安装pymongo模块。http://api.mongodb.org/python/
+模块安装方式有源码编译和easy_install，这里就不再累赘。
+ 从Apache日志中分析出需要保存的资料，比如IP，时间，GET/POST，返回状态码等。  fmt_str = &amp;#39;(?P&amp;lt;ip&amp;gt;[.\d]+) - - \[(?P&amp;lt;time&amp;gt;.*?)\] &amp;quot;(?P&amp;lt;method&amp;gt;.*?) (?P&amp;lt;uri&amp;gt;.*?) HTTP/1.\d&amp;quot; (?P&amp;lt;status&amp;gt;\d+) (?P&amp;lt;length&amp;gt;.*?) &amp;quot;(?P&amp;lt;referere&amp;gt;.*?)&amp;quot; &amp;quot;(?P&amp;lt;agent&amp;gt;.*?)&amp;quot;&amp;#39; fmt_name = re.findall(&amp;#39;\?P&amp;lt;(.*?)&amp;gt;&amp;#39;, fmt_str) fmt_re = re.compile(fmt_str)  定义了一个正则用于提取每行日志的内容。fmt_name就是提取尖括号中间的变量名。
+ 定义MongoDB相关变量，包括需要存到collection名称。Connection采取的是默认Host和端口。  conn = Connection() apache = conn.apache logs = apache.logs   保存日志行  def make_line(line): m = fmt_re.search(line) if m: logs.insert(dict(zip(fmt_name, m.groups())))   读取Apache日志文件  def make_log(log_path): with open(log_path) as fp: for line in fp: make_line(line.</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL UUID 函数</title>
+      <link>http://chenxiaoyu.org/2010/02/26/postgresql-uuid/</link>
+      <pubDate>Fri, 26 Feb 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/02/26/postgresql-uuid/</guid>
+      <description>测试环境：PostgreSQL 8.4
+默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）
+导入很简单，下面是win下面测试，其他平台类似该操作：
+D:\&amp;gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION  进入psql，执行：
+postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)  主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL RPM 安装笔记</title>
+      <link>http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/</link>
+      <pubDate>Sat, 06 Feb 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/</guid>
+      <description>测试环境：REHL 5.3 PostgreSQL版本：8.4.2
+ 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres   下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb   service启动PostgreSQL  shell&amp;gt; service postgresql start  到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。</description>
+    </item>
+    
+    <item>
+      <title>MySQL/PostgreSQL小命令对比</title>
+      <link>http://chenxiaoyu.org/2010/02/05/mysql-postgresql-command/</link>
+      <pubDate>Fri, 05 Feb 2010 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2010/02/05/mysql-postgresql-command/</guid>
+      <description>对比下一些两个数据库常用的操作。分别使用自带的client程序。
+MySQL命令行：
+mysql -u 用户名 -h 主机地址 -P 端口号 数据库名 -p  PostgreSQL命令行：
+psql -U 用户名 -h 主机地址 -p 端口号 数据库名  操作对比：
+mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS; \du SHOW COLUMNS; \d table-name SHOW PROCESSLIST; SELECT * FROM pg_stat_activity; SELECT now()\G \x 可以打开和关闭类似\G功能 SOURCE /path.sql \i /path.sql LOAD DATA INFILE ... \copy ... \h \?  </description>
+    </item>
+    
+  </channel>
+</rss>

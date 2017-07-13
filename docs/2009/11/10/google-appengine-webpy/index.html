@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Google App Engine 上试用 web.py 笔记 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改： 复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py  home.pyimport web render = web.template.render(&amp;#39;templates/&amp;#39;) urls = ( &amp;#39;/&amp;#39;, &amp;#39;index&amp;#39; ) class index: def GET(self): web.header(&amp;#39;Content-type&amp;#39;, &amp;#39;text/html&amp;#39;) name = &amp;#39;smallfish&amp;#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键  templates/index.html$def with (name) hello, $name. test by web.py   发布到GAE，测试  e:\googleapp&amp;gt;appcfg.">
+
+<meta property="og:title" content="Google App Engine 上试用 web.py 笔记 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改： 复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py  home.pyimport web render = web.template.render(&amp;#39;templates/&amp;#39;) urls = ( &amp;#39;/&amp;#39;, &amp;#39;index&amp;#39; ) class index: def GET(self): web.header(&amp;#39;Content-type&amp;#39;, &amp;#39;text/html&amp;#39;) name = &amp;#39;smallfish&amp;#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键  templates/index.html$def with (name) hello, $name. test by web.py   发布到GAE，测试  e:\googleapp&amp;gt;appcfg.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/">
+<meta name="twitter:title" content="Google App Engine 上试用 web.py 笔记 - smallfish&#39;g blog">
+<meta name="twitter:description" content="看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改： 复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py  home.pyimport web render = web.template.render(&amp;#39;templates/&amp;#39;) urls = ( &amp;#39;/&amp;#39;, &amp;#39;index&amp;#39; ) class index: def GET(self): web.header(&amp;#39;Content-type&amp;#39;, &amp;#39;text/html&amp;#39;) name = &amp;#39;smallfish&amp;#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键  templates/index.html$def with (name) hello, $name. test by web.py   发布到GAE，测试  e:\googleapp&amp;gt;appcfg.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Google App Engine 上试用 web.py 笔记 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-11-10T00:00:00JST",
+    "dateModified": "2009-11-10T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改：
+ 复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes
+ 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py  home.py
+import web render = web.template.render(&#39;templates/&#39;) urls = ( &#39;/&#39;, &#39;index&#39; ) class index: def GET(self): web.header(&#39;Content-type&#39;, &#39;text/html&#39;) name = &#39;smallfish&#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键  templates/index.html
+$def with (name) hello, $name. test by web.py   发布到GAE，测试  e:\googleapp&gt;appcfg."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Google App Engine 上试用 web.py 笔记</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Google App Engine 上试用 web.py 笔记</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改：</p>
+
+<ol>
+<li>复制本地对应web.py目录到GAE对应应用目录</li>
+</ol>
+
+<p>比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes</p>
+
+<ol>
+<li>写测试代码
+app.yaml</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">application</span><span class="p">:</span> <span class="n">pynotes</span>
+<span class="n">version</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">runtime</span><span class="p">:</span> <span class="n">python</span>
+<span class="n">api_version</span><span class="p">:</span> <span class="mi">1</span>
+
+<span class="n">handlers</span><span class="p">:</span>
+<span class="o">-</span>  <span class="n">url</span><span class="p">:</span> <span class="o">/.*</span>
+   <span class="n">script</span><span class="p">:</span> <span class="n">home</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+
+<p>home.py</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">web</span>
+<span class="n">render</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;templates/&#39;</span><span class="p">)</span>
+<span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">index</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">web</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/html&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;smallfish&#39;</span>
+        <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+<span class="n">main</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">cgirun</span><span class="p">()</span> <span class="c1"># 这行是发布到GAE的关键</span>
+</code></pre></div>
+
+
+<p>templates/index.html</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span><span class="k">def</span> <span class="nf">with</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="n">hello</span><span class="p">,</span> <span class="err">$</span><span class="n">name</span><span class="o">.</span> <span class="n">test</span> <span class="n">by</span> <span class="n">web</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>发布到GAE，测试</li>
+</ol>
+
+<p>e:\googleapp&gt;appcfg.py update pynotes/</p>
+
+<p>到这里，一个简单web.py应用就完成了，然后刷新。GAE显示500 Error！</p>
+
+<p>看后台GAE Log显示错误信息：”No module named templates“，去web.py官方溜达了一圈，发现在其cookbook里有一篇文档《<a href="http://webpy.org/cookbook/templates_on_gae">http://webpy.org/cookbook/templates_on_gae</a>》，里面说的很明白啦。</p>
+
+<p>因为web.py的模板在GAE上文件系统会有所限制，所有本地得compile一下，具体命令是：python web/template.py &ndash;compile templates 最后一个参数是本地对应模板目录templates，如果有多个模板目录则一次运行一次。运行完会在templates会生成一个<strong>init</strong>.py，里面内容有兴趣可以看看，很眼熟的哦。</p>
+
+<ol>
+<li>再次发布到GAE，可以看到OK拉！</li>
+</ol>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2013/08/28/python-profile/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Python Profile 工具性能分析 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="最近碰到“程序速度大大降低”的说法，还是直接用数据说明比较有信服力，以及可以找出真正问题所在。Python自带了几个性能分析的模块：profile、cProfile和hotshot，使用方法基本都差不多，无非模块是纯Python还是用C写的。官网文档参考：http://docs.python.org/2/library/profile.html本文示例基于cProfile模块，先写点测试代码（test1.py）：import time def func1(): sum = 0 for i in range(1000000): sum &#43;= i def func2(): time.sleep(10) func1() func2()  运行cProfile命令如下：$ python -m cProfile -o test1.out test1.py  这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。$ python -c &amp;quot;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;); p.print_stats()&amp;quot; Wed Aug 28 22:19:45 2013 test1.out 6 function calls in 10.163 seconds Random listing order was used ncalls tottime percall cumtime percall filename:lineno(function) 1 0.024 0.024 10.163 10.163 test1.">
+
+<meta property="og:title" content="Python Profile 工具性能分析 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2013/08/28/python-profile/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="最近碰到“程序速度大大降低”的说法，还是直接用数据说明比较有信服力，以及可以找出真正问题所在。Python自带了几个性能分析的模块：profile、cProfile和hotshot，使用方法基本都差不多，无非模块是纯Python还是用C写的。官网文档参考：http://docs.python.org/2/library/profile.html本文示例基于cProfile模块，先写点测试代码（test1.py）：import time def func1(): sum = 0 for i in range(1000000): sum &#43;= i def func2(): time.sleep(10) func1() func2()  运行cProfile命令如下：$ python -m cProfile -o test1.out test1.py  这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。$ python -c &amp;quot;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;); p.print_stats()&amp;quot; Wed Aug 28 22:19:45 2013 test1.out 6 function calls in 10.163 seconds Random listing order was used ncalls tottime percall cumtime percall filename:lineno(function) 1 0.024 0.024 10.163 10.163 test1.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2013/08/28/python-profile/">
+<meta name="twitter:title" content="Python Profile 工具性能分析 - smallfish&#39;g blog">
+<meta name="twitter:description" content="最近碰到“程序速度大大降低”的说法，还是直接用数据说明比较有信服力，以及可以找出真正问题所在。Python自带了几个性能分析的模块：profile、cProfile和hotshot，使用方法基本都差不多，无非模块是纯Python还是用C写的。官网文档参考：http://docs.python.org/2/library/profile.html本文示例基于cProfile模块，先写点测试代码（test1.py）：import time def func1(): sum = 0 for i in range(1000000): sum &#43;= i def func2(): time.sleep(10) func1() func2()  运行cProfile命令如下：$ python -m cProfile -o test1.out test1.py  这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。$ python -c &amp;quot;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;); p.print_stats()&amp;quot; Wed Aug 28 22:19:45 2013 test1.out 6 function calls in 10.163 seconds Random listing order was used ncalls tottime percall cumtime percall filename:lineno(function) 1 0.024 0.024 10.163 10.163 test1.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Python Profile 工具性能分析 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2013-08-28T00:00:00JST",
+    "dateModified": "2013-08-28T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "最近碰到“程序速度大大降低”的说法，还是直接用数据说明比较有信服力，以及可以找出真正问题所在。
+Python自带了几个性能分析的模块：profile、cProfile和hotshot，使用方法基本都差不多，无非模块是纯Python还是用C写的。
+官网文档参考：http://docs.python.org/2/library/profile.html
+本文示例基于cProfile模块，先写点测试代码（test1.py）：
+import time def func1(): sum = 0 for i in range(1000000): sum += i def func2(): time.sleep(10) func1() func2()  运行cProfile命令如下：
+$ python -m cProfile -o test1.out test1.py  这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。
+好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。
+$ python -c &quot;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.print_stats()&quot; Wed Aug 28 22:19:45 2013 test1.out 6 function calls in 10.163 seconds Random listing order was used ncalls tottime percall cumtime percall filename:lineno(function) 1 0.024 0.024 10.163 10.163 test1."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2013/" itemprop="url"><span itemprop="title">2013</span></a></li>
+        
+        <li class="active">Python Profile 工具性能分析</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-08-28T00:00:00JST">Aug 28, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2013/">2013</a></li>
+      
+    </ul>
+
+    <h1 class="title">Python Profile 工具性能分析</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>最近碰到“程序速度大大降低”的说法，还是直接用数据说明比较有信服力，以及可以找出真正问题所在。</p>
+
+<p>Python自带了几个性能分析的模块：profile、cProfile和hotshot，使用方法基本都差不多，无非模块是纯Python还是用C写的。</p>
+
+<p>官网文档参考：<a href="http://docs.python.org/2/library/profile.html">http://docs.python.org/2/library/profile.html</a></p>
+
+<p>本文示例基于cProfile模块，先写点测试代码（test1.py）：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">func1</span><span class="p">():</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000000</span><span class="p">):</span>
+        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">i</span>
+
+<span class="k">def</span> <span class="nf">func2</span><span class="p">():</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">func1</span><span class="p">()</span>
+<span class="n">func2</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p>运行cProfile命令如下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -m cProfile -o test1.out test1.py
+</code></pre></div>
+
+
+<p>这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。</p>
+
+<p>好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -c <span class="s2">&quot;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.print_stats()&quot;</span>
+
+Wed Aug <span class="m">28</span> <span class="m">22</span>:19:45 <span class="m">2013</span>    test1.out
+
+         <span class="m">6</span> <span class="k">function</span> calls in <span class="m">10</span>.163 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno<span class="o">(</span><span class="k">function</span><span class="o">)</span>
+        <span class="m">1</span>    <span class="m">0</span>.024    <span class="m">0</span>.024   <span class="m">10</span>.163   <span class="m">10</span>.163 test1.py:1<span class="o">(</span>&lt;module&gt;<span class="o">)</span>
+        <span class="m">1</span>   <span class="m">10</span>.001   <span class="m">10</span>.001   <span class="m">10</span>.001   <span class="m">10</span>.001 <span class="o">{</span>time.sleep<span class="o">}</span>
+        <span class="m">1</span>    <span class="m">0</span>.092    <span class="m">0</span>.092    <span class="m">0</span>.138    <span class="m">0</span>.138 test1.py:3<span class="o">(</span>func1<span class="o">)</span>
+        <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000 <span class="o">{</span>method <span class="s1">&#39;disable&#39;</span> of <span class="s1">&#39;_lsprof.Profiler&#39;</span> objects<span class="o">}</span>
+        <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000   <span class="m">10</span>.001   <span class="m">10</span>.001 test1.py:8<span class="o">(</span>func2<span class="o">)</span>
+        <span class="m">1</span>    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046 <span class="o">{</span>range<span class="o">}</span>
+</code></pre></div>
+
+
+<p>分析的数据还很清晰和简单的吧，大概能看出几列数据的意思，重点关注下时间和函数调用次数，再来排个序：</p>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -c <span class="s2">&quot;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.sort_stats(&#39;time&#39;).print_stats()&quot;</span>
+
+Wed Aug <span class="m">28</span> <span class="m">22</span>:19:45 <span class="m">2013</span>    test1.out
+
+         <span class="m">6</span> <span class="k">function</span> calls in <span class="m">10</span>.163 seconds
+
+   Ordered by: internal <span class="nb">time</span>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno<span class="o">(</span><span class="k">function</span><span class="o">)</span>
+        <span class="m">1</span>   <span class="m">10</span>.001   <span class="m">10</span>.001   <span class="m">10</span>.001   <span class="m">10</span>.001 <span class="o">{</span>time.sleep<span class="o">}</span>
+        <span class="m">1</span>    <span class="m">0</span>.092    <span class="m">0</span>.092    <span class="m">0</span>.138    <span class="m">0</span>.138 test1.py:3<span class="o">(</span>func1<span class="o">)</span>
+        <span class="m">1</span>    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046 <span class="o">{</span>range<span class="o">}</span>
+        <span class="m">1</span>    <span class="m">0</span>.024    <span class="m">0</span>.024   <span class="m">10</span>.163   <span class="m">10</span>.163 test1.py:1<span class="o">(</span>&lt;module&gt;<span class="o">)</span>
+        <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000   <span class="m">10</span>.001   <span class="m">10</span>.001 test1.py:8<span class="o">(</span>func2<span class="o">)</span>
+        <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000 <span class="o">{</span>method <span class="s1">&#39;disable&#39;</span> of <span class="s1">&#39;_lsprof.Profiler&#39;</span> objects<span class="o">}</span>
+</code></pre></div>
+</p>
+
+<p>可以看出测试程序中最耗费时间点是：time.sleep和range。</p>
+
+<p>sort_stats支持一下参数：</p>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>calls, cumulative, file, line, module, name, nfl, pcalls, stdname, <span class="nb">time</span>
+</code></pre></div>
+</p>
+
+<p>pstats模块还支持交互式：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -m pstats test1.out
+Welcome to the profile statistics browser.
+test1.out% <span class="c1">### help 或者输入字母按下tab，可以补全的</span>
+test1.out% stats <span class="m">10</span>
+</code></pre></div>
+
+
+<p>这里似乎告一段落了，只是输出式的性能分析似乎有点乏味，开源世界这么美好，肯定会有些更美观和帅气的方法吧。</p>
+
+<p>一步步来，先安装依赖项（请选择对应系统平台）：</p>
+
+<ul>
+<li><a href="http://gprof2dot.jrfonseca.googlecode.com/git/gprof2dot.py">gprof2dot.py</a></li>
+<li><a href="http://www.graphviz.org/Download.php">graphviz</a></li>
+</ul>
+
+<p>PS：Ubuntu系统请注意请注意，pstats模块因为某些原因不在Python包中，需要单独安装：python-profiler包</p>
+
+<p>装好依赖后，如此这番：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ ./gprof2dot.py -f pstats test1.out <span class="p">|</span> dot -Tpng -o test1.png
+</code></pre></div>
+
+
+<p>看看test1.png，一切都了然于心了吧。。。</p>
+
+<p><img src="/images/python-profile.png" alt="python profile" /></p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

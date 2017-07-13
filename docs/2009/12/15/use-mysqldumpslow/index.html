@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>mysqldumpslow 慢查询日志分析工具 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。首先得配置my.cnf：log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限  具体的使法如下：mysqldumpslow -s c -t 40 /path/slow.log  出来的结果是访问次数最多的40个sql，几个参数大概意思如下：-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句  可以参考mysqldumpslow &amp;ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！">
+
+<meta property="og:title" content="mysqldumpslow 慢查询日志分析工具 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。首先得配置my.cnf：log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限  具体的使法如下：mysqldumpslow -s c -t 40 /path/slow.log  出来的结果是访问次数最多的40个sql，几个参数大概意思如下：-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句  可以参考mysqldumpslow &amp;ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/">
+<meta name="twitter:title" content="mysqldumpslow 慢查询日志分析工具 - smallfish&#39;g blog">
+<meta name="twitter:description" content="mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。首先得配置my.cnf：log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限  具体的使法如下：mysqldumpslow -s c -t 40 /path/slow.log  出来的结果是访问次数最多的40个sql，几个参数大概意思如下：-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句  可以参考mysqldumpslow &amp;ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "mysqldumpslow 慢查询日志分析工具 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。
+首先得配置my.cnf：
+log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限  具体的使法如下：
+mysqldumpslow -s c -t 40 /path/slow.log  出来的结果是访问次数最多的40个sql，几个参数大概意思如下：
+-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句  可以参考mysqldumpslow &ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">mysqldumpslow 慢查询日志分析工具</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">mysqldumpslow 慢查询日志分析工具</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。</p>
+
+<p>首先得配置my.cnf：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">log_slow_queries</span> <span class="o">=</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">slow</span><span class="o">.</span><span class="n">log</span> <span class="c1"># 定义log位置，注意要有写入的权限</span>
+</code></pre></div>
+
+
+<p>具体的使法如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mysqldumpslow</span> <span class="o">-</span><span class="n">s</span> <span class="n">c</span> <span class="o">-</span><span class="n">t</span> <span class="mi">40</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">slow</span><span class="o">.</span><span class="n">log</span>
+</code></pre></div>
+
+
+<p>出来的结果是访问次数最多的40个sql，几个参数大概意思如下：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">-</span><span class="n">t</span> <span class="err">显示多少条</span>
+<span class="o">-</span><span class="n">s</span> <span class="err">排序，默认是</span><span class="n">at</span><span class="err">。</span><span class="n">c</span><span class="err">是次数，</span><span class="n">t</span><span class="err">是时间，</span><span class="n">l</span><span class="err">是</span><span class="n">lock</span><span class="err">时间，</span><span class="n">r</span><span class="err">是返回结果。如果是</span><span class="n">ac</span><span class="err">，</span><span class="n">at</span><span class="err">，</span><span class="n">al</span><span class="err">，</span><span class="n">ar</span><span class="err">则是倒序</span>
+<span class="o">-</span><span class="n">g</span> <span class="err">可以用正则匹配部分语句</span>
+</code></pre></div>
+</p>
+
+<p>可以参考mysqldumpslow &ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

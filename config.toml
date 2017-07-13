@@ -1,0 +1,7 @@
+baseURL = "http://chenxiaoyu.org/"
+languageCode = "en-us"
+title = "smallfish'g blog"
+pygmentsuseclasses = true
+publishDir = "docs"
+[permalinks]
+posts = "/:year/:month/:day/:filename/"

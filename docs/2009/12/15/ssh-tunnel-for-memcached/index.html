@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>SSH Tunnel Memcached - smallfish&#39;g blog</title>
+    
+<meta name="description" content="最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx在移动机器上执行：shell &amp;gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx  11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &amp;ndash;help。shell &amp;gt; ps aux  可以看见进程已经在了，下面开始测试代码。&amp;gt;&amp;gt;&amp;gt; import memcache &amp;gt;&amp;gt;&amp;gt; mc = memcache.Client([&amp;#39;127.0.0.1:11211&amp;#39;],debug=True) &amp;gt;&amp;gt;&amp;gt; print mc.get(&amp;#39;name&amp;#39;)  ">
+
+<meta property="og:title" content="SSH Tunnel Memcached - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx在移动机器上执行：shell &amp;gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx  11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &amp;ndash;help。shell &amp;gt; ps aux  可以看见进程已经在了，下面开始测试代码。&amp;gt;&amp;gt;&amp;gt; import memcache &amp;gt;&amp;gt;&amp;gt; mc = memcache.Client([&amp;#39;127.0.0.1:11211&amp;#39;],debug=True) &amp;gt;&amp;gt;&amp;gt; print mc.get(&amp;#39;name&amp;#39;)  ">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/">
+<meta name="twitter:title" content="SSH Tunnel Memcached - smallfish&#39;g blog">
+<meta name="twitter:description" content="最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx在移动机器上执行：shell &amp;gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx  11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &amp;ndash;help。shell &amp;gt; ps aux  可以看见进程已经在了，下面开始测试代码。&amp;gt;&amp;gt;&amp;gt; import memcache &amp;gt;&amp;gt;&amp;gt; mc = memcache.Client([&amp;#39;127.0.0.1:11211&amp;#39;],debug=True) &amp;gt;&amp;gt;&amp;gt; print mc.get(&amp;#39;name&amp;#39;)  ">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "SSH Tunnel Memcached - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。
+依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。
+上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：
+移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx
+在移动机器上执行：
+shell &gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx  11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &ndash;help。
+shell &gt; ps aux  可以看见进程已经在了，下面开始测试代码。
+&gt;&gt;&gt; import memcache &gt;&gt;&gt; mc = memcache.Client([&#39;127.0.0.1:11211&#39;],debug=True) &gt;&gt;&gt; print mc.get(&#39;name&#39;)  "
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">SSH Tunnel Memcached</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">SSH Tunnel Memcached</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。</p>
+
+<p>依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。</p>
+
+<p>上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：</p>
+
+<p>移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx</p>
+
+<p>在移动机器上执行：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span> <span class="o">&gt;</span> <span class="n">ssh</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">f</span> <span class="o">-</span><span class="n">L</span> <span class="mi">11211</span><span class="p">:</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">0.</span><span class="n">xxx</span><span class="p">:</span><span class="mi">11211</span> <span class="n">root</span><span class="nd">@155.xxx.xxx.xxx</span>
+</code></pre></div>
+
+
+<p>11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口
+这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &ndash;help。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span> <span class="o">&gt;</span> <span class="n">ps</span> <span class="n">aux</span>
+</code></pre></div>
+
+
+<p>可以看见进程已经在了，下面开始测试代码。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">memcache</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mc</span> <span class="o">=</span> <span class="n">memcache</span><span class="o">.</span><span class="n">Client</span><span class="p">([</span><span class="s1">&#39;127.0.0.1:11211&#39;</span><span class="p">],</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span> <span class="n">mc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

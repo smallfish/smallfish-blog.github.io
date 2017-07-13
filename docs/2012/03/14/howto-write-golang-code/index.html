@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>如何编写 Go 程序（最新版） - smallfish&#39;g blog</title>
+    
+<meta name="description" content="官网文档（weekly）：http://weekly.golang.org/doc/code.html中文版（旧版）：http://chenxiaoyu.org/2010/06/29/how-to-write-go.html本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。可以自己试试下：$ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files doc run godoc on package sources env print Go environment information … 略去若干字  言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：$GOPATH在类似 Unix 环境大概这样设置：GOPATH=/home/user/ext:/home/user/mygo  Windows 系统请注意分隔符，是分号（非冒号）。以上 $GOPATH 目录约定有三个子目录：">
+
+<meta property="og:title" content="如何编写 Go 程序（最新版） - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="官网文档（weekly）：http://weekly.golang.org/doc/code.html中文版（旧版）：http://chenxiaoyu.org/2010/06/29/how-to-write-go.html本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。可以自己试试下：$ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files doc run godoc on package sources env print Go environment information … 略去若干字  言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：$GOPATH在类似 Unix 环境大概这样设置：GOPATH=/home/user/ext:/home/user/mygo  Windows 系统请注意分隔符，是分号（非冒号）。以上 $GOPATH 目录约定有三个子目录：">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2012/03/14/howto-write-golang-code/">
+<meta name="twitter:title" content="如何编写 Go 程序（最新版） - smallfish&#39;g blog">
+<meta name="twitter:description" content="官网文档（weekly）：http://weekly.golang.org/doc/code.html中文版（旧版）：http://chenxiaoyu.org/2010/06/29/how-to-write-go.html本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。可以自己试试下：$ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files doc run godoc on package sources env print Go environment information … 略去若干字  言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：$GOPATH在类似 Unix 环境大概这样设置：GOPATH=/home/user/ext:/home/user/mygo  Windows 系统请注意分隔符，是分号（非冒号）。以上 $GOPATH 目录约定有三个子目录：">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "如何编写 Go 程序（最新版） - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-03-14T00:00:00JST",
+    "dateModified": "2012-03-14T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "官网文档（weekly）：http://weekly.golang.org/doc/code.html
+中文版（旧版）：http://chenxiaoyu.org/2010/06/29/how-to-write-go.html
+本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。
+本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。
+鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。
+可以自己试试下：
+$ go Go is a tool for managing Go source code. Usage: go command [arguments] The commands are: build compile packages and dependencies clean remove object files doc run godoc on package sources env print Go environment information … 略去若干字  言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：$GOPATH
+在类似 Unix 环境大概这样设置：
+GOPATH=/home/user/ext:/home/user/mygo  Windows 系统请注意分隔符，是分号（非冒号）。
+以上 $GOPATH 目录约定有三个子目录："
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2012/" itemprop="url"><span itemprop="title">2012</span></a></li>
+        
+        <li class="active">如何编写 Go 程序（最新版）</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-03-14T00:00:00JST">Mar 14, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+
+    <h1 class="title">如何编写 Go 程序（最新版）</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>官网文档（weekly）：<a href="http://weekly.golang.org/doc/code.html">http://weekly.golang.org/doc/code.html</a></p>
+
+<p>中文版（旧版）：<a href="http://chenxiaoyu.org/2010/06/29/how-to-write-go.html">http://chenxiaoyu.org/2010/06/29/how-to-write-go.html</a></p>
+
+<p>本想翻译下官网版本，翻译起来觉得有点麻烦和啰嗦。还是自己摘抄一些片段，适当删减。</p>
+
+<p>本文文档基于 weekly.2012-03-13 版本，应该是传闻中的 Go1 RC1 版本。</p>
+
+<p>鉴于新版多了 go 命令，整合了以前旧版中的不少命令，比如： 6g/6l 或者采用 Makefile 之类编译的东西。</p>
+
+<p>可以自己试试下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ go
+
+Go is a tool <span class="k">for</span> managing Go <span class="nb">source</span> code.
+Usage:
+        go <span class="nb">command</span> <span class="o">[</span>arguments<span class="o">]</span>
+The commands are:
+    build       compile packages and dependencies
+    clean       remove object files
+    doc         run godoc on package sources
+    env         print Go environment information
+ … 略去若干字
+</code></pre></div>
+
+
+<p>言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：<strong>$GOPATH</strong></p>
+
+<p>在类似 Unix 环境大概这样设置：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">GOPATH</span><span class="o">=</span>/home/user/ext:/home/user/mygo
+</code></pre></div>
+
+
+<p>Windows 系统请注意分隔符，是分号（非冒号）。</p>
+
+<p>以上 <strong>$GOPATH</strong> 目录约定有三个子目录：</p>
+
+<ul>
+<li>src  存放源代码（比如：.go .c .h .s等）</li>
+<li>pkg  编译后生成的文件（比如：.a）</li>
+<li>bin  编译后生成的可执行文件（为了方便，可以把此目录加入到 $PATH 变量中）</li>
+</ul>
+
+<p>下面来一个实例来说明，文件和目录大概如下：</p>
+
+<p>a). 设置 $GOPATH，写入 $HOME/.profile 以下内容</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>/mygo
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HOME</span>/mygo/bin
+</code></pre></div>
+
+
+<p>b). 建立包和目录：$GOPATH/src/example/newmath/sqrt.go（包名：&rdquo;example/newmath&rdquo;）</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ mkdir -p <span class="nv">$GOPATH</span>/src/example
+$ <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example
+$ mkdir newmath
+
+// <span class="nv">$GOPATH</span>/src/example/newmath/sqrt.go源码如下：
+package newmath
+
+func Sqrt<span class="o">(</span>x float64<span class="o">)</span> float64 <span class="o">{</span>
+        z :<span class="o">=</span> <span class="m">0</span>.0
+        <span class="k">for</span> i :<span class="o">=</span> <span class="m">0</span><span class="p">;</span> i &lt; <span class="m">1000</span><span class="p">;</span> i++ <span class="o">{</span>
+                z -<span class="o">=</span> <span class="o">(</span>z*z - x<span class="o">)</span> / <span class="o">(</span><span class="m">2</span> * x<span class="o">)</span>
+        <span class="o">}</span>
+        <span class="k">return</span> z
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>c). 编译 newmath/sqrt.go 包</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="m">1</span>. 在任意目录下：
+    $ go install example/newmath
+
+<span class="m">2</span>. 在源码目录下：
+    <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example/newmath
+    $ go install
+</code></pre></div>
+
+
+<p>d). 编译独立的可执行的测试</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example
+$ mkdir hello
+
+// <span class="nv">$GOPATH</span>/src/example/hello/hello.go 源码：
+package main
+
+import <span class="o">(</span>
+        <span class="s2">&quot;example/newmath&quot;</span>
+        <span class="s2">&quot;fmt&quot;</span>
+<span class="o">)</span>
+
+func main<span class="o">()</span> <span class="o">{</span>
+        fmt.Printf<span class="o">(</span><span class="s2">&quot;Hello, world.  Sqrt(2) = %v\n&quot;</span>, newmath.Sqrt<span class="o">(</span><span class="m">2</span><span class="o">))</span>
+<span class="o">}</span>
+
+$ go install example/hello <span class="c1"># 编译 hello</span>
+</code></pre></div>
+
+
+<p>这个时候可以发现在 $GOPATH/bin/hello 多了一个可执行的 hello 文件：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ hello
+Hello, world.  Sqrt<span class="o">(</span><span class="m">2</span><span class="o">)</span> <span class="o">=</span> <span class="m">1</span>.414213562373095
+</code></pre></div>
+
+
+<p>完整的目录结构如下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>bin/
+    hello
+pkg/
+    平台名/ 如：darwin_amd64、linux_amd64
+        example/
+            newmath.a
+src/
+    example/
+        hello/
+            hello.go
+        newmath/
+            sqrt.go
+</code></pre></div>
+
+
+<p>简单的示例到此为止，官网文档中还有 go install 远程扩展库和测试相关，有兴趣的自己看把~~</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

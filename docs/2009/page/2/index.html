@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/2009/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>2009s - smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+    <header class="page-header">
+      <h1>2009s</h1>
+    </header>
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/">Perl 批量跳过 MySQL Slave 复制错误</a></h2>
+  </header>
+
+  
+  <div class="summary">发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。
+slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start;  一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：
+#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &#39;show slave status\\G;&#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;&amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &quot;slave error **\n&quot;; system(&quot;mysql -u$usr -p$pass -h$ip -e &#39;slave stop;&#39;&quot;); system(&quot;mysql -u$usr -p$pass -h$ip -e &#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&#39;&quot;); system(&quot;mysql -u$usr -p$pass -h$ip -e &#39;slave start;&#39;&quot;); } my @hosts = qw/ 192.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/" title="Perl 批量跳过 MySQL Slave 复制错误">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/use-pexpect-for-ssh-remote/">Pexpect通过SSH执行远程命令</a></h2>
+  </header>
+
+  
+  <div class="summary">pexpect是python一个模块，可以通过：easy_install pexpect 来安装。
+这里主要是用pexpect执行ssh，查看远程uptime和df -h看硬盘状况。
+#ssh_cmd.py #coding:utf-8 import pexpect def ssh_cmd(ip, user, passwd, cmd): ssh = pexpect.spawn(&#39;ssh %s@%s&quot;%s&quot;&#39; % (user, ip, cmd)) r = &#39;&#39; try: i = ssh.expect([&#39;password: &#39;, &#39;continue connecting (yes/no)?&#39;]) if i == 0 : ssh.sendline(passwd) elif i == 1: ssh.sendline(&#39;yes&#39;) except pexpect.EOF: ssh.close() else: r = ssh.read() ssh.expect(pexpect.EOF) ssh.close() return r hosts = &#39;&#39;&#39; 192.168.0.12:smallfish:1234:df -h,uptime 192.168.0.13:smallfish:1234:df -h,uptime &#39;&#39;&#39; for host in hosts.split(&quot;\n&quot;): if host: ip, user, passwd, cmds = host.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/use-pexpect-for-ssh-remote/" title="Pexpect通过SSH执行远程命令">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/">SSH Tunnel Memcached</a></h2>
+  </header>
+
+  
+  <div class="summary">最近一台服务器放进了移动机房，需要访问原电信机房一台Memcached服务器，Memcached服务是以内网形式启动。
+依靠google大神，搜索出解决思路，在本地起一个SSH链接，通过本地一个端口实现对另外机器的映射或者叫做转发。
+上周本来已经搞定，本周突发灵异事件，竟然不管了，最后百般尝试，完成结果如下：
+移动机器IP：220.xxx.xxx.xxx 电信机器IP：155.xxx.xxx.xxx
+在移动机器上执行：
+shell &gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx  11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &ndash;help。
+shell &gt; ps aux  可以看见进程已经在了，下面开始测试代码。
+&gt;&gt;&gt; import memcache &gt;&gt;&gt; mc = memcache.Client([&#39;127.0.0.1:11211&#39;],debug=True) &gt;&gt;&gt; print mc.get(&#39;name&#39;)  </div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/ssh-tunnel-for-memcached/" title="SSH Tunnel Memcached">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/">mysqldumpslow 慢查询日志分析工具</a></h2>
+  </header>
+
+  
+  <div class="summary">mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。
+首先得配置my.cnf：
+log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限  具体的使法如下：
+mysqldumpslow -s c -t 40 /path/slow.log  出来的结果是访问次数最多的40个sql，几个参数大概意思如下：
+-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句  可以参考mysqldumpslow &ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/" title="mysqldumpslow 慢查询日志分析工具">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/">使用 Perl 快速解析 Apache Log</a></h2>
+  </header>
+
+  
+  <div class="summary">功能简述
+统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。
+实现简述
+Apache单个日志文件800M。
+最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了http://www.dup2.org/node/1006博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。
+然后随意用了Perl写了一个，用了最土鳖的这样的按行分析，最后正则匹配，然后++，速度竟然在40-50秒之间，惊叹！后来经过http://shucho.org/blog/指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！
+程序片段
+# -------------------------------------------------------------------- use strict; use Benchmark; my $LOG_FILE = &#39;/usr/local/apache/logs/access.log&#39;; # 下面qr部分起了关键作用，预编译了表达式 my @EXT_LIST = map {qr/$_/} qw{ aaServlet bbServlet }; my $startime = new Benchmark; my %result; map {$result{$_} = 0} @EXT_LIST; open LOG_FILE, $LOG_FILE; while (&lt;LOG_FILE&gt;){ foreach my $ext (@EXT_LIST){ $result{$ext}++ if $_ =~ /$ext/; } } close LOG_FILE; while (my ($key, $value) = each(%result)){ $key =~ s/\(\?-xism:(.*?)\)/$1/g; print &quot;$key:\t$value\n&quot;; } printf &quot;** %s\n\n&quot;, timestr(timediff(new Benchmark, $startime));  </div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/" title="使用 Perl 快速解析 Apache Log">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-10T00:00:00JST">Dec 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/10/emacs-windows-config/">emacs windows配置笔记</a></h2>
+  </header>
+
+  
+  <div class="summary">俺最新.emcas配置地址是：http://github.com/smallfish/editor/blob/master/emacs/.emacs
+最近手痒，看到不少牛x人物都是用emacs，遂在windows下装一个玩玩。
+下载地址：http://ftp.gnu.org/pub/gnu/emacs/windows/emacs-23.1-bin-i386.zip
+解压到：D:\emacs-23.1
+可以看到bin、etc、lisp等目录。主要运行都在bin目录。
+runemacs.exe 这个就是运行文件拉，可以发送到桌面快捷方式。
+可以运行一下addpm.exe这个，其作用就是把emacs加入到开始程序菜单里。
+试着运行一下runemacs.exe，可以发现默认光标的位置，那是一个入门教程喔，还是中文的耶~
+建议都看下这个入门的教程，常用的快捷键都有说明。
+接下来加点常用的功能把，比如显示行号，goto line的功能。(俺也只配置了这个两项)
+配置文件主要是_emacs或者.emacs，win下建议_emacs，点号开头的文件需要到cmd下才行。
+_emacs文件放到哪儿呢？俺是直接修改了win注册表选项。
+选项是：HKEY_CURRENT_USER\Software\GNU\Emacs，注意GNU\Emacs是需要新建的。接下来在Emacs里新建一个HOME项，值是你的emacs路径，比如我的：D:\emacs-23.1\bin。
+然后需要做的就是把_emacs文件在这个bin目录下。
+经过几经周折，显示行号和goto功能的配置如下：
+(global-linum-mode 1) (global-set-key [(meta g)] &#39;goto-line)  第一行是显示行号
+第二行是设置meta+g转到goto功能，meta在windows下可以用alt来操作。
+其他功能以后在后续补上，快捷键挺多，用了一会手指发酸。C-x 数字(1 2 3)挺好，可以开多窗口浏览了。</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/10/emacs-windows-config/" title="emacs windows配置笔记">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-08T00:00:00JST">Dec 8, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/08/use-git-for-web/">使用Git维护你的网站</a></h2>
+  </header>
+
+  
+  <div class="summary">简介
+git是由http://en.wikipedia.org/wiki/Linus_Torvalds编写的一个开放源码的版本控制系统. 它的主要目标是高度分散, 效率超过其他竞争对手.
+我就是使用git维护本网站. 我知道git不应该这样的粗重任务的使用, 即每一个开发者维护一份代码拷贝, 但是它工作的很好, 所有我使用它.
+本文的目的就是说明如何在家里或者笔记本里维护一个本地拷贝, 然后让这些修改提交到互联网主机上. 下面就是介绍如何设置.
+安装
+# Gentoo emerge git  # Debian/Ubuntu apt-get install git-core  # RedHat/Fedora yum install git  初始化
+你会进入你的服务器的目录和初始化git仓库.
+# 进入你的web目录 cd /$wherever/html/  # 初始化仓库 git init  # 添加所有内容 git add .  # 提交 -m备注 git commit -a -m &quot;The Initial Import.&quot;  然后返回你的html父目录, 克隆新的git-ized web目录.
+# 返回你的html目录 cd ..  # 克隆你的web目录到 html.git git clone --bare html html.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/08/use-git-for-web/" title="使用Git维护你的网站">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-01T00:00:00JST">Dec 1, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/">tornado.database添加PooledDB连接池功能</a></h2>
+  </header>
+
+  
+  <div class="summary">tornado.database模块简单包装了下对MySQL的操作，短小精悍。
+无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。
+主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)
+原代码如下：
+ def reconnect(self): &quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  修改后：
+ def reconnect(self): &quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)  至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：
+easy_install -U DBUtils  PooledDB有这么几个参数：
+* creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&quot;set datestyle to german&quot;, .</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/12/01/python-tornado-dbutil/" title="tornado.database添加PooledDB连接池功能">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-20T00:00:00JST">Nov 20, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/20/pysvn-tutorial/">Pysvn 程序员指南</a></h2>
+  </header>
+
+  
+  <div class="summary">这是一篇关于pysvn模块的指南.
+完整和详细的API请参考 http://pysvn.tigris.org/docs/pysvn_prog_ref.html.
+pysvn是操作Subversion版本控制的Python接口模块. 这个API接口可以管理一个工作副本, 查询档案库, 和同步两个.
+该API不能创建新的仓库; 只能作用在现有仓库上. 如果你需要创建一个仓库, 请使用Subversion的svnadmin命令.
+使用这个API, 你可以check out一份工作拷贝, 添加, 编辑, 和删除工作文件, 和check in, 比较, 或者放弃更改. 仓库属性, 如关键字扩展, 行字符结束, 或者忽略的列表也可以检查和控制.
+Subversion 模型
+Subversion是一个更新-编辑-提交的模型. 首先在本地建立一个工作副本. 在工作副本上进行修改, 最后提交到中央仓库 (可以是本地或者远程).
+这个模型允许多人偶尔会同时修改同一个文件. 大多情况下. Subversion不会干预合并这些不同修改, 如果一个提交失败, 用户或者应用则要重新检查和修改然后再次提交.
+常见任务
+本节给出一些使用pysvn接口的常用例子. 业务可以会递归的处理目录. 添加参数recurse=False以防止这种行为; 例如, 你可以需要添加内容没有增加一个目录.
+check out一份工作副本
+import pysvn client = pysvn.Client() #check out the current version of the pysvn project client.checkout(&#39;http://localhost/example/trunk&#39;, &#39;./examples/pysvn&#39;) #check out revision 11 of the pysvn project client.checkout(&#39;http://localhost/example/trunk&#39;, &#39;.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/20/pysvn-tutorial/" title="Pysvn 程序员指南">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-19T00:00:00JST">Nov 19, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/19/cython-compile/">Cython参考指南 - 编译</a></h2>
+  </header>
+
+  
+  <div class="summary">Cython代码跟Python不一样，必须要编译。
+编译经过两个阶段：
+ Cython编译.pyx文件为.c文件
+ C编译器会把.c文件编译成.so文件(Windows上是.pyd)
+  以下会分节介绍几种方式来建立你的扩展模块。
+注意： -a 选项，如果使用该选项将会为.c文件生成一份很漂亮的HTML文件，双击高亮的章节部分会展开代码，这对理解，优化和调试模块将会非常有帮助。
+命令行
+从命令行执行Cython编译器，输入选项和.pyx文件列表。
+$ cython -a yourmod.pyx  会生成一个yourmod.c文件（指定-a选项会生成一个HTML文件）
+编译.c文件取决于你的操作系统，请参考下如何在你的系统写Python扩展模块文档。
+下面是一个Linux系统的例子：
+$ gcc -shared -pthread -fPIC -fwrapv -O2 -Wall -fno-strict-aliasing \ -I/usr/include/python2.5 -o yourmod.so yourmod.c  gcc需要提供包含的文件和扩展库的链接。
+在目录里会生成yourmod.so文件。
+现在只需要导入你的yourmod模块就可以了。
+Distutils
+确保你的系统已经安装好Distutils。
+下面假设需要编译的文件叫hello.pyx。
+建立一个setup.py的脚本：
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules = [Extension(&quot;hello&quot;, [&quot;hello.pyx&quot;])] setup( name = ’Hello world app’, cmdclass = {’build_ext’: build_ext}, ext_modules = ext_modules )  在命令行执行：python setup.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/19/cython-compile/" title="Cython参考指南 - 编译">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+<nav>
+  <ul class="pager">
+
+    
+    <li><a href="/2009/">上页</a></li>
+    
+
+    
+    <li><a href="/2009/page/3/">下页</a></li>
+    
+
+  </ul>
+</nav>
+
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

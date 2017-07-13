@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/03/08/nginx-gzip/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Nginx GZip 压缩 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="Nginx GZip 模块文档详见：http://wiki.nginx.org/HttpGzipModule常用配置片段如下：gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &amp;quot;MSIE [1-6]\.&amp;quot;; # 无视IE6这个笨蛋~  其中 gzip_types 选项默认只压缩 text/html，源码见：src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&amp;quot;text/html&amp;quot;),  常用的静态 type 有，看自己需要压缩的情况而定：text/html text/plain text/css application/x-javascript text/javascript application/xml  OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：查看是否开启gzip，需要客户端加入：&amp;quot;Accept-Encoding: gzip, deflate&amp;quot; 头信息。 $ curl -I -H &amp;quot;Accept-Encoding: gzip, deflate&amp;quot; &amp;quot;http://localhost/tag.php&amp;quot; HTTP/1.">
+
+<meta property="og:title" content="Nginx GZip 压缩 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2012/03/08/nginx-gzip/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="Nginx GZip 模块文档详见：http://wiki.nginx.org/HttpGzipModule常用配置片段如下：gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &amp;quot;MSIE [1-6]\.&amp;quot;; # 无视IE6这个笨蛋~  其中 gzip_types 选项默认只压缩 text/html，源码见：src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&amp;quot;text/html&amp;quot;),  常用的静态 type 有，看自己需要压缩的情况而定：text/html text/plain text/css application/x-javascript text/javascript application/xml  OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：查看是否开启gzip，需要客户端加入：&amp;quot;Accept-Encoding: gzip, deflate&amp;quot; 头信息。 $ curl -I -H &amp;quot;Accept-Encoding: gzip, deflate&amp;quot; &amp;quot;http://localhost/tag.php&amp;quot; HTTP/1.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2012/03/08/nginx-gzip/">
+<meta name="twitter:title" content="Nginx GZip 压缩 - smallfish&#39;g blog">
+<meta name="twitter:description" content="Nginx GZip 模块文档详见：http://wiki.nginx.org/HttpGzipModule常用配置片段如下：gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &amp;quot;MSIE [1-6]\.&amp;quot;; # 无视IE6这个笨蛋~  其中 gzip_types 选项默认只压缩 text/html，源码见：src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&amp;quot;text/html&amp;quot;),  常用的静态 type 有，看自己需要压缩的情况而定：text/html text/plain text/css application/x-javascript text/javascript application/xml  OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：查看是否开启gzip，需要客户端加入：&amp;quot;Accept-Encoding: gzip, deflate&amp;quot; 头信息。 $ curl -I -H &amp;quot;Accept-Encoding: gzip, deflate&amp;quot; &amp;quot;http://localhost/tag.php&amp;quot; HTTP/1.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Nginx GZip 压缩 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-03-08T00:00:00JST",
+    "dateModified": "2012-03-08T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "Nginx GZip 模块文档详见：http://wiki.nginx.org/HttpGzipModule
+常用配置片段如下：
+gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &quot;MSIE [1-6]\.&quot;; # 无视IE6这个笨蛋~  其中 gzip_types 选项默认只压缩 text/html，源码见：
+src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&quot;text/html&quot;),  常用的静态 type 有，看自己需要压缩的情况而定：
+text/html text/plain text/css application/x-javascript text/javascript application/xml  OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
+下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：
+查看是否开启gzip，需要客户端加入：&quot;Accept-Encoding: gzip, deflate&quot; 头信息。 $ curl -I -H &quot;Accept-Encoding: gzip, deflate&quot; &quot;http://localhost/tag.php&quot; HTTP/1."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2012/" itemprop="url"><span itemprop="title">2012</span></a></li>
+        
+        <li class="active">Nginx GZip 压缩</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-03-08T00:00:00JST">Mar 8, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+
+    <h1 class="title">Nginx GZip 压缩</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>Nginx GZip 模块文档详见：<a href="http://wiki.nginx.org/HttpGzipModule">http://wiki.nginx.org/HttpGzipModule</a></p>
+
+<p>常用配置片段如下：</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span></span>gzip             on;
+gzip_comp_level  2;                        # 压缩比例，比例越大，压缩时间越长。默认是1
+gzip_types       text/css text/javascript; # 哪些文件可以被压缩
+gzip_disable     &quot;MSIE [1-6]\.&quot;;           # 无视IE6这个笨蛋~
+</code></pre></div>
+
+
+<p>其中 gzip_types 选项默认只压缩 text/html，源码见：</p>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="n">src</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">ngx_http_gzip_filter_module</span><span class="p">.</span><span class="n">c</span> <span class="err">行</span><span class="mi">152</span><span class="err">：</span>
+    <span class="o">&amp;</span><span class="n">ngx_http_html_default_types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">src</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">ngx_http</span><span class="p">.</span><span class="n">c</span> <span class="err">行</span><span class="mi">77</span><span class="err">：</span>
+    <span class="n">ngx_str_t</span>  <span class="n">ngx_http_html_default_types</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">ngx_string</span><span class="p">(</span><span class="s">&quot;text/html&quot;</span><span class="p">),</span>
+</code></pre></div>
+
+
+<p>常用的静态 type 有，看自己需要压缩的情况而定：</p>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>text/html
+text/plain
+text/css
+application/x-javascript
+text/javascript
+application/xml
+</code></pre></div>
+</p>
+
+<p>OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。</p>
+
+<p>下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>查看是否开启gzip，需要客户端加入：<span class="s2">&quot;Accept-Encoding: gzip, deflate&quot;</span> 头信息。
+
+$ curl -I -H <span class="s2">&quot;Accept-Encoding: gzip, deflate&quot;</span> <span class="s2">&quot;http://localhost/tag.php&quot;</span>
+
+HTTP/1.1 <span class="m">200</span> OK
+Server: nginx
+Date: Thu, <span class="m">08</span> Mar <span class="m">2012</span> <span class="m">07</span>:23:46 GMT
+Content-Type: text/html
+Connection: close
+Content-Encoding: gzip
+
+$ curl -I -H <span class="s2">&quot;Accept-Encoding: gzip, deflate&quot;</span> <span class="s2">&quot;http://localhost/style.css&quot;</span>
+
+HTTP/1.1 <span class="m">200</span> OK
+Server: nginx
+Date: Thu, <span class="m">08</span> Mar <span class="m">2012</span> <span class="m">07</span>:23:54 GMT
+Content-Type: text/css
+Connection: close
+Last-Modified: Tue, <span class="m">27</span> Dec <span class="m">2011</span> <span class="m">10</span>:00:51 GMT
+ETag: <span class="s2">&quot;BC612352322D435769C4BDC03DDB2572&quot;</span>
+Content-Length: <span class="m">22834</span>
+</code></pre></div>
+
+
+<p>可以看出来了把。第二个示例没有被压缩。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

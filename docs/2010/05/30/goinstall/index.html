@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/05/30/goinstall/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Go 语言模块安装工具：goinstall - smallfish&#39;g blog</title>
+    
+<meta name="description" content="文档地址：http://golang.org/cmd/goinstall/goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，git，svn三种版本控制系统。下面来举例怎么安装 web.go 模块。源地址是：http://github.com/hoisie/web.gosmallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go  根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）查看下安装的目录和路径：smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go  代码示例：import (web &amp;quot;github.com/hoisie/web.go&amp;quot;)  另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。">
+
+<meta property="og:title" content="Go 语言模块安装工具：goinstall - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/05/30/goinstall/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="文档地址：http://golang.org/cmd/goinstall/goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，git，svn三种版本控制系统。下面来举例怎么安装 web.go 模块。源地址是：http://github.com/hoisie/web.gosmallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go  根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）查看下安装的目录和路径：smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go  代码示例：import (web &amp;quot;github.com/hoisie/web.go&amp;quot;)  另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/05/30/goinstall/">
+<meta name="twitter:title" content="Go 语言模块安装工具：goinstall - smallfish&#39;g blog">
+<meta name="twitter:description" content="文档地址：http://golang.org/cmd/goinstall/goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，git，svn三种版本控制系统。下面来举例怎么安装 web.go 模块。源地址是：http://github.com/hoisie/web.gosmallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go  根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）查看下安装的目录和路径：smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go  代码示例：import (web &amp;quot;github.com/hoisie/web.go&amp;quot;)  另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Go 语言模块安装工具：goinstall - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-05-30T00:00:00JST",
+    "dateModified": "2010-05-30T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "文档地址：http://golang.org/cmd/goinstall/
+goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，git，svn三种版本控制系统。
+下面来举例怎么安装 web.go 模块。源地址是：http://github.com/hoisie/web.go
+smallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go  根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）
+查看下安装的目录和路径：
+smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go  代码示例：
+import (web &quot;github.com/hoisie/web.go&quot;)  另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">Go 语言模块安装工具：goinstall</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-05-30T00:00:00JST">May 30, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">Go 语言模块安装工具：goinstall</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p><img src="http://golang.org/doc/logo-153x55.png" alt="" /></p>
+
+<p>文档地址：<a href="http://golang.org/cmd/goinstall/">http://golang.org/cmd/goinstall/</a></p>
+
+<p>goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，git，svn三种版本控制系统。</p>
+
+<p>下面来举例怎么安装 web.go 模块。源地址是：<a href="http://github.com/hoisie/web.go">http://github.com/hoisie/web.go</a></p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">goinstall</span> <span class="o">-</span><span class="n">dashboard</span><span class="o">=</span><span class="n">true</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hoisie</span><span class="o">/</span><span class="n">web</span><span class="o">.</span><span class="n">go</span>
+</code></pre></div>
+
+
+<p>根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）</p>
+
+<p>查看下安装的目录和路径：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">ls</span> <span class="err">$</span><span class="n">GOROOT</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hoisie</span><span class="o">/</span><span class="n">web</span><span class="o">.</span><span class="n">go</span><span class="o">/</span>
+<span class="n">examples</span>  <span class="n">_go_</span><span class="o">.</span><span class="mi">8</span>   <span class="n">Makefile</span>  <span class="n">Readme</span><span class="o">.</span><span class="n">md</span>   <span class="n">scgi</span><span class="o">.</span><span class="n">go</span>       <span class="n">status</span><span class="o">.</span><span class="n">go</span>  <span class="n">web_test</span><span class="o">.</span><span class="n">go</span>
+<span class="n">fcgi</span><span class="o">.</span><span class="n">go</span>   <span class="n">LICENSE</span>  <span class="n">_obj</span>      <span class="n">request</span><span class="o">.</span><span class="n">go</span>  <span class="n">servefile</span><span class="o">.</span><span class="n">go</span>  <span class="n">web</span><span class="o">.</span><span class="n">go</span>
+</code></pre></div>
+
+
+<p>代码示例：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="p">(</span><span class="n">web</span> <span class="s2">&quot;github.com/hoisie/web.go&quot;</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

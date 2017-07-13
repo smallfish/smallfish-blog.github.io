@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>PostgreSQL Key-Value 数据类型 hstore 使用教程 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。官网文档请参考：http://www.postgresql.org/docs/current/static/hstore.html本文测试环境在 Mac OS 下，Pg采用源码编译。编译 hstore 扩展mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install  导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令  进入数据库，建一个测试表postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;quot;testhstore_id_seq&amp;quot; for serial column &amp;quot;testhstore.id&amp;quot; CREATE TABLE  查看下表结构postgres=# \d List of relations Schema | Name | Type | Owner --------&#43;-------------------&#43;----------&#43;---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;quot;public.">
+
+<meta property="og:title" content="PostgreSQL Key-Value 数据类型 hstore 使用教程 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。官网文档请参考：http://www.postgresql.org/docs/current/static/hstore.html本文测试环境在 Mac OS 下，Pg采用源码编译。编译 hstore 扩展mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install  导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令  进入数据库，建一个测试表postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;quot;testhstore_id_seq&amp;quot; for serial column &amp;quot;testhstore.id&amp;quot; CREATE TABLE  查看下表结构postgres=# \d List of relations Schema | Name | Type | Owner --------&#43;-------------------&#43;----------&#43;---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;quot;public.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore/">
+<meta name="twitter:title" content="PostgreSQL Key-Value 数据类型 hstore 使用教程 - smallfish&#39;g blog">
+<meta name="twitter:description" content="现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。官网文档请参考：http://www.postgresql.org/docs/current/static/hstore.html本文测试环境在 Mac OS 下，Pg采用源码编译。编译 hstore 扩展mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install  导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令  进入数据库，建一个测试表postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;quot;testhstore_id_seq&amp;quot; for serial column &amp;quot;testhstore.id&amp;quot; CREATE TABLE  查看下表结构postgres=# \d List of relations Schema | Name | Type | Owner --------&#43;-------------------&#43;----------&#43;---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;quot;public.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "PostgreSQL Key-Value 数据类型 hstore 使用教程 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2011-02-19T00:00:00JST",
+    "dateModified": "2011-02-19T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。
+官网文档请参考：http://www.postgresql.org/docs/current/static/hstore.html
+本文测试环境在 Mac OS 下，Pg采用源码编译。
+编译 hstore 扩展
+mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install  导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。
+mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令  进入数据库，建一个测试表
+postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &quot;testhstore_id_seq&quot; for serial column &quot;testhstore.id&quot; CREATE TABLE  查看下表结构
+postgres=# \d List of relations Schema | Name | Type | Owner --------+-------------------+----------+---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &quot;public."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2011/" itemprop="url"><span itemprop="title">2011</span></a></li>
+        
+        <li class="active">PostgreSQL Key-Value 数据类型 hstore 使用教程</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-02-19T00:00:00JST">Feb 19, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+
+    <h1 class="title">PostgreSQL Key-Value 数据类型 hstore 使用教程</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。</p>
+
+<p>官网文档请参考：<a href="http://www.postgresql.org/docs/current/static/hstore.html">http://www.postgresql.org/docs/current/static/hstore.html</a></p>
+
+<p>本文测试环境在 Mac OS 下，Pg采用源码编译。</p>
+
+<p>编译 hstore 扩展</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mac</span><span class="p">:</span><span class="o">~</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">cd</span> <span class="n">Downloads</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="mf">9.0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">hstore</span><span class="o">/</span>
+<span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">make</span>
+<span class="o">...</span> <span class="err">一堆编译信息</span>
+<span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</code></pre></div>
+
+
+<p>导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">ls</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span>
+<span class="n">hstore</span><span class="o">.</span><span class="n">sql</span>		<span class="n">uninstall_hstore</span><span class="o">.</span><span class="n">sql</span>
+<span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">hstore</span><span class="o">.</span><span class="n">sql</span>
+<span class="o">...</span> <span class="err">一堆导入命令</span>
+</code></pre></div>
+
+
+<p>进入数据库，建一个测试表</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># CREATE TABLE testhstore (id SERIAL, value hstore);</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">will</span> <span class="n">create</span> <span class="n">implicit</span> <span class="n">sequence</span> <span class="s2">&quot;testhstore_id_seq&quot;</span> <span class="k">for</span> <span class="n">serial</span> <span class="n">column</span> <span class="s2">&quot;testhstore.id&quot;</span>
+<span class="n">CREATE</span> <span class="n">TABLE</span>
+</code></pre></div>
+</p>
+
+<p>查看下表结构</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># \d</span>
+                <span class="n">List</span> <span class="n">of</span> <span class="n">relations</span>
+ <span class="n">Schema</span> <span class="o">|</span>       <span class="n">Name</span>        <span class="o">|</span>   <span class="n">Type</span>   <span class="o">|</span>  <span class="n">Owner</span>
+<span class="o">--------+-------------------+----------+----------</span>
+ <span class="n">public</span> <span class="o">|</span> <span class="n">testhstore</span>        <span class="o">|</span> <span class="n">table</span>    <span class="o">|</span> <span class="n">postgres</span>
+ <span class="n">public</span> <span class="o">|</span> <span class="n">testhstore_id_seq</span> <span class="o">|</span> <span class="n">sequence</span> <span class="o">|</span> <span class="n">postgres</span>
+<span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># \d testhstore;</span>
+                         <span class="n">Table</span> <span class="s2">&quot;public.testhstore&quot;</span>
+ <span class="n">Column</span> <span class="o">|</span>  <span class="n">Type</span>   <span class="o">|</span>                        <span class="n">Modifiers</span>
+<span class="o">--------+---------+---------------------------------------------------------</span>
+ <span class="nb">id</span>     <span class="o">|</span> <span class="n">integer</span> <span class="o">|</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;testhstore_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+ <span class="n">value</span>  <span class="o">|</span> <span class="n">hstore</span>  <span class="o">|</span>
+</code></pre></div>
+
+
+<p>尝试下简单 hstore类型</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># select &#39;a=&gt;1, b=&gt;2&#39;::hstore;</span>
+       <span class="n">hstore</span>
+<span class="o">--------------------</span>
+ <span class="s2">&quot;a&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;2&quot;</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># select &#39;a=&gt;1, b=&gt;a&#39;::hstore;</span>
+       <span class="n">hstore</span>
+<span class="o">--------------------</span>
+ <span class="s2">&quot;a&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;a&quot;</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>写几条测试数据先</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;smallfish, age=&gt;29&#39;::hstore);</span>
+<span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span>
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
+ <span class="nb">id</span> <span class="o">|</span>              <span class="n">value</span>
+<span class="o">----+----------------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;smallfish&quot;</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;nnfish, age=&gt;20&#39;::hstore);</span>
+<span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span>
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;aaa, age=&gt;30, addr=&gt;China&#39;::hstore);</span>
+<span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span>
+</code></pre></div>
+
+
+<p>查看下所有数据</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
+ <span class="nb">id</span> <span class="o">|</span>                    <span class="n">value</span>
+<span class="o">----+---------------------------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;smallfish&quot;</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;20&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;nnfish&quot;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;30&quot;</span><span class="p">,</span> <span class="s2">&quot;addr&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;China&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;aaa&quot;</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>查询列里面的指定 key</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT id, value-&gt;&#39;name&#39; AS name FROM testhstore;</span>
+ <span class="nb">id</span> <span class="o">|</span>   <span class="n">name</span>
+<span class="o">----+-----------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="n">smallfish</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="n">nnfish</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="n">aaa</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT id, value-&gt;&#39;name&#39;, value-&gt;&#39;age&#39; AS age FROM testhstore;</span>
+ <span class="nb">id</span> <span class="o">|</span> <span class="err">?</span><span class="n">column</span><span class="err">?</span>  <span class="o">|</span> <span class="n">age</span>
+<span class="o">----+-----------+-----</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="n">smallfish</span> <span class="o">|</span> <span class="mi">29</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="n">nnfish</span>    <span class="o">|</span> <span class="mi">20</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="n">aaa</span>       <span class="o">|</span> <span class="mi">30</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>修改列某 key 值</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># UPDATE testhstore SET value=value||(&#39;addr=&gt;Shanghai&#39;) WHERE id = 2;</span>
+<span class="n">UPDATE</span> <span class="mi">1</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
+ <span class="nb">id</span> <span class="o">|</span>                       <span class="n">value</span>
+<span class="o">----+---------------------------------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;smallfish&quot;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;30&quot;</span><span class="p">,</span> <span class="s2">&quot;addr&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;China&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;aaa&quot;</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;20&quot;</span><span class="p">,</span> <span class="s2">&quot;addr&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Shanghai&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;nnfish&quot;</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>删除列里某 key</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># UPDATE testhstore SET value=delete(value, &#39;addr&#39;) WHERE id = 3;</span>
+<span class="n">UPDATE</span> <span class="mi">1</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
+ <span class="nb">id</span> <span class="o">|</span>                       <span class="n">value</span>
+<span class="o">----+---------------------------------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;smallfish&quot;</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;20&quot;</span><span class="p">,</span> <span class="s2">&quot;addr&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Shanghai&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;nnfish&quot;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;30&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;aaa&quot;</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>按条件查询列里某 key ，注意要数据类型，CAST 强转。默认都是字符串的值。</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore WHERE (value-&gt;&#39;age&#39;)::INT &gt; 20;</span>
+ <span class="nb">id</span> <span class="o">|</span>              <span class="n">value</span>
+<span class="o">----+----------------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;smallfish&quot;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;30&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;aaa&quot;</span>
+<span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore WHERE value-&gt;&#39;name&#39; = &#39;smallfish&#39;;</span>
+ <span class="nb">id</span> <span class="o">|</span>              <span class="n">value</span>
+<span class="o">----+----------------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&quot;age&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;smallfish&quot;</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>&nbsp;</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

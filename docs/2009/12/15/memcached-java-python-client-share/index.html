@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Memcached Java/Python Client API 共享 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。然后发现值一直是null，再tail日志看看，异常不断：com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - &#43;&#43;&#43;&#43; exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270)  晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？然后手动试了下：shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23  经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。">
+
+<meta property="og:title" content="Memcached Java/Python Client API 共享 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。然后发现值一直是null，再tail日志看看，异常不断：com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - &#43;&#43;&#43;&#43; exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270)  晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？然后手动试了下：shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23  经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/memcached-java-python-client-share/">
+<meta name="twitter:title" content="Memcached Java/Python Client API 共享 - smallfish&#39;g blog">
+<meta name="twitter:description" content="用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。然后发现值一直是null，再tail日志看看，异常不断：com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - &#43;&#43;&#43;&#43; exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270)  晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？然后手动试了下：shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23  经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Memcached Java/Python Client API 共享 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。
+然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。
+然后发现值一直是null，再tail日志看看，异常不断：
+com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - ++++ exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270)  晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？
+然后手动试了下：
+shell&gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23  经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。
+然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Memcached Java/Python Client API 共享</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Memcached Java/Python Client API 共享</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>用Python写了一个计划任务，定时更新Memcached中一个key值，写的很happy，几分钟搞定。</p>
+
+<p>然后在Java Servlet测试，代码写的也很happy，编译 - 刷新，一气呵成。</p>
+
+<p>然后发现值一直是null，再tail日志看看，异常不断：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span> <span class="n">Mon</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">09</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mo">04</span> <span class="n">CST</span> <span class="mi">2009</span> <span class="o">-</span> <span class="o">++++</span> <span class="n">exception</span> <span class="n">thrown</span> <span class="k">while</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">get</span> <span class="nb">object</span> <span class="kn">from</span> <span class="nn">cache</span> <span class="nn">for</span> <span class="nn">key</span><span class="p">:</span> <span class="n">test_num</span>
+ <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span> <span class="n">Mon</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">09</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mo">04</span> <span class="n">CST</span> <span class="mi">2009</span> <span class="o">-</span> <span class="mi">3</span>
+ <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">NestedIOException</span><span class="p">:</span> <span class="mi">3</span>
+ <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1408</span><span class="p">)</span>
+ <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1270</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？</p>
+
+<p>然后手动试了下：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">telnet</span> <span class="n">xxxxxx</span> <span class="mi">11211</span>
+<span class="n">get</span> <span class="n">test_num</span>
+<span class="n">VALUE</span> <span class="n">test_num</span> <span class="mi">4</span> <span class="mi">2</span>
+<span class="mi">23</span>
+</code></pre></div>
+</p>
+
+<p>经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。</p>
+
+<p>然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。</p>
+
+<p>到这里就简单了，直接在py代码里：mc.set(&lsquo;test_num&rsquo;, str(num))</p>
+
+<p>Java读取OK。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

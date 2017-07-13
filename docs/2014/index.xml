@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2014s on smallfish&#39;g blog</title>
+    <link>http://chenxiaoyu.org/2014/</link>
+    <description>Recent content in 2014s on smallfish&#39;g blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 26 Dec 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chenxiaoyu.org/2014/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker Volume 属主设置</title>
+      <link>http://chenxiaoyu.org/2014/12/26/docker-volume-chown/</link>
+      <pubDate>Fri, 26 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2014/12/26/docker-volume-chown/</guid>
+      <description>最近在测试 Volume 挂载时候有点问题，描述如下：
+ Docker 启动时候，设置挂载目录用户为 foo 宿主机源目录属主为 smallfish  尝试了几种办法，比如：
+ container 启动后执行 chown 构建镜像时候加入 RUN chown foo /data，这里不仅仅是这种尝试  不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。
+原因无非是两个系统里用户 uid/gid 不一样，也可以很猥琐的在 container 里面 adduser 指定 --uid 参数。
+百无聊赖的放狗继续搜啊搜，竟然搜到一篇：Understanding Volumes in Docker
+尝试了下，竟然可以：
+RUN useradd foo RUN mkdir /data &amp;amp;&amp;amp; touch /data/a.txt RUN chown foo:foo /data VOLUME /data  上面要注意 VOLUME 一定要放在最后，然后要先建立目录，再写个文件，文件随意。
+重新构建之后，进入交互式：
+# docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash root@527f8eceacca:/# ls -al /data drwxr-xr-x 1 foo staff 136 Dec 26 06:17 .</description>
+    </item>
+    
+    <item>
+      <title>翻译-如何组织Go代码</title>
+      <link>http://chenxiaoyu.org/2014/11/06/organizing-go-code/</link>
+      <pubDate>Thu, 06 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2014/11/06/organizing-go-code/</guid>
+      <description>原文地址：http://talks.golang.org/2014/organizeio.slide，译文尽量贴近原文，会适当的增删，勿拍。
+包
+Go 程序都是由包构成，每个文件都以 package 开头，程序主体执行从 main 包开始：
+package main import &amp;quot;fmt&amp;quot; func main() { fmt.Println(&amp;quot;Hello, world!&amp;quot;) }  最简单的一个 Go 程序，只需要写一个 main 包即可。
+hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公开导出的函数。
+示例包：fmt
+// Package fmt implements formatted I/O. package fmt // Println formats using the default formats for its // operands and writes to standard output. func Println(a ...interface{}) (n int, err error) { ... } func newPrinter() *pp { .</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL JSON 数据类型</title>
+      <link>http://chenxiaoyu.org/2014/07/25/postgresql-json/</link>
+      <pubDate>Fri, 25 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2014/07/25/postgresql-json/</guid>
+      <description>从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。
+还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。
+刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。
+常用的读取操作符目前大概有三类：-&amp;gt;、-&amp;gt;&amp;gt;和#&amp;gt;。还是直接看SQL查询的例子吧。
+先看-&amp;gt;类：
+postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  再来-&amp;gt;&amp;gt;例子：
+postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
+上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：
+postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row)  当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
+postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 1, &amp;quot;b&amp;quot;: 2}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 3, &amp;quot;b&amp;quot;: 4, &amp;quot;c&amp;quot;: 5}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 6, &amp;quot;c&amp;quot;: 7}&amp;#39;::json);  插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：</description>
+    </item>
+    
+  </channel>
+</rss>

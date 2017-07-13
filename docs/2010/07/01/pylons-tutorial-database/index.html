@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/07/01/pylons-tutorial-database/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Pylons 入门实例教程 – 数据库操作 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="前面两篇入门，讲述了 Pylons 大致开发的流程、表单以及文件上传，思路大致跟传统的开发类似。本篇简单讲述下在 Pylons 如何使用数据库。本篇侧重点是使用 ORM 框架 http://www.sqlalchemy.org/。其实本人最早是研究了一下 Storm，后来听虾哥（@marchliu）在应用里不是很爽之，遂关注了下他推荐的 SQLAlchemy。当然，你也可以对应数据库的 DB-API 库来进行操作。示例代码的数据库是 http://www.postgresql.org。至于 Pg 配置和使用这里不再累赘，请狗之。Debian/Ubuntu 安装很简单：sudo aptitude install python-psycopg2  建立一个测试数据库，比如 test：smallfish@debian:~/workspace/python/hello$ su postgres postgres@debian:/home/smallfish/workspace/python/hello$ createdb -O smallfish test postgres@debian:/home/smallfish/workspace/python/hello$ exit smallfish@debian:~/workspace/python/hello$ psql -h 127.0.0.1 -p 5432 -U smallfish test 用户 smallfish 的口令： psql (8.4.4) SSL连接 (加密：DHE-RSA-AES256-SHA，位元：256) 输入 &amp;quot;help&amp;quot; 来获取帮助信息. test=#  数据库的部分已经OK，下面就是来倒腾 Pylons 啦。建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：smallfish@debian:~/workspace/python$ paster create -t pylons hellodb Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hellodb package: hellodb project: hellodb Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.">
+
+<meta property="og:title" content="Pylons 入门实例教程 – 数据库操作 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/07/01/pylons-tutorial-database/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="前面两篇入门，讲述了 Pylons 大致开发的流程、表单以及文件上传，思路大致跟传统的开发类似。本篇简单讲述下在 Pylons 如何使用数据库。本篇侧重点是使用 ORM 框架 http://www.sqlalchemy.org/。其实本人最早是研究了一下 Storm，后来听虾哥（@marchliu）在应用里不是很爽之，遂关注了下他推荐的 SQLAlchemy。当然，你也可以对应数据库的 DB-API 库来进行操作。示例代码的数据库是 http://www.postgresql.org。至于 Pg 配置和使用这里不再累赘，请狗之。Debian/Ubuntu 安装很简单：sudo aptitude install python-psycopg2  建立一个测试数据库，比如 test：smallfish@debian:~/workspace/python/hello$ su postgres postgres@debian:/home/smallfish/workspace/python/hello$ createdb -O smallfish test postgres@debian:/home/smallfish/workspace/python/hello$ exit smallfish@debian:~/workspace/python/hello$ psql -h 127.0.0.1 -p 5432 -U smallfish test 用户 smallfish 的口令： psql (8.4.4) SSL连接 (加密：DHE-RSA-AES256-SHA，位元：256) 输入 &amp;quot;help&amp;quot; 来获取帮助信息. test=#  数据库的部分已经OK，下面就是来倒腾 Pylons 啦。建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：smallfish@debian:~/workspace/python$ paster create -t pylons hellodb Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hellodb package: hellodb project: hellodb Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/07/01/pylons-tutorial-database/">
+<meta name="twitter:title" content="Pylons 入门实例教程 – 数据库操作 - smallfish&#39;g blog">
+<meta name="twitter:description" content="前面两篇入门，讲述了 Pylons 大致开发的流程、表单以及文件上传，思路大致跟传统的开发类似。本篇简单讲述下在 Pylons 如何使用数据库。本篇侧重点是使用 ORM 框架 http://www.sqlalchemy.org/。其实本人最早是研究了一下 Storm，后来听虾哥（@marchliu）在应用里不是很爽之，遂关注了下他推荐的 SQLAlchemy。当然，你也可以对应数据库的 DB-API 库来进行操作。示例代码的数据库是 http://www.postgresql.org。至于 Pg 配置和使用这里不再累赘，请狗之。Debian/Ubuntu 安装很简单：sudo aptitude install python-psycopg2  建立一个测试数据库，比如 test：smallfish@debian:~/workspace/python/hello$ su postgres postgres@debian:/home/smallfish/workspace/python/hello$ createdb -O smallfish test postgres@debian:/home/smallfish/workspace/python/hello$ exit smallfish@debian:~/workspace/python/hello$ psql -h 127.0.0.1 -p 5432 -U smallfish test 用户 smallfish 的口令： psql (8.4.4) SSL连接 (加密：DHE-RSA-AES256-SHA，位元：256) 输入 &amp;quot;help&amp;quot; 来获取帮助信息. test=#  数据库的部分已经OK，下面就是来倒腾 Pylons 啦。建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：smallfish@debian:~/workspace/python$ paster create -t pylons hellodb Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hellodb package: hellodb project: hellodb Enter template_engine (mako/genshi/jinja2/etc: Template language) [&amp;#39;mako&amp;#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Pylons 入门实例教程 – 数据库操作 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-07-01T00:00:00JST",
+    "dateModified": "2010-07-01T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "前面两篇入门，讲述了 Pylons 大致开发的流程、表单以及文件上传，思路大致跟传统的开发类似。本篇简单讲述下在 Pylons 如何使用数据库。
+本篇侧重点是使用 ORM 框架 http://www.sqlalchemy.org/。其实本人最早是研究了一下 Storm，后来听虾哥（@marchliu）在应用里不是很爽之，遂关注了下他推荐的 SQLAlchemy。当然，你也可以对应数据库的 DB-API 库来进行操作。
+示例代码的数据库是 http://www.postgresql.org。至于 Pg 配置和使用这里不再累赘，请狗之。
+Debian/Ubuntu 安装很简单：
+sudo aptitude install python-psycopg2  建立一个测试数据库，比如 test：
+smallfish@debian:~/workspace/python/hello$ su postgres postgres@debian:/home/smallfish/workspace/python/hello$ createdb -O smallfish test postgres@debian:/home/smallfish/workspace/python/hello$ exit smallfish@debian:~/workspace/python/hello$ psql -h 127.0.0.1 -p 5432 -U smallfish test 用户 smallfish 的口令： psql (8.4.4) SSL连接 (加密：DHE-RSA-AES256-SHA，位元：256) 输入 &quot;help&quot; 来获取帮助信息. test=#  数据库的部分已经OK，下面就是来倒腾 Pylons 啦。
+建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：
+smallfish@debian:~/workspace/python$ paster create -t pylons hellodb Selected and implied templates: Pylons#pylons Pylons application template Variables: egg: hellodb package: hellodb project: hellodb Enter template_engine (mako/genshi/jinja2/etc: Template language) [&#39;mako&#39;]: Enter sqlalchemy (True/False: Include SQLAlchemy 0."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">Pylons 入门实例教程 – 数据库操作</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-07-01T00:00:00JST">Jul 1, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">Pylons 入门实例教程 – 数据库操作</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>前面两篇入门，讲述了 Pylons 大致开发的流程、表单以及文件上传，思路大致跟传统的开发类似。本篇简单讲述下在 Pylons 如何使用数据库。</p>
+
+<p>本篇侧重点是使用 ORM 框架 <a href="http://www.sqlalchemy.org/">http://www.sqlalchemy.org/</a>。其实本人最早是研究了一下 Storm，后来听虾哥（@marchliu）在应用里不是很爽之，遂关注了下他推荐的 SQLAlchemy。当然，你也可以对应数据库的 DB-API 库来进行操作。</p>
+
+<p>示例代码的数据库是 <a href="http://www.postgresql.org">http://www.postgresql.org</a>。至于 Pg 配置和使用这里不再累赘，请狗之。</p>
+
+<p>Debian/Ubuntu 安装很简单：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">psycopg2</span>
+</code></pre></div>
+
+
+<p>建立一个测试数据库，比如 test：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">su</span> <span class="n">postgres</span>
+<span class="n">postgres</span><span class="nd">@debian</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">createdb</span> <span class="o">-</span><span class="n">O</span> <span class="n">smallfish</span> <span class="n">test</span>
+<span class="n">postgres</span><span class="nd">@debian</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="nb">exit</span>
+<span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">h</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span> <span class="o">-</span><span class="n">U</span> <span class="n">smallfish</span> <span class="n">test</span>
+<span class="err">用户</span> <span class="n">smallfish</span> <span class="err">的口令：</span>
+<span class="n">psql</span> <span class="p">(</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">SSL</span><span class="err">连接</span> <span class="p">(</span><span class="err">加密：</span><span class="n">DHE</span><span class="o">-</span><span class="n">RSA</span><span class="o">-</span><span class="n">AES256</span><span class="o">-</span><span class="n">SHA</span><span class="err">，位元：</span><span class="mi">256</span><span class="p">)</span>
+
+<span class="err">输入</span> <span class="s2">&quot;help&quot;</span> <span class="err">来获取帮助信息</span><span class="o">.</span>
+
+<span class="n">test</span><span class="o">=</span><span class="c1">#</span>
+</code></pre></div>
+
+
+<p>数据库的部分已经OK，下面就是来倒腾 Pylons 啦。</p>
+
+<p>建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">-</span><span class="n">t</span> <span class="n">pylons</span> <span class="n">hellodb</span>
+<span class="n">Selected</span> <span class="ow">and</span> <span class="n">implied</span> <span class="n">templates</span><span class="p">:</span>
+  <span class="n">Pylons</span><span class="c1">#pylons  Pylons application template</span>
+
+<span class="n">Variables</span><span class="p">:</span>
+  <span class="n">egg</span><span class="p">:</span>      <span class="n">hellodb</span>
+  <span class="n">package</span><span class="p">:</span>  <span class="n">hellodb</span>
+  <span class="n">project</span><span class="p">:</span>  <span class="n">hellodb</span>
+<span class="n">Enter</span> <span class="n">template_engine</span> <span class="p">(</span><span class="n">mako</span><span class="o">/</span><span class="n">genshi</span><span class="o">/</span><span class="n">jinja2</span><span class="o">/</span><span class="n">etc</span><span class="p">:</span> <span class="n">Template</span> <span class="n">language</span><span class="p">)</span> <span class="p">[</span><span class="s1">&#39;mako&#39;</span><span class="p">]:</span>
+<span class="n">Enter</span> <span class="n">sqlalchemy</span> <span class="p">(</span><span class="bp">True</span><span class="o">/</span><span class="bp">False</span><span class="p">:</span> <span class="n">Include</span> <span class="n">SQLAlchemy</span> <span class="mf">0.5</span> <span class="n">configuration</span><span class="p">)</span> <span class="p">[</span><span class="bp">False</span><span class="p">]:</span> <span class="bp">True</span>
+<span class="n">Creating</span> <span class="n">template</span> <span class="n">pylons</span>
+<span class="n">Creating</span> <span class="n">directory</span> <span class="o">./</span><span class="n">hellodb</span>
+</code></pre></div>
+
+
+<p>改成 True 之后在自动生成的 development.ini 里就有对应的数据库配置选项了。</p>
+
+<p>再建立新的 db controller：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">cd</span> <span class="n">hellodb</span><span class="o">/</span>
+<span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">controller</span> <span class="n">db</span>
+<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">controllers</span><span class="o">/</span><span class="n">db</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">tests</span><span class="o">/</span><span class="n">functional</span><span class="o">/</span><span class="n">test_db</span><span class="o">.</span><span class="n">py</span>
+</code></pre></div>
+
+
+<p>编辑 development.ini，添加数据库配置部分。smallfish:123456 是对应的 PostgreSQL 用户名/密码，127.0.0.1:5432 是对应的主机地址/端口号，最后的test则是数据库名。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># SQLAlchemy database URL</span>
+<span class="n">sqlalchemy</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">smallfish</span><span class="p">:</span><span class="mi">123456</span><span class="nd">@127.0.0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">test</span>
+</code></pre></div>
+
+
+<p>编辑 hellodb/model/<strong>init</strong>.py，加上一个叫 msg 的表和字段的定义：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="sd">&quot;&quot;&quot;The application&#39;s model objects&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">hellodb.model.meta</span> <span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">metadata</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">orm</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">def</span> <span class="nf">init_model</span><span class="p">(</span><span class="n">engine</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Call me before using any of the tables or classes in the model&quot;&quot;&quot;</span>
+    <span class="n">Session</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">now</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+<span class="n">msg_table</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="s1">&#39;msg_seq_id&#39;</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Text</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;addtime&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="n">now</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Msg</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">orm</span><span class="o">.</span><span class="n">mapper</span><span class="p">(</span><span class="n">Msg</span><span class="p">,</span> <span class="n">msg_table</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>示例 Msg 表很简单，三个字段：ID、内容和时间。</p>
+
+<p>上面的代码除去导入 sqlclchemy 包里几个库，基本上有一个对应表的字段定义，还有一个空的 Msg 对象。</p>
+
+<p>最后一行，则是做一个 map 的动作，把 Msg 映射到 msg_table 上。</p>
+
+<p>下面是不是要在数据库里建立对应的表呢？有个简单的办法 可以初始化数据库：paster setup-app development.ini：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">setup</span><span class="o">-</span><span class="n">app</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>
+<span class="n">Running</span> <span class="n">setup_config</span><span class="p">()</span> <span class="kn">from</span> <span class="nn">hellodb.websetup</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">619</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">select</span> <span class="n">version</span><span class="p">()</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">619</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{}</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">625</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">select</span> <span class="n">current_schema</span><span class="p">()</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">625</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{}</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">631</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">select</span> <span class="n">relname</span> <span class="kn">from</span> <span class="nn">pg_class</span> <span class="nn">c</span> <span class="nn">join</span> <span class="nn">pg_namespace</span> <span class="nn">n</span> <span class="nn">on</span> <span class="nn">n.oid</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">relnamespace</span> <span class="n">where</span> <span class="n">n</span><span class="o">.</span><span class="n">nspname</span><span class="o">=</span><span class="n">current_schema</span><span class="p">()</span> <span class="ow">and</span> <span class="n">lower</span><span class="p">(</span><span class="n">relname</span><span class="p">)</span><span class="o">=%</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="n">s</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">631</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;msg&#39;</span><span class="p">}</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">637</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span>
+<span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">msg</span> <span class="p">(</span>
+        <span class="nb">id</span> <span class="n">SERIAL</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="p">,</span>
+        <span class="n">content</span> <span class="n">TEXT</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="p">,</span>
+        <span class="n">addtime</span> <span class="n">TIMESTAMP</span> <span class="n">WITHOUT</span> <span class="n">TIME</span> <span class="n">ZONE</span><span class="p">,</span>
+        <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">637</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{}</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">732</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">COMMIT</span>
+</code></pre></div>
+
+
+<p>可以看到上面的输出日志，包括了建表的SQL语句。其中 SERIAL 对应上面 <strong>init</strong>.py 里 Column 的 Seq 定义。serial 类型 在 PostgreSQL 可以看成类似 MySQL 的自增ID（auto_increment） 。</p>
+
+<p>现在进入 PostgreSQL 查询数据库，就可以看到表以及序列已经建立。</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">test</span><span class="o">=</span><span class="c1"># \d</span>
+                  <span class="err">关联列表</span>
+ <span class="err">架构模式</span> <span class="o">|</span>    <span class="err">名称</span>    <span class="o">|</span>  <span class="err">型别</span>  <span class="o">|</span>  <span class="err">拥有者</span>
+<span class="o">----------+------------+--------+-----------</span>
+ <span class="n">public</span>   <span class="o">|</span> <span class="n">msg</span>        <span class="o">|</span> <span class="err">资料表</span> <span class="o">|</span> <span class="n">smallfish</span>
+ <span class="n">public</span>   <span class="o">|</span> <span class="n">msg_id_seq</span> <span class="o">|</span> <span class="err">序列数</span> <span class="o">|</span> <span class="n">smallfish</span>
+<span class="p">(</span><span class="mi">2</span> <span class="err">行记录</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>到这里，准备工作已经完毕，包括了初始化数据库，配置文件还有示例 controller。</p>
+
+<p>下面就在 controller 代码里增加读写数据库的功能吧。</p>
+
+<p>首先建立一个表单模板 db.htm ，用来添加并保存到数据库表中：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;/db/add&quot;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="o">&gt;</span>
+<span class="err">  </span> <span class="err"> </span><span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;content&quot;</span> <span class="o">/&gt;</span>
+<span class="err">  </span> <span class="err"> </span><span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
+<span class="err">  </span> <span class="err"> </span><span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;save&quot;</span> <span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+</code></pre></div>
+
+
+<p>对应 controller index 修改成，很简单。返回到模板：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">class</span> <span class="nc">DbController</span><span class="p">(</span><span class="n">BaseController</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s1">&#39;/db.htm&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>添加 add 方法，对应上面 form 中的 /db/add 路径：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+        <span class="kn">from</span> <span class="nn">hellodb</span> <span class="kn">import</span> <span class="n">model</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">()</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">&quot;add </span><span class="si">%s</span><span class="s2"> ok...&quot;</span> <span class="o">%</span> <span class="n">content</span>
+</code></pre></div>
+
+
+<p>添加部分简单完成。获取 POST 文本框，然后初始化一个 Msg 对象（上面 model 里定义的）。</p>
+
+<p>注意 add 之后，必须手动 commit，这样才会真正保存到数据库。</p>
+
+<p>浏览器访问一下：<a href="http://127.0.0.1:5000/db/index，随意添加一点数据吧，这个时候你可以在">http://127.0.0.1:5000/db/index，随意添加一点数据吧，这个时候你可以在</a> PostgreSQL 里查询已经数据已经加进来了。</p>
+
+<p>下面在 index 方法传递一些值到模板，输出刚才已经添加的数据：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">hellodb</span> <span class="kn">import</span> <span class="n">model</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">msgs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s1">&#39;/db.htm&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>c.msgs 可以理解成全局变量，关于 c 的定义在 controller前几行就应该看到了。修改模板 db.htm 显示记录：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">%</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">msgs</span><span class="p">:</span>
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">id</span><span class="p">}:</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">}</span> <span class="o">/</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">addtime</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+<span class="o">%</span> <span class="n">endfor</span>
+</code></pre></div>
+
+
+<p>很简单，只是一个普通 for 循环，遍历 index 方式里传递的 c.msgs。Mako模板还是很易读的吧？</p>
+
+<p>继续刷新下：<a href="http://127.0.0.1:5000/db/index，可以在页面上看到已经添加的数据了。">http://127.0.0.1:5000/db/index，可以在页面上看到已经添加的数据了。</a></p>
+
+<p>在狂输入了几十条之后，在一页里显示是不是忒土鳖了？</p>
+
+<p>下面再介绍下 Pylons 里 webhelper 里一个分页组件的用法，当然你也可以自己写分页算法。下面是示例：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">webhelpers</span> <span class="kn">import</span> <span class="n">paginate</span>
+        <span class="kn">from</span> <span class="nn">hellodb</span> <span class="kn">import</span> <span class="n">model</span>
+        <span class="n">msgs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">paginator</span> <span class="o">=</span> <span class="n">paginate</span><span class="o">.</span><span class="n">Page</span><span class="p">(</span>
+            <span class="n">msgs</span><span class="p">,</span>
+            <span class="n">page</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">items_per_page</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s2">&quot;/list.htm&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>导入 paginate，然后把查询的数据库对象当参数传递给 paginate.Page，里面的page则是页面的传递的页数参数，items_per_page 就好理解多了，就是多少条一页。这里是10条。</p>
+
+<p>对应的模板 list.htm 如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;</span>
+<span class="o">%</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="p">):</span>
+
+<span class="o">%</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="p">:</span>
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">id</span><span class="p">}:</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+<span class="o">%</span> <span class="n">endfor</span>
+
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="err">$</span><span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="o">.</span><span class="n">pager</span><span class="p">(</span><span class="s2">&quot;count: $item_count $first_item to $last_item , $link_first $link_previous $link_next $link_last&quot;</span><span class="p">)}</span> <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+<span class="o">%</span> <span class="n">endif</span>
+</code></pre></div>
+
+
+<p>for 部分如同上面示例，下面加了一行pager。里面一些变量从名字上就可以看出功能了。包括了总条数、当前是第几到第几条，然后就是常用的首页、上页、下页和最后一页。</p>
+
+<p>这里链接的文字都是&lt;&lt;， &lt;， &gt;， &gt;&gt;。想改成文字请查看文档吧。。如果是第一页，是不会显示首页和上一页的。这个做过分页的一般都写过类似的代码吧。</p>
+
+<p>现在访问：<a href="http://127.0.0.1:5000/db/list，想看到效果当然你得多填点数据哦。10条才会显示分页的挖。">http://127.0.0.1:5000/db/list，想看到效果当然你得多填点数据哦。10条才会显示分页的挖。</a></p>
+
+<p>好了，这里对数据库增加和显示部分都已经有示例代码了，当然最后还有一个分页用法。至于删除和更新之类请参考 SQLAlchemy 文档吧。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

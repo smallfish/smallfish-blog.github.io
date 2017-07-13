@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/02/26/postgresql-uuid/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>PostgreSQL UUID 函数 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="测试环境：PostgreSQL 8.4默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）导入很简单，下面是win下面测试，其他平台类似该操作：D:\&amp;gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION  进入psql，执行：postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)  主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。">
+
+<meta property="og:title" content="PostgreSQL UUID 函数 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/02/26/postgresql-uuid/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="测试环境：PostgreSQL 8.4默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）导入很简单，下面是win下面测试，其他平台类似该操作：D:\&amp;gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION  进入psql，执行：postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)  主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/02/26/postgresql-uuid/">
+<meta name="twitter:title" content="PostgreSQL UUID 函数 - smallfish&#39;g blog">
+<meta name="twitter:description" content="测试环境：PostgreSQL 8.4默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）导入很简单，下面是win下面测试，其他平台类似该操作：D:\&amp;gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION  进入psql，执行：postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)  主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "PostgreSQL UUID 函数 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-02-26T00:00:00JST",
+    "dateModified": "2010-02-26T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "测试环境：PostgreSQL 8.4
+默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）
+导入很简单，下面是win下面测试，其他平台类似该操作：
+D:\&gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION  进入psql，执行：
+postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)  主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">PostgreSQL UUID 函数</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-02-26T00:00:00JST">Feb 26, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">PostgreSQL UUID 函数</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>测试环境：PostgreSQL 8.4</p>
+
+<p>默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）</p>
+
+<p>导入很简单，下面是win下面测试，其他平台类似该操作：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">D</span><span class="p">:</span>\<span class="o">&gt;</span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">f</span> <span class="n">D</span><span class="p">:</span>\<span class="n">PostgreSQL</span>\<span class="mf">8.4</span>\<span class="n">share</span>\<span class="n">contrib</span>\<span class="n">uuid</span><span class="o">-</span><span class="n">ossp</span><span class="o">.</span><span class="n">sql</span>
+<span class="n">Password</span> <span class="k">for</span> <span class="n">user</span> <span class="n">postgres</span><span class="p">:</span>
+<span class="n">SET</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+<span class="n">CREATE</span> <span class="n">FUNCTION</span>
+</code></pre></div>
+
+
+<p>进入psql，执行：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=</span><span class="c1"># select uuid_generate_v1();</span>
+           <span class="n">uuid_generate_v1</span>
+<span class="o">--------------------------------------</span>
+ <span class="mi">86811</span><span class="n">bd4</span><span class="o">-</span><span class="mi">22</span><span class="n">a5</span><span class="o">-</span><span class="mi">11</span><span class="n">df</span><span class="o">-</span><span class="n">b00e</span><span class="o">-</span><span class="n">ebd863f5f8a7</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># select uuid_generate_v4();</span>
+           <span class="n">uuid_generate_v4</span>
+<span class="o">--------------------------------------</span>
+ <span class="mi">5</span><span class="n">edbfcbb</span><span class="o">-</span><span class="mi">1</span><span class="n">df8</span><span class="o">-</span><span class="mi">48</span><span class="n">fa</span><span class="o">-</span><span class="mi">853</span><span class="n">f</span><span class="o">-</span><span class="mf">7917e4</span><span class="n">e346db</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 <a href="http://www.postgresql.org/docs/8.3/static/uuid-ossp.html">http://www.postgresql.org/docs/8.3/static/uuid-ossp.html</a>。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

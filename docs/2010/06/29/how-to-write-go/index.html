@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/06/29/how-to-write-go/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>如何写 Go 代码？ - smallfish&#39;g blog</title>
+    
+<meta name="description" content="原文：http://golang.org/doc/code.html简述这篇文档描述了如何去写一个新的 package 和怎么去测试。本文假设你已经按照http://golang.org/doc/install.html装好Go。在修改一个存在的 package 或者新建立一个package，确保先发一封邮件到 http://groups.google.com/group/golang-nuts，告诉大家你想做什么。这样有助于不要重复造轮子，在写代码之前最好讨论下。社区资源如果想获取实时帮助，可以加入 http://freenode.net/ 上 IRC 频道 #go-nuts。Go 语言官方邮件列表是 http://groups.google.com/group/golang-nuts.Bugs 可以参考http://code.google.com/p/go/issues/list.对于那些想尝试开发代码的用户，这里有另外一个邮件列表 http://groups.google.com/group/golang-checkins，邮件里包含了那些刚提交到 Go 代码库的消息。建立Go包下面的源码假设 package 的导入路径是 x/y，约定下保存的路径是：$GOROOT/src/pkg/x/yMakefile这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 http://golang.org/src/pkg/container/vector/Makefile 源码包里拷贝一份。include ../../../Make.$(GOARCH) TARG=container/vector GOFILES=\ intvector.go\ stringvector.go\ vector.go\ include ../../../Make.pkg  当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：include $(GOROOT)/src/Make.$(GOARCH) TARG=mypackage GOFILES=\ my1.go\ my2.go\ include $(GOROOT)/src/Make.pkg  第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。">
+
+<meta property="og:title" content="如何写 Go 代码？ - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/06/29/how-to-write-go/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="原文：http://golang.org/doc/code.html简述这篇文档描述了如何去写一个新的 package 和怎么去测试。本文假设你已经按照http://golang.org/doc/install.html装好Go。在修改一个存在的 package 或者新建立一个package，确保先发一封邮件到 http://groups.google.com/group/golang-nuts，告诉大家你想做什么。这样有助于不要重复造轮子，在写代码之前最好讨论下。社区资源如果想获取实时帮助，可以加入 http://freenode.net/ 上 IRC 频道 #go-nuts。Go 语言官方邮件列表是 http://groups.google.com/group/golang-nuts.Bugs 可以参考http://code.google.com/p/go/issues/list.对于那些想尝试开发代码的用户，这里有另外一个邮件列表 http://groups.google.com/group/golang-checkins，邮件里包含了那些刚提交到 Go 代码库的消息。建立Go包下面的源码假设 package 的导入路径是 x/y，约定下保存的路径是：$GOROOT/src/pkg/x/yMakefile这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 http://golang.org/src/pkg/container/vector/Makefile 源码包里拷贝一份。include ../../../Make.$(GOARCH) TARG=container/vector GOFILES=\ intvector.go\ stringvector.go\ vector.go\ include ../../../Make.pkg  当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：include $(GOROOT)/src/Make.$(GOARCH) TARG=mypackage GOFILES=\ my1.go\ my2.go\ include $(GOROOT)/src/Make.pkg  第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/06/29/how-to-write-go/">
+<meta name="twitter:title" content="如何写 Go 代码？ - smallfish&#39;g blog">
+<meta name="twitter:description" content="原文：http://golang.org/doc/code.html简述这篇文档描述了如何去写一个新的 package 和怎么去测试。本文假设你已经按照http://golang.org/doc/install.html装好Go。在修改一个存在的 package 或者新建立一个package，确保先发一封邮件到 http://groups.google.com/group/golang-nuts，告诉大家你想做什么。这样有助于不要重复造轮子，在写代码之前最好讨论下。社区资源如果想获取实时帮助，可以加入 http://freenode.net/ 上 IRC 频道 #go-nuts。Go 语言官方邮件列表是 http://groups.google.com/group/golang-nuts.Bugs 可以参考http://code.google.com/p/go/issues/list.对于那些想尝试开发代码的用户，这里有另外一个邮件列表 http://groups.google.com/group/golang-checkins，邮件里包含了那些刚提交到 Go 代码库的消息。建立Go包下面的源码假设 package 的导入路径是 x/y，约定下保存的路径是：$GOROOT/src/pkg/x/yMakefile这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 http://golang.org/src/pkg/container/vector/Makefile 源码包里拷贝一份。include ../../../Make.$(GOARCH) TARG=container/vector GOFILES=\ intvector.go\ stringvector.go\ vector.go\ include ../../../Make.pkg  当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：include $(GOROOT)/src/Make.$(GOARCH) TARG=mypackage GOFILES=\ my1.go\ my2.go\ include $(GOROOT)/src/Make.pkg  第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "如何写 Go 代码？ - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-06-29T00:00:00JST",
+    "dateModified": "2010-06-29T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "原文：http://golang.org/doc/code.html
+简述
+这篇文档描述了如何去写一个新的 package 和怎么去测试。本文假设你已经按照http://golang.org/doc/install.html装好Go。
+在修改一个存在的 package 或者新建立一个package，确保先发一封邮件到 http://groups.google.com/group/golang-nuts，告诉大家你想做什么。这样有助于不要重复造轮子，在写代码之前最好讨论下。
+社区资源
+如果想获取实时帮助，可以加入 http://freenode.net/ 上 IRC 频道 #go-nuts。
+Go 语言官方邮件列表是 http://groups.google.com/group/golang-nuts.
+Bugs 可以参考http://code.google.com/p/go/issues/list.
+对于那些想尝试开发代码的用户，这里有另外一个邮件列表 http://groups.google.com/group/golang-checkins，邮件里包含了那些刚提交到 Go 代码库的消息。
+建立Go包
+下面的源码假设 package 的导入路径是 x/y，约定下保存的路径是：$GOROOT/src/pkg/x/y
+Makefile
+这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 http://golang.org/src/pkg/container/vector/Makefile 源码包里拷贝一份。
+include ../../../Make.$(GOARCH) TARG=container/vector GOFILES=\ intvector.go\ stringvector.go\ vector.go\ include ../../../Make.pkg  当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：
+include $(GOROOT)/src/Make.$(GOARCH) TARG=mypackage GOFILES=\ my1.go\ my2.go\ include $(GOROOT)/src/Make.pkg  第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">如何写 Go 代码？</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-06-29T00:00:00JST">Jun 29, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">如何写 Go 代码？</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>原文：<a href="http://golang.org/doc/code.html">http://golang.org/doc/code.html</a></p>
+
+<p>简述</p>
+
+<p>这篇文档描述了如何去写一个新的 package 和怎么去测试。本文假设你已经按照<a href="http://golang.org/doc/install.html">http://golang.org/doc/install.html</a>装好Go。</p>
+
+<p>在修改一个存在的 package 或者新建立一个package，确保先发一封邮件到 <a href="http://groups.google.com/group/golang-nuts">http://groups.google.com/group/golang-nuts</a>，告诉大家你想做什么。这样有助于不要重复造轮子，在写代码之前最好讨论下。</p>
+
+<p>社区资源</p>
+
+<p>如果想获取实时帮助，可以加入 <a href="http://freenode.net/">http://freenode.net/</a> 上 IRC 频道 #go-nuts。</p>
+
+<p>Go 语言官方邮件列表是 <a href="http://groups.google.com/group/golang-nuts">http://groups.google.com/group/golang-nuts</a>.</p>
+
+<p>Bugs 可以参考<a href="http://code.google.com/p/go/issues/list">http://code.google.com/p/go/issues/list</a>.</p>
+
+<p>对于那些想尝试开发代码的用户，这里有另外一个邮件列表 <a href="http://groups.google.com/group/golang-checkins">http://groups.google.com/group/golang-checkins</a>，邮件里包含了那些刚提交到 Go 代码库的消息。</p>
+
+<p>建立Go包</p>
+
+<p>下面的源码假设 package 的导入路径是 x/y，约定下保存的路径是：$GOROOT/src/pkg/x/y</p>
+
+<p>Makefile</p>
+
+<p>这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 <a href="http://golang.org/src/pkg/container/vector/Makefile">http://golang.org/src/pkg/container/vector/Makefile</a> 源码包里拷贝一份。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">include</span> <span class="o">../../../</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
+
+<span class="n">TARG</span><span class="o">=</span><span class="n">container</span><span class="o">/</span><span class="n">vector</span>
+<span class="n">GOFILES</span><span class="o">=</span>\
+	<span class="n">intvector</span><span class="o">.</span><span class="n">go</span>\
+	<span class="n">stringvector</span><span class="o">.</span><span class="n">go</span>\
+	<span class="n">vector</span><span class="o">.</span><span class="n">go</span>\
+
+<span class="n">include</span> <span class="o">../../../</span><span class="n">Make</span><span class="o">.</span><span class="n">pkg</span>
+</code></pre></div>
+
+
+<p>当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
+
+<span class="n">TARG</span><span class="o">=</span><span class="n">mypackage</span>
+<span class="n">GOFILES</span><span class="o">=</span>\
+	<span class="n">my1</span><span class="o">.</span><span class="n">go</span>\
+	<span class="n">my2</span><span class="o">.</span><span class="n">go</span>\
+
+<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="n">pkg</span>
+</code></pre></div>
+
+
+<p>第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。</p>
+
+<p>TRAG 是包安装路径，这行就是其他程序导入到名字。在 Go 源码中，这个名字必须和文件夹中的 Makefile 中的一致，不需要 $GOROOT/src/pkg/ 前缀。在源码之外，你可以任意起名而不要和标准 package 的重名即可。常见的做法是独立一个 package 名：myname/tree, myname/filter，确保你的代码在 myname 里，运行 make install，将会编译后把二进制文件放入 $GOROOT/pkg，可以很方便的找到。</p>
+
+<p>GOFILES 放入文件内需要编译的源码列表。多行用 \ 字符隔开。</p>
+
+<p>如果想在 Go 源码树中新建包，需要添加列表到 $GOROOT/src/pkg/Makefile 中作为标准库编译，编译运行：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">cd</span> <span class="err">$</span><span class="n">GOROOT</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">pkg</span>
+<span class="o">./</span><span class="n">deps</span><span class="o">.</span><span class="n">b</span>
+</code></pre></div>
+
+
+<p>更新依赖文件 Make.deps （这是每次 make all 或者 make build 都需要）</p>
+
+<p>Go 源文件</p>
+
+<p>在每个源码里第一行的名字应该是 Makefile 里面定义的 package 名，这里的 name 是作为默认的名字导入。（包里的每个 package 名都应该是同样的名字）Go的惯例是用路径的最后一个元素作为名字，比如 &ldquo;crypto/rot13&rdquo; 应该是 rot13。到目前为止，Go 是依靠 package 名字来确定一个二进制的文件，当然可能会很快的取消。</p>
+
+<p>Go 是在一个包内编译源码文件，在一个文件定义常量，变量，类型或者函数，在其他文件内适用不需要再定义和声明。</p>
+
+<p>想写一个干净而优美的 Go 代码不在本文范围。请参考<a href="http://golang.org/doc/effective_go.html">http://golang.org/doc/effective_go.html</a>吧。</p>
+
+<p>测试</p>
+
+<p>Go 有一个轻量级的测试代码框架：gotest。编写一个测试代码，只需要新建一个跟你源码名字一样，加上：_test.go 即可，测试函数一般是 func TestXXX (t *testing.T)。每次运行测试其中的函数。如果想返回错误的话一般是返回： t.Error 或 t.Fail，测试时候就会抛错。详细 gotest 测试方法请参考：<a href="http://golang.org/cmd/gotest/">http://golang.org/cmd/gotest/</a></p>
+
+<p>*_test.go 不需要在 Makefile 中声明。</p>
+
+<p>运行测试，编译时候 make test 即可，和 gotest 效果一样。如果想单独测试某一个源码，比如：one_test.go，则运行：gotest one_test.go。</p>
+
+<p>如果你的修改影响性能，可以添加一个性能测试函数（参考：<a href="http://golang.org/cmd/gotest/">http://golang.org/cmd/gotest/</a>），然后运行：gotest -benchmarks=.</p>
+
+<p>当你新的代码已经通过测试，也能运行，你就可以 review 和 commit.  <a href="http://golang.org/doc/contribute.html">http://golang.org/doc/contribute.html</a>。</p>
+
+<p>一个测试的例子</p>
+
+<p>这是一个名字叫 numbers 测试 package ，定义了一个叫 Double 的函数，返回一个整型，结果是输入的参数乘以2。一共有三个文件。</p>
+
+<p>第一个是 numbers.go</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">numbers</span>
+
+<span class="n">func</span> <span class="n">Double</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">)</span> <span class="nb">int</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>第二个是测试文件 numbers_test.go</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">numbers</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s2">&quot;testing&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">type</span> <span class="n">doubleTest</span> <span class="n">struct</span> <span class="p">{</span>
+	<span class="ow">in</span><span class="p">,</span> <span class="n">out</span> <span class="nb">int</span>
+<span class="p">}</span>
+
+<span class="n">var</span> <span class="n">doubleTests</span> <span class="o">=</span> <span class="p">[]</span><span class="n">doubleTest</span><span class="p">{</span>
+	<span class="n">doubleTest</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
+	<span class="n">doubleTest</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span>
+	<span class="n">doubleTest</span><span class="p">{</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">TestDouble</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">testing</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">dt</span> <span class="p">:</span><span class="o">=</span> <span class="nb">range</span> <span class="n">doubleTests</span> <span class="p">{</span>
+		<span class="n">v</span> <span class="p">:</span><span class="o">=</span> <span class="n">Double</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="ow">in</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">dt</span><span class="o">.</span><span class="n">out</span> <span class="p">{</span>
+			<span class="n">t</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s2">&quot;Double(</span><span class="si">%d</span><span class="s2">) = </span><span class="si">%d</span><span class="s2">, want </span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="ow">in</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">out</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>最后是 Makefile 文件</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
+
+<span class="n">TARG</span><span class="o">=</span><span class="n">numbers</span>
+<span class="n">GOFILES</span><span class="o">=</span>\
+	<span class="n">numbers</span><span class="o">.</span><span class="n">go</span>\
+
+<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span>
+</code></pre></div>
+
+
+<p>运行 make install 将会构建和安装包到 GOROOT/pkg/ 文件夹内（他在系统的任何地方导入调用）。</p>
+
+<p>运行 make test （或者 gotest）将会重新构建包，并会运行 numbers_test.go 中的 TestDouble 函数。如果输出 &ldquo;PASS&rdquo; 则表示测试成功通过。如果不是2到3的倍数，将会看到错误报告。</p>
+
+<p>更详细的请查看<a href="http://golang.org/cmd/gotest/">http://golang.org/cmd/gotest/</a>文档。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

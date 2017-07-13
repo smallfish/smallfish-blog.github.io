@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2013/12/04/test-nginx/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Test::Nginx 模块介绍 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="先说句题外话，Perl的测试模块那真是相当的爽，不仅可以爽到无与伦比的正则，还可以对测试用例自由组合、乱序运行等等。Perl测试模块大概有如下： Test::Simple Test::More Test::Base 及衍生（这个我还没搞透）  一般Perl的测试用例，会在一个叫t/的目录下，一堆叫*.t的文件，其实就是普通的Perl脚本。来段最简单的测试代码：$ cat 1.t use Test::Simple tests=&amp;gt;2; ok(1 &#43; 1 == 2, &amp;quot;test1 true&amp;quot;); ok(&amp;quot;10&amp;quot; == 10, &amp;quot;test2 true&amp;quot;); $ perl 1.t 1..2 ok 1 - test1 true ok 2 - test2 true  Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。跑偏题太远了，回到本文要介绍的Test::Nginx模块。个人觉得这个测试适用于以下场景： Nginx测试，包括：自身、模块、配置等测试 反向代理测试，比如后端的HTTP或者其他服务  安装可以用cpan或者直接clone一份Test::Nginx，库地址：https://github.com/agentzh/test-nginx文档： http://search.cpan.org/~agent/Test-Nginx-0.22/lib/Test/Nginx.pm  摘抄模块中的一段测试用例：use Test::Nginx::Socket; repeat_each(1); plan tests =&amp;gt; 2 * repeat_each() * blocks(); $ENV{TEST_NGINX_MEMCACHED_PORT} ||= 11211; # make this env take a default value run_tests(); __DATA__ === TEST 1: sanity --- config location /foo { set $memc_cmd set; set $memc_key foo; set $memc_value bar; memc_pass 127.">
+
+<meta property="og:title" content="Test::Nginx 模块介绍 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2013/12/04/test-nginx/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="先说句题外话，Perl的测试模块那真是相当的爽，不仅可以爽到无与伦比的正则，还可以对测试用例自由组合、乱序运行等等。Perl测试模块大概有如下： Test::Simple Test::More Test::Base 及衍生（这个我还没搞透）  一般Perl的测试用例，会在一个叫t/的目录下，一堆叫*.t的文件，其实就是普通的Perl脚本。来段最简单的测试代码：$ cat 1.t use Test::Simple tests=&amp;gt;2; ok(1 &#43; 1 == 2, &amp;quot;test1 true&amp;quot;); ok(&amp;quot;10&amp;quot; == 10, &amp;quot;test2 true&amp;quot;); $ perl 1.t 1..2 ok 1 - test1 true ok 2 - test2 true  Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。跑偏题太远了，回到本文要介绍的Test::Nginx模块。个人觉得这个测试适用于以下场景： Nginx测试，包括：自身、模块、配置等测试 反向代理测试，比如后端的HTTP或者其他服务  安装可以用cpan或者直接clone一份Test::Nginx，库地址：https://github.com/agentzh/test-nginx文档： http://search.cpan.org/~agent/Test-Nginx-0.22/lib/Test/Nginx.pm  摘抄模块中的一段测试用例：use Test::Nginx::Socket; repeat_each(1); plan tests =&amp;gt; 2 * repeat_each() * blocks(); $ENV{TEST_NGINX_MEMCACHED_PORT} ||= 11211; # make this env take a default value run_tests(); __DATA__ === TEST 1: sanity --- config location /foo { set $memc_cmd set; set $memc_key foo; set $memc_value bar; memc_pass 127.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2013/12/04/test-nginx/">
+<meta name="twitter:title" content="Test::Nginx 模块介绍 - smallfish&#39;g blog">
+<meta name="twitter:description" content="先说句题外话，Perl的测试模块那真是相当的爽，不仅可以爽到无与伦比的正则，还可以对测试用例自由组合、乱序运行等等。Perl测试模块大概有如下： Test::Simple Test::More Test::Base 及衍生（这个我还没搞透）  一般Perl的测试用例，会在一个叫t/的目录下，一堆叫*.t的文件，其实就是普通的Perl脚本。来段最简单的测试代码：$ cat 1.t use Test::Simple tests=&amp;gt;2; ok(1 &#43; 1 == 2, &amp;quot;test1 true&amp;quot;); ok(&amp;quot;10&amp;quot; == 10, &amp;quot;test2 true&amp;quot;); $ perl 1.t 1..2 ok 1 - test1 true ok 2 - test2 true  Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。跑偏题太远了，回到本文要介绍的Test::Nginx模块。个人觉得这个测试适用于以下场景： Nginx测试，包括：自身、模块、配置等测试 反向代理测试，比如后端的HTTP或者其他服务  安装可以用cpan或者直接clone一份Test::Nginx，库地址：https://github.com/agentzh/test-nginx文档： http://search.cpan.org/~agent/Test-Nginx-0.22/lib/Test/Nginx.pm  摘抄模块中的一段测试用例：use Test::Nginx::Socket; repeat_each(1); plan tests =&amp;gt; 2 * repeat_each() * blocks(); $ENV{TEST_NGINX_MEMCACHED_PORT} ||= 11211; # make this env take a default value run_tests(); __DATA__ === TEST 1: sanity --- config location /foo { set $memc_cmd set; set $memc_key foo; set $memc_value bar; memc_pass 127.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Test::Nginx 模块介绍 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2013-12-04T00:00:00JST",
+    "dateModified": "2013-12-04T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "先说句题外话，Perl的测试模块那真是相当的爽，不仅可以爽到无与伦比的正则，还可以对测试用例自由组合、乱序运行等等。
+Perl测试模块大概有如下：
+ Test::Simple Test::More Test::Base 及衍生（这个我还没搞透）  一般Perl的测试用例，会在一个叫t/的目录下，一堆叫*.t的文件，其实就是普通的Perl脚本。
+来段最简单的测试代码：
+$ cat 1.t use Test::Simple tests=&gt;2; ok(1 + 1 == 2, &quot;test1 true&quot;); ok(&quot;10&quot; == 10, &quot;test2 true&quot;); $ perl 1.t 1..2 ok 1 - test1 true ok 2 - test2 true  Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。
+跑偏题太远了，回到本文要介绍的Test::Nginx模块。个人觉得这个测试适用于以下场景：
+ Nginx测试，包括：自身、模块、配置等测试 反向代理测试，比如后端的HTTP或者其他服务  安装可以用cpan或者直接clone一份Test::Nginx，库地址：https://github.com/agentzh/test-nginx
+文档：
+ http://search.cpan.org/~agent/Test-Nginx-0.22/lib/Test/Nginx.pm  摘抄模块中的一段测试用例：
+use Test::Nginx::Socket; repeat_each(1); plan tests =&gt; 2 * repeat_each() * blocks(); $ENV{TEST_NGINX_MEMCACHED_PORT} ||= 11211; # make this env take a default value run_tests(); __DATA__ === TEST 1: sanity --- config location /foo { set $memc_cmd set; set $memc_key foo; set $memc_value bar; memc_pass 127."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2013/" itemprop="url"><span itemprop="title">2013</span></a></li>
+        
+        <li class="active">Test::Nginx 模块介绍</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2013-12-04T00:00:00JST">Dec 4, 2013</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2013/">2013</a></li>
+      
+    </ul>
+
+    <h1 class="title">Test::Nginx 模块介绍</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>先说句题外话，Perl的测试模块那真是相当的爽，不仅可以爽到无与伦比的正则，还可以对测试用例自由组合、乱序运行等等。</p>
+
+<p>Perl测试模块大概有如下：</p>
+
+<ul>
+<li>Test::Simple</li>
+<li>Test::More</li>
+<li>Test::Base 及衍生（这个我还没搞透）</li>
+</ul>
+
+<p>一般Perl的测试用例，会在一个叫t/的目录下，一堆叫*.t的文件，其实就是普通的Perl脚本。</p>
+
+<p>来段最简单的测试代码：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ cat <span class="m">1</span>.t
+use Test::Simple <span class="nv">tests</span><span class="o">=</span>&gt;2<span class="p">;</span>
+ok<span class="o">(</span><span class="m">1</span> + <span class="nv">1</span> <span class="o">==</span> <span class="m">2</span>, <span class="s2">&quot;test1 true&quot;</span><span class="o">)</span><span class="p">;</span>
+ok<span class="o">(</span><span class="s2">&quot;10&quot;</span> <span class="o">==</span> <span class="m">10</span>, <span class="s2">&quot;test2 true&quot;</span><span class="o">)</span><span class="p">;</span>
+    
+$ perl <span class="m">1</span>.t
+<span class="m">1</span>..2
+ok <span class="m">1</span> - test1 <span class="nb">true</span>
+ok <span class="m">2</span> - test2 <span class="nb">true</span>
+</code></pre></div>
+
+
+<p>Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。</p>
+
+<p>跑偏题太远了，回到本文要介绍的Test::Nginx模块。个人觉得这个测试适用于以下场景：</p>
+
+<ul>
+<li>Nginx测试，包括：自身、模块、配置等测试</li>
+<li>反向代理测试，比如后端的HTTP或者其他服务</li>
+</ul>
+
+<p>安装可以用cpan或者直接clone一份Test::Nginx，库地址：<a href="https://github.com/agentzh/test-nginx">https://github.com/agentzh/test-nginx</a></p>
+
+<p>文档：</p>
+
+<ul>
+<li><a href="http://search.cpan.org/~agent/Test-Nginx-0.22/lib/Test/Nginx.pm">http://search.cpan.org/~agent/Test-Nginx-0.22/lib/Test/Nginx.pm</a></li>
+</ul>
+
+<p>摘抄模块中的一段测试用例：</p>
+
+<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span></span><span class="k">use</span> <span class="nn">Test::Nginx::Socket</span><span class="p">;</span>
+<span class="n">repeat_each</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">plan</span> <span class="n">tests</span> <span class="o">=&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">repeat_each</span><span class="p">()</span> <span class="o">*</span> <span class="n">blocks</span><span class="p">();</span>
+<span class="nv">$ENV</span><span class="p">{</span><span class="n">TEST_NGINX_MEMCACHED_PORT</span><span class="p">}</span> <span class="o">||=</span> <span class="mi">11211</span><span class="p">;</span>  <span class="c1"># make this env take a default value</span>
+<span class="n">run_tests</span><span class="p">();</span>
+
+<span class="bp">__DATA__</span>
+
+<span class="o">===</span> <span class="n">TEST</span> <span class="mi">1</span><span class="p">:</span> <span class="n">sanity</span>
+<span class="o">---</span> <span class="n">config</span>
+<span class="n">location</span> <span class="o">/</span><span class="n">foo</span> <span class="p">{</span>
+    <span class="n">set</span> <span class="nv">$memc_cmd</span> <span class="n">set</span><span class="p">;</span>
+    <span class="n">set</span> <span class="nv">$memc_key</span> <span class="n">foo</span><span class="p">;</span>
+    <span class="n">set</span> <span class="nv">$memc_value</span> <span class="n">bar</span><span class="p">;</span>
+    <span class="n">memc_pass</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="nv">$TEST_NGINX_MEMCACHED_PORT</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="o">---</span> <span class="n">request</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">foo</span>
+<span class="o">---</span> <span class="n">response_body_like:</span> <span class="n">STORED</span>
+<span class="o">---</span> <span class="n">error_code:</span> <span class="mi">201</span>
+</code></pre></div>
+
+
+<p>可以看出就是一个基础的Perl代码，外加一部分Nginx的配置。TEST部分扩展自Test::Base：</p>
+
+<ul>
+<li>config，一段标准的location</li>
+<li>request，发起HTTP请求</li>
+<li>response_body_like，类似于匹配，这里可以用帅气的正则（<a href="https://github.com/smallfish/lua-resty-beanstalkd/blob/master/t/basic.t">例子</a>）都可以</li>
+</ul>
+
+<p>可以参考 <a href="https://github.com/agentzh/">@agentzh</a> 很多跟Nginx有关的模块，都包含有大量的测试代码。</p>
+
+<p>像我一样懒惰的人，直接copy一份，补一些业务代码就可以啦。</p>
+
+<p>如果有一堆*.t测试脚本，还用perl *.t方式就不合适，Perl自带了一个工具：prove，常用参数：</p>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>-l 类似-Ilib路径，加载一些库。比如上面的Test::Nginx模块不在默认LIB下
+-s 随机跑测试用例
+</code></pre></div>
+</p>
+
+<p>prove命令默认会找当前目录下t/文件夹下所有*.t脚本。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

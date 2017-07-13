@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Nginx-Lua HTTP 401 认证校验 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="本文示例依赖模块： lua-nginx-module ngx_coolkit（获取$remote_passwd 输入值）  如何编译Nginx这些扩展模块，请参考以前《Nginx 第三方模块试用记》。基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。比如 PHP 401发送示例，或者 Apache 配置：&amp;lt;Directory &amp;quot;/path/a&amp;quot;&amp;gt; AuthType Basic AuthName &amp;quot;localhost&amp;quot; AuthUserFile /usr/local/apache/.htpasswd Require valid-user &amp;lt;/Directory&amp;gt;  这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。nginx.conf 配置片段：location /ubuntu { access_by_lua &amp;#39; -- 用户和密码正确 access 则通过，并转向 proxy 部分。 if ngx.var.remote_user == &amp;quot;smallfish&amp;quot; and ngx.var.remote_passwd == &amp;quot;12&amp;quot; then return end -- 返回 HTTP 401 认证输入框 ngx.">
+
+<meta property="og:title" content="Nginx-Lua HTTP 401 认证校验 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="本文示例依赖模块： lua-nginx-module ngx_coolkit（获取$remote_passwd 输入值）  如何编译Nginx这些扩展模块，请参考以前《Nginx 第三方模块试用记》。基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。比如 PHP 401发送示例，或者 Apache 配置：&amp;lt;Directory &amp;quot;/path/a&amp;quot;&amp;gt; AuthType Basic AuthName &amp;quot;localhost&amp;quot; AuthUserFile /usr/local/apache/.htpasswd Require valid-user &amp;lt;/Directory&amp;gt;  这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。nginx.conf 配置片段：location /ubuntu { access_by_lua &amp;#39; -- 用户和密码正确 access 则通过，并转向 proxy 部分。 if ngx.var.remote_user == &amp;quot;smallfish&amp;quot; and ngx.var.remote_passwd == &amp;quot;12&amp;quot; then return end -- 返回 HTTP 401 认证输入框 ngx.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2012/02/08/nginx-lua-401-auth/">
+<meta name="twitter:title" content="Nginx-Lua HTTP 401 认证校验 - smallfish&#39;g blog">
+<meta name="twitter:description" content="本文示例依赖模块： lua-nginx-module ngx_coolkit（获取$remote_passwd 输入值）  如何编译Nginx这些扩展模块，请参考以前《Nginx 第三方模块试用记》。基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。比如 PHP 401发送示例，或者 Apache 配置：&amp;lt;Directory &amp;quot;/path/a&amp;quot;&amp;gt; AuthType Basic AuthName &amp;quot;localhost&amp;quot; AuthUserFile /usr/local/apache/.htpasswd Require valid-user &amp;lt;/Directory&amp;gt;  这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。nginx.conf 配置片段：location /ubuntu { access_by_lua &amp;#39; -- 用户和密码正确 access 则通过，并转向 proxy 部分。 if ngx.var.remote_user == &amp;quot;smallfish&amp;quot; and ngx.var.remote_passwd == &amp;quot;12&amp;quot; then return end -- 返回 HTTP 401 认证输入框 ngx.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Nginx-Lua HTTP 401 认证校验 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-02-08T00:00:00JST",
+    "dateModified": "2012-02-08T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "本文示例依赖模块：
+ lua-nginx-module ngx_coolkit（获取$remote_passwd 输入值）  如何编译Nginx这些扩展模块，请参考以前《Nginx 第三方模块试用记》。
+基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。
+比如 PHP 401发送示例，或者 Apache 配置：
+&lt;Directory &quot;/path/a&quot;&gt; AuthType Basic AuthName &quot;localhost&quot; AuthUserFile /usr/local/apache/.htpasswd Require valid-user &lt;/Directory&gt;  这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。
+本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。
+nginx.conf 配置片段：
+location /ubuntu { access_by_lua &#39; -- 用户和密码正确 access 则通过，并转向 proxy 部分。 if ngx.var.remote_user == &quot;smallfish&quot; and ngx.var.remote_passwd == &quot;12&quot; then return end -- 返回 HTTP 401 认证输入框 ngx."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2012/" itemprop="url"><span itemprop="title">2012</span></a></li>
+        
+        <li class="active">Nginx-Lua HTTP 401 认证校验</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-02-08T00:00:00JST">Feb 8, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+
+    <h1 class="title">Nginx-Lua HTTP 401 认证校验</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>本文示例依赖模块：</p>
+
+<ul>
+<li><a href="https://github.com/chaoslawful/lua-nginx-module/tags">lua-nginx-module</a></li>
+<li><a href="https://github.com/FRiCKLE/ngx_coolkit">ngx_coolkit</a>（获取$remote_passwd 输入值）</li>
+</ul>
+
+<p>如何编译Nginx这些扩展模块，请参考以前<a href="http://chenxiaoyu.org/2011/10/30/nginx-modules.html">《Nginx 第三方模块试用记》</a>。</p>
+
+<p>基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。</p>
+
+<p>比如 PHP <a href="http://php.net/manual/zh/features.http-auth.php">401发送示例</a>，或者 Apache 配置：</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span></span><span class="p">&lt;</span><span class="nt">Directory</span> <span class="err">&quot;/</span><span class="na">path</span><span class="err">/</span><span class="na">a</span><span class="err">&quot;</span><span class="p">&gt;</span>
+  AuthType Basic
+  AuthName &quot;localhost&quot;
+  AuthUserFile /usr/local/apache/.htpasswd
+  Require valid-user
+<span class="p">&lt;/</span><span class="nt">Directory</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+<p>这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。</p>
+
+<p>本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。</p>
+
+<p><img src="/images/nginx-lua-401-auth.png" alt="" /></p>
+
+<p>nginx.conf 配置片段：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /ubuntu <span class="o">{</span>
+    access_by_lua <span class="s1">&#39;</span>
+<span class="s1">        -- 用户和密码正确 access 则通过，并转向 proxy 部分。</span>
+<span class="s1">        if ngx.var.remote_user == &quot;smallfish&quot; and ngx.var.remote_passwd == &quot;12&quot; then</span>
+<span class="s1">            return</span>
+<span class="s1">        end</span>
+<span class="s1">        -- 返回 HTTP 401 认证输入框</span>
+<span class="s1">        ngx.header.www_authenticate = [[Basic realm=&quot;Restricted&quot;]]</span>
+<span class="s1">        ngx.exit(401)</span>
+<span class="s1">    &#39;</span><span class="p">;</span>
+    proxy_pass http://127.0.0.1:8080/<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>这里的校验部分只是简单的字符串匹配，当然可以扩展成数据库方式（此示例不完整）：<a href="http://forum.nginx.org/read.php?2,220692,220740">http://forum.nginx.org/read.php?2,220692,220740</a></p>
+
+<p>测试过程中刚好发现 <a href="https://github.com/FRiCKLE/ngx_coolkit">ngx_coolkit</a> 模块在处理 $remote_passwd 一个 bug，此变量在 lua 中不能直接用 ngx.var.remote_passwd 读取，原因是 remote_passwd 变量在模块设置的标志位 NGX_HTTP_VAR_NOHASH，<a href="http://weibo.com/agentzh">@agentzh</a> 已经在最新的 ngx_coolkit 中修复。</p>
+
+<p>NGX_HTTP_VAR_NOHASH 完整说明参考微博：<a href="http://weibo.com/1834459124/y4xzWzV2e">http://weibo.com/1834459124/y4xzWzV2e</a></p>
+
+<p>老版本的 ngx_coolkit 可以通过这样来绕过：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location / <span class="o">{</span>
+    <span class="nb">set</span> <span class="nv">$passwd</span> <span class="nv">$remote_passwd</span><span class="p">;</span>
+    access_by_lua <span class="err">&#39;</span>
+        <span class="k">if</span> ngx.var.remote_user <span class="o">==</span> <span class="s2">&quot;smallfish&quot;</span> and ngx.var.passwd <span class="o">==</span> <span class="s2">&quot;12&quot;</span> <span class="k">then</span>
+            <span class="k">return</span>
+        end
+        ...
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>建议更新到最新版，或者直接安装 <a href="http://openresty.org/">ngx-openresty</a> 包。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Java调用Linux SCP操作 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="先来回顾下linux下scp命令的用法：[shell $] scp -r /本地目录或文件 user@192.168.0.110:/远程目录  这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &amp;ndash;help最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考http://chenxiaoyu.org/blog/archives/133，大致代码如下：Runtime.getRuntime().exec(&amp;quot;scp /aa.txt root@192.168.0.110:/bb&amp;quot;);  try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。那就重新加一个user把，adduser&amp;hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，http://www.ganymed.ethz.ch/ssh2/。貌似比较老，先来测试一下把。Connection conn = new Connection(“192.168.0.110”); conn.connect(); boolean isAuthenticated = conn.authenticateWithPassword(“root”, &amp;quot;***********&amp;quot;); if (isAuthenticated == false) throw new IOException(&amp;quot;Authentication failed.&amp;quot;); SCPClient client = new SCPClient(conn); client.put(&amp;quot;/aa.txt&amp;quot;, &amp;quot;/bb&amp;quot;); conn.close();  OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。">
+
+<meta property="og:title" content="Java调用Linux SCP操作 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="先来回顾下linux下scp命令的用法：[shell $] scp -r /本地目录或文件 user@192.168.0.110:/远程目录  这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &amp;ndash;help最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考http://chenxiaoyu.org/blog/archives/133，大致代码如下：Runtime.getRuntime().exec(&amp;quot;scp /aa.txt root@192.168.0.110:/bb&amp;quot;);  try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。那就重新加一个user把，adduser&amp;hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，http://www.ganymed.ethz.ch/ssh2/。貌似比较老，先来测试一下把。Connection conn = new Connection(“192.168.0.110”); conn.connect(); boolean isAuthenticated = conn.authenticateWithPassword(“root”, &amp;quot;***********&amp;quot;); if (isAuthenticated == false) throw new IOException(&amp;quot;Authentication failed.&amp;quot;); SCPClient client = new SCPClient(conn); client.put(&amp;quot;/aa.txt&amp;quot;, &amp;quot;/bb&amp;quot;); conn.close();  OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/16/use-java-for-linux-scp/">
+<meta name="twitter:title" content="Java调用Linux SCP操作 - smallfish&#39;g blog">
+<meta name="twitter:description" content="先来回顾下linux下scp命令的用法：[shell $] scp -r /本地目录或文件 user@192.168.0.110:/远程目录  这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &amp;ndash;help最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考http://chenxiaoyu.org/blog/archives/133，大致代码如下：Runtime.getRuntime().exec(&amp;quot;scp /aa.txt root@192.168.0.110:/bb&amp;quot;);  try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。那就重新加一个user把，adduser&amp;hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，http://www.ganymed.ethz.ch/ssh2/。貌似比较老，先来测试一下把。Connection conn = new Connection(“192.168.0.110”); conn.connect(); boolean isAuthenticated = conn.authenticateWithPassword(“root”, &amp;quot;***********&amp;quot;); if (isAuthenticated == false) throw new IOException(&amp;quot;Authentication failed.&amp;quot;); SCPClient client = new SCPClient(conn); client.put(&amp;quot;/aa.txt&amp;quot;, &amp;quot;/bb&amp;quot;); conn.close();  OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Java调用Linux SCP操作 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-16T00:00:00JST",
+    "dateModified": "2009-12-16T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "先来回顾下linux下scp命令的用法：
+[shell $] scp -r /本地目录或文件 user@192.168.0.110:/远程目录  这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &ndash;help
+最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考http://chenxiaoyu.org/blog/archives/133，大致代码如下：
+Runtime.getRuntime().exec(&quot;scp /aa.txt root@192.168.0.110:/bb&quot;);  try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。
+这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？
+后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。
+那就重新加一个user把，adduser&hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。
+貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，http://www.ganymed.ethz.ch/ssh2/。貌似比较老，先来测试一下把。
+Connection conn = new Connection(“192.168.0.110”); conn.connect(); boolean isAuthenticated = conn.authenticateWithPassword(“root”, &quot;***********&quot;); if (isAuthenticated == false) throw new IOException(&quot;Authentication failed.&quot;); SCPClient client = new SCPClient(conn); client.put(&quot;/aa.txt&quot;, &quot;/bb&quot;); conn.close();  OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。
+client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Java调用Linux SCP操作</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-16T00:00:00JST">Dec 16, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Java调用Linux SCP操作</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>先来回顾下linux下scp命令的用法：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">shell</span> <span class="err">$</span><span class="p">]</span> <span class="n">scp</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="err">本地目录或文件</span> <span class="n">user</span><span class="nd">@192.168.0.110</span><span class="p">:</span><span class="o">/</span><span class="err">远程目录</span>
+</code></pre></div>
+
+
+<p>这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &ndash;help</p>
+
+<p>最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考<a href="http://chenxiaoyu.org/blog/archives/133">http://chenxiaoyu.org/blog/archives/133</a>，大致代码如下：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Runtime</span><span class="o">.</span><span class="n">getRuntime</span><span class="p">()</span><span class="o">.</span><span class="k">exec</span><span class="p">(</span><span class="s2">&quot;scp /aa.txt root@192.168.0.110:/bb&quot;</span><span class="p">);</span>
+</code></pre></div>
+
+
+<p>try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。</p>
+
+<p>这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？</p>
+
+<p>后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。</p>
+
+<p>那就重新加一个user把，adduser&hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。</p>
+
+<p>貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，<a href="http://www.ganymed.ethz.ch/ssh2/">http://www.ganymed.ethz.ch/ssh2/</a>。貌似比较老，先来测试一下把。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Connection</span><span class="p">(</span><span class="err">“</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">0.110</span><span class="err">”</span><span class="p">);</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">connect</span><span class="p">();</span>
+<span class="n">boolean</span> <span class="n">isAuthenticated</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">authenticateWithPassword</span><span class="p">(</span><span class="err">“</span><span class="n">root</span><span class="err">”</span><span class="p">,</span> <span class="s2">&quot;***********&quot;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">isAuthenticated</span> <span class="o">==</span> <span class="n">false</span><span class="p">)</span>
+    <span class="n">throw</span> <span class="n">new</span> <span class="n">IOException</span><span class="p">(</span><span class="s2">&quot;Authentication failed.&quot;</span><span class="p">);</span>
+<span class="n">SCPClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">new</span> <span class="n">SCPClient</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/aa.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;/bb&quot;</span><span class="p">);</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+</code></pre></div>
+
+
+<p>OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。</p>
+
+<p>client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>翻译-如何组织Go代码 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="原文地址：http://talks.golang.org/2014/organizeio.slide，译文尽量贴近原文，会适当的增删，勿拍。包Go 程序都是由包构成，每个文件都以 package 开头，程序主体执行从 main 包开始：package main import &amp;quot;fmt&amp;quot; func main() { fmt.Println(&amp;quot;Hello, world!&amp;quot;) }  最简单的一个 Go 程序，只需要写一个 main 包即可。hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公开导出的函数。示例包：fmt// Package fmt implements formatted I/O. package fmt // Println formats using the default formats for its // operands and writes to standard output. func Println(a ...interface{}) (n int, err error) { ... } func newPrinter() *pp { .">
+
+<meta property="og:title" content="翻译-如何组织Go代码 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2014/11/06/organizing-go-code/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="原文地址：http://talks.golang.org/2014/organizeio.slide，译文尽量贴近原文，会适当的增删，勿拍。包Go 程序都是由包构成，每个文件都以 package 开头，程序主体执行从 main 包开始：package main import &amp;quot;fmt&amp;quot; func main() { fmt.Println(&amp;quot;Hello, world!&amp;quot;) }  最简单的一个 Go 程序，只需要写一个 main 包即可。hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公开导出的函数。示例包：fmt// Package fmt implements formatted I/O. package fmt // Println formats using the default formats for its // operands and writes to standard output. func Println(a ...interface{}) (n int, err error) { ... } func newPrinter() *pp { .">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2014/11/06/organizing-go-code/">
+<meta name="twitter:title" content="翻译-如何组织Go代码 - smallfish&#39;g blog">
+<meta name="twitter:description" content="原文地址：http://talks.golang.org/2014/organizeio.slide，译文尽量贴近原文，会适当的增删，勿拍。包Go 程序都是由包构成，每个文件都以 package 开头，程序主体执行从 main 包开始：package main import &amp;quot;fmt&amp;quot; func main() { fmt.Println(&amp;quot;Hello, world!&amp;quot;) }  最简单的一个 Go 程序，只需要写一个 main 包即可。hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公开导出的函数。示例包：fmt// Package fmt implements formatted I/O. package fmt // Println formats using the default formats for its // operands and writes to standard output. func Println(a ...interface{}) (n int, err error) { ... } func newPrinter() *pp { .">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "翻译-如何组织Go代码 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-11-06T00:00:00JST",
+    "dateModified": "2014-11-06T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "原文地址：http://talks.golang.org/2014/organizeio.slide，译文尽量贴近原文，会适当的增删，勿拍。
+包
+Go 程序都是由包构成，每个文件都以 package 开头，程序主体执行从 main 包开始：
+package main import &quot;fmt&quot; func main() { fmt.Println(&quot;Hello, world!&quot;) }  最简单的一个 Go 程序，只需要写一个 main 包即可。
+hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公开导出的函数。
+示例包：fmt
+// Package fmt implements formatted I/O. package fmt // Println formats using the default formats for its // operands and writes to standard output. func Println(a ...interface{}) (n int, err error) { ... } func newPrinter() *pp { ."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2014/" itemprop="url"><span itemprop="title">2014</span></a></li>
+        
+        <li class="active">翻译-如何组织Go代码</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-11-06T00:00:00JST">Nov 6, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2014/">2014</a></li>
+      
+    </ul>
+
+    <h1 class="title">翻译-如何组织Go代码</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>原文地址：<a href="http://talks.golang.org/2014/organizeio.slide">http://talks.golang.org/2014/organizeio.slide</a>，译文尽量贴近原文，会适当的增删，勿拍。</p>
+
+<p>包</p>
+
+<p>Go 程序都是由包构成，每个文件都以 <code>package</code> 开头，程序主体执行从 <code>main</code> 包开始：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>package main
+
+import <span class="s2">&quot;fmt&quot;</span>
+
+func main<span class="o">()</span> <span class="o">{</span>
+        fmt.Println<span class="o">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>最简单的一个 Go 程序，只需要写一个 <code>main</code> 包即可。</p>
+
+<p><code>hello world</code> 第二行导入了 <code>fmt</code> 包，第四行 <code>Println</code> 是 <code>fmt</code> 包里的公开导出的函数。</p>
+
+<p>示例包：<code>fmt</code></p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>// Package fmt implements formatted I/O.
+package fmt
+
+// Println formats using the default formats <span class="k">for</span> its
+// operands and writes to standard output.
+func Println<span class="o">(</span>a ...interface<span class="o">{})</span> <span class="o">(</span>n int, err error<span class="o">)</span> <span class="o">{</span>
+        ...
+<span class="o">}</span>
+
+func newPrinter<span class="o">()</span> *pp <span class="o">{</span>
+        ...
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>其中 <code>Println</code> 是公开（<code>public</code>）函数，只需要第一个字母大写，在其他模块内都是公开可见的（区别于私有 <code>private</code> 函数）。</p>
+
+<p>另外一个函数 <code>newPrinter</code> 则是私有函数，以小写字母开头，这样的函数只能在模块（<code>fmt</code>）内使用。</p>
+
+<p>通过包来组织和区分相关代码，包可大可小，也可以由多个文件构成，这些文件需要在一个目录内。</p>
+
+<p>Go 源码 <code>net/http</code> 包导出 100 个命名（共 18 个文件），而 <code>errors</code> 包只导出 1 个名字（只有 1 文件）。</p>
+
+<p>如何给包命名？</p>
+
+<p>取名尽量简单和可阅读，不要使用下划线：</p>
+
+<ul>
+<li>io/ioutil，不要用 io/util</li>
+<li>suffixarray，不要用 suffix_array</li>
+</ul>
+
+<p>也不要太笼统，比如 <code>util</code> 意思很模糊。</p>
+
+<p>包名也是类型和函数的一部分，比如：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>buf :<span class="o">=</span> new<span class="o">(</span>bytes.Buffer<span class="o">)</span>
+</code></pre></div>
+
+
+<p>这里不要取名为 <code>bytes.BytesBuffer</code>，过于累赘。</p>
+
+<p>选择一个好的命名真的很重要，大部分时候我们写代码都在为取名而烦恼啊。。。</p>
+
+<p>包的测试</p>
+
+<p>测试文件和源码同级目录，文件名都是 <code>_test.go</code> 结尾：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>package fmt
+
+import <span class="s2">&quot;testing&quot;</span>
+
+var <span class="nv">fmtTests</span> <span class="o">=</span> <span class="o">[]</span>fmtTest<span class="o">{</span>
+        <span class="o">{</span><span class="s2">&quot;%d&quot;</span>, <span class="m">12345</span>, <span class="s2">&quot;12345&quot;</span><span class="o">}</span>,
+        <span class="o">{</span><span class="s2">&quot;%v&quot;</span>, <span class="m">12345</span>, <span class="s2">&quot;12345&quot;</span><span class="o">}</span>,
+        <span class="o">{</span><span class="s2">&quot;%t&quot;</span>, true, <span class="s2">&quot;true&quot;</span><span class="o">}</span>,
+<span class="o">}</span>
+
+func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> _, tt :<span class="o">=</span> range fmtTests <span class="o">{</span>
+            <span class="k">if</span> s :<span class="o">=</span> Sprintf<span class="o">(</span>tt.fmt, tt.val<span class="o">)</span><span class="p">;</span> s !<span class="o">=</span> tt.out <span class="o">{</span>
+                    t.Errorf<span class="o">(</span><span class="s2">&quot;...&quot;</span><span class="o">)</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>差不多了，建议一个源码文件对应一个测试文件。</p>
+
+<p>代码组织</p>
+
+<p>工作目录（workspace）</p>
+
+<p>新版 Go 依赖 <code>$GOPATH</code> 这个环境变量来区分工作目录。代码放在同一个 <code>workspace</code> 内，可以包含自己的包或远程仓库（如： <code>git</code> 或 <code>hg</code>），用过 <code>go get</code> 应该都知道。</p>
+
+<p>Go 相关工具可以很容易的区分出工作空间，构建时候不需要依赖 <code>Makefile</code> 或 <code>build.xml</code> 类似文件 ，按照目录划分好就可以啦。</p>
+
+<p>比如：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">$GOPATH</span>/
+    src/
+       github.com/user/repo/
+           mypkg/
+              mysrc1.go
+              mysrc2.go
+           cmd/mycmd/
+                main.go
+   bin/
+       mycmd
+</code></pre></div>
+
+
+<p>这里示例一下工作目录吧</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>mkdir /tmp/gows
+<span class="nv">GOPATH</span><span class="o">=</span>/tmp/gows
+</code></pre></div>
+
+
+<p><code>$GOPATH</code> 环境变量前面以及提到，后续的安装和构建包都依赖这个：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ go get github.com/dsymonds/fixhub/cmd/fixhub
+</code></pre></div>
+
+
+<p><code>go get</code> 命令则会远程仓库下载源码到自己的工作目录内（需要相关的版本工具，比如：<code>git</code>）</p>
+
+<p><code>go install</code> 命令则可以编译和分发文件到 <code>$GOPATH/bin/fixhub</code> 位置。</p>
+
+<p>我的工作目录大概如下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">$GOPATH</span>/
+    bin/fixhub                              <span class="c1"># installed binary</span>
+    pkg/darwin_amd64/                       <span class="c1"># compiled archives</span>
+        code.google.com/p/goauth2/oauth.a
+        github.com/...
+    src/                                    <span class="c1"># source repositories</span>
+        code.google.com/p/goauth2/
+            .hg
+            oauth                           <span class="c1"># used by package go-github</span>
+            ...
+        github.com/
+            golang/lint/...                 <span class="c1"># used by package fixhub</span>
+                .git
+            google/go-github/...            <span class="c1"># used by package fixhub</span>
+                .git
+            dsymonds/fixhub/
+                .git
+                client.go
+                cmd/fixhub/fixhub.go        <span class="c1"># package main</span>
+</code></pre></div>
+
+
+<p>可以看到下载了很多远程的仓库，编译后可执行文件是 <code>bin/fixhub</code>。</p>
+
+<p>为什么要划分目录结构呢？</p>
+
+<p>通过目录结构来区分，可以免去配置的麻烦，不像其他语言会依赖 <code>Makefile</code> 或 <code>build.xml</code> 文件。</p>
+
+<p>减少配置的时间，可以更多的时间去码字，另外大部分用户目录结构都类似，这样也更有利于去分享代码。</p>
+
+<p>有时候我们可能有很多的工作目录，但是大部分人只用一个。有个建议这样来声明 <code>GOPATH</code>：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>
+</code></pre></div>
+
+
+<p>这样 <code>src</code>，<code>bin</code> 和 <code>pgk</code> 都会在你的用户 <code>home</code> 目录下了。</p>
+
+<p>这里的建议应该是针对一台机器上多个用户来说吧，一般来说 <code>$HOME/bin</code> 可能在 <code>PATH</code> 中了，调用起来更为方便一些。</p>
+
+<p>快速切换目录</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">CDPATH</span><span class="o">=</span><span class="nv">$GOPATH</span>/src/github.com:<span class="nv">$GOPATH</span>/src/code.google.com/p
+
+$ <span class="nb">cd</span> dsymonds/fixhub
+/tmp/gows/src/github.com/dsymonds/fixhub
+$ <span class="nb">cd</span> goauth2
+/tmp/gows/src/code.google.com/p/goauth2
+$
+</code></pre></div>
+
+
+<p>还可以写个函数放入到 <code>~/.profile</code> 内：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>gocd <span class="o">()</span> <span class="o">{</span> <span class="nb">cd</span> <span class="sb">`</span>go list -f <span class="s1">&#39;{{.Dir}}&#39;</span> <span class="nv">$1</span><span class="sb">`</span> <span class="o">}</span>
+</code></pre></div>
+
+
+<p>这样移动更方便一些：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ gocd .../lint
+/tmp/gows/src/github.com/golang/lint
+$
+</code></pre></div>
+
+
+<p><code>go</code> 工具有很多功能：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ go <span class="nb">help</span>
+Go is a tool <span class="k">for</span> managing Go <span class="nb">source</span> code.
+
+Usage:
+
+go <span class="nb">command</span> <span class="o">[</span>arguments<span class="o">]</span>
+
+The commands are:
+</code></pre></div>
+
+
+<p>常用的功能参数如：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>build       compile packages and dependencies
+get         download and install packages and dependencies
+install     compile and install packages and dependencies
+<span class="nb">test</span>        <span class="nb">test</span> packages
+</code></pre></div>
+
+
+<p>还有一些其他有用的功能参数，比如：<code>vet</code> 和 <code>fmt</code>，后者是大招啊。</p>
+
+<p>依赖管理</p>
+
+<p>默认情况下 <code>go get</code> 都会去下载最新的代码然后构建，除非被中断。</p>
+
+<p>在开发环境下这个没什么影响，但肯定不适用于生产环境。</p>
+
+<p>略去数十字（<code>vendoring</code> 啥意思..），不喜欢这种做法，推荐 <a href="http://gopkg.in">gopkg.in</a>：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>gopkg.in/user/pkg.v3 -&gt; github.com/user/pkg <span class="o">(</span>branch/tag v3, v3.N, or v.3.N.M<span class="o">)</span>
+</code></pre></div>
+
+
+<p>命名</p>
+
+<p>程序其实就是一堆名字的构成，取名还是挺花时间和成本的。</p>
+
+<p>简单来说，长的名字浪费空间，而且在可读性方面很重要，好的名字一眼就能看意图。</p>
+
+<p>多花点时间，取一些简短和可理解的名字吧。</p>
+
+<p>命名风格</p>
+
+<ul>
+<li>使用驼峰 <code>camelCase</code>，而不是下划线 <code>_underscores</code> 连接。</li>
+<li>局部变量尽量短，短，短，1-2 个字符的情况很常见。</li>
+<li>包的名字一般来说，都是小写字母。</li>
+<li>全局（公开）变量</li>
+</ul>
+
+<p>不建议这样：</p>
+
+<ul>
+<li>bytes.Buffer，不要 bytes.ByteBuffer</li>
+<li>zip.Reader，不要 zip.ZipReader</li>
+<li>errors.New，不要 errors.NewError</li>
+<li>r 不要用在 bytesReader</li>
+<li>i 不要用在 loopIterator</li>
+</ul>
+
+<p>文档</p>
+
+<p>文档位置在模块或者导出的名字前面：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>// Join concatenates the elements of elem to create a single string.
+// The separator string sep is placed between elements in the resulting string.
+func Join<span class="o">(</span>elem <span class="o">[]</span>string, sep string<span class="o">)</span> string <span class="o">{</span>
+</code></pre></div>
+
+
+<p>通过 <code>godoc</code> 在 web 查看该函数时候，文档位置位于函数原型下方（图略去）。</p>
+
+<p>请用英语书写文档句子和段落（无视我大汉字啊）</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>// Join concatenates…         good
+// This <span class="k">function</span>…             bad
+</code></pre></div>
+
+
+<p>包文档位于模块最上面：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>	// Package fmt…
+	package fmt	
+</code></pre></div>
+
+
+<p>关于 Go docs 请参考：<a href="http://talks.golang.org/2014/godoc.org">http://talks.golang.org/2014/godoc.org</a></p>
+
+<p>最后，这是一份演讲稿，相对来说内容偏少，随意看看吧。。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

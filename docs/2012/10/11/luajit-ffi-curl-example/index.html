@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>LuaJIT FFI 调用 Curl 示例 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="LuaJIT 是一个好东西，比官方 Lua 解释器性能上提升很多。ngx_lua/ngx_openresty 都推荐用 LuaJIT 来加速 Lua 代码。除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：操作系统： Mac OS X 10.8.2 LuaJIT版本：LuaJIT-2.0.0-beta10 Curl版本： 7.24.0  测试代码如下：local ffi = require &amp;#39;ffi&amp;#39; ffi.cdef[[ void *curl_easy_init(); int curl_easy_setopt(void *curl, int option, ...); int curl_easy_perform(void *curl); void curl_easy_cleanup(void *curl); char *curl_easy_strerror(int code); ]] local libcurl = ffi.load(&amp;#39;libcurl&amp;#39;) local curl = libcurl.curl_easy_init() local CURLOPT_URL = 10002 -- 参考 curl/curl.">
+
+<meta property="og:title" content="LuaJIT FFI 调用 Curl 示例 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="LuaJIT 是一个好东西，比官方 Lua 解释器性能上提升很多。ngx_lua/ngx_openresty 都推荐用 LuaJIT 来加速 Lua 代码。除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：操作系统： Mac OS X 10.8.2 LuaJIT版本：LuaJIT-2.0.0-beta10 Curl版本： 7.24.0  测试代码如下：local ffi = require &amp;#39;ffi&amp;#39; ffi.cdef[[ void *curl_easy_init(); int curl_easy_setopt(void *curl, int option, ...); int curl_easy_perform(void *curl); void curl_easy_cleanup(void *curl); char *curl_easy_strerror(int code); ]] local libcurl = ffi.load(&amp;#39;libcurl&amp;#39;) local curl = libcurl.curl_easy_init() local CURLOPT_URL = 10002 -- 参考 curl/curl.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2012/10/11/luajit-ffi-curl-example/">
+<meta name="twitter:title" content="LuaJIT FFI 调用 Curl 示例 - smallfish&#39;g blog">
+<meta name="twitter:description" content="LuaJIT 是一个好东西，比官方 Lua 解释器性能上提升很多。ngx_lua/ngx_openresty 都推荐用 LuaJIT 来加速 Lua 代码。除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：操作系统： Mac OS X 10.8.2 LuaJIT版本：LuaJIT-2.0.0-beta10 Curl版本： 7.24.0  测试代码如下：local ffi = require &amp;#39;ffi&amp;#39; ffi.cdef[[ void *curl_easy_init(); int curl_easy_setopt(void *curl, int option, ...); int curl_easy_perform(void *curl); void curl_easy_cleanup(void *curl); char *curl_easy_strerror(int code); ]] local libcurl = ffi.load(&amp;#39;libcurl&amp;#39;) local curl = libcurl.curl_easy_init() local CURLOPT_URL = 10002 -- 参考 curl/curl.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "LuaJIT FFI 调用 Curl 示例 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-10-11T00:00:00JST",
+    "dateModified": "2012-10-11T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "LuaJIT 是一个好东西，比官方 Lua 解释器性能上提升很多。ngx_lua/ngx_openresty 都推荐用 LuaJIT 来加速 Lua 代码。
+除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。
+下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：
+操作系统： Mac OS X 10.8.2 LuaJIT版本：LuaJIT-2.0.0-beta10 Curl版本： 7.24.0  测试代码如下：
+local ffi = require &#39;ffi&#39; ffi.cdef[[ void *curl_easy_init(); int curl_easy_setopt(void *curl, int option, ...); int curl_easy_perform(void *curl); void curl_easy_cleanup(void *curl); char *curl_easy_strerror(int code); ]] local libcurl = ffi.load(&#39;libcurl&#39;) local curl = libcurl.curl_easy_init() local CURLOPT_URL = 10002 -- 参考 curl/curl."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2012/" itemprop="url"><span itemprop="title">2012</span></a></li>
+        
+        <li class="active">LuaJIT FFI 调用 Curl 示例</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-10-11T00:00:00JST">Oct 11, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+
+    <h1 class="title">LuaJIT FFI 调用 Curl 示例</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p><a href="http://luajit.org">LuaJIT</a> 是一个好东西，比官方 <a href="http://lua.org">Lua</a> 解释器性能上提升很多。ngx_lua/<a href="http://openresty.org">ngx_openresty</a> 都推荐用 LuaJIT 来加速 Lua 代码。</p>
+
+<p>除去性能和速度上的优势，LuaJIT 还提供了 C Binding 模块：FFI，可以理解为类似 Python 中的 ctypes 模块，不过更加小巧和直观。意味着可以很方便的调用动态库啦。</p>
+
+<p>下面示例如何在 FFI 调用 Curl 中的相关函数，环境如下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>操作系统：   Mac OS X <span class="m">10</span>.8.2
+LuaJIT版本：LuaJIT-2.0.0-beta10
+Curl版本：  <span class="m">7</span>.24.0
+</code></pre></div>
+
+
+<p>测试代码如下：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nb">local</span> <span class="nv">ffi</span> <span class="o">=</span> require <span class="s1">&#39;ffi&#39;</span>
+
+ffi.cdef<span class="o">[[</span>
+    void *curl_easy_init<span class="o">()</span><span class="p">;</span>
+    int curl_easy_setopt<span class="o">(</span>void *curl, int option, ...<span class="o">)</span><span class="p">;</span>
+    int curl_easy_perform<span class="o">(</span>void *curl<span class="o">)</span><span class="p">;</span>
+    void curl_easy_cleanup<span class="o">(</span>void *curl<span class="o">)</span><span class="p">;</span>
+    char *curl_easy_strerror<span class="o">(</span>int code<span class="o">)</span><span class="p">;</span>
+<span class="o">]]</span>
+
+<span class="nb">local</span> <span class="nv">libcurl</span> <span class="o">=</span> ffi.load<span class="o">(</span><span class="s1">&#39;libcurl&#39;</span><span class="o">)</span>
+
+<span class="nb">local</span> <span class="nv">curl</span> <span class="o">=</span> libcurl.curl_easy_init<span class="o">()</span>
+<span class="nb">local</span> <span class="nv">CURLOPT_URL</span> <span class="o">=</span> <span class="m">10002</span> -- 参考 curl/curl.h 中定义
+
+<span class="k">if</span> curl <span class="k">then</span>
+    libcurl.curl_easy_setopt<span class="o">(</span>curl, CURLOPT_URL, <span class="s1">&#39;http://example.com&#39;</span><span class="o">)</span>
+    <span class="nv">res</span> <span class="o">=</span> libcurl.curl_easy_perform<span class="o">(</span>curl<span class="o">)</span>
+    <span class="k">if</span> res ~<span class="o">=</span> <span class="m">0</span> <span class="k">then</span>
+        print<span class="o">(</span>ffi.string<span class="o">(</span>libcurl.curl_easy_strerror<span class="o">(</span>res<span class="o">)))</span>
+    end
+    libcurl.curl_easy_cleanup<span class="o">(</span>curl<span class="o">)</span>
+end
+</code></pre></div>
+
+
+<p>参考：<a href="http://develcuy.com/en/playing-luajit-ffi">http://develcuy.com/en/playing-luajit-ffi</a>（被此文坑了一下，示例中 curl_easy_setopt 函数 option 类型为：char，正确的应该是：int）</p>
+
+<p>报错信息如下（可以辅助设置 VERBOSE（值为41） 选项调试）：</p>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>URL using bad/illegal format or missing URL
+</code></pre></div>
+</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

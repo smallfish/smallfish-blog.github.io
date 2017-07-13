@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>PostgreSQL tablespace 表空间 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。查看pgsql当前表空间有哪些可以试试下面：postgres=&amp;gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows)  或：postgres=&amp;gt; \db Name | Owner | Location ------------&#43;----------&#43;---------- pg_default | postgres | pg_global | postgres |  建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata   进入psql  $ psql -U postgres -h 192.168.0.122  如果权限没设置好下面语句会报错postgres=&amp;gt; CREATE TABLESPACE space1 LOCATION &amp;#39;/home/smallfish/pgdata&amp;#39;;  建测试表postgres=&amp;gt; CREATE TABLE foo(i int) TABLESPACE space1;  可以查看表空间目录下多了文件">
+
+<meta property="og:title" content="PostgreSQL tablespace 表空间 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。查看pgsql当前表空间有哪些可以试试下面：postgres=&amp;gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows)  或：postgres=&amp;gt; \db Name | Owner | Location ------------&#43;----------&#43;---------- pg_default | postgres | pg_global | postgres |  建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata   进入psql  $ psql -U postgres -h 192.168.0.122  如果权限没设置好下面语句会报错postgres=&amp;gt; CREATE TABLESPACE space1 LOCATION &amp;#39;/home/smallfish/pgdata&amp;#39;;  建测试表postgres=&amp;gt; CREATE TABLE foo(i int) TABLESPACE space1;  可以查看表空间目录下多了文件">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/22/postgresql-tablespace/">
+<meta name="twitter:title" content="PostgreSQL tablespace 表空间 - smallfish&#39;g blog">
+<meta name="twitter:description" content="pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。查看pgsql当前表空间有哪些可以试试下面：postgres=&amp;gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows)  或：postgres=&amp;gt; \db Name | Owner | Location ------------&#43;----------&#43;---------- pg_default | postgres | pg_global | postgres |  建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata   进入psql  $ psql -U postgres -h 192.168.0.122  如果权限没设置好下面语句会报错postgres=&amp;gt; CREATE TABLESPACE space1 LOCATION &amp;#39;/home/smallfish/pgdata&amp;#39;;  建测试表postgres=&amp;gt; CREATE TABLE foo(i int) TABLESPACE space1;  可以查看表空间目录下多了文件">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "PostgreSQL tablespace 表空间 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-22T00:00:00JST",
+    "dateModified": "2009-12-22T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。
+查看pgsql当前表空间有哪些可以试试下面：
+postgres=&gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows)  或：
+postgres=&gt; \db Name | Owner | Location ------------+----------+---------- pg_default | postgres | pg_global | postgres |  建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。
+ 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata   进入psql  $ psql -U postgres -h 192.168.0.122  如果权限没设置好下面语句会报错
+postgres=&gt; CREATE TABLESPACE space1 LOCATION &#39;/home/smallfish/pgdata&#39;;  建测试表
+postgres=&gt; CREATE TABLE foo(i int) TABLESPACE space1;  可以查看表空间目录下多了文件"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">PostgreSQL tablespace 表空间</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-22T00:00:00JST">Dec 22, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">PostgreSQL tablespace 表空间</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。</p>
+
+<p>查看pgsql当前表空间有哪些可以试试下面：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">SELECT</span> <span class="n">spcname</span> <span class="n">FROM</span> <span class="n">pg_tablespace</span><span class="p">;</span>
+  <span class="n">spcname</span>
+<span class="o">------------</span>
+ <span class="n">pg_default</span>
+ <span class="n">pg_global</span>
+<span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>或：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> \<span class="n">db</span>
+    <span class="n">Name</span>    <span class="o">|</span>  <span class="n">Owner</span>   <span class="o">|</span> <span class="n">Location</span>
+<span class="o">------------+----------+----------</span>
+ <span class="n">pg_default</span> <span class="o">|</span> <span class="n">postgres</span> <span class="o">|</span>
+ <span class="n">pg_global</span>  <span class="o">|</span> <span class="n">postgres</span> <span class="o">|</span>
+</code></pre></div>
+
+
+<p>建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。</p>
+
+<ol>
+<li>建立目录</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">pgdata</span>
+<span class="err">$</span> <span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">postgres</span><span class="p">:</span><span class="n">postgres</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">pgdata</span>
+</code></pre></div>
+
+
+<ol>
+<li>进入psql</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.122</span>
+</code></pre></div>
+
+
+<p>如果权限没设置好下面语句会报错</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">space1</span> <span class="n">LOCATION</span> <span class="s1">&#39;/home/smallfish/pgdata&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>建测试表</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">)</span> <span class="n">TABLESPACE</span> <span class="n">space1</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>可以查看表空间目录下多了文件</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> \<span class="err">!</span> <span class="n">ls</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">pgdata</span>
+</code></pre></div>
+
+
+<p>删除表空间，需要注意的是先要删除所有该表空间里的对象</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">DROP</span> <span class="n">TABLESPACE</span> <span class="n">space1</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>ok，到这里已经建立好表空间了。当然每次建表都指定TABLESPACE也有点麻烦，来点默认的把。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">SET</span> <span class="n">default_tablespace</span> <span class="o">=</span> <span class="n">space1</span><span class="p">;</span>
+<span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">);</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

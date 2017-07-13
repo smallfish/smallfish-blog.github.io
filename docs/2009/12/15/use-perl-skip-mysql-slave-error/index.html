@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Perl 批量跳过 MySQL Slave 复制错误 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start;  一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &amp;#39;show slave status\\G;&amp;#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;amp;&amp;amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &amp;quot;slave error **\n&amp;quot;; system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave stop;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave start;&amp;#39;&amp;quot;); } my @hosts = qw/ 192.">
+
+<meta property="og:title" content="Perl 批量跳过 MySQL Slave 复制错误 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start;  一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &amp;#39;show slave status\\G;&amp;#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;amp;&amp;amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &amp;quot;slave error **\n&amp;quot;; system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave stop;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave start;&amp;#39;&amp;quot;); } my @hosts = qw/ 192.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/">
+<meta name="twitter:title" content="Perl 批量跳过 MySQL Slave 复制错误 - smallfish&#39;g blog">
+<meta name="twitter:description" content="发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start;  一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &amp;#39;show slave status\\G;&amp;#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;amp;&amp;amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &amp;quot;slave error **\n&amp;quot;; system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave stop;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&amp;#39;&amp;quot;); system(&amp;quot;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave start;&amp;#39;&amp;quot;); } my @hosts = qw/ 192.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Perl 批量跳过 MySQL Slave 复制错误 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。
+slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start;  一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：
+#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &#39;show slave status\\G;&#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;&amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &quot;slave error **\n&quot;; system(&quot;mysql -u$usr -p$pass -h$ip -e &#39;slave stop;&#39;&quot;); system(&quot;mysql -u$usr -p$pass -h$ip -e &#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&#39;&quot;); system(&quot;mysql -u$usr -p$pass -h$ip -e &#39;slave start;&#39;&quot;); } my @hosts = qw/ 192."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Perl 批量跳过 MySQL Slave 复制错误</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Perl 批量跳过 MySQL Slave 复制错误</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">slave</span> <span class="n">stop</span><span class="p">;</span>
+<span class="nb">set</span> <span class="n">GLOBAL</span> <span class="n">SQL_SLAVE_SKIP_COUNTER</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">slave</span> <span class="n">start</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="ch">#!/usr/bin/env perl</span>
+<span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">warnings</span><span class="p">;</span>
+
+<span class="c1"># get slave status</span>
+<span class="n">sub</span> <span class="n">get_status</span> <span class="p">{</span>
+    <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="nd">@_</span><span class="p">;</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">info</span> <span class="o">=</span> <span class="sb">`mysql -u$usr -p$pass -h$ip -e &#39;show slave status\\G;&#39;`</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">((</span><span class="err">$</span><span class="n">info</span> <span class="o">=~</span> <span class="o">/</span><span class="n">Slave_IO_Running</span><span class="p">:</span> <span class="n">Yes</span><span class="o">/</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="err">$</span><span class="n">info</span> <span class="o">=~</span> <span class="o">/</span><span class="n">Slave_SQL_Running</span><span class="p">:</span> <span class="n">No</span><span class="o">/</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1"># mysql slave skip</span>
+<span class="n">sub</span> <span class="n">slaveskip</span> <span class="p">{</span>
+    <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="nd">@_</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s2">&quot;slave error **</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+    <span class="n">system</span><span class="p">(</span><span class="s2">&quot;mysql -u$usr -p$pass -h$ip -e &#39;slave stop;&#39;&quot;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s2">&quot;mysql -u$usr -p$pass -h$ip -e &#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&#39;&quot;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s2">&quot;mysql -u$usr -p$pass -h$ip -e &#39;slave start;&#39;&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">my</span> <span class="nd">@hosts</span> <span class="o">=</span> <span class="n">qw</span><span class="o">/</span>
+<span class="mf">192.168</span><span class="o">.</span><span class="mf">0.101</span><span class="p">:</span><span class="n">root</span><span class="p">:</span><span class="n">tt1234</span>
+<span class="mf">192.168</span><span class="o">.</span><span class="mf">0.102</span><span class="p">:</span><span class="n">root</span><span class="p">:</span> <span class="n">tt1234</span>
+<span class="mf">192.168</span><span class="o">.</span><span class="mf">0.103</span><span class="p">:</span><span class="n">root</span><span class="p">:</span> <span class="n">tt1234</span>
+<span class="o">/</span><span class="p">;</span>
+<span class="n">foreach</span> <span class="p">(</span><span class="nd">@hosts</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="n">split</span> <span class="s1">&#39;:&#39;</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s2">&quot;// ----- $ip</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="err">$</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">my</span> <span class="err">$</span><span class="n">status</span> <span class="o">=</span> <span class="n">get_status</span><span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">);</span>
+        <span class="k">print</span> <span class="s2">&quot;i: $count status: $status</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+        <span class="n">last</span> <span class="k">if</span> <span class="err">$</span><span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">slaveskip</span><span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">);</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">undef</span><span class="p">,</span> <span class="n">undef</span><span class="p">,</span> <span class="n">undef</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">);</span>
+        <span class="err">$</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nb">exit</span><span class="p">;</span>
+</code></pre></div>
+</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

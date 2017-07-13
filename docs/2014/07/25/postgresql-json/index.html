@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2014/07/25/postgresql-json/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>PostgreSQL JSON 数据类型 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。常用的读取操作符目前大概有三类：-&amp;gt;、-&amp;gt;&amp;gt;和#&amp;gt;。还是直接看SQL查询的例子吧。先看-&amp;gt;类：postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  再来-&amp;gt;&amp;gt;例子：postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row)  当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 1, &amp;quot;b&amp;quot;: 2}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 3, &amp;quot;b&amp;quot;: 4, &amp;quot;c&amp;quot;: 5}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 6, &amp;quot;c&amp;quot;: 7}&amp;#39;::json);  插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：">
+
+<meta property="og:title" content="PostgreSQL JSON 数据类型 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2014/07/25/postgresql-json/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。常用的读取操作符目前大概有三类：-&amp;gt;、-&amp;gt;&amp;gt;和#&amp;gt;。还是直接看SQL查询的例子吧。先看-&amp;gt;类：postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  再来-&amp;gt;&amp;gt;例子：postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row)  当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 1, &amp;quot;b&amp;quot;: 2}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 3, &amp;quot;b&amp;quot;: 4, &amp;quot;c&amp;quot;: 5}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 6, &amp;quot;c&amp;quot;: 7}&amp;#39;::json);  插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2014/07/25/postgresql-json/">
+<meta name="twitter:title" content="PostgreSQL JSON 数据类型 - smallfish&#39;g blog">
+<meta name="twitter:description" content="从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。常用的读取操作符目前大概有三类：-&amp;gt;、-&amp;gt;&amp;gt;和#&amp;gt;。还是直接看SQL查询的例子吧。先看-&amp;gt;类：postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  再来-&amp;gt;&amp;gt;例子：postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:1,&amp;quot;b&amp;quot;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;; ?column? ---------- 2 (1 row)  有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row) postgres=# select &amp;#39;{&amp;quot;a&amp;quot;:[1,2,3],&amp;quot;b&amp;quot;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ---------- 3 (1 row)  当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 1, &amp;quot;b&amp;quot;: 2}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 3, &amp;quot;b&amp;quot;: 4, &amp;quot;c&amp;quot;: 5}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;quot;a&amp;quot;: 6, &amp;quot;c&amp;quot;: 7}&amp;#39;::json);  插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "PostgreSQL JSON 数据类型 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-07-25T00:00:00JST",
+    "dateModified": "2014-07-25T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。
+还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。
+刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。
+常用的读取操作符目前大概有三类：-&gt;、-&gt;&gt;和#&gt;。还是直接看SQL查询的例子吧。
+先看-&gt;类：
+postgres=# select &#39;[1,2,3]&#39;::json-&gt;2; ?column? ---------- 3 (1 row) postgres=# select &#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;::json-&gt;&#39;b&#39;; ?column? ---------- 2 (1 row)  再来-&gt;&gt;例子：
+postgres=# select &#39;[1,2,3]&#39;::json-&gt;&gt;2; ?column? ---------- 3 (1 row) postgres=# select &#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;::json-&gt;&gt;&#39;b&#39;; ?column? ---------- 2 (1 row)  有没有发现其实-&gt;和-&gt;&gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
+上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：
+postgres=# select &#39;{&quot;a&quot;:[1,2,3],&quot;b&quot;:[4,5,6]}&#39;::json#&gt;&#39;{a,2}&#39;; ?column? ---------- 3 (1 row) postgres=# select &#39;{&quot;a&quot;:[1,2,3],&quot;b&quot;:[4,5,6]}&#39;::json#&gt;&gt;&#39;{a,2}&#39;; ?column? ---------- 3 (1 row)  当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
+postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&#39;{&quot;a&quot;: 1, &quot;b&quot;: 2}&#39;::json); postgres=# insert into testjson (data) values(&#39;{&quot;a&quot;: 3, &quot;b&quot;: 4, &quot;c&quot;: 5}&#39;::json); postgres=# insert into testjson (data) values(&#39;{&quot;a&quot;: 6, &quot;c&quot;: 7}&#39;::json);  插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果："
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2014/" itemprop="url"><span itemprop="title">2014</span></a></li>
+        
+        <li class="active">PostgreSQL JSON 数据类型</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-07-25T00:00:00JST">Jul 25, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2014/">2014</a></li>
+      
+    </ul>
+
+    <h1 class="title">PostgreSQL JSON 数据类型</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。</p>
+
+<p>还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。</p>
+
+<p>刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。</p>
+
+<p>常用的读取操作符目前大概有三类：<code>-&gt;</code>、<code>-&gt;&gt;</code>和<code>#&gt;</code>。还是直接看SQL查询的例子吧。</p>
+
+<p>先看<code>-&gt;</code>类：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;[1,2,3]&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;</span><span class="mi">2</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+ <span class="mi">3</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;</span><span class="s1">&#39;b&#39;</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+ <span class="mi">2</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>再来<code>-&gt;&gt;</code>例子：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;[1,2,3]&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;&gt;</span><span class="mi">2</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+ <span class="mi">3</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;b&#39;</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+ <span class="mi">2</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>有没有发现其实<code>-&gt;</code>和<code>-&gt;&gt;</code>出来的结果肉眼看起来是一样的？区别在于后者是返回text。</p>
+
+<p>上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&quot;a&quot;:[1,2,3],&quot;b&quot;:[4,5,6]}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">#&gt;</span><span class="s1">&#39;{a,2}&#39;</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+ <span class="mi">3</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&quot;a&quot;:[1,2,3],&quot;b&quot;:[4,5,6]}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">#&gt;&gt;</span><span class="s1">&#39;{a,2}&#39;</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+ <span class="mi">3</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>当然里面可以嵌套很多，比如<code>{a,2,b,3}</code>等等。下面再来点表的例子：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">testjson</span><span class="p">(</span><span class="n">id</span> <span class="nb">serial</span><span class="p">,</span> <span class="k">data</span> <span class="n">json</span><span class="p">);</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;: 1, &quot;b&quot;: 2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;: 3, &quot;b&quot;: 4, &quot;c&quot;: 5}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;: 6, &quot;c&quot;: 7}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span>
+</code></pre></div>
+
+
+<p>插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下<code>select</code>结果：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">testjson</span><span class="p">;</span>
+ <span class="n">id</span> <span class="o">|</span>           <span class="k">data</span>
+<span class="c1">----+--------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="err">}</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;b&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="ss">&quot;c&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="err">}</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="ss">&quot;c&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="err">}</span>
+<span class="p">(</span><span class="mi">3</span> <span class="k">rows</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>很眼熟，<code>where</code>条件可以这么用：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">testjson</span> <span class="k">where</span> <span class="p">(</span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;a&#39;</span><span class="p">)::</span><span class="nb">int</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">;</span>
+ <span class="n">id</span> <span class="o">|</span>           <span class="k">data</span>
+<span class="c1">----+--------------------------</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;b&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="ss">&quot;c&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="err">}</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="ss">&quot;c&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="err">}</span>
+<span class="p">(</span><span class="mi">2</span> <span class="k">rows</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>注意这里是<code>-&gt;&gt;</code>转换成text然后在<code>::int</code>进行比较。</p>
+
+<p>不过这里有个坑，不知道怎么解决，比如：</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;: &quot;smallfish&quot;}&#39;</span><span class="p">);</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">testjson</span><span class="p">;</span>
+ <span class="n">id</span> <span class="o">|</span>           <span class="k">data</span>
+<span class="c1">----+--------------------------</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="err">}</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;b&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="ss">&quot;c&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="err">}</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="ss">&quot;c&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="err">}</span>
+  <span class="mi">5</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&quot;a&quot;</span><span class="p">:</span> <span class="ss">&quot;smallfish&quot;</span><span class="err">}</span>
+<span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>这个时候上面的<code>::int&gt;1</code>这样就报错了，因为最后一行<code>a</code>为字符串。</p>
+
+<p>mongodb这个问题解决的挺好，回头搜搜在Pg里怎么搞。</p>
+
+<p>话说，Pg里支持的JSON是不是和之前提到的<a href="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore.html">hstore</a>类型有的一相似的地方？</p>
+
+<p>两者优劣回头我再贴文吧。</p>
+
+<p>官方文档：<a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">http://www.postgresql.org/docs/9.3/static/functions-json.html</a></p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

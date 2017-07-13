@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-20T00:00:00JST">Nov 20, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/20/pysvn-tutorial/">Pysvn 程序员指南</a></h2>
+  </header>
+
+  
+  <div class="summary">这是一篇关于pysvn模块的指南.
+完整和详细的API请参考 http://pysvn.tigris.org/docs/pysvn_prog_ref.html.
+pysvn是操作Subversion版本控制的Python接口模块. 这个API接口可以管理一个工作副本, 查询档案库, 和同步两个.
+该API不能创建新的仓库; 只能作用在现有仓库上. 如果你需要创建一个仓库, 请使用Subversion的svnadmin命令.
+使用这个API, 你可以check out一份工作拷贝, 添加, 编辑, 和删除工作文件, 和check in, 比较, 或者放弃更改. 仓库属性, 如关键字扩展, 行字符结束, 或者忽略的列表也可以检查和控制.
+Subversion 模型
+Subversion是一个更新-编辑-提交的模型. 首先在本地建立一个工作副本. 在工作副本上进行修改, 最后提交到中央仓库 (可以是本地或者远程).
+这个模型允许多人偶尔会同时修改同一个文件. 大多情况下. Subversion不会干预合并这些不同修改, 如果一个提交失败, 用户或者应用则要重新检查和修改然后再次提交.
+常见任务
+本节给出一些使用pysvn接口的常用例子. 业务可以会递归的处理目录. 添加参数recurse=False以防止这种行为; 例如, 你可以需要添加内容没有增加一个目录.
+check out一份工作副本
+import pysvn client = pysvn.Client() #check out the current version of the pysvn project client.checkout(&#39;http://localhost/example/trunk&#39;, &#39;./examples/pysvn&#39;) #check out revision 11 of the pysvn project client.checkout(&#39;http://localhost/example/trunk&#39;, &#39;.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/20/pysvn-tutorial/" title="Pysvn 程序员指南">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-19T00:00:00JST">Nov 19, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/19/cython-compile/">Cython参考指南 - 编译</a></h2>
+  </header>
+
+  
+  <div class="summary">Cython代码跟Python不一样，必须要编译。
+编译经过两个阶段：
+ Cython编译.pyx文件为.c文件
+ C编译器会把.c文件编译成.so文件(Windows上是.pyd)
+  以下会分节介绍几种方式来建立你的扩展模块。
+注意： -a 选项，如果使用该选项将会为.c文件生成一份很漂亮的HTML文件，双击高亮的章节部分会展开代码，这对理解，优化和调试模块将会非常有帮助。
+命令行
+从命令行执行Cython编译器，输入选项和.pyx文件列表。
+$ cython -a yourmod.pyx  会生成一个yourmod.c文件（指定-a选项会生成一个HTML文件）
+编译.c文件取决于你的操作系统，请参考下如何在你的系统写Python扩展模块文档。
+下面是一个Linux系统的例子：
+$ gcc -shared -pthread -fPIC -fwrapv -O2 -Wall -fno-strict-aliasing \ -I/usr/include/python2.5 -o yourmod.so yourmod.c  gcc需要提供包含的文件和扩展库的链接。
+在目录里会生成yourmod.so文件。
+现在只需要导入你的yourmod模块就可以了。
+Distutils
+确保你的系统已经安装好Distutils。
+下面假设需要编译的文件叫hello.pyx。
+建立一个setup.py的脚本：
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules = [Extension(&quot;hello&quot;, [&quot;hello.pyx&quot;])] setup( name = ’Hello world app’, cmdclass = {’build_ext’: build_ext}, ext_modules = ext_modules )  在命令行执行：python setup.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/19/cython-compile/" title="Cython参考指南 - 编译">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-17T00:00:00JST">Nov 17, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/">Win Python Pyrex 扩展</a></h2>
+  </header>
+
+  
+  <div class="summary">在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。
+需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C++ http://www.bloodshed.net/devcpp.html
+Pyrex 可以通过easy_install Pyrex来安装。 Dev C++ 安装完在系统环境变量Path里加上Dev C++安装目录/bin 目录。
+测试扩展代码：
+# file: foo.pyx &quot;&quot;&quot; simple pyrex module &quot;&quot;&quot; cdef class Foo: &quot;&quot;&quot; foo doc ... &quot;&quot;&quot; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &quot;foo names: %s&quot; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&#39;foo&#39;, ext_modules=[Extension(&quot;foo&quot;, [&quot;foo.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/" title="Win Python Pyrex 扩展">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-16T00:00:00JST">Nov 16, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/16/mysql-query-profile/">MySQL Query Profile 简单使用</a></h2>
+  </header>
+
+  
+  <div class="summary">MySQL Query Profile MySQL 5.0.37 以上开始支持 MySQL Query Profiler, 可以查询到此 SQL 会执行多少时间, 并看出 CPU/Memory 使用量, 执行过程中 System lock, Table lock 花多少时间等等.
+详细可以参见官方文档：http://dev.mysql.com/tech-resources/articles/using-new-query-profiler.html
+启动
+mysql&gt; set profiling=1; Query OK, 0 rows affected (0.00 sec)  测试查询
+mysql&gt; select count(*) from client where broker_id=2; +----------+ | count(*) | +----------+ | 200 | +----------+ 1 row in set (0.00 sec)  查看profiles
+mysql&gt; show profiles; +----------+------------+-----------------------------------------------+ | Query_ID | Duration | Query | +----------+------------+-----------------------------------------------+ | 0 | 0.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/16/mysql-query-profile/" title="MySQL Query Profile 简单使用">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/">Google App Engine 上试用 web.py 笔记</a></h2>
+  </header>
+
+  
+  <div class="summary">看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改：
+ 复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes
+ 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py  home.py
+import web render = web.template.render(&#39;templates/&#39;) urls = ( &#39;/&#39;, &#39;index&#39; ) class index: def GET(self): web.header(&#39;Content-type&#39;, &#39;text/html&#39;) name = &#39;smallfish&#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键  templates/index.html
+$def with (name) hello, $name. test by web.py   发布到GAE，测试  e:\googleapp&gt;appcfg.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/" title="Google App Engine 上试用 web.py 笔记">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/10/python-mako-template/">Python Mako Template 学习笔记</a></h2>
+  </header>
+
+  
+  <div class="summary">Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。
+(Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)
+from mako.template import Template mytemplate = Template(&quot;hello world!&quot;) print mytemplate.render() mytemplate = Template(&quot;hello, ${name}!&quot;) print mytemplate.render(name=&quot;jack&quot;)  代码可以参考官方doc部分
+mytemplate = Template(filename=&#39;/docs/mytmpl.txt&#39;) print mytemplate.render()  还可以从设置模板为文件，设置filename属性
+mytemplate = Template(filename=&#39;/docs/mytmpl.txt&#39;, module_directory=&#39;/tmp/mako_modules&#39;) print mytemplate.render()  文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.py
+from mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&#39;/docs&#39;]) mytemplate = Template(&quot;&quot;&quot;&lt;%include file=&quot;header.txt&quot;/&gt; hello world!&quot;&quot;&quot;, lookup=mylookup)  查找模板，方便统一模板路径使用。
+mylookup = TemplateLookup(directories=[&#39;/docs&#39;], module_directory=&#39;/tmp/mako_modules&#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)  改良了上面的查找方式
+mylookup = TemplateLookup(directories=[&#39;/docs&#39;], output_encoding=&#39;utf-8&#39;, encoding_errors=&#39;replace&#39;) mytemplate = mylookup.</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/10/python-mako-template/" title="Python Mako Template 学习笔记">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/10/python-mysql-install/">Python MySQL 库安装笔记</a></h2>
+  </header>
+
+  
+  <div class="summary">其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。
+一般步骤是：
+ 安装easy_install  shell &gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &gt; python ez_setup.py  会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了
+ 安装MySQL-python  shell &gt; easy_install MySQL-python  到这里安装算是完成了，不过接下来测试就郁闷了。
+在import MySQLdb出现了两个错误：
+a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory  这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈
+b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&#39; not found  解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：
+shell &gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &gt; cd MySQL-python-1.2.2 shell &gt; python setup.py install  </div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/10/python-mysql-install/" title="Python MySQL 库安装笔记">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2009/11/10/python-mysqldb-return-dict/">Python MySQLdb 查询返回字典结构</a></h2>
+  </header>
+
+  
+  <div class="summary">MySQLdb默认查询结果都是返回tuple，输出时候不是很方便，必须按照0，1这样读取，无意中在网上找到简单的修改方法，就是传递一个cursors.DictCursor就行。
+默认程序：
+import MySQLdb db = MySQLdb.connect(host=&#39;localhost&#39;, user=&#39;root&#39;, passwd=&#39;123456&#39;, db=&#39;test&#39;) cur = db.cursor() cur.execute(&#39;select * from user&#39;) rs = cur.fetchall() print rs # 返回类似如下 # ((1000L, 0L), (2000L, 0L), (3000L, 0L))  修改后：
+import MySQLdb import MySQLdb.cursors db = MySQLdb.connect(host=&#39;localhost&#39;, user=&#39;root&#39;, passwd=&#39;123456&#39;, db=&#39;test&#39;, cursorclass=MySQLdb.cursors.DictCursor) cur = db.cursor() cur.execute(&#39;select * from user&#39;) rs = cur.fetchall() print rs # 返回类似如下 # ({&#39;age&#39;: 0L, &#39;num&#39;: 1000L}, {&#39;age&#39;: 0L, &#39;num&#39;: 2000L}, {&#39;age&#39;: 0L, &#39;num&#39;: 3000L})  或者也可以用下面替换connect和cursor部分</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2009/11/10/python-mysqldb-return-dict/" title="Python MySQLdb 查询返回字典结构">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+<nav>
+  <ul class="pager">
+
+    
+    <li><a href="/page/7/">上页</a></li>
+    
+
+    
+    <li class="disabled"><a href="#">下页</a></li>
+    
+
+  </ul>
+</nav>
+
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

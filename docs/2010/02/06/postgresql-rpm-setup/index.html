@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>PostgreSQL RPM 安装笔记 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="测试环境：REHL 5.3 PostgreSQL版本：8.4.2 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres   下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb   service启动PostgreSQL  shell&amp;gt; service postgresql start  到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。">
+
+<meta property="og:title" content="PostgreSQL RPM 安装笔记 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="测试环境：REHL 5.3 PostgreSQL版本：8.4.2 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres   下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb   service启动PostgreSQL  shell&amp;gt; service postgresql start  到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/">
+<meta name="twitter:title" content="PostgreSQL RPM 安装笔记 - smallfish&#39;g blog">
+<meta name="twitter:description" content="测试环境：REHL 5.3 PostgreSQL版本：8.4.2 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres   下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb   service启动PostgreSQL  shell&amp;gt; service postgresql start  到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "PostgreSQL RPM 安装笔记 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2010-02-06T00:00:00JST",
+    "dateModified": "2010-02-06T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "测试环境：REHL 5.3 PostgreSQL版本：8.4.2
+ 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&gt; rpm -qa | grep postgres   下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm   RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&gt; service postgresql initdb   service启动PostgreSQL  shell&gt; service postgresql start  到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2010/" itemprop="url"><span itemprop="title">2010</span></a></li>
+        
+        <li class="active">PostgreSQL RPM 安装笔记</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2010-02-06T00:00:00JST">Feb 6, 2010</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2010/">2010</a></li>
+      
+    </ul>
+
+    <h1 class="title">PostgreSQL RPM 安装笔记</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>测试环境：REHL 5.3
+PostgreSQL版本：8.4.2</p>
+
+<ol>
+<li>首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">qa</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">postgres</span>
+</code></pre></div>
+
+
+<ol>
+<li>下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">easynet</span><span class="o">.</span><span class="n">be</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">binary</span><span class="o">/</span><span class="n">v8</span><span class="o">.</span><span class="mf">4.2</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">rpms</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="n">rhel</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">easynet</span><span class="o">.</span><span class="n">be</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">binary</span><span class="o">/</span><span class="n">v8</span><span class="o">.</span><span class="mf">4.2</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">rpms</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="n">rhel</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="n">contrib</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">easynet</span><span class="o">.</span><span class="n">be</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">binary</span><span class="o">/</span><span class="n">v8</span><span class="o">.</span><span class="mf">4.2</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">rpms</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="n">rhel</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="n">libs</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">easynet</span><span class="o">.</span><span class="n">be</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">binary</span><span class="o">/</span><span class="n">v8</span><span class="o">.</span><span class="mf">4.2</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">rpms</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="n">rhel</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">easynet</span><span class="o">.</span><span class="n">be</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">binary</span><span class="o">/</span><span class="n">v8</span><span class="o">.</span><span class="mf">4.2</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">rpms</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="n">rhel</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">easynet</span><span class="o">.</span><span class="n">be</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">binary</span><span class="o">/</span><span class="n">v8</span><span class="o">.</span><span class="mf">4.2</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">rpms</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="n">rhel</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="n">plpython</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+</code></pre></div>
+
+
+<ol>
+<li>安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。
+后面几个不需要的话可以不装。主要是一些扩展功能。</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">libs</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">postgresql</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">contrib</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">plpython</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="n">PGDG</span><span class="o">.</span><span class="n">rhel5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。
+如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="n">initdb</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>service启动PostgreSQL</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="n">start</span>
+</code></pre></div>
+
+
+<p>到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。</p>
+
+<ol>
+<li>切换到postgres用户，修改数据库密码。(注意系统用户和数据库用户密码是两个概念，虽然名字都叫postgres)
+修改完需要重启数据库，这里咱不重启，等修改完认证配置再一起重启。</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">su</span> <span class="o">-</span> <span class="n">postgres</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">psql</span>
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># ALTER USER postgres WITH PASSWORD &#39;123456&#39;;</span>
+<span class="n">postgres</span><span class="o">=</span><span class="c1"># \q</span>
+</code></pre></div>
+
+
+<ol>
+<li>修改认证文件/var/lib/pgsql/data/pg_hba.conf，登陆使用密码。md5格式。</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">vi</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">pgsql</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">pg_hba</span><span class="o">.</span><span class="n">conf</span>
+<span class="err">修改</span><span class="n">ident</span><span class="err">为</span><span class="n">md5</span> <span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+</code></pre></div>
+
+
+<ol>
+<li>service重启PostgreSQL</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">service</span> <span class="n">postgresql</span> <span class="n">restart</span>
+</code></pre></div>
+
+
+<ol>
+<li>再次进入测试，应该会提示输入密码鸟 :)</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

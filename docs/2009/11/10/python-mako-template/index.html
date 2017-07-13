@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/11/10/python-mako-template/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Python Mako Template 学习笔记 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。(Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)from mako.template import Template mytemplate = Template(&amp;quot;hello world!&amp;quot;) print mytemplate.render() mytemplate = Template(&amp;quot;hello, ${name}!&amp;quot;) print mytemplate.render(name=&amp;quot;jack&amp;quot;)  代码可以参考官方doc部分mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;) print mytemplate.render()  还可以从设置模板为文件，设置filename属性mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;, module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) print mytemplate.render()  文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.pyfrom mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;]) mytemplate = Template(&amp;quot;&amp;quot;&amp;quot;&amp;lt;%include file=&amp;quot;header.txt&amp;quot;/&amp;gt; hello world!&amp;quot;&amp;quot;&amp;quot;, lookup=mylookup)  查找模板，方便统一模板路径使用。mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)  改良了上面的查找方式mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], output_encoding=&amp;#39;utf-8&amp;#39;, encoding_errors=&amp;#39;replace&amp;#39;) mytemplate = mylookup.">
+
+<meta property="og:title" content="Python Mako Template 学习笔记 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/11/10/python-mako-template/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。(Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)from mako.template import Template mytemplate = Template(&amp;quot;hello world!&amp;quot;) print mytemplate.render() mytemplate = Template(&amp;quot;hello, ${name}!&amp;quot;) print mytemplate.render(name=&amp;quot;jack&amp;quot;)  代码可以参考官方doc部分mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;) print mytemplate.render()  还可以从设置模板为文件，设置filename属性mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;, module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) print mytemplate.render()  文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.pyfrom mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;]) mytemplate = Template(&amp;quot;&amp;quot;&amp;quot;&amp;lt;%include file=&amp;quot;header.txt&amp;quot;/&amp;gt; hello world!&amp;quot;&amp;quot;&amp;quot;, lookup=mylookup)  查找模板，方便统一模板路径使用。mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)  改良了上面的查找方式mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], output_encoding=&amp;#39;utf-8&amp;#39;, encoding_errors=&amp;#39;replace&amp;#39;) mytemplate = mylookup.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/11/10/python-mako-template/">
+<meta name="twitter:title" content="Python Mako Template 学习笔记 - smallfish&#39;g blog">
+<meta name="twitter:description" content="Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。(Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)from mako.template import Template mytemplate = Template(&amp;quot;hello world!&amp;quot;) print mytemplate.render() mytemplate = Template(&amp;quot;hello, ${name}!&amp;quot;) print mytemplate.render(name=&amp;quot;jack&amp;quot;)  代码可以参考官方doc部分mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;) print mytemplate.render()  还可以从设置模板为文件，设置filename属性mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;, module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) print mytemplate.render()  文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.pyfrom mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;]) mytemplate = Template(&amp;quot;&amp;quot;&amp;quot;&amp;lt;%include file=&amp;quot;header.txt&amp;quot;/&amp;gt; hello world!&amp;quot;&amp;quot;&amp;quot;, lookup=mylookup)  查找模板，方便统一模板路径使用。mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)  改良了上面的查找方式mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], output_encoding=&amp;#39;utf-8&amp;#39;, encoding_errors=&amp;#39;replace&amp;#39;) mytemplate = mylookup.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Python Mako Template 学习笔记 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-11-10T00:00:00JST",
+    "dateModified": "2009-11-10T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。
+(Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)
+from mako.template import Template mytemplate = Template(&quot;hello world!&quot;) print mytemplate.render() mytemplate = Template(&quot;hello, ${name}!&quot;) print mytemplate.render(name=&quot;jack&quot;)  代码可以参考官方doc部分
+mytemplate = Template(filename=&#39;/docs/mytmpl.txt&#39;) print mytemplate.render()  还可以从设置模板为文件，设置filename属性
+mytemplate = Template(filename=&#39;/docs/mytmpl.txt&#39;, module_directory=&#39;/tmp/mako_modules&#39;) print mytemplate.render()  文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.py
+from mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&#39;/docs&#39;]) mytemplate = Template(&quot;&quot;&quot;&lt;%include file=&quot;header.txt&quot;/&gt; hello world!&quot;&quot;&quot;, lookup=mylookup)  查找模板，方便统一模板路径使用。
+mylookup = TemplateLookup(directories=[&#39;/docs&#39;], module_directory=&#39;/tmp/mako_modules&#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)  改良了上面的查找方式
+mylookup = TemplateLookup(directories=[&#39;/docs&#39;], output_encoding=&#39;utf-8&#39;, encoding_errors=&#39;replace&#39;) mytemplate = mylookup."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">Python Mako Template 学习笔记</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-11-10T00:00:00JST">Nov 10, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">Python Mako Template 学习笔记</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>Mako是什么？Moko是Python写的一个模板库，Python官网<a href="http://python.org/">http://python.org/</a>用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。</p>
+
+<p>(Mako官网地址：<a href="http://www.makotemplates.org/">http://www.makotemplates.org/</a> ，可以下载安装包，推荐使用easy_install安装)</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">mako.template</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;hello world!&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;hello, ${name}!&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;jack&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>代码可以参考官方doc部分</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;/docs/mytmpl.txt&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</code></pre></div>
+</p>
+
+<p>还可以从设置模板为文件，设置filename属性</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;/docs/mytmpl.txt&#39;</span><span class="p">,</span> <span class="n">module_directory</span><span class="o">=</span><span class="s1">&#39;/tmp/mako_modules&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</code></pre></div>
+
+
+<p>文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.py</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">mako.lookup</span> <span class="kn">import</span> <span class="n">TemplateLookup</span>
+<span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/docs&#39;</span><span class="p">])</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">%i</span><span class="s2">nclude file=&quot;header.txt&quot;/&gt; hello world!&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">lookup</span><span class="o">=</span><span class="n">mylookup</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>查找模板，方便统一模板路径使用。</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/docs&#39;</span><span class="p">],</span> <span class="n">module_directory</span><span class="o">=</span><span class="s1">&#39;/tmp/mako_modules&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">serve_template</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">mylookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">templatename</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
+</p>
+
+<p>改良了上面的查找方式</p>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/docs&#39;</span><span class="p">],</span> <span class="n">output_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+                                       <span class="n">encoding_errors</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">mylookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;foo.txt&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</code></pre></div>
+</p>
+
+<p>设置输出编码，以及编码错误时候处理方式</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

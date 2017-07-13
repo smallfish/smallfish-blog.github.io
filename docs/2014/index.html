@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://chenxiaoyu.org/2014/index.xml">
+
+<link rel="canonical" href="http://chenxiaoyu.org/2014/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>2014s - smallfish&#39;g blog</title>
+    
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    
+    <header class="page-header">
+      <h1>2014s</h1>
+    </header>
+    
+
+    <ul class="p-articles">
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-12-26T00:00:00JST">Dec 26, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2014/">2014</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/">Docker Volume 属主设置</a></h2>
+  </header>
+
+  
+  <div class="summary">最近在测试 Volume 挂载时候有点问题，描述如下：
+ Docker 启动时候，设置挂载目录用户为 foo 宿主机源目录属主为 smallfish  尝试了几种办法，比如：
+ container 启动后执行 chown 构建镜像时候加入 RUN chown foo /data，这里不仅仅是这种尝试  不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。
+原因无非是两个系统里用户 uid/gid 不一样，也可以很猥琐的在 container 里面 adduser 指定 --uid 参数。
+百无聊赖的放狗继续搜啊搜，竟然搜到一篇：Understanding Volumes in Docker
+尝试了下，竟然可以：
+RUN useradd foo RUN mkdir /data &amp;&amp; touch /data/a.txt RUN chown foo:foo /data VOLUME /data  上面要注意 VOLUME 一定要放在最后，然后要先建立目录，再写个文件，文件随意。
+重新构建之后，进入交互式：
+# docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash root@527f8eceacca:/# ls -al /data drwxr-xr-x 1 foo staff 136 Dec 26 06:17 .</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" title="Docker Volume 属主设置">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-11-06T00:00:00JST">Nov 6, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2014/">2014</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/">翻译-如何组织Go代码</a></h2>
+  </header>
+
+  
+  <div class="summary">原文地址：http://talks.golang.org/2014/organizeio.slide，译文尽量贴近原文，会适当的增删，勿拍。
+包
+Go 程序都是由包构成，每个文件都以 package 开头，程序主体执行从 main 包开始：
+package main import &quot;fmt&quot; func main() { fmt.Println(&quot;Hello, world!&quot;) }  最简单的一个 Go 程序，只需要写一个 main 包即可。
+hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公开导出的函数。
+示例包：fmt
+// Package fmt implements formatted I/O. package fmt // Println formats using the default formats for its // operands and writes to standard output. func Println(a ...interface{}) (n int, err error) { ... } func newPrinter() *pp { .</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" title="翻译-如何组织Go代码">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+      <li><article class="li">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-07-25T00:00:00JST">Jul 25, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2014/">2014</a></li>
+      
+    </ul>
+    <h2 class="title"><a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/">PostgreSQL JSON 数据类型</a></h2>
+  </header>
+
+  
+  <div class="summary">从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。
+还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。
+刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。
+常用的读取操作符目前大概有三类：-&gt;、-&gt;&gt;和#&gt;。还是直接看SQL查询的例子吧。
+先看-&gt;类：
+postgres=# select &#39;[1,2,3]&#39;::json-&gt;2; ?column? ---------- 3 (1 row) postgres=# select &#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;::json-&gt;&#39;b&#39;; ?column? ---------- 2 (1 row)  再来-&gt;&gt;例子：
+postgres=# select &#39;[1,2,3]&#39;::json-&gt;&gt;2; ?column? ---------- 3 (1 row) postgres=# select &#39;{&quot;a&quot;:1,&quot;b&quot;:2}&#39;::json-&gt;&gt;&#39;b&#39;; ?column? ---------- 2 (1 row)  有没有发现其实-&gt;和-&gt;&gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
+上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：
+postgres=# select &#39;{&quot;a&quot;:[1,2,3],&quot;b&quot;:[4,5,6]}&#39;::json#&gt;&#39;{a,2}&#39;; ?column? ---------- 3 (1 row) postgres=# select &#39;{&quot;a&quot;:[1,2,3],&quot;b&quot;:[4,5,6]}&#39;::json#&gt;&gt;&#39;{a,2}&#39;; ?column? ---------- 3 (1 row)  当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
+postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&#39;{&quot;a&quot;: 1, &quot;b&quot;: 2}&#39;::json); postgres=# insert into testjson (data) values(&#39;{&quot;a&quot;: 3, &quot;b&quot;: 4, &quot;c&quot;: 5}&#39;::json); postgres=# insert into testjson (data) values(&#39;{&quot;a&quot;: 6, &quot;c&quot;: 7}&#39;::json);  插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：</div>
+
+  <footer>
+    <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" title="PostgreSQL JSON 数据类型">Read More…</a>
+  </footer>
+</article>
+</li>
+      
+    </ul>
+
+    
+
+
+  </div>
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

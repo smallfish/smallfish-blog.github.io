@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2011/05/31/python-supervisor/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>supervisor - Python进程管理工具 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="经常会碰到要写一些守护进程，简单做法放入后台：shell&amp;gt; nohup python xxx.py &amp;amp;  偶尔这么做还可以接受，如果一堆这样的呢？当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。如果可以统一管理这些应用，是不是很哈皮？按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！supervisor地址：http://supervisord.org，官方标语就是：一个进程管理工具。安装：shell&amp;gt; sudo aptitude install supervisor # pip/easy_install  也可以通过其他包管理来安装，比如apt/yum等。安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等  下面来一个示例，用web.py写一个hello的程序：import web urls = ( &amp;#39;/(.*)&amp;#39;,&amp;#39;hello&amp;#39; ) app = web.application(urls, globals()) class hello: def GET(self, name): return &amp;#39;hello: &amp;#39; &#43; name if __name__ == &amp;#39;__main__&amp;#39;: app.run()  这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log  上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。">
+
+<meta property="og:title" content="supervisor - Python进程管理工具 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2011/05/31/python-supervisor/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="经常会碰到要写一些守护进程，简单做法放入后台：shell&amp;gt; nohup python xxx.py &amp;amp;  偶尔这么做还可以接受，如果一堆这样的呢？当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。如果可以统一管理这些应用，是不是很哈皮？按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！supervisor地址：http://supervisord.org，官方标语就是：一个进程管理工具。安装：shell&amp;gt; sudo aptitude install supervisor # pip/easy_install  也可以通过其他包管理来安装，比如apt/yum等。安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等  下面来一个示例，用web.py写一个hello的程序：import web urls = ( &amp;#39;/(.*)&amp;#39;,&amp;#39;hello&amp;#39; ) app = web.application(urls, globals()) class hello: def GET(self, name): return &amp;#39;hello: &amp;#39; &#43; name if __name__ == &amp;#39;__main__&amp;#39;: app.run()  这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log  上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2011/05/31/python-supervisor/">
+<meta name="twitter:title" content="supervisor - Python进程管理工具 - smallfish&#39;g blog">
+<meta name="twitter:description" content="经常会碰到要写一些守护进程，简单做法放入后台：shell&amp;gt; nohup python xxx.py &amp;amp;  偶尔这么做还可以接受，如果一堆这样的呢？当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。如果可以统一管理这些应用，是不是很哈皮？按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！supervisor地址：http://supervisord.org，官方标语就是：一个进程管理工具。安装：shell&amp;gt; sudo aptitude install supervisor # pip/easy_install  也可以通过其他包管理来安装，比如apt/yum等。安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等  下面来一个示例，用web.py写一个hello的程序：import web urls = ( &amp;#39;/(.*)&amp;#39;,&amp;#39;hello&amp;#39; ) app = web.application(urls, globals()) class hello: def GET(self, name): return &amp;#39;hello: &amp;#39; &#43; name if __name__ == &amp;#39;__main__&amp;#39;: app.run()  这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log  上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "supervisor - Python进程管理工具 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2011-05-31T00:00:00JST",
+    "dateModified": "2011-05-31T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "经常会碰到要写一些守护进程，简单做法放入后台：
+shell&gt; nohup python xxx.py &amp;  偶尔这么做还可以接受，如果一堆这样的呢？
+当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。
+如果可以统一管理这些应用，是不是很哈皮？
+按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！
+supervisor地址：http://supervisord.org，官方标语就是：一个进程管理工具。
+安装：
+shell&gt; sudo aptitude install supervisor # pip/easy_install  也可以通过其他包管理来安装，比如apt/yum等。
+安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：
+/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等  下面来一个示例，用web.py写一个hello的程序：
+import web urls = ( &#39;/(.*)&#39;,&#39;hello&#39; ) app = web.application(urls, globals()) class hello: def GET(self, name): return &#39;hello: &#39; + name if __name__ == &#39;__main__&#39;: app.run()  这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：
+[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log  上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。"
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2011/" itemprop="url"><span itemprop="title">2011</span></a></li>
+        
+        <li class="active">supervisor - Python进程管理工具</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-05-31T00:00:00JST">May 31, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+
+    <h1 class="title">supervisor - Python进程管理工具</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>经常会碰到要写一些守护进程，简单做法放入后台：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">nohup</span> <span class="n">python</span> <span class="n">xxx</span><span class="o">.</span><span class="n">py</span> <span class="o">&amp;</span>
+</code></pre></div>
+
+
+<p>偶尔这么做还可以接受，如果一堆这样的呢？</p>
+
+<p>当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。</p>
+
+<p>如果可以统一管理这些应用，是不是很哈皮？</p>
+
+<p>按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！</p>
+
+<p>supervisor地址：<a href="http://supervisord.org">http://supervisord.org</a>，官方标语就是：一个进程管理工具。</p>
+
+<p>安装：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">supervisor</span> <span class="c1"># pip/easy_install</span>
+</code></pre></div>
+
+
+<p>也可以通过其他包管理来安装，比如apt/yum等。</p>
+
+<p>安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisord</span>             <span class="o">--</span>  <span class="n">supervisor</span><span class="err">服务守护进程</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisorctl</span>           <span class="o">--</span>  <span class="n">supervisor</span><span class="err">服务控制程序，比如：</span><span class="n">status</span><span class="o">/</span><span class="n">start</span><span class="o">/</span><span class="n">stop</span><span class="o">/</span><span class="n">restart</span> <span class="n">xx</span> <span class="err">等</span>
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">supervisor</span><span class="o">/</span><span class="n">supervisord</span><span class="o">.</span><span class="n">conf</span> <span class="o">--</span>  <span class="err">配置文件，定义服务名称以及接口等等</span>
+</code></pre></div>
+
+
+<p>下面来一个示例，用web.py写一个hello的程序：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">web</span>
+
+<span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;/(.*)&#39;</span><span class="p">,</span><span class="s1">&#39;hello&#39;</span>
+<span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+
+<span class="k">class</span> <span class="nc">hello</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;hello: &#39;</span> <span class="o">+</span> <span class="n">name</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> 
+</code></pre></div>
+
+
+<p>这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span></span>[program:hello]
+command=python /home/smallfish/hello.py
+autorstart=true
+stdout_logfile=/home/smallfish/hello.log
+</code></pre></div>
+
+
+<p>上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。</p>
+
+<p>到这里，基本搞定了，下面就是启动管理：</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">supervisor</span> <span class="n">start</span>   <span class="o">--</span> <span class="err">启动</span><span class="n">supervisor</span><span class="err">服务</span>
+
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">status</span> <span class="n">hello</span>     <span class="o">--</span> <span class="err">获取</span><span class="n">hello</span><span class="err">服务的状态，因为是</span><span class="n">autorstart</span><span class="err">，这里已经启动了</span>
+<span class="n">hello</span>  <span class="n">RUNNING</span>    <span class="n">pid</span> <span class="mi">1159</span><span class="p">,</span> <span class="n">uptime</span> <span class="mi">0</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">32</span>
+
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">stop</span> <span class="n">hello</span>       <span class="o">--</span> <span class="err">停止</span><span class="n">hello</span><span class="err">服务</span>
+<span class="n">hello</span><span class="p">:</span> <span class="n">stopped</span>
+
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">stop</span> <span class="n">hello</span>       <span class="o">--</span> <span class="err">再次停止</span><span class="n">hello</span><span class="err">，会有错误信息</span>
+<span class="n">hello</span><span class="p">:</span> <span class="n">ERROR</span> <span class="p">(</span><span class="ow">not</span> <span class="n">running</span><span class="p">)</span>
+
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">start</span> <span class="n">hello</span>      <span class="o">--</span> <span class="err">启动</span><span class="n">hello</span><span class="err">服务</span>
+<span class="n">hello</span><span class="p">:</span> <span class="n">started</span>
+</code></pre></div>
+
+
+<p>OK，基本的操作就是类似这个了，仔细看supervisord.conf文件里会发现有一段[unix_http_server]的配置，默认是9001端口，可以输入用户名和密码，主要用于Basic Auth认证用的。</p>
+
+<p>填写一下，然后重启supervisor服务，打开浏览器输入：<a href="http://localhost:9001，如图：">http://localhost:9001，如图：</a></p>
+
+<p><img src="/images/supervisor-web.png" alt="" /></p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2011/02/19/cutycapt-for-linux/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>开源网页截屏工具 CutyCapt Linux 下安装和使用 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下： 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm   安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel   安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*   修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH   安装 cutycapt  svn co https://cutycapt.">
+
+<meta property="og:title" content="开源网页截屏工具 CutyCapt Linux 下安装和使用 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2011/02/19/cutycapt-for-linux/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下： 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm   安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel   安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*   修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH   安装 cutycapt  svn co https://cutycapt.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2011/02/19/cutycapt-for-linux/">
+<meta name="twitter:title" content="开源网页截屏工具 CutyCapt Linux 下安装和使用 - smallfish&#39;g blog">
+<meta name="twitter:description" content="目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下： 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm   安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel   安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*   修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH   安装 cutycapt  svn co https://cutycapt.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "开源网页截屏工具 CutyCapt Linux 下安装和使用 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2011-02-19T00:00:00JST",
+    "dateModified": "2011-02-19T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。
+系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/
+首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下：
+ 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm   安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel   安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*   修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH   安装 cutycapt  svn co https://cutycapt."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2011/" itemprop="url"><span itemprop="title">2011</span></a></li>
+        
+        <li class="active">开源网页截屏工具 CutyCapt Linux 下安装和使用</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2011-02-19T00:00:00JST">Feb 19, 2011</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2011/">2011</a></li>
+      
+    </ul>
+
+    <h1 class="title">开源网页截屏工具 CutyCapt Linux 下安装和使用</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。</p>
+
+<p>系统：CentOS 5.5
+官网：<a href="http://cutycapt.sourceforge.net/">http://cutycapt.sourceforge.net/</a>
+依赖：QT <a href="http://www.qtsoftware.com/">http://www.qtsoftware.com/</a></p>
+
+<p>首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下：</p>
+
+<ol>
+<li>下载RPM包</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">(</span><span class="mi">64</span><span class="err">位</span><span class="p">)</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+
+<span class="p">(</span><span class="mi">32</span><span class="err">位</span><span class="p">)</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
+</code></pre></div>
+
+
+<ol>
+<li>安装 qt-devel 依赖包</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">libXi</span><span class="o">-</span><span class="n">devel</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libXinerama</span><span class="o">-</span><span class="n">devel</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>安装 qt 相关</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
+<span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
+<span class="c1"># rpm -e qt-devel --nodeps --allmatches</span>
+<span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
+</code></pre></div>
+
+
+<ol>
+<li>修改 /etc/profile，最后并：source /etc/profile</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">export</span> <span class="n">QTDIR</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">qt44</span>
+<span class="n">export</span> <span class="n">QTLIB</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">qt44</span><span class="o">/</span><span class="n">lib</span>
+<span class="n">export</span> <span class="n">QTINC</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">qt44</span><span class="o">/</span><span class="n">include</span>
+<span class="n">export</span> <span class="n">LD_LIBRARY_PATH</span><span class="o">=</span><span class="err">$</span><span class="n">QTDIR</span><span class="o">/</span><span class="n">lib</span><span class="p">:</span><span class="err">$</span><span class="n">LD_LIBRARY_PATH</span>
+<span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="err">$</span><span class="n">QTDIR</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="err">$</span><span class="n">PATH</span>
+</code></pre></div>
+
+
+<ol>
+<li>安装 cutycapt</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">svn</span> <span class="n">co</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cutycapt</span><span class="o">.</span><span class="n">svn</span><span class="o">.</span><span class="n">sourceforge</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">svnroot</span><span class="o">/</span><span class="n">cutycapt</span>
+<span class="n">mv</span> <span class="n">cutycapt</span><span class="o">/</span><span class="n">CutyCapt</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span>
+<span class="n">qmake</span>
+<span class="n">make</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>安装模拟 x-server 服务端</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">flexthinker</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">wp</span><span class="o">-</span><span class="n">content</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="mi">2009</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">mv</span> <span class="o">./</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">txt</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">chmod</span> <span class="n">u</span><span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span>
+</code></pre></div>
+
+
+<ol>
+<li>开始欢快的截图吧</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">server</span><span class="o">-</span><span class="n">args</span><span class="o">=</span><span class="s2">&quot;-screen 0, 1024x768x24&quot;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">CutyCapt</span> <span class="o">--</span><span class="n">url</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="mf">163.</span><span class="n">com</span> <span class="o">--</span><span class="n">out</span><span class="o">=</span><span class="mf">163.j</span><span class="n">pg</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>如果看不到汉字或乱码，需要安装chinese字体</li>
+</ol>
+
+<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">yum</span> <span class="n">install</span> <span class="n">fonts</span><span class="o">-</span><span class="n">chinese</span>
+</code></pre></div>
+</p>
+
+<ol>
+<li>由于截屏的是整个网站的页面，只需要第一屏幕</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">convert</span> <span class="o">-</span><span class="n">crop</span> <span class="mi">1024</span><span class="n">x768</span><span class="o">+</span><span class="mi">0</span><span class="o">+</span><span class="mi">0</span> <span class="mf">163.j</span><span class="n">pg</span> <span class="mf">1632.j</span><span class="n">pg</span>
+</code></pre></div>
+
+
+<ol>
+<li>缩小图片</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">convert</span> <span class="o">-</span><span class="n">resize</span> <span class="mi">40</span><span class="o">%</span><span class="n">x40</span><span class="o">%</span> <span class="mf">1632.j</span><span class="n">pg</span> <span class="mf">1632.j</span><span class="n">pg</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

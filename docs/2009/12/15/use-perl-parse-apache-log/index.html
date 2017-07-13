@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>使用 Perl 快速解析 Apache Log - smallfish&#39;g blog</title>
+    
+<meta name="description" content="功能简述统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。实现简述Apache单个日志文件800M。最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了http://www.dup2.org/node/1006博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。然后随意用了Perl写了一个，用了最土鳖的这样的按行分析，最后正则匹配，然后&#43;&#43;，速度竟然在40-50秒之间，惊叹！后来经过http://shucho.org/blog/指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！程序片段# -------------------------------------------------------------------- use strict; use Benchmark; my $LOG_FILE = &amp;#39;/usr/local/apache/logs/access.log&amp;#39;; # 下面qr部分起了关键作用，预编译了表达式 my @EXT_LIST = map {qr/$_/} qw{ aaServlet bbServlet }; my $startime = new Benchmark; my %result; map {$result{$_} = 0} @EXT_LIST; open LOG_FILE, $LOG_FILE; while (&amp;lt;LOG_FILE&amp;gt;){ foreach my $ext (@EXT_LIST){ $result{$ext}&#43;&#43; if $_ =~ /$ext/; } } close LOG_FILE; while (my ($key, $value) = each(%result)){ $key =~ s/\(\?-xism:(.*?)\)/$1/g; print &amp;quot;$key:\t$value\n&amp;quot;; } printf &amp;quot;** %s\n\n&amp;quot;, timestr(timediff(new Benchmark, $startime));  ">
+
+<meta property="og:title" content="使用 Perl 快速解析 Apache Log - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="功能简述统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。实现简述Apache单个日志文件800M。最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了http://www.dup2.org/node/1006博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。然后随意用了Perl写了一个，用了最土鳖的这样的按行分析，最后正则匹配，然后&#43;&#43;，速度竟然在40-50秒之间，惊叹！后来经过http://shucho.org/blog/指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！程序片段# -------------------------------------------------------------------- use strict; use Benchmark; my $LOG_FILE = &amp;#39;/usr/local/apache/logs/access.log&amp;#39;; # 下面qr部分起了关键作用，预编译了表达式 my @EXT_LIST = map {qr/$_/} qw{ aaServlet bbServlet }; my $startime = new Benchmark; my %result; map {$result{$_} = 0} @EXT_LIST; open LOG_FILE, $LOG_FILE; while (&amp;lt;LOG_FILE&amp;gt;){ foreach my $ext (@EXT_LIST){ $result{$ext}&#43;&#43; if $_ =~ /$ext/; } } close LOG_FILE; while (my ($key, $value) = each(%result)){ $key =~ s/\(\?-xism:(.*?)\)/$1/g; print &amp;quot;$key:\t$value\n&amp;quot;; } printf &amp;quot;** %s\n\n&amp;quot;, timestr(timediff(new Benchmark, $startime));  ">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2009/12/15/use-perl-parse-apache-log/">
+<meta name="twitter:title" content="使用 Perl 快速解析 Apache Log - smallfish&#39;g blog">
+<meta name="twitter:description" content="功能简述统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。实现简述Apache单个日志文件800M。最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了http://www.dup2.org/node/1006博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。然后随意用了Perl写了一个，用了最土鳖的这样的按行分析，最后正则匹配，然后&#43;&#43;，速度竟然在40-50秒之间，惊叹！后来经过http://shucho.org/blog/指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！程序片段# -------------------------------------------------------------------- use strict; use Benchmark; my $LOG_FILE = &amp;#39;/usr/local/apache/logs/access.log&amp;#39;; # 下面qr部分起了关键作用，预编译了表达式 my @EXT_LIST = map {qr/$_/} qw{ aaServlet bbServlet }; my $startime = new Benchmark; my %result; map {$result{$_} = 0} @EXT_LIST; open LOG_FILE, $LOG_FILE; while (&amp;lt;LOG_FILE&amp;gt;){ foreach my $ext (@EXT_LIST){ $result{$ext}&#43;&#43; if $_ =~ /$ext/; } } close LOG_FILE; while (my ($key, $value) = each(%result)){ $key =~ s/\(\?-xism:(.*?)\)/$1/g; print &amp;quot;$key:\t$value\n&amp;quot;; } printf &amp;quot;** %s\n\n&amp;quot;, timestr(timediff(new Benchmark, $startime));  ">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "使用 Perl 快速解析 Apache Log - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2009-12-15T00:00:00JST",
+    "dateModified": "2009-12-15T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "功能简述
+统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。
+实现简述
+Apache单个日志文件800M。
+最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了http://www.dup2.org/node/1006博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。
+然后随意用了Perl写了一个，用了最土鳖的这样的按行分析，最后正则匹配，然后++，速度竟然在40-50秒之间，惊叹！后来经过http://shucho.org/blog/指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！
+程序片段
+# -------------------------------------------------------------------- use strict; use Benchmark; my $LOG_FILE = &#39;/usr/local/apache/logs/access.log&#39;; # 下面qr部分起了关键作用，预编译了表达式 my @EXT_LIST = map {qr/$_/} qw{ aaServlet bbServlet }; my $startime = new Benchmark; my %result; map {$result{$_} = 0} @EXT_LIST; open LOG_FILE, $LOG_FILE; while (&lt;LOG_FILE&gt;){ foreach my $ext (@EXT_LIST){ $result{$ext}++ if $_ =~ /$ext/; } } close LOG_FILE; while (my ($key, $value) = each(%result)){ $key =~ s/\(\?-xism:(.*?)\)/$1/g; print &quot;$key:\t$value\n&quot;; } printf &quot;** %s\n\n&quot;, timestr(timediff(new Benchmark, $startime));  "
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2009/" itemprop="url"><span itemprop="title">2009</span></a></li>
+        
+        <li class="active">使用 Perl 快速解析 Apache Log</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2009-12-15T00:00:00JST">Dec 15, 2009</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2009/">2009</a></li>
+      
+    </ul>
+
+    <h1 class="title">使用 Perl 快速解析 Apache Log</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>功能简述</p>
+
+<p>统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。</p>
+
+<p>实现简述</p>
+
+<p>Apache单个日志文件800M。</p>
+
+<p>最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了<a href="http://www.dup2.org/node/1006">http://www.dup2.org/node/1006</a>博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。</p>
+
+<p>然后随意用了Perl写了一个，用了最土鳖的<LOG>这样的按行分析，最后正则匹配，然后++，速度竟然在40-50秒之间，惊叹！后来经过<a href="http://shucho.org/blog/">http://shucho.org/blog/</a>指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！</p>
+
+<p>程序片段</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># --------------------------------------------------------------------</span>
+<span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">Benchmark</span><span class="p">;</span>
+
+<span class="n">my</span> <span class="err">$</span><span class="n">LOG_FILE</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/apache/logs/access.log&#39;</span><span class="p">;</span>
+<span class="c1"># 下面qr部分起了关键作用，预编译了表达式</span>
+<span class="n">my</span> <span class="nd">@EXT_LIST</span> <span class="o">=</span> <span class="nb">map</span> <span class="p">{</span><span class="n">qr</span><span class="o">/</span><span class="err">$</span><span class="n">_</span><span class="o">/</span><span class="p">}</span> <span class="n">qw</span><span class="p">{</span>
+<span class="n">aaServlet</span>
+<span class="n">bbServlet</span>
+<span class="p">};</span>
+
+<span class="n">my</span> <span class="err">$</span><span class="n">startime</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Benchmark</span><span class="p">;</span>
+<span class="n">my</span> <span class="o">%</span><span class="n">result</span><span class="p">;</span>
+<span class="nb">map</span> <span class="p">{</span><span class="err">$</span><span class="n">result</span><span class="p">{</span><span class="err">$</span><span class="n">_</span><span class="p">}</span> <span class="o">=</span> <span class="mi">0</span><span class="p">}</span> <span class="nd">@EXT_LIST</span><span class="p">;</span>
+<span class="nb">open</span> <span class="n">LOG_FILE</span><span class="p">,</span> <span class="err">$</span><span class="n">LOG_FILE</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">LOG_FILE</span><span class="o">&gt;</span><span class="p">){</span>
+    <span class="n">foreach</span> <span class="n">my</span> <span class="err">$</span><span class="n">ext</span> <span class="p">(</span><span class="nd">@EXT_LIST</span><span class="p">){</span>
+        <span class="err">$</span><span class="n">result</span><span class="p">{</span><span class="err">$</span><span class="n">ext</span><span class="p">}</span><span class="o">++</span> <span class="k">if</span> <span class="err">$</span><span class="n">_</span> <span class="o">=~</span> <span class="o">/</span><span class="err">$</span><span class="n">ext</span><span class="o">/</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">close</span> <span class="n">LOG_FILE</span><span class="p">;</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">key</span><span class="p">,</span> <span class="err">$</span><span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">each</span><span class="p">(</span><span class="o">%</span><span class="n">result</span><span class="p">)){</span>
+    <span class="err">$</span><span class="n">key</span> <span class="o">=~</span> <span class="n">s</span><span class="o">/</span>\<span class="p">(</span>\<span class="err">?</span><span class="o">-</span><span class="n">xism</span><span class="p">:(</span><span class="o">.*</span><span class="err">?</span><span class="p">)</span>\<span class="p">)</span><span class="o">/</span><span class="err">$</span><span class="mi">1</span><span class="o">/</span><span class="n">g</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s2">&quot;$key:</span><span class="se">\t</span><span class="s2">$value</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">printf</span> <span class="s2">&quot;** </span><span class="si">%s</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">timestr</span><span class="p">(</span><span class="n">timediff</span><span class="p">(</span><span class="n">new</span> <span class="n">Benchmark</span><span class="p">,</span> <span class="err">$</span><span class="n">startime</span><span class="p">));</span>
+</code></pre></div>
+
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

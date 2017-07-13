@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.25.1" />
+
+
+
+<link rel="canonical" href="http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css">
+    <title>Nginx-Lua过滤POST请求 - smallfish&#39;g blog</title>
+    
+<meta name="description" content="注：此文章会持续更新2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。刚好可以尝试一下 nginx-lua 模块，这里简单贴一些代码，编译步骤就略去。本文只是根据 POST 参数个数进行简单校验的测试。这里大概有几个步骤：加载 conf/post-limit.lua，文件内容在下一段access_by_lua_file &amp;#39;conf/post-limit.lua&amp;#39;;  conf/post-limit.lua 文件内容：ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 参数最多个数，这里测试用，2个 if method == &amp;#39;POST&amp;#39; then -- 只过滤 POST 请求 local data = ngx.req.get_body_data() if data then local count = 0 local i = 0 while true do if count &amp;gt; max_size then -- 大于2次，重定向错误页面 ngx.">
+
+<meta property="og:title" content="Nginx-Lua过滤POST请求 - smallfish&#39;g blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/">
+<meta property="og:image" content="http://chenxiaoyu.org/images/default.png">
+<meta property="og:site_name" content="smallfish&#39;g blog">
+<meta property="og:description" content="注：此文章会持续更新2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。刚好可以尝试一下 nginx-lua 模块，这里简单贴一些代码，编译步骤就略去。本文只是根据 POST 参数个数进行简单校验的测试。这里大概有几个步骤：加载 conf/post-limit.lua，文件内容在下一段access_by_lua_file &amp;#39;conf/post-limit.lua&amp;#39;;  conf/post-limit.lua 文件内容：ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 参数最多个数，这里测试用，2个 if method == &amp;#39;POST&amp;#39; then -- 只过滤 POST 请求 local data = ngx.req.get_body_data() if data then local count = 0 local i = 0 while true do if count &amp;gt; max_size then -- 大于2次，重定向错误页面 ngx.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="smallfish&#39;g blog">
+<meta name="twitter:url" content="http://chenxiaoyu.org/2012/01/04/nginx-lua-post-max/">
+<meta name="twitter:title" content="Nginx-Lua过滤POST请求 - smallfish&#39;g blog">
+<meta name="twitter:description" content="注：此文章会持续更新2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。刚好可以尝试一下 nginx-lua 模块，这里简单贴一些代码，编译步骤就略去。本文只是根据 POST 参数个数进行简单校验的测试。这里大概有几个步骤：加载 conf/post-limit.lua，文件内容在下一段access_by_lua_file &amp;#39;conf/post-limit.lua&amp;#39;;  conf/post-limit.lua 文件内容：ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 参数最多个数，这里测试用，2个 if method == &amp;#39;POST&amp;#39; then -- 只过滤 POST 请求 local data = ngx.req.get_body_data() if data then local count = 0 local i = 0 while true do if count &amp;gt; max_size then -- 大于2次，重定向错误页面 ngx.">
+<meta name="twitter:image" content="http://chenxiaoyu.org/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"http://chenxiaoyu.org/"
+    },
+    "headline": "Nginx-Lua过滤POST请求 - smallfish&#39;g blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "http://chenxiaoyu.org/images/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2012-01-04T00:00:00JST",
+    "dateModified": "2012-01-04T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "smallfish&#39;g blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "smallfish&#39;g blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "http://chenxiaoyu.org/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "注：此文章会持续更新
+2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。
+看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。
+刚好可以尝试一下 nginx-lua 模块，这里简单贴一些代码，编译步骤就略去。
+本文只是根据 POST 参数个数进行简单校验的测试。
+这里大概有几个步骤：
+加载 conf/post-limit.lua，文件内容在下一段
+access_by_lua_file &#39;conf/post-limit.lua&#39;;  conf/post-limit.lua 文件内容：
+ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 参数最多个数，这里测试用，2个 if method == &#39;POST&#39; then -- 只过滤 POST 请求 local data = ngx.req.get_body_data() if data then local count = 0 local i = 0 while true do if count &gt; max_size then -- 大于2次，重定向错误页面 ngx."
+  }
+</script>
+
+
+    <link href="http://chenxiaoyu.org/css/styles.css" rel="stylesheet">
+    
+
+  </head>
+
+  <body>
+    
+    
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://chenxiaoyu.org/">smallfish&#39;g blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="http://chenxiaoyu.org/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="http://chenxiaoyu.org/2012/" itemprop="url"><span itemprop="title">2012</span></a></li>
+        
+        <li class="active">Nginx-Lua过滤POST请求</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2012-01-04T00:00:00JST">Jan 4, 2012</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="http://chenxiaoyu.org/2012/">2012</a></li>
+      
+    </ul>
+
+    <h1 class="title">Nginx-Lua过滤POST请求</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>注：此文章会持续更新</p>
+
+<p>2012 来的几天关于Hash攻击的文章不断，基本语言级别的都收到影响。</p>
+
+<p>看了下 PHP 相关 patch，基本就是对 POST 的 key 数量做一个限制，其他提供的 patch 差不多也是如此。</p>
+
+<p>刚好可以尝试一下 <a href="https://github.com/chaoslawful/lua-nginx-module">nginx-lua</a> 模块，这里简单贴一些代码，编译步骤就略去。</p>
+
+<p>本文只是根据 POST 参数个数进行简单校验的测试。</p>
+
+<p>这里大概有几个步骤：</p>
+
+<p>加载 conf/post-limit.lua，文件内容在下一段</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>access_by_lua_file <span class="s1">&#39;conf/post-limit.lua&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>conf/post-limit.lua 文件内容：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>ngx.req.read_body<span class="o">()</span>
+
+<span class="nb">local</span> <span class="nv">method</span>   <span class="o">=</span> ngx.var.request_method
+<span class="nb">local</span> <span class="nv">max_size</span> <span class="o">=</span> <span class="m">2</span>                               -- 参数最多个数，这里测试用，2个
+
+<span class="k">if</span> <span class="nv">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span> <span class="k">then</span>                         -- 只过滤 POST 请求
+    <span class="nb">local</span> <span class="nv">data</span> <span class="o">=</span> ngx.req.get_body_data<span class="o">()</span>
+    <span class="k">if</span> data <span class="k">then</span>
+        <span class="nb">local</span> <span class="nv">count</span> <span class="o">=</span> <span class="m">0</span>
+        <span class="nb">local</span> <span class="nv">i</span>     <span class="o">=</span> <span class="m">0</span>
+        <span class="k">while</span> <span class="nb">true</span> <span class="k">do</span>
+            <span class="k">if</span> count &gt; max_size <span class="k">then</span>             -- 大于2次，重定向错误页面
+                ngx.redirect<span class="o">(</span><span class="s1">&#39;/post-max-count&#39;</span><span class="o">)</span>
+            end
+            <span class="nv">i</span> <span class="o">=</span> string.find<span class="o">(</span>data, <span class="s1">&#39;&amp;&#39;</span>, i+1<span class="o">)</span>      -- 查找 <span class="p">&amp;</span> 字符
+            <span class="k">if</span> <span class="nv">i</span> <span class="o">==</span> nil <span class="k">then</span> <span class="nb">break</span> end
+            <span class="nv">count</span> <span class="o">=</span> count + <span class="m">1</span>
+        end
+    <span class="k">else</span>
+        ngx.redirect<span class="o">(</span><span class="s1">&#39;/post-error&#39;</span><span class="o">)</span>
+    end
+end
+</code></pre></div>
+
+
+<p>原先 ngx.req.get_post_args 函数来判断，发现也收到 hash 的影响，最后采取原始的循环字符串版本。</p>
+
+<p>完整 nginx 配置片段：</p>
+
+<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /test <span class="o">{</span>
+    access_by_lua_file <span class="s1">&#39;conf/post-limit.lua&#39;</span><span class="p">;</span>
+    root html<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+</p>
+
+<p>reload nginx 即可。可以这样来访问测试：</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl --data <span class="s2">&quot;a=1&amp;a=11&amp;b=2&quot;</span> http://localhost/test/1.html
+返回 <span class="m">405</span>，可以正常 GET 页面内容。
+
+$ curl --data <span class="s2">&quot;a=1&amp;a=11&amp;b=2&amp;c=1&quot;</span> http://localhost/test/1.html
+返回 <span class="m">302</span>，重定向到 /post-max-error 错误。
+</code></pre></div>
+
+
+<p>想起之前用 ModPerl 重写了 Apache 的 TransHandler/AccessHandler，跟这个比较类似，加一些过滤器。</p>
+
+<p>感谢 <a href="http://weibo.com/agentzh">@agentzh</a> 建议，需要注意一下，在 Nginx 配置中 client_max_body_size 和 client_body_buffer_size 需要设为相同大小。</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    
+    
+    
+  </footer>
+
+</article>
+
+
+    
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/2015/01/17/go-flag-multiple-values/" class="list-group-item">Go flag/kingpin 命令行解析多个同名参数</a>
+      
+      <a href="http://chenxiaoyu.org/2014/12/26/docker-volume-chown/" class="list-group-item">Docker Volume 属主设置</a>
+      
+      <a href="http://chenxiaoyu.org/2014/11/06/organizing-go-code/" class="list-group-item">翻译-如何组织Go代码</a>
+      
+      <a href="http://chenxiaoyu.org/2014/07/25/postgresql-json/" class="list-group-item">PostgreSQL JSON 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/12/04/test-nginx/" class="list-group-item">Test::Nginx 模块介绍</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/28/postgresql-array/" class="list-group-item">PostgreSQL ARRAY 数据类型</a>
+      
+      <a href="http://chenxiaoyu.org/2013/11/03/hangzhou-malasong/" class="list-group-item">我的第一次马拉松（近期跑步总结）</a>
+      
+      <a href="http://chenxiaoyu.org/2013/09/12/python-testing/" class="list-group-item">Python Testing</a>
+      
+      <a href="http://chenxiaoyu.org/2013/08/28/python-profile/" class="list-group-item">Python Profile 工具性能分析</a>
+      
+      <a href="http://chenxiaoyu.org/2013/03/28/rabbitmq-http/" class="list-group-item">RabbitMQ REST API</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="http://chenxiaoyu.org/tags/go" class="list-group-item">go</a>
+      
+      <a href="http://chenxiaoyu.org/tags/golang" class="list-group-item">golang</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <p><span class="h-logo">&copy; smallfish&#39;g blog</span></p>
+        <aside>
+          <p>Powered by <a href="https://gohugo.io/">Hugo</a>.</p>
+          <p><a href="https://github.com/dim0627/hugo_theme_beg">Beg</a> designed by <a href="http://yet.unresolved.xyz/">Daisuke Tsuji</a>.</p>
+        </aside>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+
