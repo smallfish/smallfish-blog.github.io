@@ -1,0 +1,6 @@
+baseURL = "http://chenxiaoyu.org/"
+languageCode = "zh-cn"
+title = "smallfish'g blog"
+pygmentsuseclasses = true
+[permalinks]
+posts = "/:year/:month/:day/:filename/"
