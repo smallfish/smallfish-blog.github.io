@@ -116,24 +116,20 @@
 
 <p>尝试了下，竟然可以：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>RUN useradd foo
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">RUN useradd foo
 RUN mkdir /data <span class="o">&amp;&amp;</span> touch /data/a.txt
 RUN chown foo:foo /data
-VOLUME /data
-</code></pre></div>
-
+VOLUME /data</code></pre></div>
 
 <p>上面要注意 <code>VOLUME</code> 一定要放在最后，然后要先建立目录，再写个文件，文件随意。</p>
 
 <p>重新构建之后，进入交互式：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="c1"># docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash</span>
-root@527f8eceacca:/# ls -al /data
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash
+</span><span class="c1"></span>root@527f8eceacca:/# ls -al /data
 drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">136</span> Dec <span class="m">26</span> <span class="m">06</span>:17 .
 drwxr-xr-x <span class="m">51</span> root root  <span class="m">4096</span> Dec <span class="m">26</span> <span class="m">06</span>:17 ..
-drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">170</span> Jul  <span class="m">4</span> <span class="m">15</span>:57 xxx
-</code></pre></div>
-
+drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">170</span> Jul  <span class="m">4</span> <span class="m">15</span>:57 xxx</code></pre></div>
 
 <p>很惊喜的发现竟然属主变成 foo 了，我了个呵呵。。。</p>
 

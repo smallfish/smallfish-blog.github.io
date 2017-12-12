@@ -108,13 +108,11 @@
 
 <p>加载 conf/post-limit.lua，文件内容在下一段</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>access_by_lua_file <span class="s1">&#39;conf/post-limit.lua&#39;</span><span class="p">;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">access_by_lua_file <span class="s1">&#39;conf/post-limit.lua&#39;</span><span class="p">;</span></code></pre></div>
 
 <p>conf/post-limit.lua 文件内容：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>ngx.req.read_body<span class="o">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ngx.req.read_body<span class="o">()</span>
 
 <span class="nb">local</span> <span class="nv">method</span>   <span class="o">=</span> ngx.var.request_method
 <span class="nb">local</span> <span class="nv">max_size</span> <span class="o">=</span> <span class="m">2</span>                               -- 参数最多个数，这里测试用，2个
@@ -135,30 +133,24 @@
     <span class="k">else</span>
         ngx.redirect<span class="o">(</span><span class="s1">&#39;/post-error&#39;</span><span class="o">)</span>
     end
-end
-</code></pre></div>
-
+end</code></pre></div>
 
 <p>原先 ngx.req.get_post_args 函数来判断，发现也收到 hash 的影响，最后采取原始的循环字符串版本。</p>
 
 <p>完整 nginx 配置片段：</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /test <span class="o">{</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /test <span class="o">{</span>
     access_by_lua_file <span class="s1">&#39;conf/post-limit.lua&#39;</span><span class="p">;</span>
     root html<span class="p">;</span>
-<span class="o">}</span>
-</code></pre></div>
-</p>
+<span class="o">}</span></code></pre></div></p>
 
 <p>reload nginx 即可。可以这样来访问测试：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl --data <span class="s2">&quot;a=1&amp;a=11&amp;b=2&quot;</span> http://localhost/test/1.html
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl --data <span class="s2">&#34;a=1&amp;a=11&amp;b=2&#34;</span> http://localhost/test/1.html
 返回 <span class="m">405</span>，可以正常 GET 页面内容。
 
-$ curl --data <span class="s2">&quot;a=1&amp;a=11&amp;b=2&amp;c=1&quot;</span> http://localhost/test/1.html
-返回 <span class="m">302</span>，重定向到 /post-max-error 错误。
-</code></pre></div>
-
+$ curl --data <span class="s2">&#34;a=1&amp;a=11&amp;b=2&amp;c=1&#34;</span> http://localhost/test/1.html
+返回 <span class="m">302</span>，重定向到 /post-max-error 错误。</code></pre></div>
 
 <p>想起之前用 ModPerl 重写了 Apache 的 TransHandler/AccessHandler，跟这个比较类似，加一些过滤器。</p>
 

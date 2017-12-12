@@ -108,17 +108,15 @@
 
 <p>下面开始测试吧，先安装插件，并打开 trace_on：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ sudo rabbitmq-plugins <span class="nb">enable</span> rabbitmq_tracing
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo rabbitmq-plugins <span class="nb">enable</span> rabbitmq_tracing
 $ （略去重启RabbitMQ命令）
 $ sudo rabbitmqctl trace_on
-Starting tracing <span class="k">for</span> vhost <span class="s2">&quot;/&quot;</span> ...
-...done.
-</code></pre></div>
-
+Starting tracing <span class="k">for</span> vhost <span class="s2">&#34;/&#34;</span> ...
+...done.</code></pre></div>
 
 <p>测试代码采用 Python 的 pika 库，片段如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>import pika
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">import pika
 
 def _on_message<span class="o">(</span>ch, method, properties, body<span class="o">)</span>:
     <span class="nv">ret</span> <span class="o">=</span> <span class="o">{}</span>
@@ -128,18 +126,16 @@ def _on_message<span class="o">(</span>ch, method, properties, body<span class="
     print ret
 
 <span class="nv">conn</span> <span class="o">=</span> pika.BlockingConnection<span class="o">(</span>pika.ConnectionParameters<span class="o">())</span>
-chan.queue_declare<span class="o">(</span><span class="nv">exclusive</span><span class="o">=</span>False, <span class="nv">auto_delete</span><span class="o">=</span>True<span class="o">)</span> <span class="c1"># 临时队列</span>
-<span class="nv">queue</span> <span class="o">=</span> ret.method.queue
+chan.queue_declare<span class="o">(</span><span class="nv">exclusive</span><span class="o">=</span>False, <span class="nv">auto_delete</span><span class="o">=</span>True<span class="o">)</span> <span class="c1"># 临时队列
+</span><span class="c1"></span><span class="nv">queue</span> <span class="o">=</span> ret.method.queue
 chan.queue_bind<span class="o">(</span><span class="nv">exchange</span><span class="o">=</span><span class="s1">&#39;amq.rabbitmq.trace&#39;</span>, <span class="nv">queue</span><span class="o">=</span>queue, <span class="nv">routing_key</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="o">)</span>
 chan.queue_bind<span class="o">(</span><span class="nv">exchange</span><span class="o">=</span><span class="s1">&#39;amq.rabbitmq.log&#39;</span>, <span class="nv">queue</span><span class="o">=</span>queue, <span class="nv">routing_key</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="o">)</span>
 chan.basic_consume<span class="o">(</span>_on_message, <span class="nv">queue</span><span class="o">=</span>queue, <span class="nv">no_ack</span><span class="o">=</span>True<span class="o">)</span>
-chan.start_consuming<span class="o">()</span>
-</code></pre></div>
-
+chan.start_consuming<span class="o">()</span></code></pre></div>
 
 <p>运行结果大致如下：</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="o">{</span><span class="s1">&#39;body&#39;</span>: <span class="s1">&#39;accepting AMQP connection &lt;0.28967.1&gt; (127.0.0.1:52930 -&gt; 127.0.0.1:5672)\n&#39;</span>, 
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">{</span><span class="s1">&#39;body&#39;</span>: <span class="s1">&#39;accepting AMQP connection &lt;0.28967.1&gt; (127.0.0.1:52930 -&gt; 127.0.0.1:5672)\n&#39;</span>, 
  <span class="s1">&#39;headers&#39;</span>: None, <span class="s1">&#39;routing_key&#39;</span>: <span class="s1">&#39;info&#39;</span><span class="o">}</span>
 <span class="o">{</span><span class="s1">&#39;body&#39;</span>: <span class="s1">&#39;accepting AMQP connection &lt;0.28967.1&gt; (127.0.0.1:52930 -&gt; 127.0.0.1:5672)\n&#39;</span>, 
  <span class="s1">&#39;headers&#39;</span>: <span class="o">{</span><span class="s1">&#39;node&#39;</span>: <span class="s1">&#39;rabbit@mac&#39;</span>, <span class="s1">&#39;exchange_name &#39;</span>: <span class="s1">&#39;amq.rabbitmq.log&#39;</span>, <span class="s1">&#39;redelivered&#39;</span>: <span class="m">0</span>, 
@@ -154,9 +150,7 @@ chan.start_consuming<span class="o">()</span>
  <span class="s1">&#39;headers&#39;</span>: <span class="o">{</span><span class="s1">&#39;node&#39;</span>: <span class="s1">&#39;rabbit@mac&#39;</span>, <span class="s1">&#39;exchange_name&#39;</span>: <span class="s1">&#39;amq.rabbitmq.log&#39;</span>, <span class="s1">&#39;redelivered&#39;</span>: <span class="m">0</span>, 
  <span class="s1">&#39;routing_keys&#39;</span>: <span class="o">[</span><span class="s1">&#39;info&#39;</span><span class="o">]</span>, <span class="s1">&#39;properties&#39;</span>: <span class="o">{</span><span class="s1">&#39;timestamp&#39;</span>: <span class="m">1355906884</span>, 
  <span class="s1">&#39;content_type&#39;</span>: <span class="s1">&#39;text/plain&#39;</span><span class="o">}}</span>, 
- <span class="s1">&#39;routing_key&#39;</span>: <span class="s1">&#39;deliver.amq.gen-dJNnBwGUuigsfAzoUD9Zlw&#39;</span><span class="o">}</span>
-</code></pre></div>
-</p>
+ <span class="s1">&#39;routing_key&#39;</span>: <span class="s1">&#39;deliver.amq.gen-dJNnBwGUuigsfAzoUD9Zlw&#39;</span><span class="o">}</span></code></pre></div></p>
 
 </article>
 

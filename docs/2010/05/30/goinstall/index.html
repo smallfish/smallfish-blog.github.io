@@ -102,25 +102,19 @@
 
 <p>下面来举例怎么安装 web.go 模块。源地址是：<a href="http://github.com/hoisie/web.go">http://github.com/hoisie/web.go</a></p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">goinstall</span> <span class="o">-</span><span class="n">dashboard</span><span class="o">=</span><span class="n">true</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hoisie</span><span class="o">/</span><span class="n">web</span><span class="o">.</span><span class="n">go</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">goinstall</span> <span class="o">-</span><span class="n">dashboard</span><span class="o">=</span><span class="n">true</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hoisie</span><span class="o">/</span><span class="n">web</span><span class="o">.</span><span class="n">go</span></code></pre></div>
 
 <p>根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）</p>
 
 <p>查看下安装的目录和路径：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">ls</span> <span class="err">$</span><span class="n">GOROOT</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hoisie</span><span class="o">/</span><span class="n">web</span><span class="o">.</span><span class="n">go</span><span class="o">/</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">ls</span> <span class="err">$</span><span class="n">GOROOT</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hoisie</span><span class="o">/</span><span class="n">web</span><span class="o">.</span><span class="n">go</span><span class="o">/</span>
 <span class="n">examples</span>  <span class="n">_go_</span><span class="o">.</span><span class="mi">8</span>   <span class="n">Makefile</span>  <span class="n">Readme</span><span class="o">.</span><span class="n">md</span>   <span class="n">scgi</span><span class="o">.</span><span class="n">go</span>       <span class="n">status</span><span class="o">.</span><span class="n">go</span>  <span class="n">web_test</span><span class="o">.</span><span class="n">go</span>
-<span class="n">fcgi</span><span class="o">.</span><span class="n">go</span>   <span class="n">LICENSE</span>  <span class="n">_obj</span>      <span class="n">request</span><span class="o">.</span><span class="n">go</span>  <span class="n">servefile</span><span class="o">.</span><span class="n">go</span>  <span class="n">web</span><span class="o">.</span><span class="n">go</span>
-</code></pre></div>
-
+<span class="n">fcgi</span><span class="o">.</span><span class="n">go</span>   <span class="n">LICENSE</span>  <span class="n">_obj</span>      <span class="n">request</span><span class="o">.</span><span class="n">go</span>  <span class="n">servefile</span><span class="o">.</span><span class="n">go</span>  <span class="n">web</span><span class="o">.</span><span class="n">go</span></code></pre></div>
 
 <p>代码示例：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="p">(</span><span class="n">web</span> <span class="s2">&quot;github.com/hoisie/web.go&quot;</span><span class="p">)</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="p">(</span><span class="n">web</span> <span class="sa"></span><span class="s2">&#34;github.com/hoisie/web.go&#34;</span><span class="p">)</span></code></pre></div></p>
 
 <p>另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</p>
 

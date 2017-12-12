@@ -110,11 +110,9 @@
 <li>从Apache日志中分析出需要保存的资料，比如IP，时间，GET/POST，返回状态码等。</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">fmt_str</span>  <span class="o">=</span> <span class="s1">&#39;(?P&lt;ip&gt;[.\d]+) - - \[(?P&lt;time&gt;.*?)\] &quot;(?P&lt;method&gt;.*?) (?P&lt;uri&gt;.*?) HTTP/1.\d&quot; (?P&lt;status&gt;\d+) (?P&lt;length&gt;.*?) &quot;(?P&lt;referere&gt;.*?)&quot; &quot;(?P&lt;agent&gt;.*?)&quot;&#39;</span>
-<span class="n">fmt_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;\?P&lt;(.*?)&gt;&#39;</span><span class="p">,</span> <span class="n">fmt_str</span><span class="p">)</span>
-<span class="n">fmt_re</span>   <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">fmt_str</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">fmt_str</span>  <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;(?P&lt;ip&gt;[.\d]+) - - \[(?P&lt;time&gt;.*?)\] &#34;(?P&lt;method&gt;.*?) (?P&lt;uri&gt;.*?) HTTP/1.\d&#34; (?P&lt;status&gt;\d+) (?P&lt;length&gt;.*?) &#34;(?P&lt;referere&gt;.*?)&#34; &#34;(?P&lt;agent&gt;.*?)&#34;&#39;</span>
+<span class="n">fmt_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;\?P&lt;(.*?)&gt;&#39;</span><span class="p">,</span> <span class="n">fmt_str</span><span class="p">)</span>
+<span class="n">fmt_re</span>   <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">fmt_str</span><span class="p">)</span></code></pre></div>
 
 <p>定义了一个正则用于提取每行日志的内容。fmt_name就是提取尖括号中间的变量名。</p>
 
@@ -122,53 +120,43 @@
 <li>定义MongoDB相关变量，包括需要存到collection名称。Connection采取的是默认Host和端口。</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">conn</span>     <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">conn</span>     <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
 <span class="n">apache</span>   <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">apache</span>
-<span class="n">logs</span>     <span class="o">=</span> <span class="n">apache</span><span class="o">.</span><span class="n">logs</span>
-</code></pre></div>
-
+<span class="n">logs</span>     <span class="o">=</span> <span class="n">apache</span><span class="o">.</span><span class="n">logs</span></code></pre></div>
 
 <ol>
 <li>保存日志行</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">make_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">make_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">fmt_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-        <span class="n">logs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fmt_name</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">())))</span>
-</code></pre></div>
-
+        <span class="n">logs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fmt_name</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">())))</span></code></pre></div>
 
 <ol>
 <li>读取Apache日志文件</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">def</span> <span class="nf">make_log</span><span class="p">(</span><span class="n">log_path</span><span class="p">):</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">make_log</span><span class="p">(</span><span class="n">log_path</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fp</span><span class="p">:</span>
-            <span class="n">make_line</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-</code></pre></div>
-
+            <span class="n">make_line</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></div>
 
 <ol>
 <li>运行把。</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">make_log</span><span class="p">(</span><span class="s1">&#39;d:/apachelog.txt&#39;</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">make_log</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;d:/apachelog.txt&#39;</span><span class="p">)</span></code></pre></div>
 
 <p>脚本大致情况如此，这里没有放上stackless部分代码，可以参考下面代码：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">stackless</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">stackless</span>
 <span class="k">def</span> <span class="nf">print_x</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">print</span> <span class="n">x</span>
-<span class="n">stackless</span><span class="o">.</span><span class="n">tasklet</span><span class="p">(</span><span class="n">print_x</span><span class="p">)(</span><span class="s1">&#39;one&#39;</span><span class="p">)</span>
-<span class="n">stackless</span><span class="o">.</span><span class="n">tasklet</span><span class="p">(</span><span class="n">print_x</span><span class="p">)(</span><span class="s1">&#39;two&#39;</span><span class="p">)</span>
-<span class="n">stackless</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre></div>
-
+<span class="n">stackless</span><span class="o">.</span><span class="n">tasklet</span><span class="p">(</span><span class="n">print_x</span><span class="p">)(</span><span class="sa"></span><span class="s1">&#39;one&#39;</span><span class="p">)</span>
+<span class="n">stackless</span><span class="o">.</span><span class="n">tasklet</span><span class="p">(</span><span class="n">print_x</span><span class="p">)(</span><span class="sa"></span><span class="s1">&#39;two&#39;</span><span class="p">)</span>
+<span class="n">stackless</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></code></pre></div>
 
 <p>tasklet操作只是把类似操作放入队列中，run才是真正的运行。这里主要用于替换原有多线程threading并行分析多个日志的行为。</p>
 

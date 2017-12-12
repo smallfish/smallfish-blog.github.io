@@ -108,9 +108,7 @@
 <li>利用Apache自带都apxs建立hello模块：</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">root</span><span class="c1">#localhost] apxs -g -n hello</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">root</span><span class="c1">#localhost] apxs -g -n hello</span></code></pre></div>
 
 <p>这样就会在当前目录下新建一个hello模块的文件目录，可以看到里面有：Makefile mod_hello.c modules.mk这样的文件，具体apxs路径查询下本机apache/bin目录。</p>
 
@@ -126,18 +124,16 @@ hello_register_hooks hello_module 这俩个是需要导出的函数所必须的�
 <li>修改hello_handler函数，里面可以看到request_rec *r，r有很多函数和变量，具体要参见文档了。里面的ap_rputs是输出，可以简单的理解为把字符串输出到r。</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">static</span> <span class="nb">int</span> <span class="n">hello_handler</span><span class="p">(</span><span class="n">request_rec</span> <span class="o">*</span><span class="n">r</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">static</span> <span class="nb">int</span> <span class="n">hello_handler</span><span class="p">(</span><span class="n">request_rec</span> <span class="o">*</span><span class="n">r</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">handler</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">))</span> <span class="p">{</span> <span class="o">//</span> <span class="err">判断</span><span class="n">apache</span><span class="err">配置文件里</span><span class="n">handler</span><span class="err">是否等于</span><span class="n">hello</span><span class="err">，不是就跳过</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">handler</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;hello&#34;</span><span class="p">))</span> <span class="p">{</span> <span class="o">//</span> <span class="err">判断</span><span class="n">apache配置文件里handler是否等于hello</span><span class="err">，不是就跳过</span>
           <span class="k">return</span> <span class="n">DECLINED</span><span class="p">;</span>
      <span class="p">}</span>
-     <span class="n">r</span><span class="o">-&gt;</span><span class="n">content_type</span> <span class="o">=</span> <span class="s2">&quot;text/html&quot;</span><span class="p">;</span> <span class="o">//</span> <span class="err">设置</span><span class="n">content</span><span class="o">-</span><span class="nb">type</span>
+     <span class="n">r</span><span class="o">-&gt;</span><span class="n">content_type</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;text/html&#34;</span><span class="p">;</span> <span class="o">//</span> <span class="err">设置</span><span class="n">content</span><span class="o">-</span><span class="nb">type</span>
      <span class="k">if</span> <span class="p">(</span><span class="err">!</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">header_only</span><span class="p">)</span>
-          <span class="n">ap_rputs</span><span class="p">(</span><span class="s2">&quot;The sample page from mod_hello.c</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span> <span class="o">//</span> <span class="err">输出一段文字</span>
-     <span class="k">return</span> <span class="n">OK</span><span class="p">;</span><span class="o">//</span> <span class="err">返回</span> <span class="mi">200</span> <span class="n">OK</span><span class="err">状态</span>
-<span class="p">}</span>
-</code></pre></div>
-
+          <span class="n">ap_rputs</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;The sample page from mod_hello.c</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span> <span class="o">//</span> <span class="err">输出一段文字</span>
+     <span class="k">return</span> <span class="n">OK</span><span class="p">;</span><span class="o">//</span> <span class="err">返回</span> <span class="mi">200</span> <span class="n">OK状态</span>
+<span class="p">}</span></code></pre></div>
 
 <p>增加#include &ldquo;mysq.h&rdquo;，查询需要用到这个头文件。
 具体代码参见本文结尾部分。</p>
@@ -146,9 +142,7 @@ hello_register_hooks hello_module 这俩个是需要导出的函数所必须的�
 <li>编译模块</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">root</span><span class="c1">#localhost] apxs -c -a -i -I/usr/include/mysql/ -lmysqlclient mod_hello.c</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">root</span><span class="c1">#localhost] apxs -c -a -i -I/usr/include/mysql/ -lmysqlclient mod_hello.c</span></code></pre></div>
 
 <p>可以看到一堆编译指令，加上-I和-l是编译mysql必须的，编译完会自动在httpd.conf加上 LoadModule hello_module modules/mod_hello.so</p>
 
@@ -164,47 +158,47 @@ SetHandler hello
 
 <p>完整代码：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1">#include &quot;httpd.h&quot;</span>
-<span class="c1">#include &quot;http_config.h&quot;</span>
-<span class="c1">#include &quot;http_protocol.h&quot;</span>
-<span class="c1">#include &quot;ap_config.h&quot;</span>
-<span class="o">/*</span> <span class="err">头文件，本文用到了</span><span class="n">ap_rprintf</span><span class="err">函数</span> <span class="o">*/</span>
-<span class="c1">#include &quot;apr.h&quot;</span>
-<span class="c1">#include &quot;apr_lib.h&quot;</span>
-<span class="c1">#include &quot;apr_strings.h&quot;</span>
-<span class="c1">#include &quot;apr_want.h&quot;</span>
-<span class="c1">#include &quot;mysql.h&quot;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#include &#34;httpd.h&#34;</span>
+<span class="c1">#include &#34;http_config.h&#34;</span>
+<span class="c1">#include &#34;http_protocol.h&#34;</span>
+<span class="c1">#include &#34;ap_config.h&#34;</span>
+<span class="o">/*</span> <span class="err">头文件，本文用到了</span><span class="n">ap_rprintf函数</span> <span class="o">*/</span>
+<span class="c1">#include &#34;apr.h&#34;</span>
+<span class="c1">#include &#34;apr_lib.h&#34;</span>
+<span class="c1">#include &#34;apr_strings.h&#34;</span>
+<span class="c1">#include &#34;apr_want.h&#34;</span>
+<span class="c1">#include &#34;mysql.h&#34;</span>
 
-<span class="o">/*</span> <span class="err">定义</span><span class="n">mysql</span><span class="err">数据变量</span> <span class="o">*/</span>
-<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">user</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="k">pass</span> <span class="o">=</span> <span class="s2">&quot;smallfish&quot;</span><span class="p">;</span>
-<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">db</span><span class="err">  </span>  <span class="o">=</span> <span class="s2">&quot;mysql&quot;</span><span class="p">;</span>
+<span class="o">/*</span> <span class="err">定义</span><span class="n">mysql数据变量</span> <span class="o">*/</span>
+<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">host</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;localhost&#34;</span><span class="p">;</span>
+<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">user</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;root&#34;</span><span class="p">;</span>
+<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="k">pass</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;smallfish&#34;</span><span class="p">;</span>
+<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">db</span>    <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;mysql&#34;</span><span class="p">;</span>
 
 <span class="o">/*</span> <span class="n">The</span> <span class="n">sample</span> <span class="n">content</span> <span class="n">handler</span> <span class="o">*/</span>
 <span class="n">static</span> <span class="nb">int</span> <span class="n">hello_handler</span><span class="p">(</span><span class="n">request_rec</span> <span class="o">*</span><span class="n">r</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">handler</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">handler</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;hello&#34;</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">DECLINED</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="n">r</span><span class="o">-&gt;</span><span class="n">content_type</span> <span class="o">=</span> <span class="s2">&quot;text/html&quot;</span><span class="p">;</span>
-    <span class="o">/*</span> <span class="err">定义</span><span class="n">mysql</span><span class="err">变量</span> <span class="o">*/</span>
+    <span class="n">r</span><span class="o">-&gt;</span><span class="n">content_type</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;text/html&#34;</span><span class="p">;</span>
+    <span class="o">/*</span> <span class="err">定义</span><span class="n">mysql变量</span> <span class="o">*/</span>
     <span class="n">MYSQL</span> <span class="n">mysql</span><span class="p">;</span>
     <span class="n">MYSQL_RES</span> <span class="o">*</span><span class="n">rs</span><span class="p">;</span>
     <span class="n">MYSQL_ROW</span> <span class="n">row</span><span class="p">;</span>
     <span class="n">mysql_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">);</span> <span class="o">/*</span> <span class="err">初始化</span> <span class="o">*/</span>
     <span class="k">if</span> <span class="p">(</span><span class="err">!</span><span class="n">mysql_real_connect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="k">pass</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span><span class="o">/*</span> <span class="err">连接数据库</span> <span class="o">*/</span>
-        <span class="n">ap_rprintf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;&lt;li&gt;Error:</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mysql_errno</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">),</span> <span class="n">mysql_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">));</span>
+        <span class="n">ap_rprintf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;&lt;li&gt;Error:</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">mysql_errno</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">),</span> <span class="n">mysql_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">));</span>
         <span class="k">return</span> <span class="n">OK</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="n">char</span> <span class="o">*</span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;select host,user from user order by rand()&quot;</span><span class="p">;</span>
+    <span class="n">char</span> <span class="o">*</span><span class="n">sql</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;select host,user from user order by rand()&#34;</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">mysql_query</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">,</span> <span class="n">sql</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">/*</span> <span class="err">查询</span> <span class="o">*/</span>
-        <span class="n">ap_rprintf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;&lt;li&gt;Error : </span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mysql_errno</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">),</span> <span class="n">mysql_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">));</span>
+        <span class="n">ap_rprintf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;&lt;li&gt;Error : </span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">mysql_errno</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">),</span> <span class="n">mysql_error</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">));</span>
         <span class="k">return</span> <span class="n">OK</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="n">rs</span> <span class="o">=</span> <span class="n">mysql_store_result</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">);</span> <span class="o">/*</span> <span class="err">获取查询结果</span> <span class="o">*/</span>
     <span class="k">while</span> <span class="p">((</span><span class="n">row</span> <span class="o">=</span> <span class="n">mysql_fetch_row</span><span class="p">(</span><span class="n">rs</span><span class="p">)))</span> <span class="p">{</span> <span class="o">/*</span> <span class="err">获取每一行记录</span> <span class="o">*/</span>
-        <span class="n">ap_rprintf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;&lt;li&gt;</span><span class="si">%s</span><span class="s2"> - </span><span class="si">%s</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="n">ap_rprintf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;&lt;li&gt;</span><span class="si">%s</span><span class="s2"> - </span><span class="si">%s</span><span class="s2">&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
     <span class="p">}</span>
     <span class="n">mysql_free_result</span><span class="p">(</span><span class="n">rs</span><span class="p">);</span> <span class="o">/*</span> <span class="err">释放结果集</span> <span class="o">*/</span>
     <span class="n">mysql_close</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mysql</span><span class="p">);</span> <span class="o">/*</span> <span class="err">关闭连接</span> <span class="o">*/</span>
@@ -219,15 +213,13 @@ SetHandler hello
 <span class="o">/*</span> <span class="n">Dispatch</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">API</span> <span class="n">hooks</span> <span class="o">*/</span>
 <span class="n">module</span> <span class="n">AP_MODULE_DECLARE_DATA</span> <span class="n">hello_module</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">STANDARD20_MODULE_STUFF</span><span class="p">,</span>
-    <span class="n">NULL</span><span class="p">,</span><span class="err">                 </span>           <span class="o">/*</span> <span class="n">create</span> <span class="n">per</span><span class="o">-</span><span class="nb">dir</span><span class="err">   </span>           <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
-    <span class="n">NULL</span><span class="p">,</span><span class="err">                 </span>           <span class="o">/*</span> <span class="n">merge</span>  <span class="n">per</span><span class="o">-</span><span class="nb">dir</span><span class="err">   </span>           <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
-    <span class="n">NULL</span><span class="p">,</span><span class="err">                 </span>           <span class="o">/*</span> <span class="n">create</span> <span class="n">per</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
-    <span class="n">NULL</span><span class="p">,</span><span class="err">                 </span>           <span class="o">/*</span> <span class="n">merge</span>  <span class="n">per</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
-    <span class="n">NULL</span><span class="p">,</span><span class="err">                 </span>           <span class="o">/*</span> <span class="n">table</span> <span class="n">of</span> <span class="n">config</span> <span class="nb">file</span> <span class="n">commands</span><span class="err">      </span>           <span class="o">*/</span>
-    <span class="n">hello_register_hooks</span>  <span class="o">/*</span> <span class="n">register</span> <span class="n">hooks</span><span class="err">                     </span>           <span class="o">*/</span>
-<span class="p">};</span>
-</code></pre></div>
-
+    <span class="n">NULL</span><span class="p">,</span>                            <span class="o">/*</span> <span class="n">create</span> <span class="n">per</span><span class="o">-</span><span class="nb">dir</span>              <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
+    <span class="n">NULL</span><span class="p">,</span>                            <span class="o">/*</span> <span class="n">merge</span>  <span class="n">per</span><span class="o">-</span><span class="nb">dir</span>              <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
+    <span class="n">NULL</span><span class="p">,</span>                            <span class="o">/*</span> <span class="n">create</span> <span class="n">per</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
+    <span class="n">NULL</span><span class="p">,</span>                            <span class="o">/*</span> <span class="n">merge</span>  <span class="n">per</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span> <span class="n">structures</span> <span class="o">*/</span>
+    <span class="n">NULL</span><span class="p">,</span>                            <span class="o">/*</span> <span class="n">table</span> <span class="n">of</span> <span class="n">config</span> <span class="nb">file</span> <span class="n">commands</span>                 <span class="o">*/</span>
+    <span class="n">hello_register_hooks</span>  <span class="o">/*</span> <span class="n">register</span> <span class="n">hooks</span>                                <span class="o">*/</span>
+<span class="p">};</span></code></pre></div>
 
 </article>
 

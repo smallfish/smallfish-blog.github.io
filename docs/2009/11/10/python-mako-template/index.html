@@ -98,53 +98,41 @@
 
 <p>(Mako官网地址：<a href="http://www.makotemplates.org/">http://www.makotemplates.org/</a> ，可以下载安装包，推荐使用easy_install安装)</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">mako.template</span> <span class="kn">import</span> <span class="n">Template</span>
-<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;hello world!&quot;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">mako.template</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;hello world!&#34;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;hello, ${name}!&quot;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;jack&quot;</span><span class="p">)</span>
-</code></pre></div>
-
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;hello, ${name}!&#34;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;jack&#34;</span><span class="p">)</span></code></pre></div>
 
 <p>代码可以参考官方doc部分</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;/docs/mytmpl.txt&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;/docs/mytmpl.txt&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></code></pre></div></p>
 
 <p>还可以从设置模板为文件，设置filename属性</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;/docs/mytmpl.txt&#39;</span><span class="p">,</span> <span class="n">module_directory</span><span class="o">=</span><span class="s1">&#39;/tmp/mako_modules&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;/docs/mytmpl.txt&#39;</span><span class="p">,</span> <span class="n">module_directory</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;/tmp/mako_modules&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></code></pre></div>
 
 <p>文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.py</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">mako.lookup</span> <span class="kn">import</span> <span class="n">TemplateLookup</span>
-<span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/docs&#39;</span><span class="p">])</span>
-<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">%i</span><span class="s2">nclude file=&quot;header.txt&quot;/&gt; hello world!&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">lookup</span><span class="o">=</span><span class="n">mylookup</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">mako.lookup</span> <span class="kn">import</span> <span class="n">TemplateLookup</span>
+<span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;/docs&#39;</span><span class="p">])</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;&#34;&#34;&lt;</span><span class="si">%i</span><span class="s2">nclude file=&#34;header.txt&#34;/&gt; hello world!&#34;&#34;&#34;</span><span class="p">,</span> <span class="n">lookup</span><span class="o">=</span><span class="n">mylookup</span><span class="p">)</span></code></pre></div>
 
 <p>查找模板，方便统一模板路径使用。</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/docs&#39;</span><span class="p">],</span> <span class="n">module_directory</span><span class="o">=</span><span class="s1">&#39;/tmp/mako_modules&#39;</span><span class="p">)</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;/docs&#39;</span><span class="p">],</span> <span class="n">module_directory</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;/tmp/mako_modules&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">serve_template</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="n">mytemplate</span> <span class="o">=</span> <span class="n">mylookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">templatename</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre></div>
-</p>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code></pre></div></p>
 
 <p>改良了上面的查找方式</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/docs&#39;</span><span class="p">],</span> <span class="n">output_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
-                                       <span class="n">encoding_errors</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
-<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">mylookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;foo.txt&quot;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mylookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;/docs&#39;</span><span class="p">],</span> <span class="n">output_encoding</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+                                       <span class="n">encoding_errors</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+<span class="n">mytemplate</span> <span class="o">=</span> <span class="n">mylookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;foo.txt&#34;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">mytemplate</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></code></pre></div></p>
 
 <p>设置输出编码，以及编码错误时候处理方式</p>
 

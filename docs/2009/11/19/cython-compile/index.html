@@ -112,9 +112,7 @@
 
 <p>从命令行执行Cython编译器，输入选项和.pyx文件列表。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span> <span class="n">cython</span> <span class="o">-</span><span class="n">a</span> <span class="n">yourmod</span><span class="o">.</span><span class="n">pyx</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">cython</span> <span class="o">-</span><span class="n">a</span> <span class="n">yourmod</span><span class="o">.</span><span class="n">pyx</span></code></pre></div>
 
 <p>会生成一个yourmod.c文件（指定-a选项会生成一个HTML文件）</p>
 
@@ -122,10 +120,8 @@
 
 <p>下面是一个Linux系统的例子：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span> <span class="n">gcc</span> <span class="o">-</span><span class="n">shared</span> <span class="o">-</span><span class="n">pthread</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">fwrapv</span> <span class="o">-</span><span class="n">O2</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">strict</span><span class="o">-</span><span class="n">aliasing</span> \
- <span class="o">-</span><span class="n">I</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">python2</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span><span class="n">o</span> <span class="n">yourmod</span><span class="o">.</span><span class="n">so</span> <span class="n">yourmod</span><span class="o">.</span><span class="n">c</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">gcc</span> <span class="o">-</span><span class="n">shared</span> <span class="o">-</span><span class="n">pthread</span> <span class="o">-</span><span class="n">fPIC</span> <span class="o">-</span><span class="n">fwrapv</span> <span class="o">-</span><span class="n">O2</span> <span class="o">-</span><span class="n">Wall</span> <span class="o">-</span><span class="n">fno</span><span class="o">-</span><span class="n">strict</span><span class="o">-</span><span class="n">aliasing</span> \
+ <span class="o">-</span><span class="n">I</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">python2</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span><span class="n">o</span> <span class="n">yourmod</span><span class="o">.</span><span class="n">so</span> <span class="n">yourmod</span><span class="o">.</span><span class="n">c</span></code></pre></div>
 
 <p>gcc需要提供包含的文件和扩展库的链接。</p>
 
@@ -141,19 +137,17 @@
 
 <p>建立一个setup.py的脚本：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
 <span class="kn">from</span> <span class="nn">distutils.extension</span> <span class="kn">import</span> <span class="n">Extension</span>
 <span class="kn">from</span> <span class="nn">Cython.Distutils</span> <span class="kn">import</span> <span class="n">build_ext</span>
 
-<span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">Extension</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;hello.pyx&quot;</span><span class="p">])]</span>
+<span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">Extension</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;hello&#34;</span><span class="p">,</span> <span class="p">[</span><span class="sa"></span><span class="s2">&#34;hello.pyx&#34;</span><span class="p">])]</span>
 
 <span class="n">setup</span><span class="p">(</span>
     <span class="n">name</span> <span class="o">=</span> <span class="err">’</span><span class="n">Hello</span> <span class="n">world</span> <span class="n">app</span><span class="err">’</span><span class="p">,</span>
     <span class="n">cmdclass</span> <span class="o">=</span> <span class="p">{</span><span class="err">’</span><span class="n">build_ext</span><span class="err">’</span><span class="p">:</span> <span class="n">build_ext</span><span class="p">},</span>
     <span class="n">ext_modules</span> <span class="o">=</span> <span class="n">ext_modules</span>
-<span class="p">)</span>
-</code></pre></div>
-
+<span class="p">)</span></code></pre></div>
 
 <p>在命令行执行：python setup.py build_ext &ndash;inplace</p>
 
@@ -163,11 +157,9 @@
 
 <p>在纯Python代码里调用Cython代码：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pyximport</span><span class="p">;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pyximport</span><span class="p">;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">helloworld</span>
-<span class="n">Hello</span> <span class="n">World</span>
-</code></pre></div>
-
+<span class="n">Hello</span> <span class="n">World</span></code></pre></div>
 
 <p>这仅仅是简单调用Cython，不需要C库也不需要构建脚本。</p>
 
@@ -176,9 +168,7 @@
 
 <p>.py安装是这样：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">pyimport</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">pyimport</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span></code></pre></div>
 
 <p>原文：<a href="http://docs.cython.org/src/reference/compilation.html">http://docs.cython.org/src/reference/compilation.html</a></p>
 

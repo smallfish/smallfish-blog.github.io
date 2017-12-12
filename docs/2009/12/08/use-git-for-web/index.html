@@ -106,56 +106,38 @@
 
 <p>安装</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Gentoo</span>
-<span class="n">emerge</span> <span class="n">git</span>
-</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Gentoo</span>
+<span class="n">emerge</span> <span class="n">git</span></code></pre></div>
 
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Debian/Ubuntu</span>
+<span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span><span class="o">-</span><span class="n">core</span></code></pre></div>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Debian/Ubuntu</span>
-<span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span><span class="o">-</span><span class="n">core</span>
-</code></pre></div>
-
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># RedHat/Fedora</span>
-<span class="n">yum</span> <span class="n">install</span> <span class="n">git</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># RedHat/Fedora</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">git</span></code></pre></div>
 
 <p>初始化</p>
 
 <p>你会进入你的服务器的目录和初始化git仓库.</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 进入你的web目录</span>
-<span class="n">cd</span> <span class="o">/</span><span class="err">$</span><span class="n">wherever</span><span class="o">/</span><span class="n">html</span><span class="o">/</span>
-</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 进入你的web目录</span>
+<span class="n">cd</span> <span class="o">/</span><span class="err">$</span><span class="n">wherever</span><span class="o">/</span><span class="n">html</span><span class="o">/</span></code></pre></div>
 
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 初始化仓库</span>
+<span class="n">git</span> <span class="n">init</span></code></pre></div>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 初始化仓库</span>
-<span class="n">git</span> <span class="n">init</span>
-</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 添加所有内容</span>
+<span class="n">git</span> <span class="n">add</span> <span class="o">.</span></code></pre></div>
 
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 添加所有内容</span>
-<span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
-</code></pre></div>
-
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 提交 -m备注</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;The Initial Import.&quot;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 提交 -m备注</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">m</span> <span class="sa"></span><span class="s2">&#34;The Initial Import.&#34;</span></code></pre></div>
 
 <p>然后返回你的html父目录, 克隆新的git-ized web目录.</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 返回你的html目录</span>
-<span class="n">cd</span> <span class="o">..</span>
-</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 返回你的html目录</span>
+<span class="n">cd</span> <span class="o">..</span></code></pre></div>
 
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 克隆你的web目录到 html.git</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">bare</span> <span class="n">html</span> <span class="n">html</span><span class="o">.</span><span class="n">git</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 克隆你的web目录到 html.git</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">bare</span> <span class="n">html</span> <span class="n">html</span><span class="o">.</span><span class="n">git</span></code></pre></div>
 
 <p>现在你已经初始化好了仓库, 并将整个目录(递归)到该库中, 并进行了初次提交, 为web目录建立了一个git克隆. 这个git目录(html.git)是整个过程的关键.</p>
 
@@ -167,9 +149,7 @@
 <li>从你的开发目录运行下面命令</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">ssh</span><span class="p">:</span><span class="o">//</span><span class="n">yoursite</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">html</span><span class="o">.</span><span class="n">git</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">git</span> <span class="n">clone</span> <span class="n">ssh</span><span class="p">:</span><span class="o">//</span><span class="n">yoursite</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">html</span><span class="o">.</span><span class="n">git</span></code></pre></div>
 
 <p>现在已经获得一个完整的网站服务器版本的本地拷贝.</p>
 
@@ -177,10 +157,8 @@
 
 <p>记住, 你的html.git是这里的关键, 而不是现有的html目录, 所以你要切换出来, 备份目录, 然后:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 备份html目录, 然后克隆html.git</span>
-<span class="n">mv</span> <span class="n">html</span> <span class="n">html</span><span class="o">.</span><span class="n">backup</span><span class="p">;</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">html</span><span class="o">.</span><span class="n">git</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 备份html目录, 然后克隆html.git</span>
+<span class="n">mv</span> <span class="n">html</span> <span class="n">html</span><span class="o">.</span><span class="n">backup</span><span class="p">;</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">html</span><span class="o">.</span><span class="n">git</span></code></pre></div>
 
 <p>这在当前目录获取一份html.git的拷贝, 当然名字还是html. 这就是为什么备份旧的html目录.</p>
 
@@ -188,16 +166,12 @@
 
 <p>把你的html.git目录添加到post-update钩子中</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">cd</span> <span class="o">../</span><span class="n">htdocs</span>
-<span class="n">env</span> <span class="o">-</span><span class="n">i</span> <span class="n">git</span> <span class="n">pull</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cd</span> <span class="o">../</span><span class="n">htdocs</span>
+<span class="n">env</span> <span class="o">-</span><span class="n">i</span> <span class="n">git</span> <span class="n">pull</span></code></pre></div>
 
 <p>修改钩子程序为可执行</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">post</span><span class="o">-</span><span class="n">update</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">post</span><span class="o">-</span><span class="n">update</span></code></pre></div>
 
 <p>在你的开发环境的变动</p>
 
@@ -209,12 +183,10 @@
 <li>运行下面的程序, 例如(QuickSearchBox, TextMate等)</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># This is for an OS X box</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># This is for an OS X box</span>
 <span class="n">cd</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">daniel</span><span class="o">/</span><span class="n">Development</span><span class="o">/</span><span class="n">html</span><span class="o">/</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;Another update.&quot;</span>
-<span class="n">git</span> <span class="n">push</span>
-</code></pre></div>
-
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">m</span> <span class="sa"></span><span class="s2">&#34;Another update.&#34;</span>
+<span class="n">git</span> <span class="n">push</span></code></pre></div>
 
 <p>这基本上是更新到git仓库最重要的两个命令: commit(注意:你的标记(如果想回滚的话))和push(推送到服务器).</p>
 

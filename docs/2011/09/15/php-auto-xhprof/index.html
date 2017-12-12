@@ -104,16 +104,14 @@
 
 <p>主要思路如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。
 
 <span class="p">;</span>php.ini
 <span class="nv">auto_prepend_file</span> <span class="o">=</span> <span class="s1">&#39;/path/prepend.php&#39;</span>
 
 <span class="p">;</span> &lt;?php
 <span class="p">;</span>    include_once <span class="s1">&#39;/path/auto-xhprof.php&#39;</span><span class="p">;</span>
-<span class="p">;</span> ?&gt;
-</code></pre></div>
-
+<span class="p">;</span> ?&gt;</code></pre></div>
 
 <p>主要功能点有如下：</p>
 
@@ -135,54 +133,44 @@
 
 <p>源码文件说明：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>auto-xhprof.php         全局加载文件。
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">auto-xhprof.php         全局加载文件。
 auto-xhprof-config.php  全局配置文件，设置MySQL数据库和参数等。
 gearman-worker.php      gearman后台处理worker进程。
 web/                    web显示目录，xhprof列表页面和原xhprof展示部分
-xhprof_lib/             xhprof库文件。
-</code></pre></div>
-
+xhprof_lib/             xhprof库文件。</code></pre></div>
 
 <p>&mdash;&mdash;&mdash; 扩展安装步骤 &mdash;&mdash;&mdash;</p>
 
 <ul>
 <li><p>编译xhprof.so扩展
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>% <span class="nb">cd</span> &lt;xhprof_source_directory&gt;/extension/
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">% <span class="nb">cd</span> &lt;xhprof_source_directory&gt;/extension/
 % phpize
 % ./configure --with-php-config<span class="o">=</span>&lt;path to php-config&gt;
 % make
-% make install
-</code></pre></div>
-</p></li>
+% make install</code></pre></div></p></li>
 
 <li><p>修改php.ini中extension，以支持xhprof扩展
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="o">[</span>xhprof<span class="o">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>xhprof<span class="o">]</span>
 <span class="nv">extension</span><span class="o">=</span>xhprof.so
-xhprof.output_dir<span class="o">=</span>&lt;directory&gt; <span class="p">;</span> 需要有写入权限，可以写/tmp，或者不设置
-</code></pre></div>
-</p></li>
+xhprof.output_dir<span class="o">=</span>&lt;directory&gt; <span class="p">;</span> 需要有写入权限，可以写/tmp，或者不设置</code></pre></div></p></li>
 
 <li><p>从github上下载auto-xhprof，并配置。
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="m">1</span>. 非web目录拷贝到系统php include目录下，比如：/usr/include。
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">1</span>. 非web目录拷贝到系统php include目录下，比如：/usr/include。
 <span class="m">2</span>. web目录拷贝到可访问的应用目录下。比如：/var/www/app1/web，前端访问为：http://app1/web/
-<span class="m">3</span>. 修改auto-xhprof-config.php中相应的数据库配置，超时阀值等参数。
-</code></pre></div>
-</p></li>
+<span class="m">3</span>. 修改auto-xhprof-config.php中相应的数据库配置，超时阀值等参数。</code></pre></div></p></li>
 </ul>
 
 <p>到这里，基本安装和配置结束了，访问web目录可以看到xhprof列表信息。</p>
 
 <p>另外，如果支持gearman扩展的话，需要在php.ini中启动该扩展，并在auto-xhprof-config.php中配置：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>define<span class="o">(</span><span class="s1">&#39;__XHPROF_GERAMAN_SERVERS&#39;</span>, <span class="s1">&#39;127.0.0.1:4730;127.0.0.1:4730&#39;</span><span class="o">)</span><span class="p">;</span> // gearman 服务器定义
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">define<span class="o">(</span><span class="s1">&#39;__XHPROF_GERAMAN_SERVERS&#39;</span>, <span class="s1">&#39;127.0.0.1:4730;127.0.0.1:4730&#39;</span><span class="o">)</span><span class="p">;</span> // gearman 服务器定义
 
-% gearmand -vvv -q libdrizzle --libdrizzle-host<span class="o">=</span><span class="m">127</span>.0.0.1<span class="se">\</span>
-   --libdrizzle-user<span class="o">=</span>root --libdrizzle-password<span class="o">=</span><span class="m">123456</span> --libdrizzle-db<span class="o">=</span>gearman<span class="se">\</span>
-      --libdrizzle-table<span class="o">=</span>queue --libdrizzle-mysql
+% gearmand -vvv -q libdrizzle --libdrizzle-host<span class="o">=</span><span class="m">127</span>.0.0.1<span class="se">\
+</span><span class="se"></span>   --libdrizzle-user<span class="o">=</span>root --libdrizzle-password<span class="o">=</span><span class="m">123456</span> --libdrizzle-db<span class="o">=</span>gearman<span class="se">\
+</span><span class="se"></span>      --libdrizzle-table<span class="o">=</span>queue --libdrizzle-mysql
 
-% php gearman-worker.php
-</code></pre></div>
-
+% php gearman-worker.php</code></pre></div>
 
 </article>
 

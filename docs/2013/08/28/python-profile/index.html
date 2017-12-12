@@ -102,7 +102,7 @@
 
 <p>本文示例基于cProfile模块，先写点测试代码（test1.py）：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="k">def</span> <span class="nf">func1</span><span class="p">():</span>
     <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
@@ -113,21 +113,17 @@
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="n">func1</span><span class="p">()</span>
-<span class="n">func2</span><span class="p">()</span>
-</code></pre></div>
-
+<span class="n">func2</span><span class="p">()</span></code></pre></div>
 
 <p>运行cProfile命令如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -m cProfile -o test1.out test1.py
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ python -m cProfile -o test1.out test1.py</code></pre></div>
 
 <p>这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。</p>
 
 <p>好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -c <span class="s2">&quot;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.print_stats()&quot;</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ python -c <span class="s2">&#34;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.print_stats()&#34;</span>
 
 Wed Aug <span class="m">28</span> <span class="m">22</span>:19:45 <span class="m">2013</span>    test1.out
 
@@ -141,13 +137,11 @@ Wed Aug <span class="m">28</span> <span class="m">22</span>:19:45 <span class="m
         <span class="m">1</span>    <span class="m">0</span>.092    <span class="m">0</span>.092    <span class="m">0</span>.138    <span class="m">0</span>.138 test1.py:3<span class="o">(</span>func1<span class="o">)</span>
         <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000 <span class="o">{</span>method <span class="s1">&#39;disable&#39;</span> of <span class="s1">&#39;_lsprof.Profiler&#39;</span> objects<span class="o">}</span>
         <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000   <span class="m">10</span>.001   <span class="m">10</span>.001 test1.py:8<span class="o">(</span>func2<span class="o">)</span>
-        <span class="m">1</span>    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046 <span class="o">{</span>range<span class="o">}</span>
-</code></pre></div>
-
+        <span class="m">1</span>    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046 <span class="o">{</span>range<span class="o">}</span></code></pre></div>
 
 <p>分析的数据还很清晰和简单的吧，大概能看出几列数据的意思，重点关注下时间和函数调用次数，再来排个序：</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -c <span class="s2">&quot;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.sort_stats(&#39;time&#39;).print_stats()&quot;</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ python -c <span class="s2">&#34;import pstats; p=pstats.Stats(&#39;test1.out&#39;); p.sort_stats(&#39;time&#39;).print_stats()&#34;</span>
 
 Wed Aug <span class="m">28</span> <span class="m">22</span>:19:45 <span class="m">2013</span>    test1.out
 
@@ -161,26 +155,20 @@ Wed Aug <span class="m">28</span> <span class="m">22</span>:19:45 <span class="m
         <span class="m">1</span>    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046    <span class="m">0</span>.046 <span class="o">{</span>range<span class="o">}</span>
         <span class="m">1</span>    <span class="m">0</span>.024    <span class="m">0</span>.024   <span class="m">10</span>.163   <span class="m">10</span>.163 test1.py:1<span class="o">(</span>&lt;module&gt;<span class="o">)</span>
         <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000   <span class="m">10</span>.001   <span class="m">10</span>.001 test1.py:8<span class="o">(</span>func2<span class="o">)</span>
-        <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000 <span class="o">{</span>method <span class="s1">&#39;disable&#39;</span> of <span class="s1">&#39;_lsprof.Profiler&#39;</span> objects<span class="o">}</span>
-</code></pre></div>
-</p>
+        <span class="m">1</span>    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000    <span class="m">0</span>.000 <span class="o">{</span>method <span class="s1">&#39;disable&#39;</span> of <span class="s1">&#39;_lsprof.Profiler&#39;</span> objects<span class="o">}</span></code></pre></div></p>
 
 <p>可以看出测试程序中最耗费时间点是：time.sleep和range。</p>
 
 <p>sort_stats支持一下参数：</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>calls, cumulative, file, line, module, name, nfl, pcalls, stdname, <span class="nb">time</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">calls, cumulative, file, line, module, name, nfl, pcalls, stdname, time</code></pre></div></p>
 
 <p>pstats模块还支持交互式：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ python -m pstats test1.out
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ python -m pstats test1.out
 Welcome to the profile statistics browser.
-test1.out% <span class="c1">### help 或者输入字母按下tab，可以补全的</span>
-test1.out% stats <span class="m">10</span>
-</code></pre></div>
-
+test1.out% <span class="c1">### help 或者输入字母按下tab，可以补全的
+</span><span class="c1"></span>test1.out% stats <span class="m">10</span></code></pre></div>
 
 <p>这里似乎告一段落了，只是输出式的性能分析似乎有点乏味，开源世界这么美好，肯定会有些更美观和帅气的方法吧。</p>
 
@@ -195,9 +183,7 @@ test1.out% stats <span class="m">10</span>
 
 <p>装好依赖后，如此这番：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ ./gprof2dot.py -f pstats test1.out <span class="p">|</span> dot -Tpng -o test1.png
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ ./gprof2dot.py -f pstats test1.out <span class="p">|</span> dot -Tpng -o test1.png</code></pre></div>
 
 <p>看看test1.png，一切都了然于心了吧。。。</p>
 

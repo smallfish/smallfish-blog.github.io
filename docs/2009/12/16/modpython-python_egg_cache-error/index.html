@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-16",
         "description": "",
-        "wordCount": 97
+        "wordCount": 89
     }
     </script>
     
@@ -98,38 +98,32 @@
 
 <p>换了一台新机器，没有配置Mod_Python了，在一些应用里import MySQLdb出现了下面错误：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">ExtractionError</span><span class="p">:</span> <span class="n">Can</span><span class="s1">&#39;t extract file(s) to egg cache</span>
-<span class="n">The</span> <span class="n">following</span> <span class="n">error</span> <span class="n">occurred</span> <span class="k">while</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">extract</span> <span class="nb">file</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Python</span> <span class="n">egg</span>
-<span class="n">cache</span><span class="p">:</span>
-  <span class="p">[</span><span class="n">Errno</span> <span class="mi">13</span><span class="p">]</span> <span class="n">Permission</span> <span class="n">denied</span><span class="p">:</span> <span class="s1">&#39;/root/.python-eggs&#39;</span>
-<span class="n">The</span> <span class="n">Python</span> <span class="n">egg</span> <span class="n">cache</span> <span class="n">directory</span> <span class="ow">is</span> <span class="n">currently</span> <span class="nb">set</span> <span class="n">to</span><span class="p">:</span>
-  <span class="o">/</span><span class="n">root</span><span class="o">/.</span><span class="n">python</span><span class="o">-</span><span class="n">eggs</span>
-<span class="n">Perhaps</span> <span class="n">your</span> <span class="n">account</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">have</span> <span class="n">write</span> <span class="n">access</span> <span class="n">to</span> <span class="n">this</span> <span class="n">directory</span><span class="err">?</span>  <span class="n">You</span> <span class="n">can</span>
-<span class="n">change</span> <span class="n">the</span> <span class="n">cache</span> <span class="n">directory</span> <span class="n">by</span> <span class="n">setting</span> <span class="n">the</span> <span class="n">PYTHON_EGG_CACHE</span> <span class="n">environment</span>
-<span class="n">variable</span> <span class="n">to</span> <span class="n">point</span> <span class="n">to</span> <span class="n">an</span> <span class="n">accessible</span> <span class="n">directory</span><span class="o">.</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ExtractionError</span><span class="p">:</span> <span class="n">Can</span><span class="sa"></span><span class="s1">&#39;t extract file(s) to egg cache</span><span class="err">
+</span><span class="err"></span><span class="s1">The following error occurred while trying to extract file(s) to the Python egg</span><span class="err">
+</span><span class="err"></span><span class="s1">cache:</span><span class="err">
+</span><span class="err"></span><span class="s1">  [Errno 13] Permission denied: &#39;</span><span class="o">/</span><span class="n">root</span><span class="o">/.</span><span class="n">python</span><span class="o">-</span><span class="n">eggs</span><span class="sa"></span><span class="s1">&#39;</span><span class="err">
+</span><span class="err"></span><span class="s1">The Python egg cache directory is currently set to:</span><span class="err">
+</span><span class="err"></span><span class="s1">  /root/.python-eggs</span><span class="err">
+</span><span class="err"></span><span class="s1">Perhaps your account does not have write access to this directory?  You can</span><span class="err">
+</span><span class="err"></span><span class="s1">change the cache directory by setting the PYTHON_EGG_CACHE environment</span><span class="err">
+</span><span class="err"></span><span class="s1">variable to point to an accessible directory.</span></code></pre></div>
 
 <p>解决办法有两种：</p>
 
 <p>1.设置PYTHON_EGG_CACHE环境变量</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span> <span class="n">SetEnv</span> <span class="n">PYTHON_EGG_CACHE</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">aaa</span><span class="o">/</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">SetEnv</span> <span class="n">PYTHON_EGG_CACHE</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">aaa</span><span class="o">/</span></code></pre></div></p>
 
 <p>目录权限注意要是apache用户，或者简单点就777</p>
 
 <p>2.把egg格式转成目录</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="err">$</span> <span class="n">cd</span> <span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">path</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span>
-<span class="err">$</span> <span class="n">mv</span> <span class="n">MySQL_python</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">3</span><span class="n">c1</span><span class="o">-</span><span class="n">py2</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">egg</span> <span class="n">foo</span><span class="o">.</span><span class="n">zip</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">cd</span> <span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">path</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span>
+<span class="err">$</span> <span class="n">mv</span> <span class="n">MySQL_python</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">3</span><span class="n">c1</span><span class="o">-</span><span class="n">py2</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">egg</span> <span class="n">foo</span><span class="o">.</span><span class="nb">zip</span>
 <span class="err">$</span> <span class="n">mkdir</span> <span class="n">MySQL_python</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">3</span><span class="n">c1</span><span class="o">-</span><span class="n">py2</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">egg</span>
 <span class="err">$</span> <span class="n">cd</span> <span class="n">MySQL_python</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">3</span><span class="n">c1</span><span class="o">-</span><span class="n">py2</span><span class="o">.</span><span class="mi">5</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">egg</span>
-<span class="err">$</span> <span class="n">unzip</span> <span class="o">../</span><span class="n">foo</span><span class="o">.</span><span class="n">zip</span>
-<span class="err">$</span> <span class="n">rm</span> <span class="o">../</span><span class="n">foo</span><span class="o">.</span><span class="n">zip</span>
-</code></pre></div>
-</p>
+<span class="err">$</span> <span class="n">unzip</span> <span class="o">../</span><span class="n">foo</span><span class="o">.</span><span class="nb">zip</span>
+<span class="err">$</span> <span class="n">rm</span> <span class="o">../</span><span class="n">foo</span><span class="o">.</span><span class="nb">zip</span></code></pre></div></p>
 
 </article>
 

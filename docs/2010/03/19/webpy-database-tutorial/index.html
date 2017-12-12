@@ -106,17 +106,13 @@
 <li>easy_install方式，如果木有此工具，可以参考：<a href="http://chenxiaoyu.org/blog/archives/23">http://chenxiaoyu.org/blog/archives/23</a></li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">easy_install</span> <span class="n">web</span><span class="o">.</span><span class="n">py</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">easy_install</span> <span class="n">web</span><span class="o">.</span><span class="n">py</span></code></pre></div>
 
 <ol>
 <li>下载源码编译。地址： <a href="http://webpy.org/static/web.py-0.33.tar.gz">http://webpy.org/static/web.py-0.33.tar.gz</a> ，解压后执行：</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span></code></pre></div>
 
 <p>web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。</p>
 
@@ -126,90 +122,78 @@
 <li>导入模块，定义数据库连接db。</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="kn">import</span> <span class="nn">web</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="s1">&#39;postgres&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;mydata&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;dbuser&#39;</span><span class="p">,</span> <span class="n">pw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">web</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;postgres&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;mydata&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;dbuser&#39;</span><span class="p">,</span> <span class="n">pw</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;&#39;</span><span class="p">)</span></code></pre></div>
 
 <ol>
 <li>select 查询</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># 查询表</span>
-<span class="n">entries</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 查询表</span>
+<span class="n">entries</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">)</span>
 
 <span class="c1"># where 条件</span>
-<span class="n">myvar</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Bob&quot;</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">myvar</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;name = $name&quot;</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;id&gt;100&quot;</span><span class="p">)</span>
+<span class="n">myvar</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;Bob&#34;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">myvar</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;name = $name&#34;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;id&gt;100&#34;</span><span class="p">)</span>
 
 <span class="c1"># 查询具体列</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s2">&quot;id,name&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;id,name&#34;</span><span class="p">)</span>
 
 <span class="c1"># order by</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;post_date DESC&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;post_date DESC&#34;</span><span class="p">)</span>
 
 <span class="c1"># group</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;color&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;color&#34;</span><span class="p">)</span>
 
 <span class="c1"># limit</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># offset</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</code></pre></div>
-
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></code></pre></div>
 
 <ol>
 <li>更新</li>
 </ol>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;id = 10&quot;</span><span class="p">,</span> <span class="n">value1</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;id = 10&#34;</span><span class="p">,</span> <span class="n">value1</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;foo&#34;</span><span class="p">)</span></code></pre></div></p>
 
 <ol>
 <li>删除</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;id=10&quot;</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;mytable&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;id=10&#34;</span><span class="p">)</span></code></pre></div>
 
 <ol>
 <li>复杂查询</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># count</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) AS total_users FROM users&quot;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># count</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;SELECT COUNT(*) AS total_users FROM users&#34;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">total_users</span>
 
 <span class="c1"># join</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM entries JOIN users WHERE entries.author_id = users.id&quot;</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;SELECT * FROM entries JOIN users WHERE entries.author_id = users.id&#34;</span><span class="p">)</span>
 
 <span class="c1"># 防止SQL注入可以这么干</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users WHERE id=$id&quot;</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
-</code></pre></div>
-
+<span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;SELECT * FROM users WHERE id=$id&#34;</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">{</span><span class="sa"></span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span></code></pre></div>
 
 <p>6 多数据库操作 (web.py大于0.3)</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">db1</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;dbname1&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-<span class="n">db2</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;dbname2&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">db1</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;dbname1&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="n">db2</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">database</span><span class="p">(</span><span class="n">dbn</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;dbname2&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
 
-<span class="k">print</span> <span class="n">db1</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;id=1&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">db2</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;id=5&#39;</span><span class="p">)</span>
-</code></pre></div>
-
+<span class="k">print</span> <span class="n">db1</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;id=1&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">db2</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;id=5&#39;</span><span class="p">)</span></code></pre></div>
 
 <ol>
 <li>事务</li>
 </ol>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">t</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">t</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
     <span class="k">raise</span>
@@ -219,10 +203,8 @@
 <span class="c1"># Python 2.5+ 可以用with</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-</code></pre></div>
-</p>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;bar&#39;</span><span class="p">)</span></code></pre></div></p>
 
 </article>
 

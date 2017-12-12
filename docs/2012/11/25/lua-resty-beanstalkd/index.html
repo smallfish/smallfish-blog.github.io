@@ -116,79 +116,75 @@
 <li>生产者（发布消息），主要那应用了两个协议：use/put，代码如下：</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /t <span class="o">{</span>
-    content_by_lua <span class="s1">&#39;</span>
-<span class="s1">        local beanstalkd = require &quot;resty.beanstalkd&quot;</span>
-<span class="s1">        </span>
-<span class="s1">        local bean, err = beanstalkd:new()</span>
-
-<span class="s1">        local ok, err = bean:connect(&quot;127.0.0.1&quot;, 11300)</span>
-<span class="s1">        if not ok then</span>
-<span class="s1">            ngx.say(&quot;1: failed to connect: &quot;, err)</span>
-<span class="s1">            return</span>
-<span class="s1">        end</span>
-
-<span class="s1">        local ok, err = bean:use(&quot;default&quot;)</span>
-<span class="s1">        if not ok then</span>
-<span class="s1">            ngx.say(&quot;2: failed to use tube: &quot;, err)</span>
-<span class="s1">            return</span>
-<span class="s1">        end</span>
-<span class="s1">   </span>
-<span class="s1">        local id, err = bean:put(&quot;hello&quot;)</span>
-<span class="s1">        if not id then</span>
-<span class="s1">            ngx.say(&quot;3: failed to put: &quot;, err)</span>
-<span class="s1">            return</span>
-<span class="s1">        end</span>
-
-<span class="s1">        ngx.say(&quot;put: &quot;, id)</span>
-
-<span class="s1">        bean:close()</span>
-<span class="s1">    &#39;</span><span class="p">;</span>
-<span class="o">}</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /t <span class="o">{</span>
+    content_by_lua <span class="s1">&#39;
+</span><span class="s1">        local beanstalkd = require &#34;resty.beanstalkd&#34;
+</span><span class="s1">        
+</span><span class="s1">        local bean, err = beanstalkd:new()
+</span><span class="s1">
+</span><span class="s1">        local ok, err = bean:connect(&#34;127.0.0.1&#34;, 11300)
+</span><span class="s1">        if not ok then
+</span><span class="s1">            ngx.say(&#34;1: failed to connect: &#34;, err)
+</span><span class="s1">            return
+</span><span class="s1">        end
+</span><span class="s1">
+</span><span class="s1">        local ok, err = bean:use(&#34;default&#34;)
+</span><span class="s1">        if not ok then
+</span><span class="s1">            ngx.say(&#34;2: failed to use tube: &#34;, err)
+</span><span class="s1">            return
+</span><span class="s1">        end
+</span><span class="s1">   
+</span><span class="s1">        local id, err = bean:put(&#34;hello&#34;)
+</span><span class="s1">        if not id then
+</span><span class="s1">            ngx.say(&#34;3: failed to put: &#34;, err)
+</span><span class="s1">            return
+</span><span class="s1">        end
+</span><span class="s1">
+</span><span class="s1">        ngx.say(&#34;put: &#34;, id)
+</span><span class="s1">
+</span><span class="s1">        bean:close()
+</span><span class="s1">    &#39;</span><span class="p">;</span>
+<span class="o">}</span></code></pre></div>
 
 <ol>
 <li>消费者（消费消息），主要用了三个协议：watch/reserve/delete，代码如下：</li>
 </ol>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>location /t <span class="o">{</span>
-    content_by_lua <span class="s1">&#39;</span>
-<span class="s1">        local beanstalkd = require &quot;resty.beanstalkd&quot;</span>
-
-<span class="s1">        local bean, err = beanstalkd:new()</span>
-
-<span class="s1">        local ok, err = bean:connect(&quot;127.0.0.1&quot;, 11300)</span>
-<span class="s1">        if not ok then</span>
-<span class="s1">            ngx.say(&quot;1: failed to connect: &quot;, err)</span>
-<span class="s1">            return</span>
-<span class="s1">        end</span>
-
-<span class="s1">        local ok, err = bean:watch(&quot;default&quot;)</span>
-<span class="s1">        if not ok then</span>
-<span class="s1">            ngx.say(&quot;2: failed to watch: &quot;, err)</span>
-<span class="s1">            return</span>
-<span class="s1">        end</span>
-
-<span class="s1">        local id, data = bean:reserve()</span>
-<span class="s1">        if not id then</span>
-<span class="s1">            ngx.say(&quot;3: failed to reserve: &quot;, id)</span>
-<span class="s1">            return</span>
-<span class="s1">        else</span>
-<span class="s1">            ngx.say(&quot;1: reserve: &quot;, id)</span>
-<span class="s1">            local ok, err = bean:delete(id)</span>
-<span class="s1">            if not ok then</span>
-<span class="s1">                ngx.say(&quot;4: failed to delete: &quot;, id)</span>
-<span class="s1">                return</span>
-<span class="s1">            end</span>
-<span class="s1">            ngx.say(&quot;2: delete: &quot;, id)</span>
-<span class="s1">        end</span>
-
-<span class="s1">        bean:close()</span>
-<span class="s1">    &#39;</span><span class="p">;</span>
-<span class="o">}</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /t <span class="o">{</span>
+    content_by_lua <span class="s1">&#39;
+</span><span class="s1">        local beanstalkd = require &#34;resty.beanstalkd&#34;
+</span><span class="s1">
+</span><span class="s1">        local bean, err = beanstalkd:new()
+</span><span class="s1">
+</span><span class="s1">        local ok, err = bean:connect(&#34;127.0.0.1&#34;, 11300)
+</span><span class="s1">        if not ok then
+</span><span class="s1">            ngx.say(&#34;1: failed to connect: &#34;, err)
+</span><span class="s1">            return
+</span><span class="s1">        end
+</span><span class="s1">
+</span><span class="s1">        local ok, err = bean:watch(&#34;default&#34;)
+</span><span class="s1">        if not ok then
+</span><span class="s1">            ngx.say(&#34;2: failed to watch: &#34;, err)
+</span><span class="s1">            return
+</span><span class="s1">        end
+</span><span class="s1">
+</span><span class="s1">        local id, data = bean:reserve()
+</span><span class="s1">        if not id then
+</span><span class="s1">            ngx.say(&#34;3: failed to reserve: &#34;, id)
+</span><span class="s1">            return
+</span><span class="s1">        else
+</span><span class="s1">            ngx.say(&#34;1: reserve: &#34;, id)
+</span><span class="s1">            local ok, err = bean:delete(id)
+</span><span class="s1">            if not ok then
+</span><span class="s1">                ngx.say(&#34;4: failed to delete: &#34;, id)
+</span><span class="s1">                return
+</span><span class="s1">            end
+</span><span class="s1">            ngx.say(&#34;2: delete: &#34;, id)
+</span><span class="s1">        end
+</span><span class="s1">
+</span><span class="s1">        bean:close()
+</span><span class="s1">    &#39;</span><span class="p">;</span>
+<span class="o">}</span></code></pre></div></p>
 
 <p>为了提升性能，可以调用 set_keepalive（提升50%以上性能），需要注意：</p>
 

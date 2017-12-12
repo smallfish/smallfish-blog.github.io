@@ -100,13 +100,11 @@
 
 <p>修改下http.conf配置，添加一下内容：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">PerlTransHandler</span> <span class="n">MyTrans</span> <span class="c1"># MyTrans 这个是自己添加的处理模块名</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">PerlTransHandler</span> <span class="n">MyTrans</span> <span class="c1"># MyTrans 这个是自己添加的处理模块名</span></code></pre></div>
 
 <p>具体MyTrans.pm脚本如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">MyTrans</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">package</span> <span class="n">MyTrans</span><span class="p">;</span>
 
 <span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
 <span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span> <span class="n">qw</span><span class="p">(</span><span class="n">DECLINED</span><span class="p">);</span>
@@ -115,13 +113,11 @@
     <span class="n">my</span> <span class="err">$</span><span class="n">r</span> <span class="o">=</span> <span class="n">shift</span><span class="p">;</span>
     <span class="n">my</span> <span class="err">$</span><span class="n">uri</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">;</span>
     <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="nb">id</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="err">$</span><span class="n">url</span> <span class="o">=~</span> <span class="n">m</span><span class="o">|^/</span><span class="n">news</span><span class="o">/</span><span class="p">(</span><span class="o">.*</span><span class="p">)</span>\<span class="o">.</span><span class="n">html</span><span class="o">|</span><span class="p">);</span>
-    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">(</span><span class="s2">&quot;/news.php&quot;</span><span class="p">);</span>
-    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">(</span><span class="s2">&quot;id=$id&quot;</span><span class="p">);</span>
+    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;/news.php&#34;</span><span class="p">);</span>
+    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;id=$id&#34;</span><span class="p">);</span>
     <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">DECLINED</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="mi">1</span><span class="p">;</span>
-</code></pre></div>
-
+<span class="mi">1</span><span class="p">;</span></code></pre></div>
 
 <p>实现就是：/news/12345.html  =&gt; /news.php?id=12345</p>
 

@@ -106,7 +106,7 @@
 
 <p>可以自己试试下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ go
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ go
 
 Go is a tool <span class="k">for</span> managing Go <span class="nb">source</span> code.
 Usage:
@@ -116,17 +116,13 @@ The commands are:
     clean       remove object files
     doc         run godoc on package sources
     env         print Go environment information
- … 略去若干字
-</code></pre></div>
-
+ … 略去若干字</code></pre></div>
 
 <p>言归正传，开始进入正题。 go 命令依赖一个重要的环境变量：<strong>$GOPATH</strong></p>
 
 <p>在类似 Unix 环境大概这样设置：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">GOPATH</span><span class="o">=</span>/home/user/ext:/home/user/mygo
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">GOPATH</span><span class="o">=</span>/home/user/ext:/home/user/mygo</code></pre></div>
 
 <p>Windows 系统请注意分隔符，是分号（非冒号）。</p>
 
@@ -142,14 +138,12 @@ The commands are:
 
 <p>a). 设置 $GOPATH，写入 $HOME/.profile 以下内容</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>/mygo
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HOME</span>/mygo/bin
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>/mygo
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HOME</span>/mygo/bin</code></pre></div>
 
 <p>b). 建立包和目录：$GOPATH/src/example/newmath/sqrt.go（包名：&rdquo;example/newmath&rdquo;）</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ mkdir -p <span class="nv">$GOPATH</span>/src/example
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ mkdir -p <span class="nv">$GOPATH</span>/src/example
 $ <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example
 $ mkdir newmath
 
@@ -162,52 +156,44 @@ func Sqrt<span class="o">(</span>x float64<span class="o">)</span> float64 <span
                 z -<span class="o">=</span> <span class="o">(</span>z*z - x<span class="o">)</span> / <span class="o">(</span><span class="m">2</span> * x<span class="o">)</span>
         <span class="o">}</span>
         <span class="k">return</span> z
-<span class="o">}</span>
-</code></pre></div>
-
+<span class="o">}</span></code></pre></div>
 
 <p>c). 编译 newmath/sqrt.go 包</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="m">1</span>. 在任意目录下：
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">1</span>. 在任意目录下：
     $ go install example/newmath
 
 <span class="m">2</span>. 在源码目录下：
     <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example/newmath
-    $ go install
-</code></pre></div>
-
+    $ go install</code></pre></div>
 
 <p>d). 编译独立的可执行的测试</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/example
 $ mkdir hello
 
 // <span class="nv">$GOPATH</span>/src/example/hello/hello.go 源码：
 package main
 
 import <span class="o">(</span>
-        <span class="s2">&quot;example/newmath&quot;</span>
-        <span class="s2">&quot;fmt&quot;</span>
+        <span class="s2">&#34;example/newmath&#34;</span>
+        <span class="s2">&#34;fmt&#34;</span>
 <span class="o">)</span>
 
 func main<span class="o">()</span> <span class="o">{</span>
-        fmt.Printf<span class="o">(</span><span class="s2">&quot;Hello, world.  Sqrt(2) = %v\n&quot;</span>, newmath.Sqrt<span class="o">(</span><span class="m">2</span><span class="o">))</span>
+        fmt.Printf<span class="o">(</span><span class="s2">&#34;Hello, world.  Sqrt(2) = %v\n&#34;</span>, newmath.Sqrt<span class="o">(</span><span class="m">2</span><span class="o">))</span>
 <span class="o">}</span>
 
-$ go install example/hello <span class="c1"># 编译 hello</span>
-</code></pre></div>
-
+$ go install example/hello # 编译 hello</code></pre></div>
 
 <p>这个时候可以发现在 $GOPATH/bin/hello 多了一个可执行的 hello 文件：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ hello
-Hello, world.  Sqrt<span class="o">(</span><span class="m">2</span><span class="o">)</span> <span class="o">=</span> <span class="m">1</span>.414213562373095
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ hello
+Hello, world.  Sqrt<span class="o">(</span><span class="m">2</span><span class="o">)</span> <span class="o">=</span> <span class="m">1</span>.414213562373095</code></pre></div>
 
 <p>完整的目录结构如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>bin/
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bin/
     hello
 pkg/
     平台名/ 如：darwin_amd64、linux_amd64
@@ -218,9 +204,7 @@ src/
         hello/
             hello.go
         newmath/
-            sqrt.go
-</code></pre></div>
-
+            sqrt.go</code></pre></div>
 
 <p>简单的示例到此为止，官网文档中还有 go install 远程扩展库和测试相关，有兴趣的自己看把~~</p>
 

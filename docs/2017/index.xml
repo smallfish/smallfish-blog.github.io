@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2017s on smallfish&#39;s blog</title>
+    <link>http://chenxiaoyu.org/2017/</link>
+    <description>Recent content in 2017s on smallfish&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 12 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chenxiaoyu.org/2017/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>docker supervisord 管理多进程的一些建议</title>
+      <link>http://chenxiaoyu.org/2017/12/12/docker-supervisord-tips/</link>
+      <pubDate>Tue, 12 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2017/12/12/docker-supervisord-tips/</guid>
+      <description>上一次提到 supervisord 还是 2011 年 http://chenxiaoyu.org/2011/05/31/python-supervisor/ 这里再补充一篇，基本上是这几年在 docker 里面的一些用法和建议。在容器里面是不太建议里面跑多个进程（服务）的玩法，但是有的时候实际业务在所难免
+配置使用绝对路径 启动参数 -c 指定配置 supervisord.conf 绝对路径。比如 Dockerfile 最后这么写：
+ENTRYPOINT [&amp;quot;/usr/bin/supervisord&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;/etc/supervisor/supervisord.conf&amp;quot;]  多个启动项配置文件统一目录 如 /etc/supervisor/conf.d/，并且在 supervisord.conf include 这里目录
+[include] files = /etc/supervisor/conf.d/*.conf  每个启动项日志统一 统一放入目录，如：/tmp/xxx_stdout.log，并设置日志滚动大小和保留份数
+supervisord 配置  需要配置 nodaemon=true，默认输出扔给 docker supervisorctl 使用 http server 方式管理，这里涉及 docker overlayfs unix sockets 一个问题，无法管理启动项，不知道现在是否解决  [inet_http_server] port=127.0.0.1:9001 username=user password=123 [supervisorctl] serverurl=http://127.0.0.1:9001 username=user password=123  缺点就是多监听本地一个端口，并注意不能和应用端口冲突
+一次性程序 比如要执行初始化，可以：
+[program:xxx] command=sh /xxx.sh startretries=0 autorestart=false  传递环境变量 针对非 root 用户启动，并且需要读取容器启动时候环境变量（env）传递，新写 ENTRYPOINT 脚本中获取环境变量，写入文件，最后再运行 supervisord</description>
+    </item>
+    
+  </channel>
+</rss>

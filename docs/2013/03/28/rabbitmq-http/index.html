@@ -153,40 +153,30 @@
 
 <p>新建一个 Exchange：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl -i -X POST http://127.0.0.1:8080/exchange -d <span class="se">\</span>
-<span class="s1">&#39;{&quot;name&quot;: &quot;e1&quot;, &quot;type&quot;: &quot;topic&quot;, &quot;durable&quot;: true, &quot;autodelete&quot;: false}&#39;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/exchange -d <span class="se">\
+</span><span class="se"></span><span class="s1">&#39;{&#34;name&#34;: &#34;e1&#34;, &#34;type&#34;: &#34;topic&#34;, &#34;durable&#34;: true, &#34;autodelete&#34;: false}&#39;</span></code></pre></div>
 
 <p>新建一个 Queue：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl -i -X POST http://127.0.0.1:8080/queue -d <span class="se">\</span>
-<span class="s1">&#39;{&quot;name&quot;: &quot;q1&quot;}&#39;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/queue -d <span class="se">\
+</span><span class="se"></span><span class="s1">&#39;{&#34;name&#34;: &#34;q1&#34;}&#39;</span></code></pre></div>
 
 <p>绑定 Queue 到 Exchange 上：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl -i -X POST http://127.0.0.1:8080/queue/bind -d <span class="se">\</span>
-<span class="s1">&#39;{&quot;queue&quot;: &quot;q1&quot;, &quot;exchange&quot;: &quot;e1&quot;, &quot;keys&quot;: [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;]}&#39;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/queue/bind -d <span class="se">\
+</span><span class="se"></span><span class="s1">&#39;{&#34;queue&#34;: &#34;q1&#34;, &#34;exchange&#34;: &#34;e1&#34;, &#34;keys&#34;: [&#34;aa&#34;, &#34;bb&#34;, &#34;cc&#34;]}&#39;</span></code></pre></div>
 
 <p>发布消息到 Exchange，指定 Routing-key：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl -i -X POST http://127.0.0.1:8080/publish -d <span class="se">\</span>
-<span class="s1">&#39;{&quot;exchange&quot;: &quot;e1&quot;, &quot;key&quot;: &quot;bb&quot;, &quot;body&quot;: &quot;hahaha&quot;}&#39;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/publish -d <span class="se">\
+</span><span class="se"></span><span class="s1">&#39;{&#34;exchange&#34;: &#34;e1&#34;, &#34;key&#34;: &#34;bb&#34;, &#34;body&#34;: &#34;hahaha&#34;}&#39;</span></code></pre></div>
 
 <p>读取一下刚才发送的消息，即消费某个 Queue：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ curl -i <span class="s2">&quot;http://127.0.0.1:8080/queue?name=q1&quot;</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i <span class="s2">&#34;http://127.0.0.1:8080/queue?name=q1&#34;</span>
         
 PS：消费的接口输出为 Chunked 模式，可以用类似文件的行读取方式，接口是 HTTP 长连接。
-同时这个接口也支持多个 Queue 一起消费，类似：“/queue?name<span class="o">=</span>q1<span class="p">&amp;</span><span class="nv">name</span><span class="o">=</span>q2” 即可。
-</code></pre></div>
-
+同时这个接口也支持多个 Queue 一起消费，类似：“/queue?name<span class="o">=</span>q1<span class="p">&amp;</span><span class="nv">name</span><span class="o">=</span>q2” 即可。</code></pre></div>
 
 <p>基本常用的接口已经暴露出来， 后续还会封装一些其他语言的 SDK，其实都是普通的 HTTP 的请求。</p>
 

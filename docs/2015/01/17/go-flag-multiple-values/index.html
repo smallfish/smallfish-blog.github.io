@@ -105,9 +105,7 @@
     <h1 class="post-title">Go flag/kingpin 命令行解析多个同名参数</h1>
     <p>想了半天标题应该怎么写，都不太好表达，要的效果如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>xx --name<span class="o">=</span>aa --name<span class="o">=</span>bb
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">xx --name<span class="o">=</span>aa --name<span class="o">=</span>bb</code></pre></div>
 
 <p>需要解析出 <code>name</code> 参数，默认 <code>flag</code> 解析后返回的是最后一个值，即：<code>bb</code></p>
 
@@ -124,10 +122,8 @@
 
 <p>示例输出：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ ./xx --name<span class="o">=</span>xx -name<span class="o">=</span>yy
-<span class="nv">v</span> <span class="o">=</span> <span class="o">[</span>xx yy<span class="o">]</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ ./xx --name<span class="o">=</span>xx -name<span class="o">=</span>yy
+<span class="nv">v</span> <span class="o">=</span> <span class="o">[</span>xx yy<span class="o">]</span></code></pre></div>
 
 <p>上面的示例是基于 Go 语言自带的 <code>flag</code> 模块，这个稍繁琐了点，我自己用了另外一个模块：<a href="https://github.com/alecthomas/kingpin">alecthomas/kingpin</a></p>
 
@@ -137,23 +133,21 @@
 
 <p>话不多说，还是上个示例：</p>
 
-<div class="highlight"><pre><code class="language-go" data-lang="go"><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-        <span class="s">&quot;fmt&quot;</span>
-        <span class="s">&quot;gopkg.in/alecthomas/kingpin.v1&quot;</span>
+        <span class="s">&#34;fmt&#34;</span>
+        <span class="s">&#34;gopkg.in/alecthomas/kingpin.v1&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">var</span> <span class="p">(</span>
-        <span class="nx">names</span> <span class="p">=</span> <span class="nx">kingpin</span><span class="p">.</span><span class="nx">Flag</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">).</span><span class="nx">Strings</span><span class="p">()</span>
+        <span class="nx">names</span> <span class="p">=</span> <span class="nx">kingpin</span><span class="p">.</span><span class="nx">Flag</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">).</span><span class="nx">Strings</span><span class="p">()</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">kingpin</span><span class="p">.</span><span class="nx">Parse</span><span class="p">()</span>
         <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="o">*</span><span class="nx">names</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
-
+<span class="p">}</span></code></pre></div>
 
 <p>效果同上。</p>
 

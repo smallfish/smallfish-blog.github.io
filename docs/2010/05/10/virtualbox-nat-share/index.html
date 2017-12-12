@@ -117,11 +117,9 @@
 
 <p>下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span>  <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&quot;</span> <span class="n">TCP</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span>  <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&quot;</span> <span class="mi">22</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span>  <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&quot;</span> <span class="mi">22</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span>  <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&#34;</span> <span class="n">TCP</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span>  <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&#34;</span> <span class="mi">22</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span>  <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&#34;</span> <span class="mi">22</span></code></pre></div>
 
 <ol>
 <li><p>启动虚拟机。</p></li>
@@ -133,17 +131,13 @@
 
 <p>只要如下设置，web端口为81，跟上面也雷同：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span> <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&quot;</span> <span class="n">TCP</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span> <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&quot;</span> <span class="mi">81</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span> <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&quot;</span> <span class="mi">81</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&#34;</span> <span class="n">TCP</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&#34;</span> <span class="mi">81</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&#34;</span> <span class="mi">81</span></code></pre></div>
 
 <p>另外如果想清空上面设置的选项，只要不设置后面的值即可：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&quot;ubuntu9&quot;</span> <span class="s2">&quot;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&quot;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&#34;</span></code></pre></div>
 
 </article>
 

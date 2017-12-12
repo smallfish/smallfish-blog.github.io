@@ -108,17 +108,15 @@
 
 <p>来段最简单的测试代码：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ cat <span class="m">1</span>.t
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ cat <span class="m">1</span>.t
 use Test::Simple <span class="nv">tests</span><span class="o">=</span>&gt;2<span class="p">;</span>
-ok<span class="o">(</span><span class="m">1</span> + <span class="nv">1</span> <span class="o">==</span> <span class="m">2</span>, <span class="s2">&quot;test1 true&quot;</span><span class="o">)</span><span class="p">;</span>
-ok<span class="o">(</span><span class="s2">&quot;10&quot;</span> <span class="o">==</span> <span class="m">10</span>, <span class="s2">&quot;test2 true&quot;</span><span class="o">)</span><span class="p">;</span>
+ok<span class="o">(</span><span class="m">1</span> + <span class="nv">1</span> <span class="o">==</span> <span class="m">2</span>, <span class="s2">&#34;test1 true&#34;</span><span class="o">)</span><span class="p">;</span>
+ok<span class="o">(</span><span class="s2">&#34;10&#34;</span> <span class="o">==</span> <span class="m">10</span>, <span class="s2">&#34;test2 true&#34;</span><span class="o">)</span><span class="p">;</span>
     
 $ perl <span class="m">1</span>.t
 <span class="m">1</span>..2
 ok <span class="m">1</span> - test1 <span class="nb">true</span>
-ok <span class="m">2</span> - test2 <span class="nb">true</span>
-</code></pre></div>
-
+ok <span class="m">2</span> - test2 true</code></pre></div>
 
 <p>Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。</p>
 
@@ -139,7 +137,7 @@ ok <span class="m">2</span> - test2 <span class="nb">true</span>
 
 <p>摘抄模块中的一段测试用例：</p>
 
-<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span></span><span class="k">use</span> <span class="nn">Test::Nginx::Socket</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-perl" data-lang="perl"><span class="k">use</span> <span class="nn">Test::Nginx::Socket</span><span class="p">;</span>
 <span class="n">repeat_each</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="n">plan</span> <span class="n">tests</span> <span class="o">=&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">repeat_each</span><span class="p">()</span> <span class="o">*</span> <span class="n">blocks</span><span class="p">();</span>
 <span class="nv">$ENV</span><span class="p">{</span><span class="n">TEST_NGINX_MEMCACHED_PORT</span><span class="p">}</span> <span class="o">||=</span> <span class="mi">11211</span><span class="p">;</span>  <span class="c1"># make this env take a default value</span>
@@ -158,9 +156,7 @@ ok <span class="m">2</span> - test2 <span class="nb">true</span>
 <span class="o">---</span> <span class="n">request</span>
 <span class="n">GET</span> <span class="o">/</span><span class="n">foo</span>
 <span class="o">---</span> <span class="n">response_body_like:</span> <span class="n">STORED</span>
-<span class="o">---</span> <span class="n">error_code:</span> <span class="mi">201</span>
-</code></pre></div>
-
+<span class="o">---</span> <span class="n">error_code:</span> <span class="mi">201</span></code></pre></div>
 
 <p>可以看出就是一个基础的Perl代码，外加一部分Nginx的配置。TEST部分扩展自Test::Base：</p>
 
@@ -176,10 +172,8 @@ ok <span class="m">2</span> - test2 <span class="nb">true</span>
 
 <p>如果有一堆*.t测试脚本，还用perl *.t方式就不合适，Perl自带了一个工具：prove，常用参数：</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>-l 类似-Ilib路径，加载一些库。比如上面的Test::Nginx模块不在默认LIB下
--s 随机跑测试用例
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">-l 类似-Ilib路径，加载一些库。比如上面的Test::Nginx模块不在默认LIB下
+-s 随机跑测试用例</code></pre></div></p>
 
 <p>prove命令默认会找当前目录下t/文件夹下所有*.t脚本。</p>
 

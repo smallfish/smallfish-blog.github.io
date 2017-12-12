@@ -98,53 +98,43 @@
 
 <p>测试环境：Nginx 0.8.53 + FastCGI 模式 （需要安装 flup 模块）</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">flup</span>
-<span class="c1"># easy_install -U flup</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">pip</span> <span class="n">install</span> <span class="n">flup</span>
+<span class="c1"># easy_install -U flup</span></code></pre></div>
 
 <p>测试代码，延用前面的 Hello 示例。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mac</span><span class="p">:</span><span class="n">python</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">-</span><span class="n">t</span> <span class="n">pylons</span> <span class="n">hello</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mac</span><span class="p">:</span><span class="n">python</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">-</span><span class="n">t</span> <span class="n">pylons</span> <span class="n">hello</span>
 <span class="n">mac</span><span class="p">:</span><span class="n">python</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">cd</span> <span class="n">hello</span><span class="o">/</span>
 <span class="n">mac</span><span class="p">:</span><span class="n">hello</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">controller</span> <span class="n">hi</span>
-<span class="n">mac</span><span class="p">:</span><span class="n">hello</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">serve</span> <span class="o">--</span><span class="nb">reload</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>
-</code></pre></div>
-
+<span class="n">mac</span><span class="p">:</span><span class="n">hello</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">serve</span> <span class="o">--</span><span class="nb">reload</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span></code></pre></div>
 
 <p>确保以上过程无错，访问：<a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> 可以看到默认页面。</p>
 
 <p>好把，开始配置发布环境。
 需要修改 development.ini 配置文件，找到 [server:main] 节点，修改其中的 use 方式（默认是 egg:Paste#http）。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">server</span><span class="p">:</span><span class="n">main</span><span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">server</span><span class="p">:</span><span class="n">main</span><span class="p">]</span>
 <span class="n">use</span> <span class="o">=</span> <span class="n">egg</span><span class="p">:</span><span class="n">PasteScript</span><span class="c1">#flup_fcgi_thread</span>
 <span class="n">host</span> <span class="o">=</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mi">5000</span>
-</code></pre></div>
-
+<span class="n">port</span> <span class="o">=</span> <span class="mi">5000</span></code></pre></div>
 
 <p>另外建议修改 [DEFAULT] 节点中 debug = false，以免错误会打印具体的环境和堆栈信息。</p>
 
 <p>到这里 Pylons 部分以及设置好了，如果出现一下错误：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="ne">LookupError</span><span class="p">:</span> <span class="n">Entry</span> <span class="n">point</span> <span class="s1">&#39;flup_fcgi_thread&#39;</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">egg</span> <span class="s1">&#39;Paste&#39;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="ne">LookupError</span><span class="p">:</span> <span class="n">Entry</span> <span class="n">point</span> <span class="sa"></span><span class="s1">&#39;flup_fcgi_thread&#39;</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">egg</span> <span class="sa"></span><span class="s1">&#39;Paste&#39;</span></code></pre></div>
 
 <p>请注意上面的 use 部分里是 PasteScript 而不是 Paste哦。淡定淡定，别光看后面的 http 改成 flup_fcgi_thread。</p>
 
 <p>下面修改 Nginx 的配置 nginx.conf，修改其中 / 部分设置。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>        <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">        <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
             <span class="n">fastcgi_pass</span>   <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5000</span><span class="p">;</span>
             <span class="n">fastcgi_index</span>  <span class="n">index</span><span class="p">;</span>
             <span class="n">fastcgi_param</span>  <span class="n">SCRIPT_FILENAME</span>  <span class="o">/</span><span class="n">scripts</span><span class="err">$</span><span class="n">fastcgi_script_name</span><span class="p">;</span>
             <span class="n">include</span>        <span class="n">fastcgi_params</span><span class="p">;</span>
             <span class="n">fastcgi_intercept_errors</span> <span class="n">off</span><span class="p">;</span>
-        <span class="p">}</span>
-</code></pre></div>
-
+        <span class="p">}</span></code></pre></div>
 
 <p>其中 fastcgi_pass 中 host 和 port 对应 development.ini 中的配置。</p>
 
@@ -152,17 +142,13 @@
 
 <p>启动 Pylons 部分（启动 daemon 进程，或参考搜狐邮箱使用的 <a href="http://mailteam.blog.sohu.com/136961251.html">http://mailteam.blog.sohu.com/136961251.html</a> 来管理进程）：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mac</span><span class="p">:</span><span class="n">hello</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">serve</span> <span class="o">--</span><span class="nb">reload</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>  <span class="o">--</span><span class="n">daemon</span> <span class="n">start</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mac</span><span class="p">:</span><span class="n">hello</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">paster</span> <span class="n">serve</span> <span class="o">--</span><span class="nb">reload</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>  <span class="o">--</span><span class="n">daemon</span> <span class="n">start</span>
 <span class="c1"># 注意，正式环境中请去除 reload 参数</span>
-<span class="c1"># daemon 后面参数有 start | stop | restart | status，可以很方便的管理进程</span>
-</code></pre></div>
-
+<span class="c1"># daemon 后面参数有 start | stop | restart | status，可以很方便的管理进程</span></code></pre></div>
 
 <p>启动 Nginx 部分：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">mac</span><span class="p">:</span><span class="o">~</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">sudo</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">nginx</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mac</span><span class="p">:</span><span class="o">~</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">sudo</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">nginx</span></code></pre></div>
 
 <p>尝试一下访问： <a href="http://localhost/">http://localhost/</a> 和 <a href="http://localhost/hi/index">http://localhost/hi/index</a> 。是不是都可以了？OK，到这里已经整合好了。</p>
 

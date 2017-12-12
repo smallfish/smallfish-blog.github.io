@@ -108,11 +108,11 @@
 
 <p>程序片段</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># --------------------------------------------------------------------</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># --------------------------------------------------------------------</span>
 <span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
 <span class="n">use</span> <span class="n">Benchmark</span><span class="p">;</span>
 
-<span class="n">my</span> <span class="err">$</span><span class="n">LOG_FILE</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/apache/logs/access.log&#39;</span><span class="p">;</span>
+<span class="n">my</span> <span class="err">$</span><span class="n">LOG_FILE</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;/usr/local/apache/logs/access.log&#39;</span><span class="p">;</span>
 <span class="c1"># 下面qr部分起了关键作用，预编译了表达式</span>
 <span class="n">my</span> <span class="nd">@EXT_LIST</span> <span class="o">=</span> <span class="nb">map</span> <span class="p">{</span><span class="n">qr</span><span class="o">/</span><span class="err">$</span><span class="n">_</span><span class="o">/</span><span class="p">}</span> <span class="n">qw</span><span class="p">{</span>
 <span class="n">aaServlet</span>
@@ -132,12 +132,10 @@
 
 <span class="k">while</span> <span class="p">(</span><span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">key</span><span class="p">,</span> <span class="err">$</span><span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">each</span><span class="p">(</span><span class="o">%</span><span class="n">result</span><span class="p">)){</span>
     <span class="err">$</span><span class="n">key</span> <span class="o">=~</span> <span class="n">s</span><span class="o">/</span>\<span class="p">(</span>\<span class="err">?</span><span class="o">-</span><span class="n">xism</span><span class="p">:(</span><span class="o">.*</span><span class="err">?</span><span class="p">)</span>\<span class="p">)</span><span class="o">/</span><span class="err">$</span><span class="mi">1</span><span class="o">/</span><span class="n">g</span><span class="p">;</span>
-    <span class="k">print</span> <span class="s2">&quot;$key:</span><span class="se">\t</span><span class="s2">$value</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+    <span class="k">print</span> <span class="sa"></span><span class="s2">&#34;$key:</span><span class="se">\t</span><span class="s2">$value</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="n">printf</span> <span class="s2">&quot;** </span><span class="si">%s</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">timestr</span><span class="p">(</span><span class="n">timediff</span><span class="p">(</span><span class="n">new</span> <span class="n">Benchmark</span><span class="p">,</span> <span class="err">$</span><span class="n">startime</span><span class="p">));</span>
-</code></pre></div>
-
+<span class="n">printf</span> <span class="sa"></span><span class="s2">&#34;** </span><span class="si">%s</span><span class="se">\n\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">timestr</span><span class="p">(</span><span class="n">timediff</span><span class="p">(</span><span class="n">new</span> <span class="n">Benchmark</span><span class="p">,</span> <span class="err">$</span><span class="n">startime</span><span class="p">));</span></code></pre></div>
 
 </article>
 

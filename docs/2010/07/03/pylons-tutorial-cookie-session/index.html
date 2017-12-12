@@ -100,63 +100,51 @@
 
 <p>修改 index 方法，添加显示部分：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;NULL&#39;</span>
-        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="s1">&#39;cookie name=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;NULL&#39;</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="sa"></span><span class="s1">&#39;cookie name=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span></code></pre></div>
 
 <p>cookie 读取可以通过 request.cookies 对象，类似一个字典结构。需要注意的是读取时候用最好 has_key 判断下，这样避免抛 KeyError 异常。当然你也可以 try&hellip;catch 捕获一下。</p>
 
 <p>再重新写一个方法，用来写 cookie。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">writecookie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;smallfish&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;write cookie ok&quot;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">writecookie</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;smallfish&#34;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa"></span><span class="s2">&#34;write cookie ok&#34;</span></code></pre></div>
 
 <p>这里只是简单设置一个值得，set_cookie 还有其他参数，具体如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">set_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">max_age</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">secure</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">httponly</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">expires</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">set_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">max_age</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">secure</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">httponly</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">expires</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></div>
 
 <p>基本一般需要设置：max_age，path，domain，expires 这几个参数。</p>
 
 <p>下面再来尝试一下 session：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">controller</span> <span class="n">sessiontest</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">controller</span> <span class="n">sessiontest</span>
 <span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">controllers</span><span class="o">/</span><span class="n">sessiontest</span><span class="o">.</span><span class="n">py</span>
-<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">tests</span><span class="o">/</span><span class="n">functional</span><span class="o">/</span><span class="n">test_sessiontest</span><span class="o">.</span><span class="n">py</span>
-</code></pre></div>
-
+<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">tests</span><span class="o">/</span><span class="n">functional</span><span class="o">/</span><span class="n">test_sessiontest</span><span class="o">.</span><span class="n">py</span></code></pre></div>
 
 <p>和上面 cookie 例子类似，在 controller 里有两个方法，index 负责显示 session，writesession 负责写。</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;NULL&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;session name=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;NULL&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa"></span><span class="s1">&#39;session name=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span>
 
     <span class="k">def</span> <span class="nf">writesession</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">session</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;smallfish&#39;</span>
+        <span class="n">session</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;smallfish&#39;</span>
         <span class="n">session</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;save session ok&quot;</span>
-</code></pre></div>
-</p>
+        <span class="k">return</span> <span class="sa"></span><span class="s2">&#34;save session ok&#34;</span></code></pre></div></p>
 
 <p>index 方法里 get 后面的 NULL 是默认值。writesession 里需要注意下设置 session 之后需要 save。</p>
 
 <p>删除 session 可以尝试如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">del</span> <span class="n">session</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">del</span> <span class="n">session</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
 <span class="c1"># 删除所有</span>
-<span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-</code></pre></div>
-
+<span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></code></pre></div></p>
 
 <p>到这里，WEB 常用的一些东西在 Pylons 里基本走了一圈，包含 URL、模板、数据库和会话部分。</p>
 

@@ -19,7 +19,7 @@
       <guid>http://chenxiaoyu.org/2011/12/29/the-rose/</guid>
       <description>想了很久，很难给这篇跟技术无关的博客起一个满意的标题。刚好想起以前看过的一个视频《The Rose》，姑且凑合用吧。
 其实用信乐团的《海阔天空》来当标题或许更为合适，歌词依旧如此犀利和伤感：
- 冷漠的人 谢谢你们曾经看轻我 让我不低头更精彩的活 … 海阔天空 狂风暴雨以后 转过头 对旧心酸一笑而过  随着时间的消逝，有些东西始终只是存在自己的回忆里，不管是美好还是伤感，始终那些都是值得。
+冷漠的人 谢谢你们曾经看轻我 让我不低头更精彩的活 … 海阔天空 狂风暴雨以后 转过头 对旧心酸一笑而过 随着时间的消逝，有些东西始终只是存在自己的回忆里，不管是美好还是伤感，始终那些都是值得。
 或许，曾经有点苦涩，有点埋怨。而如今，回想起来，始终有着那么一丝丝的回味和惋惜。
 清晰的记得，那是2005年的国庆前，穿越一个城市，冒着大雨，只是为了那一份为之着迷和幻想的工作。
 在去南京之前，对于写程序而已，大部分时间只是在纸上模拟，代码只是流淌在自己的记忆体中。很顺利的拿到了那份工作，一呆就是四年半，接近五年的时间。
@@ -43,10 +43,11 @@
       <guid>http://chenxiaoyu.org/2011/11/24/json-format/</guid>
       <description>经常会碰到一些返回 JSON 格式的应用，默认都是一大坨字一起显示，完全是虐待自己的眼睛。
 比如以下JSON：
-mac:~ smallfish$ curl http://127.0.0.1:8108/postgres [{&amp;quot;datname&amp;quot;:&amp;quot;postgres&amp;quot;,&amp;quot;datdba&amp;quot;:&amp;quot;10&amp;quot;,&amp;quot;encoding&amp;quot;:6,&amp;quot;datcollate&amp;quot;:&amp;quot;zh_CN.UTF-8&amp;quot;,&amp;quot;datctype&amp;quot;:&amp;quot;zh_CN.UTF-8&amp;quot;, &amp;quot;datistemplate&amp;quot;:false,&amp;quot;datallowconn&amp;quot;:true,&amp;quot;datconnlimit&amp;quot;:-1,&amp;quot;datlastsysoid&amp;quot;:&amp;quot;12172&amp;quot;,&amp;quot;datfrozenxid&amp;quot;:&amp;quot;985&amp;quot;, &amp;quot;dattablespace&amp;quot;:&amp;quot;1663&amp;quot;,&amp;quot;datacl&amp;quot;:null},{&amp;quot;datname&amp;quot;:&amp;quot;smallfish&amp;quot;,&amp;quot;datdba&amp;quot;:&amp;quot;16384&amp;quot;,&amp;quot;encoding&amp;quot;:6, &amp;quot;datcollate&amp;quot;:&amp;quot;zh_CN.UTF-8&amp;quot;,&amp;quot;datctype&amp;quot;:&amp;quot;zh_CN.UTF-8&amp;quot;,&amp;quot;datistemplate&amp;quot;:false,&amp;quot;datallowconn&amp;quot;:true, &amp;quot;datconnlimit&amp;quot;:-1,&amp;quot;datlastsysoid&amp;quot;:&amp;quot;12172&amp;quot;,&amp;quot;datfrozenxid&amp;quot;:&amp;quot;985&amp;quot;,&amp;quot;dattablespace&amp;quot;:&amp;quot;1663&amp;quot;,&amp;quot;datacl&amp;quot;:null}]  顺手 Google 了下，发现了两种浏览方式：命令行查看和浏览器查看。
+mac:~ smallfish$ curl http://127.0.0.1:8108/postgres [{&amp;#34;datname&amp;#34;:&amp;#34;postgres&amp;#34;,&amp;#34;datdba&amp;#34;:&amp;#34;10&amp;#34;,&amp;#34;encoding&amp;#34;:6,&amp;#34;datcollate&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datctype&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;, &amp;#34;datistemplate&amp;#34;:false,&amp;#34;datallowconn&amp;#34;:true,&amp;#34;datconnlimit&amp;#34;:-1,&amp;#34;datlastsysoid&amp;#34;:&amp;#34;12172&amp;#34;,&amp;#34;datfrozenxid&amp;#34;:&amp;#34;985&amp;#34;, &amp;#34;dattablespace&amp;#34;:&amp;#34;1663&amp;#34;,&amp;#34;datacl&amp;#34;:null},{&amp;#34;datname&amp;#34;:&amp;#34;smallfish&amp;#34;,&amp;#34;datdba&amp;#34;:&amp;#34;16384&amp;#34;,&amp;#34;encoding&amp;#34;:6, &amp;#34;datcollate&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datctype&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datistemplate&amp;#34;:false,&amp;#34;datallowconn&amp;#34;:true, &amp;#34;datconnlimit&amp;#34;:-1,&amp;#34;datlastsysoid&amp;#34;:&amp;#34;12172&amp;#34;,&amp;#34;datfrozenxid&amp;#34;:&amp;#34;985&amp;#34;,&amp;#34;dattablespace&amp;#34;:&amp;#34;1663&amp;#34;,&amp;#34;datacl&amp;#34;:null}] 顺手 Google 了下，发现了两种浏览方式：命令行查看和浏览器查看。
 一、浏览器查看方式，需要安装 Chrome 插件：JSONView。
 二、命令行查看，需要安装 Python。
-mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool  是不是美观很多了？</description>
+mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool 
+是不是美观很多了？</description>
     </item>
     
     <item>
@@ -58,10 +59,10 @@ mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool  是�
       <description>上一篇《Nginx第三方模块》涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。
 这里还是需要感谢一下@agentzh，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下：
  ngx_devel_kit encrypted-session-nginx-module  编译很简单，类似如下：
-./configure --prefix=/opt/nginx \ --add-module=../ngx_devel_kit \ --add-module=../encrypted-session-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：
-1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload  在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。
-encrypted_session_key &amp;quot;abcdefghijklmnopqrstuvwxyz123456&amp;quot;; encrypted_session_iv &amp;quot;1234567812345678&amp;quot;; encrypted_session_expires 5; # 默认过期时间是1d（一天）  话不到多说，直接来读写示例：
- 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &amp;#39;smallfish&amp;#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &amp;quot;Set-Cookie&amp;quot; &amp;quot;name=$session_name&amp;quot;; echo &amp;quot;write name: $session_name&amp;quot;; }   读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &amp;quot;read name: $name&amp;quot;; }  </description>
+./configure --prefix=/opt/nginx \  --add-module=../ngx_devel_kit \  --add-module=../encrypted-session-nginx-module 重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：
+1. kill -HUP `cat /path/nginx/logs/nginx.pid` 2. /path/nginx/sbin/nginx -s reload 在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。
+encrypted_session_key &amp;#34;abcdefghijklmnopqrstuvwxyz123456&amp;#34;; encrypted_session_iv &amp;#34;1234567812345678&amp;#34;; encrypted_session_expires 5; # 默认过期时间是1d（一天） 话不到多说，直接来读写示例：
+ 写入session，测试session名为name，值是smallfish。  location /session-write { set $name &amp;#39;smallfish&amp;#39;; set_encrypt_session $session_name $name; set_encode_base32 $session_name; add_header &amp;#34;Set-Cookie&amp;#34; &amp;#34;name=$session_name&amp;#34;; echo &amp;#34;write name: $session_name&amp;#34;; }  读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。  location /session-read { set_decode_base32 $session_name $cookie_name; set_decrypt_session $name $session_name; echo &amp;#34;read name: $name&amp;#34;; } </description>
     </item>
     
     <item>
@@ -75,9 +76,8 @@ encrypted_session_key &amp;quot;abcdefghijklmnopqrstuvwxyz123456&amp;quot;; encr
  echo memcached nginx lua  详细模块地址分别为：
  ngx_devel_kit https://github.com/simpl/ngx_devel_kit set-misc-nginx-module https://github.com/agentzh/set-misc-nginx-module memc-nginx-module https://github.com/agentzh/memc-nginx-module echo-nginx-module https://github.com/agentzh/echo-nginx-module lua-nginx-module https://github.com/chaoslawful/lua-nginx-module srcache-nginx-module https://github.com/agentzh/srcache-nginx-module drizzle-nginx-module https://github.com/chaoslawful/drizzle-nginx-module rds-json-nginx-module https://github.com/agentzh/rds-json-nginx-module  为了省事这里一股脑把上面的module全部下载好，一起编译。PS：如果更懒惰的可以尝试下openresty项目，它帮你打包好Nginx和一堆扩展模块，得感谢@agentzh。
 这里编译和drizzle和lua模块，在编译Nginx之前需要设置一下这两个库的LIB和INCLUDE文件地址：
--- lua -- export LUA_LIB=/path/to/lua/lib export LUA_INC=/path/to/lua/include -- drizzle -- export LIBDRIZZLE_INC=/opt/drizzle/include/libdrizzle-1.0 export LIBDRIZZLE_LIB=/opt/drizzle/lib  Nginx编译选项如下，请注意先后顺序：
-./configure --prefix=/opt/nginx \ --with-pcre=../pcre \ --add-module=../ngx_devel_kit \ --add-module=../set-misc-nginx-module \ --add-module=../memc-nginx-module \ --add-module=../echo-nginx-module \ --add-module=../lua-nginx-module \ --add-module=../srcache-nginx-module \ --add-module=../drizzle-nginx-module \ --add-module=../rds-json-nginx-module  重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：
-1. kill -HUP `cat /path/nginx/logs/nginx.</description>
+-- lua -- export LUA_LIB=/path/to/lua/lib export LUA_INC=/path/to/lua/include -- drizzle -- export LIBDRIZZLE_INC=/opt/drizzle/include/libdrizzle-1.0 export LIBDRIZZLE_LIB=/opt/drizzle/lib Nginx编译选项如下，请注意先后顺序：
+./configure --prefix=/opt/nginx \  --with-pcre=../pcre \  --add-module=../ngx_devel_kit \  --add-module=../set-misc-nginx-module \  --add-module=../memc-nginx-module \  --add-module=../echo-nginx-module \  --add-module=../lua-nginx-module \  --add-module=../srcache-nginx-module \  --add-module=../drizzle-nginx-module \  --add-module=.</description>
     </item>
     
     <item>
@@ -91,10 +91,12 @@ encrypted_session_key &amp;quot;abcdefghijklmnopqrstuvwxyz123456&amp;quot;; encr
 当然也可以按照官方的示例来监控应用或者页面的数据，使用起来还是有点不爽。比如想监控所有访问超过2秒的页面性能情况，或者自动打开/关闭分析，请求url、响应时间等。
 随手基于xhprof写了一个扩展小工具。
 主要思路如下：
-通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。 ;php.ini auto_prepend_file = &amp;#39;/path/prepend.php&amp;#39; ; &amp;lt;?php ; include_once &amp;#39;/path/auto-xhprof.php&amp;#39;; ; ?&amp;gt;  主要功能点有如下：
+通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。 ;php.ini auto_prepend_file = &amp;#39;/path/prepend.php&amp;#39; ; &amp;lt;?php ; include_once &amp;#39;/path/auto-xhprof.php&amp;#39;; ; ?&amp;gt; 主要功能点有如下：
  参数配置是否自动开启xhprof。 参数配置超时的阀值，比如2秒。 保存分析后的数据到MySQL中，供集中统一分析。 数据内容含：请求的URL、相应时间。 支持gearman异步保存数据。 提供封装的xhprof_start/xhprof_end对部分程序进行手动分析。 自动记录错误信息  图一（列表显示）： 图二（部分函数显示）： 源码文件说明：
-auto-xhprof.php 全局加载文件。 auto-xhprof-config.php 全局配置文件，设置MySQL数据库和参数等。 gearman-worker.php gearman后台处理worker进程。 web/ web显示目录，xhprof列表页面和原xhprof展示部分 xhprof_lib/ xhprof库文件。  &amp;mdash;&amp;mdash;&amp;mdash; 扩展安装步骤 &amp;mdash;&amp;mdash;&amp;mdash;
- 编译xhprof.so扩展 % cd &amp;lt;xhprof_source_directory&amp;gt;/extension/ % phpize % ./configure --with-php-config=&amp;lt;path to php-config&amp;gt; % make % make install   修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&amp;lt;directory&amp;gt; ; 需要有写入权限，可以写/tmp，或者不设置   从github上下载auto-xhprof，并配置。 1.</description>
+auto-xhprof.php 全局加载文件。 auto-xhprof-config.php 全局配置文件，设置MySQL数据库和参数等。 gearman-worker.php gearman后台处理worker进程。 web/ web显示目录，xhprof列表页面和原xhprof展示部分 xhprof_lib/ xhprof库文件。 &amp;mdash;&amp;mdash;&amp;mdash; 扩展安装步骤 &amp;mdash;&amp;mdash;&amp;mdash;
+ 编译xhprof.so扩展 % cd &amp;lt;xhprof_source_directory&amp;gt;/extension/ % phpize % ./configure --with-php-config=&amp;lt;path to php-config&amp;gt; % make % make install
+ 修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&amp;lt;directory&amp;gt; ; 需要有写入权限，可以写/tmp，或者不设置
+ 从github上下载auto-xhprof，并配置。 1.</description>
     </item>
     
     <item>
@@ -104,17 +106,19 @@ auto-xhprof.php 全局加载文件。 auto-xhprof-config.php 全局配置文件�
       
       <guid>http://chenxiaoyu.org/2011/05/31/python-supervisor/</guid>
       <description>经常会碰到要写一些守护进程，简单做法放入后台：
-shell&amp;gt; nohup python xxx.py &amp;amp;  偶尔这么做还可以接受，如果一堆这样的呢？
+shell&amp;gt; nohup python xxx.py &amp;amp; 偶尔这么做还可以接受，如果一堆这样的呢？
 当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。
 如果可以统一管理这些应用，是不是很哈皮？
 按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！
 supervisor地址：http://supervisord.org，官方标语就是：一个进程管理工具。
 安装：
-shell&amp;gt; sudo aptitude install supervisor # pip/easy_install  也可以通过其他包管理来安装，比如apt/yum等。
+shell&amp;gt; sudo aptitude install supervisor # pip/easy_install 也可以通过其他包管理来安装，比如apt/yum等。
 安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：
-/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等  下面来一个示例，用web.py写一个hello的程序：
+/usr/bin/supervisord -- supervisor服务守护进程 /usr/bin/supervisorctl -- supervisor服务控制程序，比如：status/start/stop/restart xx 等 /etc/supervisor/supervisord.conf -- 配置文件，定义服务名称以及接口等等 下面来一个示例，用web.py写一个hello的程序：
 import web urls = ( &amp;#39;/(.*)&amp;#39;,&amp;#39;hello&amp;#39; ) app = web.application(urls, globals()) class hello: def GET(self, name): return &amp;#39;hello: &amp;#39; + name if __name__ == &amp;#39;__main__&amp;#39;: app.run()  这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：
-[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log  上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。</description>
+[program:hello] command=python /home/smallfish/hello.py autorstart=true stdout_logfile=/home/smallfish/hello.log 上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。
+到这里，基本搞定了，下面就是启动管理：
+shell&amp;gt; sudo /etc/init.</description>
     </item>
     
     <item>
@@ -127,13 +131,14 @@ import web urls = ( &amp;#39;/(.*)&amp;#39;,&amp;#39;hello&amp;#39; ) app = web.
 测试Google App Engine时候需要切换到2.5，正式调试时候回归到2.6，自己玩的时候会选择2.7或者stackless，每次都是通过bash profile来调整，或者手动加link。真麻烦那。。。
 无意间看到有一个Perl版本的brew工具：http://search.cpan.org/~gugod/App-perlbrew-0.18/bin/perlbrew！
 安装：
-$ easy_install pythonbrew $ pythonbrew_install # 或手动下载 $ curl -kLO http://github.com/utahta/pythonbrew/raw/master/pythonbrew-install $ chmod +x pythonbrew-install $ ./pythonbrew-install  把 source /xxx/.pythonbrew/etc/bashrc 加入到自己profile或者bashrc中去（xxx是自己的用户目录）
+$ easy_install pythonbrew $ pythonbrew_install # 或手动下载 $ curl -kLO http://github.com/utahta/pythonbrew/raw/master/pythonbrew-install $ chmod +x pythonbrew-install $ ./pythonbrew-install 把 source /xxx/.pythonbrew/etc/bashrc 加入到自己profile或者bashrc中去（xxx是自己的用户目录）
 pythonbrew 常用命令如下：
 install 安装版本：
-$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6  switch 选择版本：
-$ pythonbrew switch 2.6.6  list 查看版本：
-$ pythonbrew list # 列出目前已安装的版本 pythonbrew list -k # 列出可以下载和安装的版本  uninstall 卸载版本：
-$ pythonbrew uninstall 2.</description>
+$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6
+switch 选择版本：
+$ pythonbrew switch 2.6.6 list 查看版本：
+$ pythonbrew list # 列出目前已安装的版本 pythonbrew list -k # 列出可以下载和安装的版本 uninstall 卸载版本：
+$ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://pypi.python.org/pypi/pythonbrew/。</description>
     </item>
     
     <item>
@@ -149,7 +154,7 @@ $ pythonbrew uninstall 2.</description>
 杭州之行匆匆而逝，来到了大上海，这个充满魔力和摩登的都市。说真的，自己尚未体会。换了新环境，适应是必须的。在试用期内很快直接切入项目，几个月很快过去了。虽然在一些问题上自己不能决定什么，但是还是很幸运，可以从项目最初的雏形，到现在已经测试发布，自己都在其中。其实这个正是自己所擅长的。我想的就是自己能够决定更多，能够参与的更多，当然，或许这个可能性还需要自己去努力，或许现实总是那般无力，或许。
 一年的流水账，想说，并不容易。希望自己一直能够如此前行，走自己的路，知道自己需要什么，能够得到什么。足矣。
 零点的钟声已过，回忆这一年，许许多多的人，给了自己很多很多的帮助，感谢一下。
-何伟平：很感谢何老师的推荐，才能有机会进入淘宝这样的大公司。何老师的谦虚和热心，很值得自己去学习。很遗憾，至今未有机会请何老师吃顿饭。 康伯：在淘宝时候我的主管。很感谢他跟自己多次的交流，有想法就说，就交流。给了自己很多机会。他是我至今为止唯一一个在系统方面很膜拜的人。 大舞：淘宝入职时候的师兄。试用期内给了自己很多建议和指导，一个很帅很帅的男人。@kemin_ukl 春哥：非芒果台的那位。感谢春哥推荐了自己来盛大，还混了不少饭，春哥工作和生活的太多很值得码农学习和借鉴。@mcspring 道神：灰常牛叉的DD，感谢刚来魔都时候收留了俺这个码农。回头还要多搭讪，求其在Debian方面的经验。@lidaobing 群众：鄙人群里那些哥们，你们都是神一样的男人！因为有了你们，才有了欢乐！@marchliu @xiaoxiaolu @guangfengio 等等大牛们。  话不多说，祝愿那些把帮助和关心过我的人，新年能够身体健康，幸福快乐！
+何伟平：很感谢何老师的推荐，才能有机会进入淘宝这样的大公司。何老师的谦虚和热心，很值得自己去学习。很遗憾，至今未有机会请何老师吃顿饭。 康伯：在淘宝时候我的主管。很感谢他跟自己多次的交流，有想法就说，就交流。给了自己很多机会。他是我至今为止唯一一个在系统方面很膜拜的人。 大舞：淘宝入职时候的师兄。试用期内给了自己很多建议和指导，一个很帅很帅的男人。@kemin_ukl 春哥：非芒果台的那位。感谢春哥推荐了自己来盛大，还混了不少饭，春哥工作和生活的太多很值得码农学习和借鉴。@mcspring 道神：灰常牛叉的DD，感谢刚来魔都时候收留了俺这个码农。回头还要多搭讪，求其在Debian方面的经验。@lidaobing 群众：鄙人群里那些哥们，你们都是神一样的男人！因为有了你们，才有了欢乐！@marchliu @xiaoxiaolu @guangfengio 等等大牛们。 话不多说，祝愿那些把帮助和关心过我的人，新年能够身体健康，幸福快乐！
 去迎接新的一年，我，继续在路上。
 &amp;nbsp;</description>
     </item>
@@ -164,10 +169,11 @@ $ pythonbrew uninstall 2.</description>
 官网文档请参考：http://www.postgresql.org/docs/current/static/hstore.html
 本文测试环境在 Mac OS 下，Pg采用源码编译。
 编译 hstore 扩展
-mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install  导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。
-mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令  进入数据库，建一个测试表
-postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;quot;testhstore_id_seq&amp;quot; for serial column &amp;quot;testhstore.id&amp;quot; CREATE TABLE  查看下表结构
-postgres=# \d List of relations Schema | Name | Type | Owner --------+-------------------+----------+---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;quot;public.</description>
+mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install 导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。
+mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令 进入数据库，建一个测试表
+postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;#34;testhstore_id_seq&amp;#34; for serial column &amp;#34;testhstore.id&amp;#34; CREATE TABLE
+查看下表结构
+postgres=# \d List of relations Schema | Name | Type | Owner --------+-------------------+----------+---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;#34;public.</description>
     </item>
     
     <item>
@@ -178,10 +184,10 @@ postgres=# \d List of relations Schema | Name | Type | Owner --------+----------
       <guid>http://chenxiaoyu.org/2011/02/19/pylons-tutorial-deploy-application/</guid>
       <description>前面几篇教程简单讲述了如何使用 Pylons 进行 WEB 方面开发的步骤，包括简单的 Hello、表单和数据库操作等内容。本篇将描述一下如何在正式环境中发布基于 Pylons 的 WEB 应用。
 测试环境：Nginx 0.8.53 + FastCGI 模式 （需要安装 flup 模块）
-pip install flup # easy_install -U flup  测试代码，延用前面的 Hello 示例。
-mac:python smallfish$ paster create -t pylons hello mac:python smallfish$ cd hello/ mac:hello smallfish$ paster controller hi mac:hello smallfish$ paster serve --reload development.ini  确保以上过程无错，访问：http://127.0.0.1:5000 可以看到默认页面。
+pip install flup # easy_install -U flup 测试代码，延用前面的 Hello 示例。
+mac:python smallfish$ paster create -t pylons hello mac:python smallfish$ cd hello/ mac:hello smallfish$ paster controller hi mac:hello smallfish$ paster serve --reload development.ini 确保以上过程无错，访问：http://127.0.0.1:5000 可以看到默认页面。
 好把，开始配置发布环境。 需要修改 development.ini 配置文件，找到 [server:main] 节点，修改其中的 use 方式（默认是 egg:Paste#http）。
-[server:main] use = egg:PasteScript#flup_fcgi_thread host = 0.0.0.0 port = 5000  另外建议修改 [DEFAULT] 节点中 debug = false，以免错误会打印具体的环境和堆栈信息。</description>
+[server:main] use = egg:PasteScript#flup_fcgi_thread host = 0.0.0.0 port = 5000 另外建议修改 [DEFAULT] 节点中 debug = false，以免错误会打印具体的环境和堆栈信息。</description>
     </item>
     
     <item>
@@ -225,7 +231,8 @@ http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-p
       <description>目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。
 系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/
 首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下：
- 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm   安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel   安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*   修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH   安装 cutycapt  svn co https://cutycapt.</description>
+ 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm  安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel
+ 安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*  修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH  安装 cutycapt  svn co https://cutycapt.</description>
     </item>
     
   </channel>

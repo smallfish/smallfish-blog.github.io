@@ -102,51 +102,41 @@
 <li>修改 conf/httpd.conf，找到如下位置，去除 # 注释符</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Virtual hosts</span>
-<span class="n">Include</span> <span class="n">conf</span><span class="o">/</span><span class="n">extra</span><span class="o">/</span><span class="n">httpd</span><span class="o">-</span><span class="n">vhosts</span><span class="o">.</span><span class="n">conf</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Virtual hosts</span>
+<span class="n">Include</span> <span class="n">conf</span><span class="o">/</span><span class="n">extra</span><span class="o">/</span><span class="n">httpd</span><span class="o">-</span><span class="n">vhosts</span><span class="o">.</span><span class="n">conf</span></code></pre></div>
 
 <p>2.修改 conf/extra/httpd-vhosts.conf</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">VirtualHost</span> <span class="o">*</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">VirtualHost</span> <span class="o">*</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span>
     <span class="n">ServerAdmin</span> <span class="n">webmaster</span><span class="nd">@aa.com</span>
-    <span class="n">DocumentRoot</span> <span class="s2">&quot;/usr/aa&quot;</span>
+    <span class="n">DocumentRoot</span> <span class="sa"></span><span class="s2">&#34;/usr/aa&#34;</span>
     <span class="n">ServerName</span> <span class="n">ww</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">com</span>
     <span class="n">ServerAlias</span> <span class="n">ww</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">com</span>
-    <span class="n">ErrorLog</span> <span class="s2">&quot;logs/ww.aa.com-error_log&quot;</span>
-    <span class="n">CustomLog</span> <span class="s2">&quot;logs/ww.aa.com-access_log&quot;</span> <span class="n">common</span>
-<span class="o">&lt;/</span><span class="n">VirtualHost</span><span class="o">&gt;</span>
-</code></pre></div>
-
+    <span class="n">ErrorLog</span> <span class="sa"></span><span class="s2">&#34;logs/ww.aa.com-error_log&#34;</span>
+    <span class="n">CustomLog</span> <span class="sa"></span><span class="s2">&#34;logs/ww.aa.com-access_log&#34;</span> <span class="n">common</span>
+<span class="o">&lt;/</span><span class="n">VirtualHost</span><span class="o">&gt;</span></code></pre></div>
 
 <p>注意CustomLog这行，默认给的配置是：&rdquo;logs/dummy-host.example.com-access_log common&rdquo;</p>
 
 <p>这个其实是错误的，Apache启动时候会报错，common这个应该放在双引号外面：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">Syntax</span> <span class="n">error</span> <span class="n">on</span> <span class="n">line</span> <span class="mi">32</span> <span class="n">of</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">apache</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">extra</span><span class="o">/</span><span class="n">httpd</span><span class="o">-</span><span class="n">vhosts</span><span class="o">.</span><span class="n">conf</span><span class="p">:</span>
-<span class="n">CustomLog</span> <span class="n">takes</span> <span class="n">two</span> <span class="ow">or</span> <span class="n">three</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">a</span> <span class="nb">file</span> <span class="n">name</span><span class="p">,</span> <span class="n">a</span> <span class="n">custom</span> <span class="n">log</span> <span class="n">format</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">format</span> <span class="n">name</span><span class="p">,</span> <span class="ow">and</span> <span class="n">an</span> <span class="n">optional</span> <span class="s2">&quot;env=&quot;</span> <span class="n">clause</span> <span class="p">(</span><span class="n">see</span> <span class="n">docs</span><span class="p">)</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">Syntax</span> <span class="n">error</span> <span class="n">on</span> <span class="n">line</span> <span class="mi">32</span> <span class="n">of</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">apache</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span><span class="n">extra</span><span class="o">/</span><span class="n">httpd</span><span class="o">-</span><span class="n">vhosts</span><span class="o">.</span><span class="n">conf</span><span class="p">:</span>
+<span class="n">CustomLog</span> <span class="n">takes</span> <span class="n">two</span> <span class="ow">or</span> <span class="n">three</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">a</span> <span class="nb">file</span> <span class="n">name</span><span class="p">,</span> <span class="n">a</span> <span class="n">custom</span> <span class="n">log</span> <span class="n">format</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">format</span> <span class="n">name</span><span class="p">,</span> <span class="ow">and</span> <span class="n">an</span> <span class="n">optional</span> <span class="sa"></span><span class="s2">&#34;env=&#34;</span> <span class="n">clause</span> <span class="p">(</span><span class="n">see</span> <span class="n">docs</span><span class="p">)</span></code></pre></div></p>
 
 <p>另外还有个问题，在Apache+Tomcat时候出现的，在配置好mod_jk之后，通过默认80端口访问jsp总会提示403禁止访问，纳闷了！后来 才发现是Directory配置问题，因为每个VirtualHost配置的目录不是默认的DocumentRoot目录，在Apache2以后对于权限 和安全有了更高的要求，所以必须手动配置下每个Directory属性。</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">Directory</span> <span class="s2">&quot;/usr/aa&quot;</span><span class="o">&gt;</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">Directory</span> <span class="sa"></span><span class="s2">&#34;/usr/aa&#34;</span><span class="o">&gt;</span>
     <span class="n">Options</span> <span class="n">Indexes</span> <span class="n">FollowSymLinks</span>
     <span class="n">AllowOverride</span> <span class="bp">None</span>
     <span class="n">Order</span> <span class="n">allow</span><span class="p">,</span><span class="n">deny</span>
     <span class="n">Allow</span> <span class="kn">from</span> <span class="nn">all</span>
-<span class="o">&lt;/</span><span class="n">Directory</span><span class="o">&gt;</span>
-</code></pre></div>
-</p>
+<span class="o">&lt;/</span><span class="n">Directory</span><span class="o">&gt;</span></code></pre></div></p>
 
 <p>OK，到这里虚拟主机部分已经配置完成！</p>
 
 <p>补充一点，加上日志按天保存，避免一个巨大无比的文件！</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">CustomLog</span> <span class="s2">&quot;|/usr/local/apache/bin/rotatelogs /usr/local/apache/logs/ww.aa.com-access-%y%m</span><span class="si">%d</span><span class="s2">.log 86400 480 &quot;</span> <span class="n">combined</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">CustomLog</span> <span class="sa"></span><span class="s2">&#34;|/usr/local/apache/bin/rotatelogs /usr/local/apache/logs/ww.aa.com-access-%y%m</span><span class="si">%d</span><span class="s2">.log 86400 480 &#34;</span> <span class="n">combined</span></code></pre></div>
 
 </article>
 

@@ -120,7 +120,7 @@
 
 <p>这将是很好的利用 Go-specific 工具里安排源码结构，如何按照顺序和构建代码。Go 使用 GUN make。所以首先在一个新的package 文件夹里建立一个 Makefile。最简单的做法就是从 <a href="http://golang.org/src/pkg/container/vector/Makefile">http://golang.org/src/pkg/container/vector/Makefile</a> 源码包里拷贝一份。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">include</span> <span class="o">../../../</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">include</span> <span class="o">../../../</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
 
 <span class="n">TARG</span><span class="o">=</span><span class="n">container</span><span class="o">/</span><span class="n">vector</span>
 <span class="n">GOFILES</span><span class="o">=</span>\
@@ -128,22 +128,18 @@
 	<span class="n">stringvector</span><span class="o">.</span><span class="n">go</span>\
 	<span class="n">vector</span><span class="o">.</span><span class="n">go</span>\
 
-<span class="n">include</span> <span class="o">../../../</span><span class="n">Make</span><span class="o">.</span><span class="n">pkg</span>
-</code></pre></div>
-
+<span class="n">include</span> <span class="o">../../../</span><span class="n">Make</span><span class="o">.</span><span class="n">pkg</span></code></pre></div>
 
 <p>当然在上面的源码包之外写一个新的 package ，通常的 Makefile 如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
 
 <span class="n">TARG</span><span class="o">=</span><span class="n">mypackage</span>
 <span class="n">GOFILES</span><span class="o">=</span>\
 	<span class="n">my1</span><span class="o">.</span><span class="n">go</span>\
 	<span class="n">my2</span><span class="o">.</span><span class="n">go</span>\
 
-<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="n">pkg</span>
-</code></pre></div>
-
+<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="n">pkg</span></code></pre></div>
 
 <p>第一行 include 标准的定义和规则，package 的路径一般相对路径来代替 $(GOROOT)/src ，这样做到目的就是防止 make 时候 $(GOROOT) 含有空格，这样做很方便开发中使用Go。</p>
 
@@ -153,10 +149,8 @@
 
 <p>如果想在 Go 源码树中新建包，需要添加列表到 $GOROOT/src/pkg/Makefile 中作为标准库编译，编译运行：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">cd</span> <span class="err">$</span><span class="n">GOROOT</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">pkg</span>
-<span class="o">./</span><span class="n">deps</span><span class="o">.</span><span class="n">b</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cd</span> <span class="err">$</span><span class="n">GOROOT</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">pkg</span>
+<span class="o">./</span><span class="n">deps</span><span class="o">.</span><span class="n">b</span></code></pre></div>
 
 <p>更新依赖文件 Make.deps （这是每次 make all 或者 make build 都需要）</p>
 
@@ -186,20 +180,18 @@
 
 <p>第一个是 numbers.go</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">numbers</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">package</span> <span class="n">numbers</span>
 
 <span class="n">func</span> <span class="n">Double</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">)</span> <span class="nb">int</span> <span class="p">{</span>
 	<span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="p">}</span>
-</code></pre></div>
-
+<span class="p">}</span></code></pre></div>
 
 <p>第二个是测试文件 numbers_test.go</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">numbers</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">package</span> <span class="n">numbers</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s2">&quot;testing&quot;</span>
+	<span class="sa"></span><span class="s2">&#34;testing&#34;</span>
 <span class="p">)</span>
 
 <span class="nb">type</span> <span class="n">doubleTest</span> <span class="n">struct</span> <span class="p">{</span>
@@ -216,24 +208,20 @@
 	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">dt</span> <span class="p">:</span><span class="o">=</span> <span class="nb">range</span> <span class="n">doubleTests</span> <span class="p">{</span>
 		<span class="n">v</span> <span class="p">:</span><span class="o">=</span> <span class="n">Double</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="ow">in</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">dt</span><span class="o">.</span><span class="n">out</span> <span class="p">{</span>
-			<span class="n">t</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s2">&quot;Double(</span><span class="si">%d</span><span class="s2">) = </span><span class="si">%d</span><span class="s2">, want </span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="ow">in</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">out</span><span class="p">)</span>
+			<span class="n">t</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;Double(</span><span class="si">%d</span><span class="s2">) = </span><span class="si">%d</span><span class="s2">, want </span><span class="si">%d</span><span class="s2">.&#34;</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="ow">in</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">out</span><span class="p">)</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
+<span class="p">}</span></code></pre></div>
 
 <p>最后是 Makefile 文件</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span><span class="err">$</span><span class="p">(</span><span class="n">GOARCH</span><span class="p">)</span>
 
 <span class="n">TARG</span><span class="o">=</span><span class="n">numbers</span>
 <span class="n">GOFILES</span><span class="o">=</span>\
 	<span class="n">numbers</span><span class="o">.</span><span class="n">go</span>\
 
-<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span>
-</code></pre></div>
-
+<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">GOROOT</span><span class="p">)</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">Make</span><span class="o">.</span></code></pre></div>
 
 <p>运行 make install 将会构建和安装包到 GOROOT/pkg/ 文件夹内（他在系统的任何地方导入调用）。</p>
 

@@ -102,18 +102,16 @@
 
 <p>原代码如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa"></span><span class="s2">&#34;&#34;&#34;Closes the existing database connection and re-opens it.&#34;&#34;&#34;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-</code></pre></div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
 
 <p>修改后：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Closes the existing database connection and re-opens it.&quot;&quot;&quot;</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa"></span><span class="s2">&#34;&#34;&#34;Closes the existing database connection and re-opens it.&#34;&#34;&#34;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">DBUtils</span> <span class="kn">import</span> <span class="n">PooledDB</span>
@@ -121,19 +119,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">pool_con</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-</code></pre></div>
-</p>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span></code></pre></div></p>
 
 <p>至于安装DBUtils模块可以去<a href="http://pypi.python.org/pypi/DBUtils/">http://pypi.python.org/pypi/DBUtils/</a>下载，也可以简单的用easy_install：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">easy_install</span> <span class="o">-</span><span class="n">U</span> <span class="n">DBUtils</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">easy_install</span> <span class="o">-</span><span class="n">U</span> <span class="n">DBUtils</span></code></pre></div></p>
 
 <p>PooledDB有这么几个参数：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">*</span> <span class="n">creator</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">*</span> <span class="n">creator</span>
     <span class="err">可以生成</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="err">连接的任何函数或</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="err">兼容的数据库连接模块。</span>
 <span class="o">*</span> <span class="n">mincached</span>
     <span class="err">启动时开启的空连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">意味着开始时不创建连接</span><span class="p">)</span>
@@ -148,9 +142,7 @@
 <span class="o">*</span> <span class="n">maxusage</span>
     <span class="err">单个连接的最大允许复用次数</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">或</span> <span class="bp">False</span> <span class="err">代表不限制的复用</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">setsession</span><span class="p">:</span>
-    <span class="err">一个可选的</span><span class="n">SQL</span><span class="err">命令列表用于准备每个会话，如</span> <span class="p">[</span><span class="s2">&quot;set datestyle to german&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</code></pre></div>
-
+    <span class="err">一个可选的</span><span class="n">SQL命令列表用于准备每个会话</span><span class="err">，如</span> <span class="p">[</span><span class="sa"></span><span class="s2">&#34;set datestyle to german&#34;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span></code></pre></div>
 
 <p>creator 函数或可以生成连接的函数可以接受这里传入的其他参数，例如主机名、数据库、用户名、密码等。你还可以选择传入creator函数的其他参数，允许失败重连和负载均衡。</p>
 

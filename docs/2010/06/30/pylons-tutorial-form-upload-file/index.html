@@ -98,10 +98,8 @@
 
 <p>继续延用上篇里面的 hello 工程，在 HiController 里添加 form 方法：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s1">&#39;/form.mako&#39;</span><span class="p">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;/form.mako&#39;</span><span class="p">)</span></code></pre></div>
 
 <p>加完以后可以访问：<a href="http://127.0.0.1:5000/hi/form，会报错。">http://127.0.0.1:5000/hi/form，会报错。</a></p>
 
@@ -109,68 +107,56 @@
 
 <p>好吧，写一个表单的模板，只包含一个简单的文本框和提交按钮示例。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;/hi/submit&quot;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="o">&gt;</span>
-<span class="n">name</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span> <span class="o">/&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;/hi/submit&#34;</span> <span class="n">method</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;post&#34;</span><span class="o">&gt;</span>
+<span class="n">name</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;text&#34;</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;name&#34;</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
-<span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="o">/&gt;</span>
-<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
-</code></pre></div>
-
+<span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;submit&#34;</span> <span class="n">value</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;submit&#34;</span> <span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span></code></pre></div>
 
 <p>再添加一个 submit 方法来处理表单提交，</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;hello, name: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa"></span><span class="s2">&#34;hello, name: </span><span class="si">%s</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span></code></pre></div>
 
 <p>request.params 包含了表单或者URL提交的参数，建议 POST 数据参照下面的上传部分。想获取更详细的列表，可以查看文档或者自己手动 dir()查阅。</p>
 
 <p>下面尝试一下文件上传，首先在 development.ini 添加一个变量，用来存放文件上传后的文件夹。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="p">[</span><span class="n">app</span><span class="p">:</span><span class="n">main</span><span class="p">]</span>
-<span class="n">upload_dir</span> <span class="o">=</span> <span class="o">%</span><span class="p">(</span><span class="n">here</span><span class="p">)</span><span class="n">s</span><span class="o">/</span><span class="n">upload</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">app</span><span class="p">:</span><span class="n">main</span><span class="p">]</span>
+<span class="n">upload_dir</span> <span class="o">=</span> <span class="o">%</span><span class="p">(</span><span class="n">here</span><span class="p">)</span><span class="n">s</span><span class="o">/</span><span class="n">upload</span></code></pre></div>
 
 <p>%(here) 启动后 server 会替换到当前目录地址，上面的地址就是当前路径下的upload文件夹。</p>
 
 <p>修改一下刚才的表单，加一个 file 上传，注意 multipart/form-data 这句，上传必须。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;/hi/submit&quot;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span>  <span class="n">enctype</span><span class="o">=</span> <span class="s2">&quot;multipart/form-data&quot;</span><span class="o">&gt;</span>
-<span class="n">name</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span> <span class="o">/&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;/hi/submit&#34;</span> <span class="n">method</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;post&#34;</span>  <span class="n">enctype</span><span class="o">=</span> <span class="sa"></span><span class="s2">&#34;multipart/form-data&#34;</span><span class="o">&gt;</span>
+<span class="n">name</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;text&#34;</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;name&#34;</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
-<span class="nb">file</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;file&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;file&quot;</span> <span class="o">/&gt;</span>
+<span class="nb">file</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;file&#34;</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;file&#34;</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
-<span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="o">/&gt;</span>
-<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
-</code></pre></div>
-
+<span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;submit&#34;</span> <span class="n">value</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;submit&#34;</span> <span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span></code></pre></div>
 
 <p>修改 submit 方法，添加文件内容：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">name</span>   <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="n">myfile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span>   <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">myfile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
         <span class="kn">import</span> <span class="nn">os</span>
         <span class="kn">import</span> <span class="nn">shutil</span>
         <span class="kn">from</span> <span class="nn">pylons</span> <span class="kn">import</span> <span class="n">config</span>
-        <span class="n">local_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;app_conf&#39;</span><span class="p">][</span><span class="s1">&#39;upload_dir&#39;</span><span class="p">],</span> <span class="n">myfile</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-        <span class="n">local_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">local_name</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">myfile</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">local_file</span><span class="p">)</span>
-        <span class="n">myfile</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">local_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;app_conf&#39;</span><span class="p">][</span><span class="sa"></span><span class="s1">&#39;upload_dir&#39;</span><span class="p">],</span> <span class="n">myfile</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">local_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">local_name</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;wb&#34;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">myfile</span><span class="o">.</span><span class="nb">file</span><span class="p">,</span> <span class="n">local_file</span><span class="p">)</span>
+        <span class="n">myfile</span><span class="o">.</span><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">local_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;hello, name: </span><span class="si">%s</span><span class="s2">, upload: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">myfile</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-</code></pre></div>
-
+        <span class="k">return</span> <span class="sa"></span><span class="s2">&#34;hello, name: </span><span class="si">%s</span><span class="s2">, upload: </span><span class="si">%s</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">myfile</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span></code></pre></div>
 
 <p>里面 import 部分这里仅仅为了示例，正式的代码请放入程序开头部分，POST 内容可以从 request.POST 获取。</p>
 
 <p>config[&lsquo;app_conf&rsquo;][&lsquo;upload_dir&rsquo;] 就是刚才配置里 development.ini 定义的地址。这个目录需要自己手动创建哦。</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">mkdir</span> <span class="n">upload</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">mkdir</span> <span class="n">upload</span></code></pre></div></p>
 
 <p>OK，到这里程序部分都已经修改完成。重新访问一下：<a href="http://127.0.0.1:5000/hi/form">http://127.0.0.1:5000/hi/form</a></p>
 

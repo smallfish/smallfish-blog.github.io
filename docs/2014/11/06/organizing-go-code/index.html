@@ -100,15 +100,13 @@
 
 <p>Go 程序都是由包构成，每个文件都以 <code>package</code> 开头，程序主体执行从 <code>main</code> 包开始：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>package main
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">package main
 
-import <span class="s2">&quot;fmt&quot;</span>
+import <span class="s2">&#34;fmt&#34;</span>
 
 func main<span class="o">()</span> <span class="o">{</span>
-        fmt.Println<span class="o">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="o">)</span>
-<span class="o">}</span>
-</code></pre></div>
-
+        fmt.Println<span class="o">(</span><span class="s2">&#34;Hello, world!&#34;</span><span class="o">)</span>
+<span class="o">}</span></code></pre></div>
 
 <p>最简单的一个 Go 程序，只需要写一个 <code>main</code> 包即可。</p>
 
@@ -116,7 +114,7 @@ func main<span class="o">()</span> <span class="o">{</span>
 
 <p>示例包：<code>fmt</code></p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>// Package fmt implements formatted I/O.
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">// Package fmt implements formatted I/O.
 package fmt
 
 // Println formats using the default formats <span class="k">for</span> its
@@ -127,9 +125,7 @@ func Println<span class="o">(</span>a ...interface<span class="o">{})</span> <sp
 
 func newPrinter<span class="o">()</span> *pp <span class="o">{</span>
         ...
-<span class="o">}</span>
-</code></pre></div>
-
+<span class="o">}</span></code></pre></div>
 
 <p>其中 <code>Println</code> 是公开（<code>public</code>）函数，只需要第一个字母大写，在其他模块内都是公开可见的（区别于私有 <code>private</code> 函数）。</p>
 
@@ -152,9 +148,7 @@ func newPrinter<span class="o">()</span> *pp <span class="o">{</span>
 
 <p>包名也是类型和函数的一部分，比如：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>buf :<span class="o">=</span> new<span class="o">(</span>bytes.Buffer<span class="o">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">buf :<span class="o">=</span> new<span class="o">(</span>bytes.Buffer<span class="o">)</span></code></pre></div>
 
 <p>这里不要取名为 <code>bytes.BytesBuffer</code>，过于累赘。</p>
 
@@ -164,25 +158,23 @@ func newPrinter<span class="o">()</span> *pp <span class="o">{</span>
 
 <p>测试文件和源码同级目录，文件名都是 <code>_test.go</code> 结尾：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>package fmt
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">package fmt
 
-import <span class="s2">&quot;testing&quot;</span>
+import <span class="s2">&#34;testing&#34;</span>
 
 var <span class="nv">fmtTests</span> <span class="o">=</span> <span class="o">[]</span>fmtTest<span class="o">{</span>
-        <span class="o">{</span><span class="s2">&quot;%d&quot;</span>, <span class="m">12345</span>, <span class="s2">&quot;12345&quot;</span><span class="o">}</span>,
-        <span class="o">{</span><span class="s2">&quot;%v&quot;</span>, <span class="m">12345</span>, <span class="s2">&quot;12345&quot;</span><span class="o">}</span>,
-        <span class="o">{</span><span class="s2">&quot;%t&quot;</span>, true, <span class="s2">&quot;true&quot;</span><span class="o">}</span>,
+        <span class="o">{</span><span class="s2">&#34;%d&#34;</span>, <span class="m">12345</span>, <span class="s2">&#34;12345&#34;</span><span class="o">}</span>,
+        <span class="o">{</span><span class="s2">&#34;%v&#34;</span>, <span class="m">12345</span>, <span class="s2">&#34;12345&#34;</span><span class="o">}</span>,
+        <span class="o">{</span><span class="s2">&#34;%t&#34;</span>, true, <span class="s2">&#34;true&#34;</span><span class="o">}</span>,
 <span class="o">}</span>
 
 func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
         <span class="k">for</span> _, tt :<span class="o">=</span> range fmtTests <span class="o">{</span>
             <span class="k">if</span> s :<span class="o">=</span> Sprintf<span class="o">(</span>tt.fmt, tt.val<span class="o">)</span><span class="p">;</span> s !<span class="o">=</span> tt.out <span class="o">{</span>
-                    t.Errorf<span class="o">(</span><span class="s2">&quot;...&quot;</span><span class="o">)</span>
+                    t.Errorf<span class="o">(</span><span class="s2">&#34;...&#34;</span><span class="o">)</span>
             <span class="o">}</span>
         <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
-
+<span class="o">}</span></code></pre></div>
 
 <p>差不多了，建议一个源码文件对应一个测试文件。</p>
 
@@ -196,7 +188,7 @@ func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <sp
 
 <p>比如：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">$GOPATH</span>/
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">$GOPATH</span>/
     src/
        github.com/user/repo/
            mypkg/
@@ -205,22 +197,16 @@ func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <sp
            cmd/mycmd/
                 main.go
    bin/
-       mycmd
-</code></pre></div>
-
+       mycmd</code></pre></div>
 
 <p>这里示例一下工作目录吧</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>mkdir /tmp/gows
-<span class="nv">GOPATH</span><span class="o">=</span>/tmp/gows
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">mkdir /tmp/gows
+<span class="nv">GOPATH</span><span class="o">=</span>/tmp/gows</code></pre></div>
 
 <p><code>$GOPATH</code> 环境变量前面以及提到，后续的安装和构建包都依赖这个：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ go get github.com/dsymonds/fixhub/cmd/fixhub
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ go get github.com/dsymonds/fixhub/cmd/fixhub</code></pre></div>
 
 <p><code>go get</code> 命令则会远程仓库下载源码到自己的工作目录内（需要相关的版本工具，比如：<code>git</code>）</p>
 
@@ -228,27 +214,25 @@ func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <sp
 
 <p>我的工作目录大概如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">$GOPATH</span>/
-    bin/fixhub                              <span class="c1"># installed binary</span>
-    pkg/darwin_amd64/                       <span class="c1"># compiled archives</span>
-        code.google.com/p/goauth2/oauth.a
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">$GOPATH</span>/
+    bin/fixhub                              <span class="c1"># installed binary
+</span><span class="c1"></span>    pkg/darwin_amd64/                       <span class="c1"># compiled archives
+</span><span class="c1"></span>        code.google.com/p/goauth2/oauth.a
         github.com/...
-    src/                                    <span class="c1"># source repositories</span>
-        code.google.com/p/goauth2/
+    src/                                    <span class="c1"># source repositories
+</span><span class="c1"></span>        code.google.com/p/goauth2/
             .hg
-            oauth                           <span class="c1"># used by package go-github</span>
-            ...
+            oauth                           <span class="c1"># used by package go-github
+</span><span class="c1"></span>            ...
         github.com/
-            golang/lint/...                 <span class="c1"># used by package fixhub</span>
-                .git
-            google/go-github/...            <span class="c1"># used by package fixhub</span>
-                .git
+            golang/lint/...                 <span class="c1"># used by package fixhub
+</span><span class="c1"></span>                .git
+            google/go-github/...            <span class="c1"># used by package fixhub
+</span><span class="c1"></span>                .git
             dsymonds/fixhub/
                 .git
                 client.go
-                cmd/fixhub/fixhub.go        <span class="c1"># package main</span>
-</code></pre></div>
-
+                cmd/fixhub/fixhub.go        # package main</code></pre></div>
 
 <p>可以看到下载了很多远程的仓库，编译后可执行文件是 <code>bin/fixhub</code>。</p>
 
@@ -260,9 +244,7 @@ func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <sp
 
 <p>有时候我们可能有很多的工作目录，但是大部分人只用一个。有个建议这样来声明 <code>GOPATH</code>：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span></code></pre></div>
 
 <p>这样 <code>src</code>，<code>bin</code> 和 <code>pgk</code> 都会在你的用户 <code>home</code> 目录下了。</p>
 
@@ -270,51 +252,41 @@ func TestSprintf<span class="o">(</span>t *testing.T<span class="o">)</span> <sp
 
 <p>快速切换目录</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="nv">CDPATH</span><span class="o">=</span><span class="nv">$GOPATH</span>/src/github.com:<span class="nv">$GOPATH</span>/src/code.google.com/p
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CDPATH</span><span class="o">=</span><span class="nv">$GOPATH</span>/src/github.com:<span class="nv">$GOPATH</span>/src/code.google.com/p
 
 $ <span class="nb">cd</span> dsymonds/fixhub
 /tmp/gows/src/github.com/dsymonds/fixhub
 $ <span class="nb">cd</span> goauth2
 /tmp/gows/src/code.google.com/p/goauth2
-$
-</code></pre></div>
-
+$</code></pre></div>
 
 <p>还可以写个函数放入到 <code>~/.profile</code> 内：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>gocd <span class="o">()</span> <span class="o">{</span> <span class="nb">cd</span> <span class="sb">`</span>go list -f <span class="s1">&#39;{{.Dir}}&#39;</span> <span class="nv">$1</span><span class="sb">`</span> <span class="o">}</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">gocd <span class="o">()</span> <span class="o">{</span> <span class="nb">cd</span> <span class="sb">`</span>go list -f <span class="s1">&#39;{{.Dir}}&#39;</span> <span class="nv">$1</span><span class="sb">`</span> <span class="o">}</span></code></pre></div>
 
 <p>这样移动更方便一些：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ gocd .../lint
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ gocd .../lint
 /tmp/gows/src/github.com/golang/lint
-$
-</code></pre></div>
-
+$</code></pre></div>
 
 <p><code>go</code> 工具有很多功能：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ go <span class="nb">help</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ go <span class="nb">help</span>
 Go is a tool <span class="k">for</span> managing Go <span class="nb">source</span> code.
 
 Usage:
 
 go <span class="nb">command</span> <span class="o">[</span>arguments<span class="o">]</span>
 
-The commands are:
-</code></pre></div>
-
+The commands are:</code></pre></div>
 
 <p>常用的功能参数如：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>build       compile packages and dependencies
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">build       compile packages and dependencies
 get         download and install packages and dependencies
 install     compile and install packages and dependencies
-<span class="nb">test</span>        <span class="nb">test</span> packages
-</code></pre></div>
-
+<span class="nb">test</span>        <span class="nb">test</span> packages</code></pre></div>
 
 <p>还有一些其他有用的功能参数，比如：<code>vet</code> 和 <code>fmt</code>，后者是大招啊。</p>
 
@@ -326,9 +298,7 @@ install     compile and install packages and dependencies
 
 <p>略去数十字（<code>vendoring</code> 啥意思..），不喜欢这种做法，推荐 <a href="http://gopkg.in">gopkg.in</a>：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>gopkg.in/user/pkg.v3 -&gt; github.com/user/pkg <span class="o">(</span>branch/tag v3, v3.N, or v.3.N.M<span class="o">)</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">gopkg.in/user/pkg.v3 -&gt; github.com/user/pkg <span class="o">(</span>branch/tag v3, v3.N, or v.3.N.M<span class="o">)</span></code></pre></div>
 
 <p>命名</p>
 
@@ -361,27 +331,21 @@ install     compile and install packages and dependencies
 
 <p>文档位置在模块或者导出的名字前面：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>// Join concatenates the elements of elem to create a single string.
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">// Join concatenates the elements of elem to create a single string.
 // The separator string sep is placed between elements in the resulting string.
-func Join<span class="o">(</span>elem <span class="o">[]</span>string, sep string<span class="o">)</span> string <span class="o">{</span>
-</code></pre></div>
-
+func Join<span class="o">(</span>elem <span class="o">[]</span>string, sep string<span class="o">)</span> string <span class="o">{</span></code></pre></div>
 
 <p>通过 <code>godoc</code> 在 web 查看该函数时候，文档位置位于函数原型下方（图略去）。</p>
 
 <p>请用英语书写文档句子和段落（无视我大汉字啊）</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>// Join concatenates…         good
-// This <span class="k">function</span>…             bad
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">// Join concatenates…         good
+// This <span class="k">function</span>…             bad</code></pre></div>
 
 <p>包文档位于模块最上面：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>	// Package fmt…
-	package fmt	
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">	// Package fmt…
+	package fmt	</code></pre></div>
 
 <p>关于 Go docs 请参考：<a href="http://talks.golang.org/2014/godoc.org">http://talks.golang.org/2014/godoc.org</a></p>
 

@@ -98,55 +98,47 @@
 
 <p>导出表数据到文件或 STDOUT ：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">COPY</span> <span class="n">tablename</span> <span class="p">[(</span><span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">])]</span>
-   <span class="n">TO</span> <span class="p">{</span><span class="s1">&#39;filename&#39;</span> <span class="o">|</span> <span class="n">STDOUT</span><span class="p">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">COPY</span> <span class="n">tablename</span> <span class="p">[(</span><span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">])]</span>
+   <span class="n">TO</span> <span class="p">{</span><span class="sa"></span><span class="s1">&#39;filename&#39;</span> <span class="o">|</span> <span class="n">STDOUT</span><span class="p">}</span>
    <span class="p">[[</span><span class="n">WITH</span><span class="p">]</span>
       <span class="p">[</span><span class="n">BINARY</span><span class="p">]</span>
       <span class="p">[</span><span class="n">OIDS</span><span class="p">]</span>
-      <span class="p">[</span><span class="n">DELIMITER</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;delimiter&#39;</span><span class="p">]</span>
-      <span class="p">[</span><span class="n">NULL</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;null string&#39;</span><span class="p">]</span>
+      <span class="p">[</span><span class="n">DELIMITER</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;delimiter&#39;</span><span class="p">]</span>
+      <span class="p">[</span><span class="n">NULL</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;null string&#39;</span><span class="p">]</span>
       <span class="p">[</span><span class="n">CSV</span> <span class="p">[</span><span class="n">HEADER</span><span class="p">]</span>
-         <span class="p">[</span><span class="n">QUOTE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;quote&#39;</span><span class="p">]</span>
-         <span class="p">[</span><span class="n">ESCAPE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;escape&#39;</span><span class="p">]</span>
-         <span class="p">[</span><span class="n">FORCE</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">]]</span>
-</code></pre></div>
-
+         <span class="p">[</span><span class="n">QUOTE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;quote&#39;</span><span class="p">]</span>
+         <span class="p">[</span><span class="n">ESCAPE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;escape&#39;</span><span class="p">]</span>
+         <span class="p">[</span><span class="n">FORCE</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">]]</span></code></pre></div>
 
 <p>导入文件或者 STDIN 到表中：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">COPY</span> <span class="n">tablename</span> <span class="p">[(</span><span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">])]</span>
-   <span class="n">FROM</span> <span class="p">{</span><span class="s1">&#39;filename&#39;</span> <span class="o">|</span> <span class="n">STDIN</span><span class="p">}</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">COPY</span> <span class="n">tablename</span> <span class="p">[(</span><span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">])]</span>
+   <span class="n">FROM</span> <span class="p">{</span><span class="sa"></span><span class="s1">&#39;filename&#39;</span> <span class="o">|</span> <span class="n">STDIN</span><span class="p">}</span>
    <span class="p">[[</span><span class="n">WITH</span><span class="p">]</span>
       <span class="p">[</span><span class="n">BINARY</span><span class="p">]</span>
       <span class="p">[</span><span class="n">OIDS</span><span class="p">]</span>
-      <span class="p">[</span><span class="n">DELIMITER</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;delimiter&#39;</span><span class="p">]</span>
-      <span class="p">[</span><span class="n">NULL</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;null string&#39;</span><span class="p">]</span>
+      <span class="p">[</span><span class="n">DELIMITER</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;delimiter&#39;</span><span class="p">]</span>
+      <span class="p">[</span><span class="n">NULL</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;null string&#39;</span><span class="p">]</span>
       <span class="p">[</span><span class="n">CSV</span> <span class="p">[</span><span class="n">HEADER</span><span class="p">]</span>
-         <span class="p">[</span><span class="n">QUOTE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;quote&#39;</span><span class="p">]</span>
-         <span class="p">[</span><span class="n">ESCAPE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="s1">&#39;escape&#39;</span><span class="p">]</span>
-         <span class="p">[</span><span class="n">FORCE</span> <span class="n">QUOTE</span> <span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">]]</span>
-</code></pre></div>
-</p>
+         <span class="p">[</span><span class="n">QUOTE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;quote&#39;</span><span class="p">]</span>
+         <span class="p">[</span><span class="n">ESCAPE</span> <span class="p">[</span><span class="n">AS</span><span class="p">]</span> <span class="sa"></span><span class="s1">&#39;escape&#39;</span><span class="p">]</span>
+         <span class="p">[</span><span class="n">FORCE</span> <span class="n">QUOTE</span> <span class="n">column</span> <span class="p">[,</span> <span class="o">...</span><span class="p">]]</span></code></pre></div></p>
 
 <p>导出表 employee 到默认输出 STDOUT：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span><span class="p">;</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span><span class="p">;</span>
 <span class="mi">1</span>       <span class="n">JG100011</span>        <span class="n">Jason</span> <span class="n">Gilmore</span>         <span class="n">jason</span><span class="nd">@example.com</span>
 <span class="mi">2</span>       <span class="n">RT435234</span>        <span class="n">Robert</span> <span class="n">Treat</span>          <span class="n">rob</span><span class="nd">@example.com</span>
 <span class="mi">3</span>       <span class="n">GS998909</span>        <span class="n">Greg</span> <span class="n">Sabino</span> <span class="n">Mullane</span>   <span class="n">greg</span><span class="nd">@example.com</span>
-<span class="mi">4</span>       <span class="n">MW777983</span>        <span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">matt</span><span class="nd">@example.com</span>
-</code></pre></div>
-</p>
+<span class="mi">4</span>       <span class="n">MW777983</span>        <span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">matt</span><span class="nd">@example.com</span></code></pre></div></p>
 
 <p>导出表 employee 到 sql 文件：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="s1">&#39;/home/smallfish/employee.sql&#39;</span><span class="p">;</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="sa"></span><span class="s1">&#39;/home/smallfish/employee.sql&#39;</span><span class="p">;</span></code></pre></div></p>
 
 <p>从文件导入数据：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employeenew</span> <span class="n">FROM</span> <span class="s1">&#39;/home/smallfish/employee.sql&#39;</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employeenew</span> <span class="n">FROM</span> <span class="sa"></span><span class="s1">&#39;/home/smallfish/employee.sql&#39;</span><span class="p">;</span>
 <span class="n">psql</span><span class="o">&gt;</span> <span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">employeenew</span><span class="p">;</span>
 <span class="n">employeeid</span>  <span class="o">|</span> <span class="n">employeecode</span> <span class="o">|</span>     <span class="n">name</span>            <span class="o">|</span>       <span class="n">email</span>
 <span class="o">------------+--------------+---------------------+---------------</span>
@@ -154,61 +146,47 @@
           <span class="mi">2</span> <span class="o">|</span> <span class="n">RT435234</span>     <span class="o">|</span> <span class="n">Robert</span> <span class="n">Treat</span>        <span class="o">|</span> <span class="n">rob</span><span class="nd">@example.com</span>
           <span class="mi">3</span> <span class="o">|</span> <span class="n">GS998909</span>     <span class="o">|</span> <span class="n">Greg</span> <span class="n">Sabino</span> <span class="n">Mullane</span> <span class="o">|</span> <span class="n">greg</span><span class="nd">@example.com</span>
           <span class="mi">4</span> <span class="o">|</span> <span class="n">MW777983</span>     <span class="o">|</span> <span class="n">Matt</span> <span class="n">Wade</span>           <span class="o">|</span> <span class="n">matt</span><span class="nd">@example.com</span>
-<span class="p">(</span><span class="mi">4</span> <span class="n">rows</span><span class="p">)</span>
-</code></pre></div>
-
+<span class="p">(</span><span class="mi">4</span> <span class="n">rows</span><span class="p">)</span></code></pre></div>
 
 <p>输出对象ID（OIDS）：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span> <span class="n">OIDS</span><span class="p">;</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span> <span class="n">OIDS</span><span class="p">;</span>
 <span class="mi">24627</span>  <span class="mi">1</span>       <span class="n">GM100011</span>        <span class="n">Jason</span> <span class="n">Gilmore</span>         <span class="n">jason</span><span class="nd">@example.com</span>
 <span class="mi">24628</span>  <span class="mi">2</span>       <span class="n">RT435234</span>        <span class="n">Robert</span> <span class="n">Treat</span>          <span class="n">rob</span><span class="nd">@example.com</span>
 <span class="mi">24629</span>  <span class="mi">3</span>       <span class="n">GS998909</span>        <span class="n">Greg</span> <span class="n">Sabino</span> <span class="n">Mullane</span>   <span class="n">greg</span><span class="nd">@example.com</span>
-<span class="mi">24630</span>  <span class="mi">4</span>       <span class="n">MW777983</span>        <span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">matt</span><span class="nd">@example.com</span>
-</code></pre></div>
-</p>
+<span class="mi">24630</span>  <span class="mi">4</span>       <span class="n">MW777983</span>        <span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">matt</span><span class="nd">@example.com</span></code></pre></div></p>
 
 <p>指定导出间隔符，默认是 \t ，这里为 | ：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span><span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span> <span class="n">DELIMITER</span> <span class="s1">&#39;|&#39;</span><span class="p">;</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span><span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span> <span class="n">DELIMITER</span> <span class="sa"></span><span class="s1">&#39;|&#39;</span><span class="p">;</span>
 <span class="mi">1</span><span class="o">|</span><span class="n">GM100011</span><span class="o">|</span><span class="n">Jason</span> <span class="n">Gilmore</span><span class="o">|</span><span class="n">jason</span><span class="nd">@example.com</span>
 <span class="mi">2</span><span class="o">|</span><span class="n">RT435234</span><span class="o">|</span><span class="n">Robert</span> <span class="n">Treat</span><span class="o">|</span><span class="n">rob</span><span class="nd">@example.com</span>
 <span class="mi">3</span><span class="o">|</span><span class="n">GS998909</span><span class="o">|</span><span class="n">Greg</span> <span class="n">Sabino</span> <span class="n">Mullane</span><span class="o">|</span><span class="n">greg</span><span class="nd">@example.com</span>
-<span class="mi">4</span><span class="o">|</span><span class="n">MW777983</span><span class="o">|</span><span class="n">Matt</span> <span class="n">Wade</span><span class="o">|</span><span class="n">matt</span><span class="nd">@example.com</span>
-</code></pre></div>
-</p>
+<span class="mi">4</span><span class="o">|</span><span class="n">MW777983</span><span class="o">|</span><span class="n">Matt</span> <span class="n">Wade</span><span class="o">|</span><span class="n">matt</span><span class="nd">@example.com</span></code></pre></div></p>
 
 <p>导入文件数据，指定间隔符为 | ：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employeenew</span> <span class="n">FROM</span> <span class="s1">&#39;/home/smallfish/employee.sql&#39;</span> <span class="n">DELIMITER</span> <span class="o">|</span><span class="p">;</span>
-</code></pre></div>
-</p>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employeenew</span> <span class="n">FROM</span> <span class="sa"></span><span class="s1">&#39;/home/smallfish/employee.sql&#39;</span> <span class="n">DELIMITER</span> <span class="o">|</span><span class="p">;</span></code></pre></div></p>
 
 <p>导出指定字段的数据：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">email</span><span class="p">)</span> <span class="n">TO</span> <span class="n">STDOUT</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">email</span><span class="p">)</span> <span class="n">TO</span> <span class="n">STDOUT</span><span class="p">;</span>
 <span class="n">Jason</span> <span class="n">Gilmore</span>         <span class="n">jason</span><span class="nd">@example.com</span>
 <span class="n">Robert</span> <span class="n">Treat</span>          <span class="n">rob</span><span class="nd">@example.com</span>
 <span class="n">Greg</span> <span class="n">Sabino</span> <span class="n">Mullane</span>   <span class="n">greg</span><span class="nd">@example.com</span>
-<span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">matt</span><span class="nd">@example.com</span>
-</code></pre></div>
-
+<span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">matt</span><span class="nd">@example.com</span></code></pre></div>
 
 <p>为 NULL 字段设置默认值：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span> <span class="n">NULL</span> <span class="s1">&#39;no email&#39;</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="n">TO</span> <span class="n">STDOUT</span> <span class="n">NULL</span> <span class="sa"></span><span class="s1">&#39;no email&#39;</span><span class="p">;</span>
 <span class="n">Jason</span> <span class="n">Gilmore</span>         <span class="n">no</span> <span class="n">email</span>
 <span class="n">Robert</span> <span class="n">Treat</span>          <span class="n">rob</span><span class="nd">@example.com</span>
 <span class="n">Greg</span> <span class="n">Sabino</span> <span class="n">Mullane</span>   <span class="n">greg</span><span class="nd">@example.com</span>
-<span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">no</span> <span class="n">email</span>
-</code></pre></div>
-
+<span class="n">Matt</span> <span class="n">Wade</span>             <span class="n">no</span> <span class="n">email</span></code></pre></div>
 
 <p>导出为CVS格式：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="n">TO</span> <span class="s1">&#39;/home/smallfish/employee.csv&#39;</span> <span class="n">CSV</span> <span class="n">HEADER</span><span class="p">;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">psql</span><span class="o">&gt;</span> <span class="n">COPY</span> <span class="n">employee</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="n">TO</span> <span class="sa"></span><span class="s1">&#39;/home/smallfish/employee.csv&#39;</span> <span class="n">CSV</span> <span class="n">HEADER</span><span class="p">;</span></code></pre></div>
 
 <p>参考资料：<a href="http://apress.com/book/view/9781590595473">http://apress.com/book/view/9781590595473</a></p>
 

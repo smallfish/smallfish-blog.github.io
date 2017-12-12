@@ -100,24 +100,20 @@
 
 <p>然后发现值一直是null，再tail日志看看，异常不断：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span> <span class="n">Mon</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">09</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mo">04</span> <span class="n">CST</span> <span class="mi">2009</span> <span class="o">-</span> <span class="o">++++</span> <span class="n">exception</span> <span class="n">thrown</span> <span class="k">while</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">get</span> <span class="nb">object</span> <span class="kn">from</span> <span class="nn">cache</span> <span class="nn">for</span> <span class="nn">key</span><span class="p">:</span> <span class="n">test_num</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span> <span class="n">Mon</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">09</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mo">04</span> <span class="n">CST</span> <span class="mi">2009</span> <span class="o">-</span> <span class="o">++++</span> <span class="n">exception</span> <span class="n">thrown</span> <span class="k">while</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">get</span> <span class="nb">object</span> <span class="kn">from</span> <span class="nn">cache</span> <span class="nn">for</span> <span class="nn">key</span><span class="p">:</span> <span class="n">test_num</span>
  <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span> <span class="n">Mon</span> <span class="n">Jul</span> <span class="mi">20</span> <span class="mi">09</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mo">04</span> <span class="n">CST</span> <span class="mi">2009</span> <span class="o">-</span> <span class="mi">3</span>
  <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">NestedIOException</span><span class="p">:</span> <span class="mi">3</span>
  <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1408</span><span class="p">)</span>
- <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1270</span><span class="p">)</span>
-</code></pre></div>
-
+ <span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="n">danga</span><span class="o">.</span><span class="n">MemCached</span><span class="o">.</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MemCachedClient</span><span class="o">.</span><span class="n">java</span><span class="p">:</span><span class="mi">1270</span><span class="p">)</span></code></pre></div>
 
 <p>晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？</p>
 
 <p>然后手动试了下：</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">shell</span><span class="o">&gt;</span> <span class="n">telnet</span> <span class="n">xxxxxx</span> <span class="mi">11211</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shell</span><span class="o">&gt;</span> <span class="n">telnet</span> <span class="n">xxxxxx</span> <span class="mi">11211</span>
 <span class="n">get</span> <span class="n">test_num</span>
 <span class="n">VALUE</span> <span class="n">test_num</span> <span class="mi">4</span> <span class="mi">2</span>
-<span class="mi">23</span>
-</code></pre></div>
-</p>
+<span class="mi">23</span></code></pre></div></p>
 
 <p>经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。</p>
 

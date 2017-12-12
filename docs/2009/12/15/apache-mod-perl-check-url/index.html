@@ -100,7 +100,7 @@
 
 <p>先建立/home/httpd/modperl/startup.pl(目录请自行修改)，内容如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
 
 <span class="n">use</span> <span class="n">lib</span> <span class="n">qw</span><span class="p">(</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">modperl</span><span class="p">);</span> <span class="c1"># 把这个路径加入到perl lib路径</span>
 
@@ -112,22 +112,18 @@
 <span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Log</span> <span class="p">();</span>
 <span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Request</span> <span class="p">();</span>
 
-<span class="mi">1</span><span class="p">;</span>
-</code></pre></div>
-
+<span class="mi">1</span><span class="p">;</span></code></pre></div>
 
 <p>部分本机httpd.conf配置：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">LoadModule</span> <span class="n">perl_module</span><span class="err">            </span>    <span class="n">modules</span><span class="o">/</span><span class="n">mod_perl</span><span class="o">.</span><span class="n">so</span>
-<span class="n">LoadModule</span> <span class="n">apreq_module</span><span class="err">         </span>    <span class="n">modules</span><span class="o">/</span><span class="n">mod_apreq2</span><span class="o">.</span><span class="n">so</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">LoadModule</span> <span class="n">perl_module</span>                <span class="n">modules</span><span class="o">/</span><span class="n">mod_perl</span><span class="o">.</span><span class="n">so</span>
+<span class="n">LoadModule</span> <span class="n">apreq_module</span>             <span class="n">modules</span><span class="o">/</span><span class="n">mod_apreq2</span><span class="o">.</span><span class="n">so</span>
 <span class="n">PerlPostConfigRequire</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">modperl</span><span class="o">/</span><span class="n">startup</span><span class="o">.</span><span class="n">pl</span>
 <span class="o">&lt;</span><span class="n">Location</span> <span class="o">/</span><span class="n">down</span> <span class="o">&gt;</span>
     <span class="n">SetHandler</span> <span class="n">modperl</span> <span class="c1"># 设置该目录交给modper处理</span>
     <span class="n">PerlAccessHandler</span> <span class="n">Down</span> <span class="c1"># Down是模块名称</span>
     <span class="n">PerlSetVar</span> <span class="n">key</span> <span class="mi">123</span> <span class="c1"># 设置校验参数值</span>
-<span class="o">&lt;/</span><span class="n">Location</span><span class="o">&gt;</span>
-</code></pre></div>
-
+<span class="o">&lt;/</span><span class="n">Location</span><span class="o">&gt;</span></code></pre></div>
 
 <p>mod_apreq2.so这个模块需要安装Apache2::Request，具体安装：<a href="http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry">http://pyh7.spaces.live.com/blog/cns%2147D8D44208AC51E5%21128.entry</a></p>
 
@@ -135,7 +131,7 @@
 
 <p>修改这些后可以重启下apache，看下logs/error_log里最后是否有mod_apreq和mod_perl字样，如果有就说明成功了。剩下都就是写校验的perl脚本了，/home/httpd/modperl/Down.pm，内容如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">package</span> <span class="n">Down</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">package</span> <span class="n">Down</span><span class="p">;</span>
 <span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
 <span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestRec</span> <span class="p">();</span>
 <span class="n">use</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">RequestIO</span> <span class="p">();</span>
@@ -150,20 +146,18 @@
     <span class="n">my</span> <span class="err">$</span><span class="n">r</span> <span class="o">=</span> <span class="n">shift</span><span class="p">;</span>
     <span class="n">my</span> <span class="err">$</span><span class="n">req</span> <span class="o">=</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Request</span><span class="o">-&gt;</span><span class="n">new</span><span class="p">(</span><span class="err">$</span><span class="n">r</span><span class="p">);</span>
     <span class="n">my</span> <span class="err">$</span><span class="n">ip</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">remote_ip</span><span class="p">;</span>
-    <span class="n">my</span> <span class="err">$</span><span class="n">k</span> <span class="o">=</span> <span class="err">$</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1"># 判断访问时是否带key参数</span>
-    <span class="n">my</span> <span class="err">$</span><span class="n">key</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">dir_config</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;123&#39;</span><span class="p">;</span> <span class="c1"># 加载httpd.conf配置中的key值</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">k</span> <span class="o">=</span> <span class="err">$</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">param</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="sa"></span><span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1"># 判断访问时是否带key参数</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">key</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">dir_config</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="sa"></span><span class="s1">&#39;123&#39;</span><span class="p">;</span> <span class="c1"># 加载httpd.conf配置中的key值</span>
     <span class="k">if</span> <span class="p">(</span><span class="err">$</span><span class="n">key</span> <span class="n">eq</span> <span class="err">$</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span> <span class="c1"># 相等可以正常访问</span>
         <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">OK</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1"># 否则显示拒绝访问</span>
         <span class="n">my</span> <span class="err">$</span><span class="n">s</span> <span class="o">=</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">ServerUtil</span><span class="o">-&gt;</span><span class="n">server</span><span class="p">;</span>
-        <span class="err">$</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">log_error</span><span class="p">(</span><span class="s2">&quot;[$ip--------forbidden.]&quot;</span><span class="p">);</span>
+        <span class="err">$</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">log_error</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;[$ip--------forbidden.]&#34;</span><span class="p">);</span>
         <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">FORBIDDEN</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="mi">1</span><span class="p">;</span>
-</code></pre></div>
-
+<span class="mi">1</span><span class="p">;</span></code></pre></div>
 
 <p>提示一下，以上两个perl脚本文件末尾记得加上1;</p>
 

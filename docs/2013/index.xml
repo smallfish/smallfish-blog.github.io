@@ -21,7 +21,7 @@
 Perl测试模块大概有如下：
  Test::Simple Test::More Test::Base 及衍生（这个我还没搞透）  一般Perl的测试用例，会在一个叫t/的目录下，一堆叫*.t的文件，其实就是普通的Perl脚本。
 来段最简单的测试代码：
-$ cat 1.t use Test::Simple tests=&amp;gt;2; ok(1 + 1 == 2, &amp;quot;test1 true&amp;quot;); ok(&amp;quot;10&amp;quot; == 10, &amp;quot;test2 true&amp;quot;); $ perl 1.t 1..2 ok 1 - test1 true ok 2 - test2 true  Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。
+$ cat 1.t use Test::Simple tests=&amp;gt;2; ok(1 + 1 == 2, &amp;#34;test1 true&amp;#34;); ok(&amp;#34;10&amp;#34; == 10, &amp;#34;test2 true&amp;#34;); $ perl 1.t 1..2 ok 1 - test1 true ok 2 - test2 true Test::Simple模块只有一个ok()函数，需要复杂的一些的话就用Test::More吧。
 跑偏题太远了，回到本文要介绍的Test::Nginx模块。个人觉得这个测试适用于以下场景：
  Nginx测试，包括：自身、模块、配置等测试 反向代理测试，比如后端的HTTP或者其他服务  安装可以用cpan或者直接clone一份Test::Nginx，库地址：https://github.com/agentzh/test-nginx
 文档：
@@ -39,9 +39,10 @@ use Test::Nginx::Socket; repeat_each(1); plan tests =&amp;gt; 2 * repeat_each() 
 官方文档参考：
  8.14. Arrays 9.17. Array Functions and Operators  这里简单的介绍下和一些示例，完整的还是推荐参考官方吧。测试版本为：PostgreSQL 9.3
 比如声明integer/varchar数组：
-x integer[5] y varchar[] z varchar ARRAY  后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。
-CREATE TABLE test1 ( x integer[5], y varchar[], z varchar ARRAY ); smallfish=# \d test1 Table &amp;quot;public.test1&amp;quot; Column | Type | Modifiers --------+---------------------+----------- x | integer[] | y | character varying[] | z | character varying[] | 没骗你们吧，后两者完全一样。  写入ARRAY字段，有一下两种方式：
- 显示声明，比如：ARRAY[11, 22] 花括号，比如：&amp;rsquo;{aa, bb}&amp;rsquo;  插入一条记录：</description>
+x integer[5] y varchar[] z varchar ARRAY 后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。
+CREATE TABLE test1 ( x integer[5], y varchar[], z varchar ARRAY ); smallfish=# \d test1 Table &amp;#34;public.test1&amp;#34; Column | Type | Modifiers --------+---------------------+-----------  x | integer[] | y | character varying[] | z | character varying[] | 没骗你们吧，后两者完全一样。 写入ARRAY字段，有一下两种方式：
+ 显示声明，比如：ARRAY[11, 22] 花括号，比如：&amp;rsquo;{aa, bb}&amp;rsquo;  插入一条记录：
+INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;#39;cc&amp;#39;, &amp;#39;dd&amp;#39;]);</description>
     </item>
     
     <item>
@@ -71,8 +72,10 @@ CREATE TABLE test1 ( x integer[5], y varchar[], z varchar ARRAY ); smallfish=# \
 个人推荐nose，简单的话doctest也已经足够了。
 首先：
  代码要易于测试，代码写完对应的测试应该配套跟上。 测试要简单，轻便。  先说最简单的doctest吧，顾名思义，doctest就是在文档（docstring）里完成测试。看以下例子（/tmp/1.py）：
-def add(a, b): &amp;quot;&amp;quot;&amp;quot; &amp;gt;&amp;gt;&amp;gt; add(10, 20) 30 &amp;quot;&amp;quot;&amp;quot; return a + b if __name__ == &amp;#39;__main__&amp;#39;: import doctest doctest.testmod()  可以看出doctest是不是很简单？是不是想起了普通解释器（&amp;gt;&amp;gt;&amp;gt;），运行一下测试（注意-v选项）：
-smallfish@debian:~$ python /tmp/1.py -v Trying: add(10, 20) Expecting: 30 ok 1 items had no tests: __main__ 1 items passed all tests: 1 tests in __main__.add 1 tests in 2 items. 1 passed and 0 failed. Test passed.  作为简单的模块或者工具，main里实现测试已经足够了。但是稍大一些工程或应用，doctest太多的话，看上去会觉得有点臃肿。</description>
+def add(a, b): &amp;#34;&amp;#34;&amp;#34; &amp;gt;&amp;gt;&amp;gt; add(10, 20) 30 &amp;#34;&amp;#34;&amp;#34; return a + b if __name__ == &amp;#39;__main__&amp;#39;: import doctest doctest.testmod() 可以看出doctest是不是很简单？是不是想起了普通解释器（&amp;gt;&amp;gt;&amp;gt;），运行一下测试（注意-v选项）：
+smallfish@debian:~$ python /tmp/1.py -v Trying: add(10, 20) Expecting: 30 ok 1 items had no tests: __main__ 1 items passed all tests: 1 tests in __main__.add 1 tests in 2 items. 1 passed and 0 failed. Test passed. 作为简单的模块或者工具，main里实现测试已经足够了。但是稍大一些工程或应用，doctest太多的话，看上去会觉得有点臃肿。
+下面介绍下nose，偷偷的说下，nose是支持doctest、unittest测试的，所以嘛。先安装一下：
+smallfish@debian:~$ pip install nose 继续跑一下上面的例子：</description>
     </item>
     
     <item>
@@ -85,10 +88,10 @@ smallfish@debian:~$ python /tmp/1.py -v Trying: add(10, 20) Expecting: 30 ok 1 i
 Python自带了几个性能分析的模块：profile、cProfile和hotshot，使用方法基本都差不多，无非模块是纯Python还是用C写的。
 官网文档参考：http://docs.python.org/2/library/profile.html
 本文示例基于cProfile模块，先写点测试代码（test1.py）：
-import time def func1(): sum = 0 for i in range(1000000): sum += i def func2(): time.sleep(10) func1() func2()  运行cProfile命令如下：
-$ python -m cProfile -o test1.out test1.py  这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。
+import time def func1(): sum = 0 for i in range(1000000): sum += i def func2(): time.sleep(10) func1() func2() 运行cProfile命令如下：
+$ python -m cProfile -o test1.out test1.py 这里是以模块方式直接保存profile结果，当然也可以在程序中引入cProfile模块。
 好了，上面的测试程序大概运行10秒左右，可以看下最终的性能分析数据。
-$ python -c &amp;quot;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;); p.print_stats()&amp;quot; Wed Aug 28 22:19:45 2013 test1.out 6 function calls in 10.163 seconds Random listing order was used ncalls tottime percall cumtime percall filename:lineno(function) 1 0.024 0.024 10.163 10.163 test1.</description>
+$ python -c &amp;#34;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;); p.print_stats()&amp;#34; Wed Aug 28 22:19:45 2013 test1.out 6 function calls in 10.163 seconds Random listing order was used ncalls tottime percall cumtime percall filename:lineno(function) 1 0.024 0.024 10.163 10.163 test1.py:1(&amp;lt;module&amp;gt;) 1 10.</description>
     </item>
     
     <item>

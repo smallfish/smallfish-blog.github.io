@@ -102,31 +102,27 @@
 
 <p>Debian/Ubuntu 安装很简单：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">psycopg2</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">psycopg2</span></code></pre></div>
 
 <p>建立一个测试数据库，比如 test：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">su</span> <span class="n">postgres</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">su</span> <span class="n">postgres</span>
 <span class="n">postgres</span><span class="nd">@debian</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">createdb</span> <span class="o">-</span><span class="n">O</span> <span class="n">smallfish</span> <span class="n">test</span>
 <span class="n">postgres</span><span class="nd">@debian</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="nb">exit</span>
 <span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hello</span><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">h</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5432</span> <span class="o">-</span><span class="n">U</span> <span class="n">smallfish</span> <span class="n">test</span>
 <span class="err">用户</span> <span class="n">smallfish</span> <span class="err">的口令：</span>
 <span class="n">psql</span> <span class="p">(</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">SSL</span><span class="err">连接</span> <span class="p">(</span><span class="err">加密：</span><span class="n">DHE</span><span class="o">-</span><span class="n">RSA</span><span class="o">-</span><span class="n">AES256</span><span class="o">-</span><span class="n">SHA</span><span class="err">，位元：</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">SSL连接</span> <span class="p">(</span><span class="err">加密：</span><span class="n">DHE</span><span class="o">-</span><span class="n">RSA</span><span class="o">-</span><span class="n">AES256</span><span class="o">-</span><span class="n">SHA</span><span class="err">，位元：</span><span class="mi">256</span><span class="p">)</span>
 
-<span class="err">输入</span> <span class="s2">&quot;help&quot;</span> <span class="err">来获取帮助信息</span><span class="o">.</span>
+<span class="err">输入</span> <span class="sa"></span><span class="s2">&#34;help&#34;</span> <span class="err">来获取帮助信息</span><span class="o">.</span>
 
-<span class="n">test</span><span class="o">=</span><span class="c1">#</span>
-</code></pre></div>
-
+<span class="n">test</span><span class="o">=</span><span class="c1">#</span></code></pre></div>
 
 <p>数据库的部分已经OK，下面就是来倒腾 Pylons 啦。</p>
 
 <p>建立新项目，加入支持数据库部分，注意 Enter sqlalchemy那个选项，默认是 False，改成 True：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">-</span><span class="n">t</span> <span class="n">pylons</span> <span class="n">hellodb</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">paster</span> <span class="n">create</span> <span class="o">-</span><span class="n">t</span> <span class="n">pylons</span> <span class="n">hellodb</span>
 <span class="n">Selected</span> <span class="ow">and</span> <span class="n">implied</span> <span class="n">templates</span><span class="p">:</span>
   <span class="n">Pylons</span><span class="c1">#pylons  Pylons application template</span>
 
@@ -134,58 +130,50 @@
   <span class="n">egg</span><span class="p">:</span>      <span class="n">hellodb</span>
   <span class="n">package</span><span class="p">:</span>  <span class="n">hellodb</span>
   <span class="n">project</span><span class="p">:</span>  <span class="n">hellodb</span>
-<span class="n">Enter</span> <span class="n">template_engine</span> <span class="p">(</span><span class="n">mako</span><span class="o">/</span><span class="n">genshi</span><span class="o">/</span><span class="n">jinja2</span><span class="o">/</span><span class="n">etc</span><span class="p">:</span> <span class="n">Template</span> <span class="n">language</span><span class="p">)</span> <span class="p">[</span><span class="s1">&#39;mako&#39;</span><span class="p">]:</span>
+<span class="n">Enter</span> <span class="n">template_engine</span> <span class="p">(</span><span class="n">mako</span><span class="o">/</span><span class="n">genshi</span><span class="o">/</span><span class="n">jinja2</span><span class="o">/</span><span class="n">etc</span><span class="p">:</span> <span class="n">Template</span> <span class="n">language</span><span class="p">)</span> <span class="p">[</span><span class="sa"></span><span class="s1">&#39;mako&#39;</span><span class="p">]:</span>
 <span class="n">Enter</span> <span class="n">sqlalchemy</span> <span class="p">(</span><span class="bp">True</span><span class="o">/</span><span class="bp">False</span><span class="p">:</span> <span class="n">Include</span> <span class="n">SQLAlchemy</span> <span class="mf">0.5</span> <span class="n">configuration</span><span class="p">)</span> <span class="p">[</span><span class="bp">False</span><span class="p">]:</span> <span class="bp">True</span>
 <span class="n">Creating</span> <span class="n">template</span> <span class="n">pylons</span>
-<span class="n">Creating</span> <span class="n">directory</span> <span class="o">./</span><span class="n">hellodb</span>
-</code></pre></div>
-
+<span class="n">Creating</span> <span class="n">directory</span> <span class="o">./</span><span class="n">hellodb</span></code></pre></div>
 
 <p>改成 True 之后在自动生成的 development.ini 里就有对应的数据库配置选项了。</p>
 
 <p>再建立新的 db controller：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">cd</span> <span class="n">hellodb</span><span class="o">/</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="err">$</span> <span class="n">cd</span> <span class="n">hellodb</span><span class="o">/</span>
 <span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">controller</span> <span class="n">db</span>
 <span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">controllers</span><span class="o">/</span><span class="n">db</span><span class="o">.</span><span class="n">py</span>
-<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">tests</span><span class="o">/</span><span class="n">functional</span><span class="o">/</span><span class="n">test_db</span><span class="o">.</span><span class="n">py</span>
-</code></pre></div>
-
+<span class="n">Creating</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">hellodb</span><span class="o">/</span><span class="n">tests</span><span class="o">/</span><span class="n">functional</span><span class="o">/</span><span class="n">test_db</span><span class="o">.</span><span class="n">py</span></code></pre></div>
 
 <p>编辑 development.ini，添加数据库配置部分。smallfish:123456 是对应的 PostgreSQL 用户名/密码，127.0.0.1:5432 是对应的主机地址/端口号，最后的test则是数据库名。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># SQLAlchemy database URL</span>
-<span class="n">sqlalchemy</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">smallfish</span><span class="p">:</span><span class="mi">123456</span><span class="nd">@127.0.0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">test</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># SQLAlchemy database URL</span>
+<span class="n">sqlalchemy</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">smallfish</span><span class="p">:</span><span class="mi">123456</span><span class="nd">@127.0.0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">test</span></code></pre></div>
 
 <p>编辑 hellodb/model/<strong>init</strong>.py，加上一个叫 msg 的表和字段的定义：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="sd">&quot;&quot;&quot;The application&#39;s model objects&quot;&quot;&quot;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="sa"></span><span class="s2">&#34;&#34;&#34;The application&#39;s model objects&#34;&#34;&#34;</span>
 <span class="kn">from</span> <span class="nn">hellodb.model.meta</span> <span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">metadata</span>
 
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">orm</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">types</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="k">def</span> <span class="nf">init_model</span><span class="p">(</span><span class="n">engine</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Call me before using any of the tables or classes in the model&quot;&quot;&quot;</span>
+    <span class="sa"></span><span class="s2">&#34;&#34;&#34;Call me before using any of the tables or classes in the model&#34;&#34;&#34;</span>
     <span class="n">Session</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">now</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
-<span class="n">msg_table</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
-    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="s1">&#39;msg_seq_id&#39;</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
-    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Text</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
-    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;addtime&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="n">now</span><span class="p">),</span>
+<span class="n">msg_table</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;msg&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;msg_seq_id&#39;</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Text</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+    <span class="n">schema</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;addtime&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="n">now</span><span class="p">),</span>
 <span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">Msg</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">pass</span>
 
-<span class="n">orm</span><span class="o">.</span><span class="n">mapper</span><span class="p">(</span><span class="n">Msg</span><span class="p">,</span> <span class="n">msg_table</span><span class="p">)</span>
-</code></pre></div>
-
+<span class="n">orm</span><span class="o">.</span><span class="n">mapper</span><span class="p">(</span><span class="n">Msg</span><span class="p">,</span> <span class="n">msg_table</span><span class="p">)</span></code></pre></div>
 
 <p>示例 Msg 表很简单，三个字段：ID、内容和时间。</p>
 
@@ -195,14 +183,14 @@
 
 <p>下面是不是要在数据库里建立对应的表呢？有个简单的办法 可以初始化数据库：paster setup-app development.ini：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">setup</span><span class="o">-</span><span class="n">app</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">smallfish</span><span class="nd">@debian</span><span class="p">:</span><span class="o">~/</span><span class="n">workspace</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">hellodb</span><span class="err">$</span> <span class="n">paster</span> <span class="n">setup</span><span class="o">-</span><span class="n">app</span> <span class="n">development</span><span class="o">.</span><span class="n">ini</span>
 <span class="n">Running</span> <span class="n">setup_config</span><span class="p">()</span> <span class="kn">from</span> <span class="nn">hellodb.websetup</span>
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">619</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">select</span> <span class="n">version</span><span class="p">()</span>
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">619</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{}</span>
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">625</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">select</span> <span class="n">current_schema</span><span class="p">()</span>
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">625</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{}</span>
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">631</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">select</span> <span class="n">relname</span> <span class="kn">from</span> <span class="nn">pg_class</span> <span class="nn">c</span> <span class="nn">join</span> <span class="nn">pg_namespace</span> <span class="nn">n</span> <span class="nn">on</span> <span class="nn">n.oid</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">relnamespace</span> <span class="n">where</span> <span class="n">n</span><span class="o">.</span><span class="n">nspname</span><span class="o">=</span><span class="n">current_schema</span><span class="p">()</span> <span class="ow">and</span> <span class="n">lower</span><span class="p">(</span><span class="n">relname</span><span class="p">)</span><span class="o">=%</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="n">s</span>
-<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">631</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;msg&#39;</span><span class="p">}</span>
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">631</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;msg&#39;</span><span class="p">}</span>
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">637</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span>
 <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">msg</span> <span class="p">(</span>
         <span class="nb">id</span> <span class="n">SERIAL</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="p">,</span>
@@ -212,23 +200,19 @@
 <span class="p">)</span>
 
 <span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">637</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="p">{}</span>
-<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">732</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">COMMIT</span>
-</code></pre></div>
-
+<span class="mi">20</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="mi">43</span><span class="p">,</span><span class="mi">732</span> <span class="n">INFO</span>  <span class="p">[</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Engine</span><span class="o">.</span><span class="mi">0</span><span class="n">x</span><span class="o">...</span><span class="mi">854</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="n">MainThread</span><span class="p">]</span> <span class="n">COMMIT</span></code></pre></div>
 
 <p>可以看到上面的输出日志，包括了建表的SQL语句。其中 SERIAL 对应上面 <strong>init</strong>.py 里 Column 的 Seq 定义。serial 类型 在 PostgreSQL 可以看成类似 MySQL 的自增ID（auto_increment） 。</p>
 
 <p>现在进入 PostgreSQL 查询数据库，就可以看到表以及序列已经建立。</p>
 
-<p><div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">test</span><span class="o">=</span><span class="c1"># \d</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">test</span><span class="o">=</span><span class="c1"># \d</span>
                   <span class="err">关联列表</span>
  <span class="err">架构模式</span> <span class="o">|</span>    <span class="err">名称</span>    <span class="o">|</span>  <span class="err">型别</span>  <span class="o">|</span>  <span class="err">拥有者</span>
 <span class="o">----------+------------+--------+-----------</span>
  <span class="n">public</span>   <span class="o">|</span> <span class="n">msg</span>        <span class="o">|</span> <span class="err">资料表</span> <span class="o">|</span> <span class="n">smallfish</span>
  <span class="n">public</span>   <span class="o">|</span> <span class="n">msg_id_seq</span> <span class="o">|</span> <span class="err">序列数</span> <span class="o">|</span> <span class="n">smallfish</span>
-<span class="p">(</span><span class="mi">2</span> <span class="err">行记录</span><span class="p">)</span>
-</code></pre></div>
-</p>
+<span class="p">(</span><span class="mi">2</span> <span class="err">行记录</span><span class="p">)</span></code></pre></div></p>
 
 <p>到这里，准备工作已经完毕，包括了初始化数据库，配置文件还有示例 controller。</p>
 
@@ -236,35 +220,29 @@
 
 <p>首先建立一个表单模板 db.htm ，用来添加并保存到数据库表中：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;/db/add&quot;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="o">&gt;</span>
-<span class="err">  </span> <span class="err"> </span><span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;content&quot;</span> <span class="o">/&gt;</span>
-<span class="err">  </span> <span class="err"> </span><span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
-<span class="err">  </span> <span class="err"> </span><span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;save&quot;</span> <span class="o">/&gt;</span>
-<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;/db/add&#34;</span> <span class="n">method</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;post&#34;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;text&#34;</span> <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;content&#34;</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;submit&#34;</span> <span class="n">value</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;save&#34;</span> <span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span></code></pre></div>
 
 <p>对应 controller index 修改成，很简单。返回到模板：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="k">class</span> <span class="nc">DbController</span><span class="p">(</span><span class="n">BaseController</span><span class="p">):</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">DbController</span><span class="p">(</span><span class="n">BaseController</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s1">&#39;/db.htm&#39;</span><span class="p">)</span>
-</code></pre></div>
-
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;/db.htm&#39;</span><span class="p">)</span></code></pre></div>
 
 <p>添加 add 方法，对应上面 form 中的 /db/add 路径：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
         <span class="kn">from</span> <span class="nn">hellodb</span> <span class="kn">import</span> <span class="n">model</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">()</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
         <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;add </span><span class="si">%s</span><span class="s2"> ok...&quot;</span> <span class="o">%</span> <span class="n">content</span>
-</code></pre></div>
-
+        <span class="k">return</span> <span class="sa"></span><span class="s2">&#34;add </span><span class="si">%s</span><span class="s2"> ok...&#34;</span> <span class="o">%</span> <span class="n">content</span></code></pre></div>
 
 <p>添加部分简单完成。获取 POST 文本框，然后初始化一个 Msg 对象（上面 model 里定义的）。</p>
 
@@ -274,20 +252,16 @@
 
 <p>下面在 index 方法传递一些值到模板，输出刚才已经添加的数据：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">hellodb</span> <span class="kn">import</span> <span class="n">model</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">msgs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s1">&#39;/db.htm&#39;</span><span class="p">)</span>
-</code></pre></div>
-
+        <span class="n">c</span><span class="o">.</span><span class="n">msgs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">)</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;/db.htm&#39;</span><span class="p">)</span></code></pre></div>
 
 <p>c.msgs 可以理解成全局变量，关于 c 的定义在 controller前几行就应该看到了。修改模板 db.htm 显示记录：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">%</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">msgs</span><span class="p">:</span>
-<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">id</span><span class="p">}:</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">}</span> <span class="o">/</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">addtime</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-<span class="o">%</span> <span class="n">endfor</span>
-</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">%</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">msgs</span><span class="p">:</span>
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="nb">id</span><span class="p">}:</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">}</span> <span class="o">/</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">addtime</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+<span class="o">%</span> <span class="n">endfor</span></code></pre></div>
 
 <p>很简单，只是一个普通 for 循环，遍历 index 方式里传递的 c.msgs。Mako模板还是很易读的吧？</p>
 
@@ -297,34 +271,30 @@
 
 <p>下面再介绍下 Pylons 里 webhelper 里一个分页组件的用法，当然你也可以自己写分页算法。下面是示例：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span>    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">webhelpers</span> <span class="kn">import</span> <span class="n">paginate</span>
         <span class="kn">from</span> <span class="nn">hellodb</span> <span class="kn">import</span> <span class="n">model</span>
         <span class="n">msgs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Msg</span><span class="p">)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">paginator</span> <span class="o">=</span> <span class="n">paginate</span><span class="o">.</span><span class="n">Page</span><span class="p">(</span>
             <span class="n">msgs</span><span class="p">,</span>
-            <span class="n">page</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">page</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
             <span class="n">items_per_page</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s2">&quot;/list.htm&quot;</span><span class="p">)</span>
-</code></pre></div>
-
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;/list.htm&#34;</span><span class="p">)</span></code></pre></div>
 
 <p>导入 paginate，然后把查询的数据库对象当参数传递给 paginate.Page，里面的page则是页面的传递的页数参数，items_per_page 就好理解多了，就是多少条一页。这里是10条。</p>
 
 <p>对应的模板 list.htm 如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;</span>
 <span class="o">%</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="p">):</span>
 
 <span class="o">%</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="p">:</span>
-<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">id</span><span class="p">}:</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="nb">id</span><span class="p">}:</span> <span class="err">$</span><span class="p">{</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 <span class="o">%</span> <span class="n">endfor</span>
 
-<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="err">$</span><span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="o">.</span><span class="n">pager</span><span class="p">(</span><span class="s2">&quot;count: $item_count $first_item to $last_item , $link_first $link_previous $link_next $link_last&quot;</span><span class="p">)}</span> <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-<span class="o">%</span> <span class="n">endif</span>
-</code></pre></div>
-
+<span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="err">$</span><span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">paginator</span><span class="o">.</span><span class="n">pager</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;count: $item_count $first_item to $last_item , $link_first $link_previous $link_next $link_last&#34;</span><span class="p">)}</span> <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+<span class="o">%</span> <span class="n">endif</span></code></pre></div>
 
 <p>for 部分如同上面示例，下面加了一行pager。里面一些变量从名字上就可以看出功能了。包括了总条数、当前是第几到第几条，然后就是常用的首页、上页、下页和最后一页。</p>
 
