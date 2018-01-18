@@ -6,10 +6,24 @@
     <description>Recent content on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 12 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://chenxiaoyu.org/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>wrk 使用</title>
+      <link>http://chenxiaoyu.org/2018/01/18/wrk-tips/</link>
+      <pubDate>Thu, 18 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2018/01/18/wrk-tips/</guid>
+      <description>wrk 使用小记，备忘用
+简述 主要用于 HTTP 类接口压测，作为 ab（Apache Bench）替代品，支持脚本方式进行扩展
+安装过程这里不再赘述，运行方式可以：
+ 安装 wrk 命令行 https://github.com/wg/wrk docker 运行 docker pull williamyeh/wrk  简单使用 常用参数包括：
+ -t，线程数，建议机器核数 -d，测试时间，默认单位秒（s），支持 s/m/h 单位，比如 1m -c，打开连接数，需要大于 -t 参数数值 -s，脚本（lua）文件地址 &amp;ndash;latency，打印延时统计信息  简单使用：
+$ wrk -d10m -t24 -c100 --script=write.lua \ --latency &amp;quot;http://127.0.0.1:8080/xx&amp;quot; Running 10m test @ http://127.0.0.1:8080/xx 24 threads and 100 connections Thread Stats Avg Stdev Max +/- Stdev Latency 9.02ms 57.73ms 1.04s 98.13% Req/Sec 1.81k 217.80 2.</description>
+    </item>
     
     <item>
       <title>docker supervisord 管理多进程的一些建议</title>
@@ -1032,7 +1046,7 @@ shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23
       <guid>http://chenxiaoyu.org/2009/12/15/use-perl-skip-mysql-slave-error/</guid>
       <description>发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。
 slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start; 一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：
-#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &amp;#39;show slave status\\G;&amp;#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;amp;&amp;amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &amp;#34;slave error **\n&amp;#34;; system(&amp;#34;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave stop;&amp;#39;&amp;#34;); system(&amp;#34;mysql -u$usr -p$pass -h$ip -e &amp;#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&amp;#39;&amp;#34;); system(&amp;#34;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave start;&amp;#39;&amp;#34;); } my @hosts = qw/ 192.</description>
+#!/usr/bin/env perl use strict; use warnings; # get slave status sub get_status { my ($ip, $usr, $pass) = @_; my $info = `mysql -u$usr -p$pass -h$ip -e &amp;#39;show slave status\\G;&amp;#39;`; if (($info =~ /Slave_IO_Running: Yes/) &amp;amp;amp;&amp;amp;amp; ($info =~ /Slave_SQL_Running: No/)) { return 1; } return 0; } # mysql slave skip sub slaveskip { my ($ip, $usr, $pass) = @_; print &amp;#34;slave error **\n&amp;#34;; system(&amp;#34;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave stop;&amp;#39;&amp;#34;); system(&amp;#34;mysql -u$usr -p$pass -h$ip -e &amp;#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&amp;#39;&amp;#34;); system(&amp;#34;mysql -u$usr -p$pass -h$ip -e &amp;#39;slave start;&amp;#39;&amp;#34;); } my @hosts = qw/ 192.</description>
     </item>
     
     <item>

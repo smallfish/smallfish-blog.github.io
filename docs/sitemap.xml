@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://chenxiaoyu.org/2018/01/18/wrk-tips/</loc>
+    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://chenxiaoyu.org/2017/12/12/docker-supervisord-tips/</loc>
     <lastmod>2017-12-12T00:00:00+00:00</lastmod>
   </url>
@@ -446,6 +451,12 @@
   </url>
   
   <url>
+    <loc>http://chenxiaoyu.org/2018/</loc>
+    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://chenxiaoyu.org/categories/</loc>
     <priority>0</priority>
   </url>
@@ -469,6 +480,12 @@
   </url>
   
   <url>
+    <loc>http://chenxiaoyu.org/tags/linux/</loc>
+    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://chenxiaoyu.org/tags/supervisord/</loc>
     <lastmod>2017-12-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -481,8 +498,14 @@
   </url>
   
   <url>
+    <loc>http://chenxiaoyu.org/tags/wrk/</loc>
+    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://chenxiaoyu.org/</loc>
-    <lastmod>2017-12-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
