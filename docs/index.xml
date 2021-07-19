@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>smallfish&#39;s blog</title>
@@ -6,11 +6,7 @@
     <description>Recent content on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 18 Jan 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://chenxiaoyu.org/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 18 Jan 2018 00:00:00 +0000</lastBuildDate><atom:link href="http://chenxiaoyu.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>wrk 使用</title>
       <link>http://chenxiaoyu.org/2018/01/18/wrk-tips/</link>
@@ -22,7 +18,7 @@
 安装过程这里不再赘述，运行方式可以：
  安装 wrk 命令行 https://github.com/wg/wrk docker 运行 docker pull williamyeh/wrk  简单使用 常用参数包括：
  -t，线程数，建议机器核数 -d，测试时间，默认单位秒（s），支持 s/m/h 单位，比如 1m -c，打开连接数，需要大于 -t 参数数值 -s，脚本（lua）文件地址 &amp;ndash;latency，打印延时统计信息  简单使用：
-$ wrk -d10m -t24 -c100 --script=write.lua \ --latency &amp;quot;http://127.0.0.1:8080/xx&amp;quot; Running 10m test @ http://127.0.0.1:8080/xx 24 threads and 100 connections Thread Stats Avg Stdev Max +/- Stdev Latency 9.02ms 57.73ms 1.04s 98.13% Req/Sec 1.81k 217.80 2.</description>
+$ wrk -d10m -t24 -c100 --script=write.lua \  --latency &amp;#34;http://127.0.0.1:8080/xx&amp;#34; Running 10m test @ http://127.0.0.1:8080/xx 24 threads and 100 connections Thread Stats Avg Stdev Max +/- Stdev Latency 9.02ms 57.73ms 1.04s 98.13% Req/Sec 1.81k 217.80 2.</description>
     </item>
     
     <item>
@@ -33,11 +29,11 @@ $ wrk -d10m -t24 -c100 --script=write.lua \ --latency &amp;quot;http://127.0.0.1
       <guid>http://chenxiaoyu.org/2017/12/12/docker-supervisord-tips/</guid>
       <description>上一次提到 supervisord 还是 2011 年 http://chenxiaoyu.org/2011/05/31/python-supervisor/ 这里再补充一篇，基本上是这几年在 docker 里面的一些用法和建议。在容器里面是不太建议里面跑多个进程（服务）的玩法，但是有的时候实际业务在所难免
 配置使用绝对路径 启动参数 -c 指定配置 supervisord.conf 绝对路径。比如 Dockerfile 最后这么写：
-ENTRYPOINT [&amp;quot;/usr/bin/supervisord&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;/etc/supervisor/supervisord.conf&amp;quot;]  多个启动项配置文件统一目录 如 /etc/supervisor/conf.d/，并且在 supervisord.conf include 这里目录
-[include] files = /etc/supervisor/conf.d/*.conf  每个启动项日志统一 统一放入目录，如：/tmp/xxx_stdout.log，并设置日志滚动大小和保留份数
-supervisord 配置  需要配置 nodaemon=true，默认输出扔给 docker supervisorctl 使用 http server 方式管理，这里涉及 docker overlayfs unix sockets 一个问题，无法管理启动项，不知道现在是否解决  [inet_http_server] port=127.0.0.1:9001 username=user password=123 [supervisorctl] serverurl=http://127.0.0.1:9001 username=user password=123  缺点就是多监听本地一个端口，并注意不能和应用端口冲突
+ENTRYPOINT [&amp;quot;/usr/bin/supervisord&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;/etc/supervisor/supervisord.conf&amp;quot;] 多个启动项配置文件统一目录 如 /etc/supervisor/conf.d/，并且在 supervisord.conf include 这里目录
+[include] files = /etc/supervisor/conf.d/*.conf 每个启动项日志统一 统一放入目录，如：/tmp/xxx_stdout.log，并设置日志滚动大小和保留份数
+supervisord 配置  需要配置 nodaemon=true，默认输出扔给 docker supervisorctl 使用 http server 方式管理，这里涉及 docker overlayfs unix sockets 一个问题，无法管理启动项，不知道现在是否解决  [inet_http_server] port=127.0.0.1:9001 username=user password=123 [supervisorctl] serverurl=http://127.0.0.1:9001 username=user password=123 缺点就是多监听本地一个端口，并注意不能和应用端口冲突
 一次性程序 比如要执行初始化，可以：
-[program:xxx] command=sh /xxx.sh startretries=0 autorestart=false  传递环境变量 针对非 root 用户启动，并且需要读取容器启动时候环境变量（env）传递，新写 ENTRYPOINT 脚本中获取环境变量，写入文件，最后再运行 supervisord</description>
+[program:xxx] command=sh /xxx.sh startretries=0 autorestart=false 传递环境变量 针对非 root 用户启动，并且需要读取容器启动时候环境变量（env）传递，新写 ENTRYPOINT 脚本中获取环境变量，写入文件，最后再运行 supervisord</description>
     </item>
     
     <item>
@@ -102,11 +98,19 @@ hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公�
 刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。
 常用的读取操作符目前大概有三类：-&amp;gt;、-&amp;gt;&amp;gt;和#&amp;gt;。还是直接看SQL查询的例子吧。
 先看-&amp;gt;类：
-postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2; ?column? ----------  3 (1 row) postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;; ?column? ----------  2 (1 row) 再来-&amp;gt;&amp;gt;例子：
-postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2; ?column? ----------  3 (1 row) postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;; ?column? ----------  2 (1 row) 有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
+postgres=#select&amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2;?column?---------- 3(1row)postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;;?column?---------- 2(1row) 再来-&amp;gt;&amp;gt;例子：
+postgres=#select&amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2;?column?---------- 3(1row)postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;;?column?---------- 2(1row) 有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
 上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：
-postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ----------  3 (1 row) postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ----------  3 (1 row) 当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
-postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;#34;a&amp;#34;: 1, &amp;#34;b&amp;#34;: 2}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;#34;a&amp;#34;: 3, &amp;#34;b&amp;#34;: 4, &amp;#34;c&amp;#34;: 5}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;#34;a&amp;#34;: 6, &amp;#34;c&amp;#34;: 7}&amp;#39;::json); 插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：</description>
+postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;;?column?---------- 3(1row)postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;;?column?---------- 3(1row) 当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
+postgres=#createtabletestjson(idserial,datajson);postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: 1, &amp;#34;b&amp;#34;: 2}&amp;#39;::json);postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: 3, &amp;#34;b&amp;#34;: 4, &amp;#34;c&amp;#34;: 5}&amp;#39;::json);postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: 6, &amp;#34;c&amp;#34;: 7}&amp;#39;::json); 插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：
+postgres=#select*fromtestjson;id|data----+-------------------------- 1|{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}2|{&amp;#34;a&amp;#34;:3,&amp;#34;b&amp;#34;:4,&amp;#34;c&amp;#34;:5}3|{&amp;#34;a&amp;#34;:6,&amp;#34;c&amp;#34;:7}(3rows) 很眼熟，where条件可以这么用：
+postgres=#select*fromtestjsonwhere(data-&amp;gt;&amp;gt;&amp;#39;a&amp;#39;)::int&amp;gt;1;id|data----+-------------------------- 2|{&amp;#34;a&amp;#34;:3,&amp;#34;b&amp;#34;:4,&amp;#34;c&amp;#34;:5}3|{&amp;#34;a&amp;#34;:6,&amp;#34;c&amp;#34;:7}(2rows) 注意这里是-&amp;gt;&amp;gt;转换成text然后在::int进行比较。
+不过这里有个坑，不知道怎么解决，比如：
+postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: &amp;#34;smallfish&amp;#34;}&amp;#39;);postgres=#select*fromtestjson;id|data----+-------------------------- 1|{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}2|{&amp;#34;a&amp;#34;:3,&amp;#34;b&amp;#34;:4,&amp;#34;c&amp;#34;:5}3|{&amp;#34;a&amp;#34;:6,&amp;#34;c&amp;#34;:7}5|{&amp;#34;a&amp;#34;:&amp;#34;smallfish&amp;#34;}(4rows) 这个时候上面的::int&amp;gt;1这样就报错了，因为最后一行a为字符串。
+mongodb这个问题解决的挺好，回头搜搜在Pg里怎么搞。
+话说，Pg里支持的JSON是不是和之前提到的hstore类型有的一相似的地方？
+两者优劣回头我再贴文吧。
+官方文档：http://www.postgresql.org/docs/9.3/static/functions-json.html</description>
     </item>
     
     <item>
@@ -137,10 +141,16 @@ use Test::Nginx::Socket; repeat_each(1); plan tests =&amp;gt; 2 * repeat_each() 
 官方文档参考：
  8.14. Arrays 9.17. Array Functions and Operators  这里简单的介绍下和一些示例，完整的还是推荐参考官方吧。测试版本为：PostgreSQL 9.3
 比如声明integer/varchar数组：
-x integer[5] y varchar[] z varchar ARRAY 后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。
-CREATE TABLE test1 ( x integer[5], y varchar[], z varchar ARRAY ); smallfish=# \d test1 Table &amp;#34;public.test1&amp;#34; Column | Type | Modifiers --------+---------------------+-----------  x | integer[] | y | character varying[] | z | character varying[] | 没骗你们吧，后两者完全一样。 写入ARRAY字段，有一下两种方式：
- 显示声明，比如：ARRAY[11, 22] 花括号，比如：&amp;rsquo;{aa, bb}&amp;rsquo;  插入一条记录：
-INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;#39;cc&amp;#39;, &amp;#39;dd&amp;#39;]);</description>
+xinteger[5]yvarchar[]zvarcharARRAY 后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。
+CREATETABLEtest1(xinteger[5],yvarchar[],zvarcharARRAY);smallfish=#\dtest1Table&amp;#34;public.test1&amp;#34;Column|Type|Modifiers--------+---------------------+----------- x|integer[]|y|charactervarying[]|z|charactervarying[]|没骗你们吧，后两者完全一样。 写入ARRAY字段，有一下两种方式：
+ 显示声明，比如：ARRAY[11, 22] 花括号，比如：&#39;{aa, bb}&#39;  插入一条记录：
+INSERTINTOtest1VALUES(ARRAY[11,22],&amp;#39;{aa, bb}&amp;#39;,ARRAY[&amp;#39;cc&amp;#39;,&amp;#39;dd&amp;#39;]); 查询一下，看看表里出来是啥样子：
+smallfish=#SELECT*FROMtest1;x|y|z---------+---------+--------- {11,22}|{aa,bb}|{cc,dd} 是不是看上去还挺帅的样子，这里的字符串没有特殊符号，比如空格斜杠之类的，可以双引号或用E来包一下。
+ARRAY索引是从1开始的，这点稍微区别下一般语言的数组，还支持类似切片的查询哦。
+smallfish=#SELECTx[1],y,zFROMtest1WHEREx[2]&amp;gt;10;x|y|z----+---------+--------- 11|{aa,bb}|{cc,dd}smallfish=#SELECTx[1:2]FROMtest1;x--------- {11,22} 说了读，写，还有更新的例子：
+smallfish=#UPDATEtest1SETx[1]=100;smallfish=#SELECT*FROMtest1;x|y|z----------+---------+--------- {100,22}|{aa,bb}|{cc,dd} 给数组添加新元素：
+smallfish=#UPDATEtest1SETx[3]=999;smallfish=#SELECT*FROMtest1;x|y|z--------------+---------+--------- {100,22,999}|{aa,bb}|{cc,dd} 按照索引删除的功能似乎要写函数来解决了，官方有一个array_remove的函数，不过这个是按照value来移除的，如：
+smallfish=#UPDATEtest1SETx=array_remove(x,22);smallfish=#SELECTxFROMtest1;x----------- {100,999} 这年头能用上Pg真心不容易，用的还是9.x版本。谢天谢地~</description>
     </item>
     
     <item>
@@ -154,9 +164,9 @@ INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;
 首先，说到准备。今天算起来今天准备阶段做的太差了，浪费了太多时间和体力。
  应该提前半小时到达赛场，换好和存放好衣服，然后做一些热身和拉伸动作，今天完全没热身就上场了。 马拉松由于人数众多，起跑阶段尽量选择道路边缘，可以避免被人来回挤和超出，影响自己。当然要注意路道情况，别崴脚什么的。 上下坡的速度调整，下坡虽然感觉快和轻松，其实是相对的，收不住的话，上坡会发觉很累。 轻装上阵，能不带的尽量不带，建议就带一个电子表，能看时间即可。手机啊，GPS啊什么的，虽然方便，跑到最后发现这些个玩意都是累赘，尤其是长距离跑。 小装备要准备充足，比如：创可贴（避免x处摩擦）、凡士林（同摩擦）、腰包（装点小东西）、面纸（防止中途意外xx）、吃喝能量（运动饮料，巧克力之类）补充。 合理安排跑步和休息计划，比如：大致距离的时速，休息时间等。 跑步节奏，身体和呼吸的调整。千万要稳住，不要和身边的人做比较，自己的身体只有自己知道。跑不动咱就快走来放松一下。  说了这么多，基本都是今天碰到的问题。有兴趣的朋友可以参考 @跑步指南 的一些微博，里面有备战马拉松的一些计划，写的相当不错。
 再说一下，关于跑步我自己的一些感受吧。
- 装备
- 鞋子，最最重要了。平时公路跑或者跑圈，推荐缓冲避震型的跑鞋。Asics有好多入门级的跑鞋，避免对膝盖造成过大的冲击，膝盖歇了，就可以回家躺着了。。。 衣服，速干衣，主要也是为了不吸汗。不要选择太紧或者太松的衣服，长距离时候要么摩擦太大，要么紧身勒的很累（光好看没P用啊）。 其他配件，袜子和护膝什么的。袜子选择稍微厚一些的运动袜，护膝不要买太紧，以免影响腿部肌肉和血液循环。  计划
- 跑步间隔，比如跑一休一，这个根据身体自己和运动程度来调节，一周跑个3-4次。“科学证明”跑步间隔不宜超过3天，碰到长假什么的，自己安排个短距离的跑步，找找状态。 运动量，初期可以选择5-10km的匀速跑。 LSD，这个就跟自己的目标有关，每周尽量来一次“长距离慢跑”，速度慢于平时，追求持久。距离大于平时距离的50%左右，初期不能太大，别翻倍。。。。 贵在坚持啊。。。。。三天打鱼两天晒网，有可能前面白跑了。 变速跑，如果只是一味的匀速跑，距离是远了。但是你有可能只是长距离慢跑者。。   半马跑完了，突然对两月后的厦门全马忧心忡忡啊。。亚历山大，看来要安排科学的计划了。</description>
+  装备
+ 鞋子，最最重要了。平时公路跑或者跑圈，推荐缓冲避震型的跑鞋。Asics有好多入门级的跑鞋，避免对膝盖造成过大的冲击，膝盖歇了，就可以回家躺着了。。。 衣服，速干衣，主要也是为了不吸汗。不要选择太紧或者太松的衣服，长距离时候要么摩擦太大，要么紧身勒的很累（光好看没P用啊）。 其他配件，袜子和护膝什么的。袜子选择稍微厚一些的运动袜，护膝不要买太紧，以免影响腿部肌肉和血液循环。    计划
+ 跑步间隔，比如跑一休一，这个根据身体自己和运动程度来调节，一周跑个3-4次。“科学证明”跑步间隔不宜超过3天，碰到长假什么的，自己安排个短距离的跑步，找找状态。 运动量，初期可以选择5-10km的匀速跑。 LSD，这个就跟自己的目标有关，每周尽量来一次“长距离慢跑”，速度慢于平时，追求持久。距离大于平时距离的50%左右，初期不能太大，别翻倍。。。。 贵在坚持啊。。。。。三天打鱼两天晒网，有可能前面白跑了。 变速跑，如果只是一味的匀速跑，距离是远了。但是你有可能只是长距离慢跑者。。    半马跑完了，突然对两月后的厦门全马忧心忡忡啊。。亚历山大，看来要安排科学的计划了。</description>
     </item>
     
     <item>
@@ -170,7 +180,7 @@ INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;
 个人推荐nose，简单的话doctest也已经足够了。
 首先：
  代码要易于测试，代码写完对应的测试应该配套跟上。 测试要简单，轻便。  先说最简单的doctest吧，顾名思义，doctest就是在文档（docstring）里完成测试。看以下例子（/tmp/1.py）：
-def add(a, b): &amp;#34;&amp;#34;&amp;#34; &amp;gt;&amp;gt;&amp;gt; add(10, 20) 30 &amp;#34;&amp;#34;&amp;#34; return a + b if __name__ == &amp;#39;__main__&amp;#39;: import doctest doctest.testmod() 可以看出doctest是不是很简单？是不是想起了普通解释器（&amp;gt;&amp;gt;&amp;gt;），运行一下测试（注意-v选项）：
+def add(a, b): &amp;#34;&amp;#34;&amp;#34; &amp;gt;&amp;gt;&amp;gt; add(10, 20) 30 &amp;#34;&amp;#34;&amp;#34; return a + b if __name__ == &amp;#39;__main__&amp;#39;: import doctest doctest.testmod() 可以看出doctest是不是很简单？是不是想起了普通解释器（&amp;raquo;&amp;gt;），运行一下测试（注意-v选项）：
 smallfish@debian:~$ python /tmp/1.py -v Trying: add(10, 20) Expecting: 30 ok 1 items had no tests: __main__ 1 items passed all tests: 1 tests in __main__.add 1 tests in 2 items. 1 passed and 0 failed. Test passed. 作为简单的模块或者工具，main里实现测试已经足够了。但是稍大一些工程或应用，doctest太多的话，看上去会觉得有点臃肿。
 下面介绍下nose，偷偷的说下，nose是支持doctest、unittest测试的，所以嘛。先安装一下：
 smallfish@debian:~$ pip install nose 继续跑一下上面的例子：</description>
@@ -205,7 +215,7 @@ $ python -c &amp;#34;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;);
 仓库地址：https://github.com/smallfish/rabbitmq-http
 如何安装依赖、编译和启动这些操作，这里就不再赘述，直接参考项目里的 README.md
 目前封装的接口大致分为一下几类：
- Exchange  新建 删除  Queue  新建 删除 绑定/取消绑定 读取消息  Message  发布新消息   上面的新建、删除、发送或者读取的行为对应 HTTP 请求中的几种方法，比如：POST、DELETE、GET等。
+ Exchange  新建 删除   Queue  新建 删除 绑定/取消绑定 读取消息   Message  发布新消息    上面的新建、删除、发送或者读取的行为对应 HTTP 请求中的几种方法，比如：POST、DELETE、GET等。
 整个 API 的返回值（HTTP状态码）有一下三类：
  200，操作 OK，返回的 Body 体中有简单描述字符。 405，不支持的请求方式，比如接口尚未实现。 500，服务器端错误，Body 体中会有错误的描述。比如队列不存在、删除错误等。  好了，还是来一点实际的例子吧。完全是 curl 操作：</description>
     </item>
@@ -249,11 +259,11 @@ $ go test -v === RUN TestAdd --- PASS: TestAdd (0.00 seconds) foo_test.go:9: tes
       
       <guid>http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/</guid>
       <description>本文涉及几个名词：
- ngx_lua http://wiki.nginx.org/HttpLuaModule
+  ngx_lua http://wiki.nginx.org/HttpLuaModule
 Embed the power of Lua into Nginx 摘自官方描述
- beanstalkd http://kr.github.com/beanstalkd/
+  beanstalkd http://kr.github.com/beanstalkd/
 一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。
- lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
+  lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
 基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。
   下面是读写的示例：
  生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &amp;#39; local beanstalkd = require &amp;#34;resty.beanstalkd&amp;#34; local bean, err = beanstalkd:new() local ok, err = bean:connect(&amp;#34;127.0.0.1&amp;#34;, 11300) if not ok then ngx.say(&amp;#34;1: failed to connect: &amp;#34;, err) return end local ok, err = bean:use(&amp;#34;default&amp;#34;) if not ok then ngx.</description>
@@ -318,8 +328,7 @@ GOPATH=/home/user/ext:/home/user/mygo Windows 系统请注意分隔符，是分�
 常用配置片段如下：
 gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &amp;#34;MSIE [1-6]\.&amp;#34;; # 无视IE6这个笨蛋~ 其中 gzip_types 选项默认只压缩 text/html，源码见：
 src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&amp;#34;text/html&amp;#34;), 常用的静态 type 有，看自己需要压缩的情况而定：
-text/html text/plain text/css application/x-javascript text/javascript application/xml
-OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
+text/html text/plain text/css application/x-javascript text/javascript application/xml OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
 下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：
 查看是否开启gzip，需要客户端加入：&amp;#34;Accept-Encoding: gzip, deflate&amp;#34; 头信息。 $ curl -I -H &amp;#34;Accept-Encoding: gzip, deflate&amp;#34; &amp;#34;http://localhost/tag.php&amp;#34; HTTP/1.1 200 OK Server: nginx Date: Thu, 08 Mar 2012 07:23:46 GMT Content-Type: text/html Connection: close Content-Encoding: gzip $ curl -I -H &amp;#34;Accept-Encoding: gzip, deflate&amp;#34; &amp;#34;http://localhost/style.</description>
     </item>
@@ -392,8 +401,7 @@ ngx.req.read_body() local method = ngx.var.request_method local max_size = 2 -- 
 mac:~ smallfish$ curl http://127.0.0.1:8108/postgres [{&amp;#34;datname&amp;#34;:&amp;#34;postgres&amp;#34;,&amp;#34;datdba&amp;#34;:&amp;#34;10&amp;#34;,&amp;#34;encoding&amp;#34;:6,&amp;#34;datcollate&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datctype&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;, &amp;#34;datistemplate&amp;#34;:false,&amp;#34;datallowconn&amp;#34;:true,&amp;#34;datconnlimit&amp;#34;:-1,&amp;#34;datlastsysoid&amp;#34;:&amp;#34;12172&amp;#34;,&amp;#34;datfrozenxid&amp;#34;:&amp;#34;985&amp;#34;, &amp;#34;dattablespace&amp;#34;:&amp;#34;1663&amp;#34;,&amp;#34;datacl&amp;#34;:null},{&amp;#34;datname&amp;#34;:&amp;#34;smallfish&amp;#34;,&amp;#34;datdba&amp;#34;:&amp;#34;16384&amp;#34;,&amp;#34;encoding&amp;#34;:6, &amp;#34;datcollate&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datctype&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datistemplate&amp;#34;:false,&amp;#34;datallowconn&amp;#34;:true, &amp;#34;datconnlimit&amp;#34;:-1,&amp;#34;datlastsysoid&amp;#34;:&amp;#34;12172&amp;#34;,&amp;#34;datfrozenxid&amp;#34;:&amp;#34;985&amp;#34;,&amp;#34;dattablespace&amp;#34;:&amp;#34;1663&amp;#34;,&amp;#34;datacl&amp;#34;:null}] 顺手 Google 了下，发现了两种浏览方式：命令行查看和浏览器查看。
 一、浏览器查看方式，需要安装 Chrome 插件：JSONView。
 二、命令行查看，需要安装 Python。
-mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool 
-是不是美观很多了？</description>
+mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool  是不是美观很多了？</description>
     </item>
     
     <item>
@@ -440,9 +448,8 @@ encrypted_session_key &amp;#34;abcdefghijklmnopqrstuvwxyz123456&amp;#34;; encryp
 通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。 ;php.ini auto_prepend_file = &amp;#39;/path/prepend.php&amp;#39; ; &amp;lt;?php ; include_once &amp;#39;/path/auto-xhprof.php&amp;#39;; ; ?&amp;gt; 主要功能点有如下：
  参数配置是否自动开启xhprof。 参数配置超时的阀值，比如2秒。 保存分析后的数据到MySQL中，供集中统一分析。 数据内容含：请求的URL、相应时间。 支持gearman异步保存数据。 提供封装的xhprof_start/xhprof_end对部分程序进行手动分析。 自动记录错误信息  图一（列表显示）： 图二（部分函数显示）： 源码文件说明：
 auto-xhprof.php 全局加载文件。 auto-xhprof-config.php 全局配置文件，设置MySQL数据库和参数等。 gearman-worker.php gearman后台处理worker进程。 web/ web显示目录，xhprof列表页面和原xhprof展示部分 xhprof_lib/ xhprof库文件。 &amp;mdash;&amp;mdash;&amp;mdash; 扩展安装步骤 &amp;mdash;&amp;mdash;&amp;mdash;
- 编译xhprof.so扩展 % cd &amp;lt;xhprof_source_directory&amp;gt;/extension/ % phpize % ./configure --with-php-config=&amp;lt;path to php-config&amp;gt; % make % make install
- 修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&amp;lt;directory&amp;gt; ; 需要有写入权限，可以写/tmp，或者不设置
- 从github上下载auto-xhprof，并配置。 1.</description>
+  编译xhprof.so扩展 % cd &amp;lt;xhprof_source_directory&amp;gt;/extension/ % phpize % ./configure --with-php-config=&amp;lt;path to php-config&amp;gt; % make % make install
+  修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&amp;lt;directory&amp;gt; ; 需要有写入权限，可以写/tmp，或者不设置</description>
     </item>
     
     <item>
@@ -480,8 +487,7 @@ shell&amp;gt; sudo /etc/init.</description>
 $ easy_install pythonbrew $ pythonbrew_install # 或手动下载 $ curl -kLO http://github.com/utahta/pythonbrew/raw/master/pythonbrew-install $ chmod +x pythonbrew-install $ ./pythonbrew-install 把 source /xxx/.pythonbrew/etc/bashrc 加入到自己profile或者bashrc中去（xxx是自己的用户目录）
 pythonbrew 常用命令如下：
 install 安装版本：
-$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6
-switch 选择版本：
+$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6 switch 选择版本：
 $ pythonbrew switch 2.6.6 list 查看版本：
 $ pythonbrew list # 列出目前已安装的版本 pythonbrew list -k # 列出可以下载和安装的版本 uninstall 卸载版本：
 $ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://pypi.python.org/pypi/pythonbrew/。</description>
@@ -502,7 +508,7 @@ $ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://p
 零点的钟声已过，回忆这一年，许许多多的人，给了自己很多很多的帮助，感谢一下。
 何伟平：很感谢何老师的推荐，才能有机会进入淘宝这样的大公司。何老师的谦虚和热心，很值得自己去学习。很遗憾，至今未有机会请何老师吃顿饭。 康伯：在淘宝时候我的主管。很感谢他跟自己多次的交流，有想法就说，就交流。给了自己很多机会。他是我至今为止唯一一个在系统方面很膜拜的人。 大舞：淘宝入职时候的师兄。试用期内给了自己很多建议和指导，一个很帅很帅的男人。@kemin_ukl 春哥：非芒果台的那位。感谢春哥推荐了自己来盛大，还混了不少饭，春哥工作和生活的太多很值得码农学习和借鉴。@mcspring 道神：灰常牛叉的DD，感谢刚来魔都时候收留了俺这个码农。回头还要多搭讪，求其在Debian方面的经验。@lidaobing 群众：鄙人群里那些哥们，你们都是神一样的男人！因为有了你们，才有了欢乐！@marchliu @xiaoxiaolu @guangfengio 等等大牛们。 话不多说，祝愿那些把帮助和关心过我的人，新年能够身体健康，幸福快乐！
 去迎接新的一年，我，继续在路上。
-&amp;nbsp;</description>
+ </description>
     </item>
     
     <item>
@@ -517,8 +523,7 @@ $ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://p
 编译 hstore 扩展
 mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install 导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。
 mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令 进入数据库，建一个测试表
-postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;#34;testhstore_id_seq&amp;#34; for serial column &amp;#34;testhstore.id&amp;#34; CREATE TABLE
-查看下表结构
+postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;#34;testhstore_id_seq&amp;#34; for serial column &amp;#34;testhstore.id&amp;#34; CREATE TABLE 查看下表结构
 postgres=# \d List of relations Schema | Name | Type | Owner --------+-------------------+----------+---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;#34;public.</description>
     </item>
     
@@ -542,8 +547,7 @@ mac:python smallfish$ paster create -t pylons hello mac:python smallfish$ cd hel
       <pubDate>Sat, 19 Feb 2011 00:00:00 +0000</pubDate>
       
       <guid>http://chenxiaoyu.org/2011/02/19/python-story/</guid>
-      <description>http://www.slideshare.net/nnfish/python-story
-http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-phpapp01&amp;amp;stripped_title=python-story&amp;amp;userName=nnfish</description>
+      <description>http://www.slideshare.net/nnfish/python-storyhttp://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-phpapp01&amp;amp;stripped_title=python-story&amp;amp;userName=nnfish</description>
     </item>
     
     <item>
@@ -565,7 +569,7 @@ http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-p
 实现。设计数据库，写类库，写页面。详细罗列的话估计一长串。然后就是拆分逻辑，拆分页面，拆分功能点，然后就是与之对应的整合和补充。说到这边，可能就有人会说，用某某类库，或者某某框架，某某工具。这一切都建立在对其了解的基础上。不要太迷信，同样的刀在不同人手上是不一样的，用的好才是好刀，用不好连茅草都不如。折腾的滋味自己尝把。不是用了啥就牛逼，而是解决了啥，针对性的解决才是牛逼的关键。所有的一切，都只不过是实现的一种手段。条条大路，都可以。不要太迷信××，那只是一个传说。没有万能的实现，只有不断的解决与重新审视。实现细节滤过。。。
 测试。不是写几个TestCase就是测试，那个只是证明你的代码看起来没啥问题，当然也不仅仅是用了啥测试框架，多专业。都只是辅助工具。除去功能性的测试，需要的是注意细节上。如果仅仅只是能用，没错没bug。这个不是产品，或许就是留言版。当然应该提供更多的可用性、流畅性以及体验。
 唉，一不小心快十二点了，洗洗睡吧。未完再补充。
-&amp;nbsp;</description>
+ </description>
     </item>
     
     <item>
@@ -577,8 +581,7 @@ http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-p
       <description>目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。
 系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/
 首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下：
- 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm  安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel
- 安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*  修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH  安装 cutycapt  svn co https://cutycapt.</description>
+ 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm 安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel 安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10* 修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH 安装 cutycapt  svn co https://cutycapt.</description>
     </item>
     
     <item>
@@ -587,7 +590,7 @@ http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-p
       <pubDate>Sat, 07 Aug 2010 00:00:00 +0000</pubDate>
       
       <guid>http://chenxiaoyu.org/2010/08/07/pythonic-ppt/</guid>
-      <description>很荣幸收到龙哥 @hoorace 邀请去参加了杭州第四期程序员圆桌会议，顺带介绍了下最近在公司内部做的关于《Pythonic》分享。喜欢Python的可以下载看看把。 Pythonichttp://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonic-100807044344-phpapp02&amp;amp;stripped_title=pythonic&amp;amp;userName=nnfish&amp;nbsp; View more http://www.slideshare.net/.  收获还是颇丰，多接触了点其他工种的朋友。
+      <description>很荣幸收到龙哥 @hoorace 邀请去参加了杭州第四期程序员圆桌会议，顺带介绍了下最近在公司内部做的关于《Pythonic》分享。喜欢Python的可以下载看看把。
 话题比较宽泛，基本我就是纯酱油飘过。感谢网新的朋友做的Vim的分享，另外威猛的升哥topic也不错，对RedHat系统安装和启动加载有了更多的了解。
 另外很遗憾的就是威大师竟然没说点啥，可惜了那么好的水果茶啊。。。残念残念。。</description>
     </item>
@@ -700,7 +703,7 @@ COPY tablename [(column [, ...])] FROM {&amp;#39;filename&amp;#39; | STDIN} [[WI
       <description>一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：
 cdef extern from &amp;#34;math.h&amp;#34;: double sin(double) cdef double f(double x): return sin(x*x) 请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。
 当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：
-from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;#34;demo&amp;#34;, [&amp;#34;demo.pyx&amp;#34;], libraries=[&amp;#34;m&amp;#34;]) # Unix-like specific ] setup( name = &amp;#34;Demos&amp;#34;, cmdclass = {&amp;#34;build_ext&amp;#34;: build_ext}, ext_modules = ext_modules )</description>
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;#34;demo&amp;#34;, [&amp;#34;demo.pyx&amp;#34;], libraries=[&amp;#34;m&amp;#34;]) # Unix-like specific ] setup( name = &amp;#34;Demos&amp;#34;, cmdclass = {&amp;#34;build_ext&amp;#34;: build_ext}, ext_modules = ext_modules ) 跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。</description>
     </item>
     
     <item>
@@ -715,8 +718,7 @@ goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，gi
 smallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go 根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）
 查看下安装的目录和路径：
 smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go 代码示例：
-import (web &amp;#34;github.com/hoisie/web.go&amp;#34;)
-另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</description>
+import (web &amp;#34;github.com/hoisie/web.go&amp;#34;) 另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</description>
     </item>
     
     <item>
@@ -745,11 +747,12 @@ import (web &amp;#34;github.com/hoisie/web.go&amp;#34;)
 目的：Win里ssh进Ubuntu，能访问里面提供的服务。
 主要是通过 VBoxManage setextradata 设置一些属性。
 先上几个步骤图把。注意一下修改，先得关闭虚拟机，修改完事以后再启动。
- 查看虚拟机中的名称：ubuntu9
- 进入本机Vbox目录，运行VBoxManage，查看下。
- 添加三个项目   下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。
+  查看虚拟机中的名称：ubuntu9
+  进入本机Vbox目录，运行VBoxManage，查看下。
+  添加三个项目
+  下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。
 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&amp;#34; TCP VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&amp;#34; 22 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&amp;#34; 22  启动虚拟机。
- 设置putty登陆之。
+  设置putty登陆之。
   到这里已经顺利ssh 到127.0.0.1，如果想访问虚拟机里的web服务器呢？同样很简单。
 只要如下设置，web端口为81，跟上面也雷同：
 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&amp;#34; TCP VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&amp;#34; 81 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&amp;#34; 81 另外如果想清空上面设置的选项，只要不设置后面的值即可：
@@ -784,8 +787,7 @@ MongoDB shell version: 0.9.8 url: test connecting to: test type &amp;#34;help&am
       <guid>http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/</guid>
       <description>默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：
 &amp;gt;&amp;gt;&amp;gt; from ConfigParser import ConfigParser &amp;gt;&amp;gt;&amp;gt; cf = ConfigParser() &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;d&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;d&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;a&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;a&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish2&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.write(open(&amp;#39;d:/a.ini&amp;#39;, &amp;#39;w&amp;#39;)) &amp;gt;&amp;gt;&amp;gt; cf = None 生成配置如下：
-[a] name = smallfish2 [d] name = smallfish
-翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html
+[a] name = smallfish2 [d] name = smallfish 翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html
 代码片段如下：
 &amp;gt;&amp;gt;&amp;gt; from configobj import ConfigObj &amp;gt;&amp;gt;&amp;gt; config = ConfigObj() &amp;gt;&amp;gt;&amp;gt; config.filename = &amp;#39;d:/a.ini&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish2&amp;#39; &amp;gt;&amp;gt;&amp;gt; config.</description>
     </item>
@@ -814,7 +816,7 @@ MongoDB shell version: 0.9.8 url: test connecting to: test type &amp;#34;help&am
       <description>Nginx本身可以通过
 kill -HUP `cat /usr/local/nginx/logs/nginx.pid` 进行平滑重启的，可以通过ps进程查看一下。效果还是挺不错的。
 这里介绍的是另外一种方式service，适合RHEL/CentOS系列。
- kill nginx进程  kill `cat /usr/local/nginx/logs/nginx.pid`  建立 /etc/init.d/nginx 文件  #!/bin/sh # # nginx - this script starts and stops the nginx daemin # # chkconfig: - 85 15 # description: Nginx is an HTTP(S) server, HTTP(S) reverse \ # proxy and IMAP/POP3 proxy server # processname: nginx # config: /usr/local/nginx/conf/nginx.conf # pidfile: /usr/local/nginx/logs/nginx.pid # Source function library. . /etc/rc.d/init.d/functions # Source networking configuration.</description>
+ kill nginx进程  kill `cat /usr/local/nginx/logs/nginx.pid` 建立 /etc/init.d/nginx 文件  #!/bin/sh # # nginx - this script starts and stops the nginx daemin # # chkconfig: - 85 15 # description: Nginx is an HTTP(S) server, HTTP(S) reverse \ # proxy and IMAP/POP3 proxy server # processname: nginx # config: /usr/local/nginx/conf/nginx.conf # pidfile: /usr/local/nginx/logs/nginx.pid # Source function library. . /etc/rc.d/init.d/functions # Source networking configuration.</description>
     </item>
     
     <item>
@@ -827,9 +829,9 @@ kill -HUP `cat /usr/local/nginx/logs/nginx.pid` 进行平滑重启的，可以�
 web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。
 很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。
 废话不多，先来安装，有两种方式：
- easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py  下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。
+ easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py 下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。
 下面开始使用吧！
- 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;)  select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;#34;Bob&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;#34;name = $name&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;#34;id&amp;gt;100&amp;#34;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;#34;id,name&amp;#34;) # order by results = db.select(&amp;#39;mytable&amp;#39;, order=&amp;#34;post_date DESC&amp;#34;) # group results = db.</description>
+ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;) select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;#34;Bob&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;#34;name = $name&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;#34;id&amp;gt;100&amp;#34;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;#34;id,name&amp;#34;) # order by results = db.select(&amp;#39;mytable&amp;#39;, order=&amp;#34;post_date DESC&amp;#34;) # group results = db.</description>
     </item>
     
     <item>
@@ -845,7 +847,7 @@ Stackless可以简单的认为是Python一个增强版，最吸引眼球的非�
 本文除去上面提及到的两个软件，还需要安装pymongo模块。http://api.mongodb.org/python/
 模块安装方式有源码编译和easy_install，这里就不再累赘。
  从Apache日志中分析出需要保存的资料，比如IP，时间，GET/POST，返回状态码等。  fmt_str = &amp;#39;(?P&amp;lt;ip&amp;gt;[.\d]+) - - \[(?P&amp;lt;time&amp;gt;.*?)\] &amp;#34;(?P&amp;lt;method&amp;gt;.*?) (?P&amp;lt;uri&amp;gt;.*?) HTTP/1.\d&amp;#34; (?P&amp;lt;status&amp;gt;\d+) (?P&amp;lt;length&amp;gt;.*?) &amp;#34;(?P&amp;lt;referere&amp;gt;.*?)&amp;#34; &amp;#34;(?P&amp;lt;agent&amp;gt;.*?)&amp;#34;&amp;#39; fmt_name = re.findall(&amp;#39;\?P&amp;lt;(.*?)&amp;gt;&amp;#39;, fmt_str) fmt_re = re.compile(fmt_str) 定义了一个正则用于提取每行日志的内容。fmt_name就是提取尖括号中间的变量名。
- 定义MongoDB相关变量，包括需要存到collection名称。Connection采取的是默认Host和端口。  conn = Connection() apache = conn.apache logs = apache.logs  保存日志行  def make_line(line): m = fmt_re.search(line) if m: logs.insert(dict(zip(fmt_name, m.groups())))  读取Apache日志文件  def make_log(log_path): with open(log_path) as fp: for line in fp: make_line(line.</description>
+定义MongoDB相关变量，包括需要存到collection名称。Connection采取的是默认Host和端口。  conn = Connection() apache = conn.apache logs = apache.logs 保存日志行  def make_line(line): m = fmt_re.search(line) if m: logs.insert(dict(zip(fmt_name, m.groups()))) 读取Apache日志文件  def make_log(log_path): with open(log_path) as fp: for line in fp: make_line(line.strip()) 运行把。  if __name__ == &amp;#39;__main__&amp;#39;: make_log(&amp;#39;d:/apachelog.</description>
     </item>
     
     <item>
@@ -858,8 +860,7 @@ Stackless可以简单的认为是Python一个增强版，最吸引眼球的非�
 默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）
 导入很简单，下面是win下面测试，其他平台类似该操作：
 D:\&amp;gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION 进入psql，执行：
-postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)
-主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。</description>
+postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row) 主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。</description>
     </item>
     
     <item>
@@ -869,8 +870,7 @@ postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------
       
       <guid>http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/</guid>
       <description>测试环境：REHL 5.3 PostgreSQL版本：8.4.2
- 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres  下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm  安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm
- RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb</description>
+ 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres 下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm 安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb service启动PostgreSQL  shell&amp;gt; service postgresql start 到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。</description>
     </item>
     
     <item>
@@ -882,9 +882,8 @@ postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------
       <description>对比下一些两个数据库常用的操作。分别使用自带的client程序。
 MySQL命令行：
 mysql -u 用户名 -h 主机地址 -P 端口号 数据库名 -p PostgreSQL命令行：
-psql -U 用户名 -h 主机地址 -p 端口号 数据库名
-操作对比：
-mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS; \du SHOW COLUMNS; \d table-name SHOW PROCESSLIST; SELECT * FROM pg_stat_activity; SELECT now()\G \x 可以打开和关闭类似\G功能 SOURCE /path.sql \i /path.sql LOAD DATA INFILE ... \copy ... \h \?</description>
+psql -U 用户名 -h 主机地址 -p 端口号 数据库名 操作对比：
+mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS; \du SHOW COLUMNS; \d table-name SHOW PROCESSLIST; SELECT * FROM pg_stat_activity; SELECT now()\G \x 可以打开和关闭类似\G功能 SOURCE /path.sql \i /path.sql LOAD DATA INFILE ... \copy ... \h \? </description>
     </item>
     
     <item>
@@ -896,8 +895,7 @@ mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS
       <description>测试版本：pg 8.3 (ubuntu)
 在pg里表分区是通过表继承来实现的，一般都是建立一个主表，里面是空，然后每个分区都去继承它。
 创建表分区步骤如下：
- 创建主表  CREATE TABLE users ( uid int not null primary key, name varchar(20));  创建分区表(必须继承上面的主表)  CREATE TABLE users_0 ( check (uid &amp;gt;= 0 and uid&amp;lt; 100) ) INHERITS (users); CREATE TABLE users_1 ( check (uid &amp;gt;= 100)) INHERITS (users);  在分区表上建立索引，其实这步可以省略的哦  CREATE INDEX users_0_uidindex on users_0(uid); CREATE INDEX users_1_uidindex on users_1(uid);
- 创建规则RULE  CREATE RULE users_insert_0 AS ON INSERT TO users WHERE (uid &amp;gt;= 0 and uid &amp;lt; 100) DO INSTEAD INSERT INTO users_0 VALUES (NEW.</description>
+ 创建主表  CREATE TABLE users ( uid int not null primary key, name varchar(20)); 创建分区表(必须继承上面的主表)  CREATE TABLE users_0 ( check (uid &amp;gt;= 0 and uid&amp;lt; 100) ) INHERITS (users); CREATE TABLE users_1 ( check (uid &amp;gt;= 100)) INHERITS (users); 在分区表上建立索引，其实这步可以省略的哦  CREATE INDEX users_0_uidindex on users_0(uid); CREATE INDEX users_1_uidindex on users_1(uid); 创建规则RULE  CREATE RULE users_insert_0 AS ON INSERT TO users WHERE (uid &amp;gt;= 0 and uid &amp;lt; 100) DO INSTEAD INSERT INTO users_0 VALUES (NEW.</description>
     </item>
     
     <item>
@@ -910,7 +908,7 @@ mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS
 查看pgsql当前表空间有哪些可以试试下面：
 postgres=&amp;gt; SELECT spcname FROM pg_tablespace; spcname ------------ pg_default pg_global (2 rows) 或：
 postgres=&amp;gt; \db Name | Owner | Location ------------+----------+---------- pg_default | postgres | pg_global | postgres | 建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。
- 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata  进入psql  $ psql -U postgres -h 192.168.0.122 如果权限没设置好下面语句会报错
+ 建立目录  $ mkdir /home/smallfish/pgdata $ sudo chown -R postgres:postgres /home/smallfish/pgdata 进入psql  $ psql -U postgres -h 192.168.0.122 如果权限没设置好下面语句会报错
 postgres=&amp;gt; CREATE TABLESPACE space1 LOCATION &amp;#39;/home/smallfish/pgdata&amp;#39;; 建测试表
 postgres=&amp;gt; CREATE TABLE foo(i int) TABLESPACE space1; 可以查看表空间目录下多了文件
 postgres=&amp;gt; \! ls /home/smallfish/pgdata 删除表空间，需要注意的是先要删除所有该表空间里的对象</description>
@@ -928,8 +926,8 @@ postgres=&amp;gt; \! ls /home/smallfish/pgdata 删除表空间，需要注意的
 ArchLinux Apache2.2 MySQL 5.0
 具体开发步骤：
  利用Apache自带都apxs建立hello模块：  [root#localhost] apxs -g -n hello 这样就会在当前目录下新建一个hello模块的文件目录，可以看到里面有：Makefile mod_hello.c modules.mk这样的文件，具体apxs路径查询下本机apache/bin目录。
- 预览下mod_hello.c，可以看到里面apxs自动帮你生成一堆代码了，我们需要的只是修改里面的代码部分，先简单都介绍下里面的函数说明。  include 部分就是引入了一些必要都头文件 hello_handler 这个就是hello模块都主体部分，所有的显示、处理请求什么的都在这里。 hello_register_hooks hello_module 这俩个是需要导出的函数所必须的，先可以不管他们，按照生成的不动即可。
- 修改hello_handler函数，里面可以看到request_rec *r，r有很多函数和变量，具体要参见文档了。里面的ap_rputs是输出，可以简单的理解为把字符串输出到r。  static int hello_handler(request_rec *r) { if (strcmp(r-&amp;gt;handler, &amp;#34;hello&amp;#34;)) { // 判断apache配置文件里handler是否等于hello，不是就跳过 return DECLINED; } r-&amp;gt;content_type = &amp;#34;text/html&amp;#34;; // 设置content-type if (!r-&amp;gt;header_only) ap_rputs(&amp;#34;The sample page from mod_hello.c\n&amp;#34;, r); // 输出一段文字 return OK;// 返回 200 OK状态 } 增加#include &amp;ldquo;mysq.</description>
+预览下mod_hello.c，可以看到里面apxs自动帮你生成一堆代码了，我们需要的只是修改里面的代码部分，先简单都介绍下里面的函数说明。  include 部分就是引入了一些必要都头文件 hello_handler 这个就是hello模块都主体部分，所有的显示、处理请求什么的都在这里。 hello_register_hooks hello_module 这俩个是需要导出的函数所必须的，先可以不管他们，按照生成的不动即可。
+修改hello_handler函数，里面可以看到request_rec *r，r有很多函数和变量，具体要参见文档了。里面的ap_rputs是输出，可以简单的理解为把字符串输出到r。  static int hello_handler(request_rec *r) { if (strcmp(r-&amp;gt;handler, &amp;#34;hello&amp;#34;)) { // 判断apache配置文件里handler是否等于hello，不是就跳过 return DECLINED; } r-&amp;gt;content_type = &amp;#34;text/html&amp;#34;; // 设置content-type if (!r-&amp;gt;header_only) ap_rputs(&amp;#34;The sample page from mod_hello.c\n&amp;#34;, r); // 输出一段文字 return OK;// 返回 200 OK状态 } 增加#include &amp;ldquo;mysq.</description>
     </item>
     
     <item>
@@ -959,7 +957,7 @@ client.put方法第一个参数可以是个数组，即文件名的数组。暂�
       <description>经常在不同linux机器之间互相scp拷文件，每次总是要输入密码才可行。
 通过ssh-keygen生成公钥，在两台机器之间互相建立信任通道即可。假设本地机器client，远程机器为server。
  生成rsa keygen  [winter@client winter] $ ssh-keygen -b 1024 -t rsa Generating public/private rsa key pair. Enter file in which to save the key (/home/winter/.ssh/id_rsa): &amp;lt;Enter&amp;gt; Enter passphrase (empty for no passphrase): &amp;lt;Enter&amp;gt; Enter same passphrase again: &amp;lt;Enter&amp;gt; Your identification has been saved in /home/winter/.ssh/id_rsa. Your public key has been saved in /home/winter/.ssh/id_rsa.pub. The key fingerprint is: 33:d4:7b:9c:87:04:cf:14:40:22:6d:c7:15:78:97:6a winter@client 直接上面公钥和私钥存放地址可以直接回车，私钥密码可以直接回车，也可以输入。
- 查看.ssh目录下了多私钥和公钥文件  [winter@client winter] $ ls .</description>
+查看.ssh目录下了多私钥和公钥文件  [winter@client winter] $ ls .ssh/ id_rsa id_rsa.</description>
     </item>
     
     <item>
@@ -970,11 +968,7 @@ client.put方法第一个参数可以是个数组，即文件名的数组。暂�
       <guid>http://chenxiaoyu.org/2009/12/16/modpython-python_egg_cache-error/</guid>
       <description>环境：Linux Apache Python(mod_python)
 换了一台新机器，没有配置Mod_Python了，在一些应用里import MySQLdb出现了下面错误：
-ExtractionError: Can&amp;#39;t extract file(s) to egg cacheThe following error occurred while trying to extract file(s) to the Python eggcache:[Errno 13] Permission denied: &amp;#39;/root/.python-eggs&amp;#39;The Python egg cache directory is currently set to:/root/.python-eggsPerhaps your account does not have write access to this directory? You canchange the cache directory by setting the PYTHON_EGG_CACHE environmentvariable to point to an accessible directory. 解决办法有两种：
-1.设置PYTHON_EGG_CACHE环境变量
-$ SetEnv PYTHON_EGG_CACHE /tmp/aaa/
-目录权限注意要是apache用户，或者简单点就777
-2.把egg格式转成目录</description>
+ExtractionError: Can&amp;#39;t extract file(s) to egg cache The following error occurred while trying to extract file(s) to the Python egg cache: [Errno 13] Permission denied: &amp;#39;/root/.python-eggs&amp;#39; The Python egg cache directory is currently set to: /root/.python-eggs Perhaps your account does not have write access to this directory? You can change the cache directory by setting the PYTHON_EGG_CACHE environment variable to point to an accessible directory. 解决办法有两种：</description>
     </item>
     
     <item>
@@ -1015,10 +1009,9 @@ package MyTrans; use strict; use Apache2::Const qw(DECLINED); sub handler { my $
       <description>环境：Linux Apache2.2 （路径 /usr/local/apache）
 步骤：
  修改 conf/httpd.conf，找到如下位置，去除 # 注释符  # Virtual hosts Include conf/extra/httpd-vhosts.conf 2.修改 conf/extra/httpd-vhosts.conf
-&amp;lt;VirtualHost *:80&amp;gt; ServerAdmin webmaster@aa.com DocumentRoot &amp;#34;/usr/aa&amp;#34; ServerName ww.aa.com ServerAlias ww.aa.com ErrorLog &amp;#34;logs/ww.aa.com-error_log&amp;#34; CustomLog &amp;#34;logs/ww.aa.com-access_log&amp;#34; common &amp;lt;/VirtualHost&amp;gt; 注意CustomLog这行，默认给的配置是：&amp;rdquo;logs/dummy-host.example.com-access_log common&amp;rdquo;
+&amp;lt;VirtualHost *:80&amp;gt; ServerAdmin webmaster@aa.com DocumentRoot &amp;#34;/usr/aa&amp;#34; ServerName ww.aa.com ServerAlias ww.aa.com ErrorLog &amp;#34;logs/ww.aa.com-error_log&amp;#34; CustomLog &amp;#34;logs/ww.aa.com-access_log&amp;#34; common &amp;lt;/VirtualHost&amp;gt; 注意CustomLog这行，默认给的配置是：&amp;ldquo;logs/dummy-host.example.com-access_log common&amp;rdquo;
 这个其实是错误的，Apache启动时候会报错，common这个应该放在双引号外面：
-Syntax error on line 32 of /usr/local/apache/conf/extra/httpd-vhosts.conf: CustomLog takes two or three arguments, a file name, a custom log format string or format name, and an optional &amp;#34;env=&amp;#34; clause (see docs)
-另外还有个问题，在Apache+Tomcat时候出现的，在配置好mod_jk之后，通过默认80端口访问jsp总会提示403禁止访问，纳闷了！后来 才发现是Directory配置问题，因为每个VirtualHost配置的目录不是默认的DocumentRoot目录，在Apache2以后对于权限 和安全有了更高的要求，所以必须手动配置下每个Directory属性。</description>
+Syntax error on line 32 of /usr/local/apache/conf/extra/httpd-vhosts.conf: CustomLog takes two or three arguments, a file name, a custom log format string or format name, and an optional &amp;#34;env=&amp;#34; clause (see docs) 另外还有个问题，在Apache+Tomcat时候出现的，在配置好mod_jk之后，通过默认80端口访问jsp总会提示403禁止访问，纳闷了！后来 才发现是Directory配置问题，因为每个VirtualHost配置的目录不是默认的DocumentRoot目录，在Apache2以后对于权限 和安全有了更高的要求，所以必须手动配置下每个Directory属性。</description>
     </item>
     
     <item>
@@ -1032,10 +1025,22 @@ Syntax error on line 32 of /usr/local/apache/conf/extra/httpd-vhosts.conf: Custo
 然后发现值一直是null，再tail日志看看，异常不断：
 com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - ++++ exception thrown while trying to get object from cache for key: test_num com.danga.MemCached.MemCachedClient Mon Jul 20 09:37:04 CST 2009 - 3 com.danga.MemCached.NestedIOException: 3 at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1408) at com.danga.MemCached.MemCachedClient.get(MemCachedClient.java:1270) 晕倒，记得以前为了让两个语言实现API读写共享，手动去修改了两个的API包，实现了中文互读写。难不成今儿个还要手动去搞一把？
 然后手动试了下：
-shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23
-经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。
+shell&amp;gt; telnet xxxxxx 11211 get test_num VALUE test_num 4 2 23 经查证VALUE协议返回的是 key flags len \r\n value 这样的格式，大悟：原来flags不一样啊，Java里面对int型赋值以后flags是0，而Python里则不一样，两者序列化的东西不同啊。懒得去 折腾两者序列化有啥不同。来点直接的把。
 然后打开Python Memcached API，大概578行_val_to_store_info方法里，可以看到flags部分，是根据变量类型进行定义的，isinstance(val, str) 如果是str则pass。
 到这里就简单了，直接在py代码里：mc.set(&amp;lsquo;test_num&amp;rsquo;, str(num))</description>
+    </item>
+    
+    <item>
+      <title>mysqldumpslow 慢查询日志分析工具</title>
+      <link>http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/</link>
+      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/</guid>
+      <description>mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。
+首先得配置my.cnf：
+log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限 具体的使法如下：
+mysqldumpslow -s c -t 40 /path/slow.log 出来的结果是访问次数最多的40个sql，几个参数大概意思如下：
+-t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句 可以参考mysqldumpslow &amp;ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！</description>
     </item>
     
     <item>
@@ -1074,20 +1079,6 @@ slave stop; set GLOBAL SQL_SLAVE_SKIP_COUNTER=1; slave start; 一台slave机器�
 shell &amp;gt; ssh -N -f -L 11211:192.168.0.xxx:11211 root@155.xxx.xxx.xxx 11211:192.168.0.xxx:11211，格式为：本地端口:memcache启动的IP:端口 这里没有用RSA认证，就直接输入密码。-N 是不需要shell，-f 是程序后台执行，其他参数参见ssh &amp;ndash;help。
 shell &amp;gt; ps aux 可以看见进程已经在了，下面开始测试代码。
 &amp;gt;&amp;gt;&amp;gt; import memcache &amp;gt;&amp;gt;&amp;gt; mc = memcache.Client([&amp;#39;127.0.0.1:11211&amp;#39;],debug=True) &amp;gt;&amp;gt;&amp;gt; print mc.get(&amp;#39;name&amp;#39;) </description>
-    </item>
-    
-    <item>
-      <title>mysqldumpslow 慢查询日志分析工具</title>
-      <link>http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/</link>
-      <pubDate>Tue, 15 Dec 2009 00:00:00 +0000</pubDate>
-      
-      <guid>http://chenxiaoyu.org/2009/12/15/use-mysqldumpslow/</guid>
-      <description>mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。
-首先得配置my.cnf：
-log_slow_queries = /path/slow.log # 定义log位置，注意要有写入的权限 具体的使法如下：
-mysqldumpslow -s c -t 40 /path/slow.log 出来的结果是访问次数最多的40个sql，几个参数大概意思如下：
--t 显示多少条 -s 排序，默认是at。c是次数，t是时间，l是lock时间，r是返回结果。如果是ac，at，al，ar则是倒序 -g 可以用正则匹配部分语句
-可以参考mysqldumpslow &amp;ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！</description>
     </item>
     
     <item>
@@ -1160,10 +1151,8 @@ git是由http://en.wikipedia.org/wiki/Linus_Torvalds编写的一个开放源码�
 主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)
 原代码如下：
 def reconnect(self): &amp;#34;&amp;#34;&amp;#34;Closes the existing database connection and re-opens it.&amp;#34;&amp;#34;&amp;#34; self.close() self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True) 修改后：
-def reconnect(self): &amp;#34;&amp;#34;&amp;#34;Closes the existing database connection and re-opens it.&amp;#34;&amp;#34;&amp;#34; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True)
-至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：
-easy_install -U DBUtils
-PooledDB有这么几个参数：
+def reconnect(self): &amp;#34;&amp;#34;&amp;#34;Closes the existing database connection and re-opens it.&amp;#34;&amp;#34;&amp;#34; self.close() try: from DBUtils import PooledDB pool_con = PooledDB.PooledDB(creator=MySQLdb, **self._db_args) self._db = pool_con.connection() except: self._db = MySQLdb.connect(**self._db_args) self._db.autocommit(True) 至于安装DBUtils模块可以去http://pypi.python.org/pypi/DBUtils/下载，也可以简单的用easy_install：
+easy_install -U DBUtils PooledDB有这么几个参数：
 * creator 可以生成 DB-API 2 连接的任何函数或 DB-API 2 兼容的数据库连接模块。 * mincached 启动时开启的空连接数量(缺省值 0 意味着开始时不创建连接) * maxcached 连接池使用的最多连接数量(缺省值 0 代表不限制连接池大小) * maxshared 最大允许的共享连接数量(缺省值 0 代表所有连接都是专用的) * maxconnections 最大允许连接数量(缺省值 0 代表不限制) * blocking 设置在达到最大数量时的行为(缺省值 0 或 False) * maxusage 单个连接的最大允许复用次数(缺省值 0 或 False 代表不限制的复用) * setsession: 一个可选的SQL命令列表用于准备每个会话，如 [&amp;#34;set datestyle to german&amp;#34;, .</description>
     </item>
     
@@ -1195,8 +1184,8 @@ import pysvn client = pysvn.Client() #check out the current version of the pysvn
       <guid>http://chenxiaoyu.org/2009/11/19/cython-compile/</guid>
       <description>Cython代码跟Python不一样，必须要编译。
 编译经过两个阶段：
- Cython编译.pyx文件为.c文件
- C编译器会把.c文件编译成.so文件(Windows上是.pyd)
+  Cython编译.pyx文件为.c文件
+  C编译器会把.c文件编译成.so文件(Windows上是.pyd)
   以下会分节介绍几种方式来建立你的扩展模块。
 注意： -a 选项，如果使用该选项将会为.c文件生成一份很漂亮的HTML文件，双击高亮的章节部分会展开代码，这对理解，优化和调试模块将会非常有帮助。
 命令行
@@ -1221,8 +1210,8 @@ from distutils.core import setup from distutils.extension import Extension from 
       
       <guid>http://chenxiaoyu.org/2009/11/17/python-pyrex-for-win/</guid>
       <description>在偶的ubuntu里编写pyrex程序编译成so还是挺爽的，用 timeit.Timer 测试性能提升不少，今天在windows也尝试了一番。
-需要的工具有： - Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ - Dev C++ http://www.bloodshed.net/devcpp.html
-Pyrex 可以通过easy_install Pyrex来安装。 Dev C++ 安装完在系统环境变量Path里加上Dev C++安装目录/bin 目录。
+需要的工具有：
+ Pyrex http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/ Dev C++ http://www.bloodshed.net/devcpp.html  Pyrex 可以通过easy_install Pyrex来安装。 Dev C++ 安装完在系统环境变量Path里加上Dev C++安装目录/bin 目录。
 测试扩展代码：
 # file: foo.pyx &amp;#34;&amp;#34;&amp;#34; simple pyrex module &amp;#34;&amp;#34;&amp;#34; cdef class Foo: &amp;#34;&amp;#34;&amp;#34; foo doc ... &amp;#34;&amp;#34;&amp;#34; cdef char *name def __init__(self, name): self.name = name def __repr__(self): return &amp;#34;foo names: %s&amp;#34; % (self.name) # file: setup.py from distutils.core import setup from distutils.extension import Extension from Pyrex.Distutils import build_ext setup( name=&amp;#39;foo&amp;#39;, ext_modules=[Extension(&amp;#34;foo&amp;#34;, [&amp;#34;foo.</description>
     </item>
@@ -1249,10 +1238,9 @@ mysql&amp;gt; show profiles; +----------+------------+--------------------------
       <guid>http://chenxiaoyu.org/2009/11/10/google-appengine-webpy/</guid>
       <description>看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改：
  复制本地对应web.py目录到GAE对应应用目录  比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes
- 写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py home.py
+写测试代码 app.yaml  application: pynotes version: 1 runtime: python api_version: 1 handlers: - url: /.* script: home.py home.py
 import web render = web.template.render(&amp;#39;templates/&amp;#39;) urls = ( &amp;#39;/&amp;#39;, &amp;#39;index&amp;#39; ) class index: def GET(self): web.header(&amp;#39;Content-type&amp;#39;, &amp;#39;text/html&amp;#39;) name = &amp;#39;smallfish&amp;#39; return render.index(name) app = web.application(urls, globals()) main = app.cgirun() # 这行是发布到GAE的关键 templates/index.html
-$def with (name) hello, $name. test by web.py
- 发布到GAE，测试  e:\googleapp&amp;gt;appcfg.py update pynotes/</description>
+$def with (name) hello, $name. test by web.py 发布到GAE，测试  e:\googleapp&amp;gt;appcfg.py update pynotes/</description>
     </item>
     
     <item>
@@ -1264,12 +1252,10 @@ $def with (name) hello, $name. test by web.py
       <description>Mako是什么？Moko是Python写的一个模板库，Python官网http://python.org/用的就是它哦。其他废话也就不累赘了，直接来点代码，方便阅读与了解把。
 (Mako官网地址：http://www.makotemplates.org/ ，可以下载安装包，推荐使用easy_install安装)
 from mako.template import Template mytemplate = Template(&amp;#34;hello world!&amp;#34;) print mytemplate.render() mytemplate = Template(&amp;#34;hello, ${name}!&amp;#34;) print mytemplate.render(name=&amp;#34;jack&amp;#34;) 代码可以参考官方doc部分
-mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;) print mytemplate.render()
-还可以从设置模板为文件，设置filename属性
+mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;) print mytemplate.render() 还可以从设置模板为文件，设置filename属性
 mytemplate = Template(filename=&amp;#39;/docs/mytmpl.txt&amp;#39;, module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) print mytemplate.render() 文件还可以缓存到某个目录下，下面的/docs/mytmpl.txt会产生一个py：/tmp/mako_modules/docs/mytmpl.txt.py
 from mako.lookup import TemplateLookup mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;]) mytemplate = Template(&amp;#34;&amp;#34;&amp;#34;&amp;lt;%include file=&amp;#34;header.txt&amp;#34;/&amp;gt; hello world!&amp;#34;&amp;#34;&amp;#34;, lookup=mylookup) 查找模板，方便统一模板路径使用。
-mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs)
-改良了上面的查找方式
+mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], module_directory=&amp;#39;/tmp/mako_modules&amp;#39;) def serve_template(templatename, **kwargs): mytemplate = mylookup.get_template(templatename) print mytemplate.render(**kwargs) 改良了上面的查找方式
 mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], output_encoding=&amp;#39;utf-8&amp;#39;, encoding_errors=&amp;#39;replace&amp;#39;) mytemplate = mylookup.get_template(&amp;#34;foo.txt&amp;#34;) print mytemplate.</description>
     </item>
     
@@ -1282,7 +1268,7 @@ mylookup = TemplateLookup(directories=[&amp;#39;/docs&amp;#39;], output_encoding
       <description>其实MySQL-python安装很简直，以前一直也没在意，今天发觉换了1.2.3新版本，ms蹦出很多问题来了。 做个记录，防止以后有问题无处可查。
 一般步骤是：
  安装easy_install  shell &amp;gt; wget http://peak.telecommunity.com/dist/ez_setup.py shell &amp;gt; python ez_setup.py 会自动根据本机的py版本选择对应的egg，安装完可以看到有/usr/bin/easy_install程序了
- 安装MySQL-python  shell &amp;gt; easy_install MySQL-python 到这里安装算是完成了，不过接下来测试就郁闷了。
+安装MySQL-python  shell &amp;gt; easy_install MySQL-python 到这里安装算是完成了，不过接下来测试就郁闷了。
 在import MySQLdb出现了两个错误：
 a). ImportError: libmysqlclient_r.so.15: cannot open shared object file: No such file or directory 这个错误一般解决比较简单，把路径加入到LD_LIBRARY_PATH即可，不过偶的现象比较强，因为没装MySQL，哈哈
 b). ImportError: /lib/tls/libc.so.6: version `GLIBC_2.4&amp;#39; not found 解决这个错误的办法是不用easy_install了，直接下载MySQL-python-1.2.2.tar.gz包，然后就是三步走：
@@ -1298,7 +1284,7 @@ shell &amp;gt; tar zxvf MySQL-python-1.2.2.tar.gz shell &amp;gt; cd MySQL-python
       <description>MySQLdb默认查询结果都是返回tuple，输出时候不是很方便，必须按照0，1这样读取，无意中在网上找到简单的修改方法，就是传递一个cursors.DictCursor就行。
 默认程序：
 import MySQLdb db = MySQLdb.connect(host=&amp;#39;localhost&amp;#39;, user=&amp;#39;root&amp;#39;, passwd=&amp;#39;123456&amp;#39;, db=&amp;#39;test&amp;#39;) cur = db.cursor() cur.execute(&amp;#39;select * from user&amp;#39;) rs = cur.fetchall() print rs # 返回类似如下 # ((1000L, 0L), (2000L, 0L), (3000L, 0L)) 修改后：
-import MySQLdb import MySQLdb.cursors db = MySQLdb.connect(host=&amp;#39;localhost&amp;#39;, user=&amp;#39;root&amp;#39;, passwd=&amp;#39;123456&amp;#39;, db=&amp;#39;test&amp;#39;, cursorclass=MySQLdb.cursors.DictCursor) cur = db.cursor() cur.execute(&amp;#39;select * from user&amp;#39;) rs = cur.fetchall() print rs # 返回类似如下 # ({&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 1000L}, {&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 2000L}, {&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 3000L})</description>
+import MySQLdb import MySQLdb.cursors db = MySQLdb.connect(host=&amp;#39;localhost&amp;#39;, user=&amp;#39;root&amp;#39;, passwd=&amp;#39;123456&amp;#39;, db=&amp;#39;test&amp;#39;, cursorclass=MySQLdb.cursors.DictCursor) cur = db.cursor() cur.execute(&amp;#39;select * from user&amp;#39;) rs = cur.fetchall() print rs # 返回类似如下 # ({&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 1000L}, {&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 2000L}, {&amp;#39;age&amp;#39;: 0L, &amp;#39;num&amp;#39;: 3000L}) 或者也可以用下面替换connect和cursor部分</description>
     </item>
     
   </channel>

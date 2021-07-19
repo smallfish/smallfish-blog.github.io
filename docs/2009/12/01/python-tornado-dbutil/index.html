@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-01",
         "description": "",
-        "wordCount": 108
+        "wordCount":  108 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,23 +99,17 @@
     </div>
     <h1 class="post-title">tornado.database添加PooledDB连接池功能</h1>
     <p>tornado.database模块简单包装了下对MySQL的操作，短小精悍。</p>
-
 <p>无奈源码中无连接池功能，遂加上了一段DBUtils模块功能。</p>
-
 <p>主要修改了reconnect()方法，大致在database.py第86行左右。(tornado 0.2 win版)</p>
-
 <p>原代码如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa"></span><span class="s2">&#34;&#34;&#34;Closes the existing database connection and re-opens it.&#34;&#34;&#34;</span>
+        <span class="s2">&#34;&#34;&#34;Closes the existing database connection and re-opens it.&#34;&#34;&#34;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></code></pre></div>
 <p>修改后：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa"></span><span class="s2">&#34;&#34;&#34;Closes the existing database connection and re-opens it.&#34;&#34;&#34;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Closes the existing database connection and re-opens it.&#34;&#34;&#34;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">DBUtils</span> <span class="kn">import</span> <span class="n">PooledDB</span>
@@ -119,33 +117,27 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">pool_con</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_args</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span></code></pre></div></p>
-
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">autocommit</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></code></pre></div>
 <p>至于安装DBUtils模块可以去<a href="http://pypi.python.org/pypi/DBUtils/">http://pypi.python.org/pypi/DBUtils/</a>下载，也可以简单的用easy_install：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">easy_install</span> <span class="o">-</span><span class="n">U</span> <span class="n">DBUtils</span></code></pre></div></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">easy_install</span> <span class="o">-</span><span class="n">U</span> <span class="n">DBUtils</span></code></pre></div>
 <p>PooledDB有这么几个参数：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">*</span> <span class="n">creator</span>
-    <span class="err">可以生成</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="err">连接的任何函数或</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="err">兼容的数据库连接模块。</span>
+    <span class="n">可以生成</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="n">连接的任何函数或</span> <span class="n">DB</span><span class="o">-</span><span class="n">API</span> <span class="mi">2</span> <span class="n">兼容的数据库连接模块</span><span class="err">。</span>
 <span class="o">*</span> <span class="n">mincached</span>
-    <span class="err">启动时开启的空连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">意味着开始时不创建连接</span><span class="p">)</span>
+    <span class="n">启动时开启的空连接数量</span><span class="p">(</span><span class="n">缺省值</span> <span class="mi">0</span> <span class="n">意味着开始时不创建连接</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">maxcached</span>
-    <span class="err">连接池使用的最多连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">代表不限制连接池大小</span><span class="p">)</span>
+    <span class="n">连接池使用的最多连接数量</span><span class="p">(</span><span class="n">缺省值</span> <span class="mi">0</span> <span class="n">代表不限制连接池大小</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">maxshared</span>
-    <span class="err">最大允许的共享连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">代表所有连接都是专用的</span><span class="p">)</span>
+    <span class="n">最大允许的共享连接数量</span><span class="p">(</span><span class="n">缺省值</span> <span class="mi">0</span> <span class="n">代表所有连接都是专用的</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">maxconnections</span>
-    <span class="err">最大允许连接数量</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">代表不限制</span><span class="p">)</span>
+    <span class="n">最大允许连接数量</span><span class="p">(</span><span class="n">缺省值</span> <span class="mi">0</span> <span class="n">代表不限制</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">blocking</span>
-    <span class="err">设置在达到最大数量时的行为</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">或</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">设置在达到最大数量时的行为</span><span class="p">(</span><span class="n">缺省值</span> <span class="mi">0</span> <span class="n">或</span> <span class="kc">False</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">maxusage</span>
-    <span class="err">单个连接的最大允许复用次数</span><span class="p">(</span><span class="err">缺省值</span> <span class="mi">0</span> <span class="err">或</span> <span class="bp">False</span> <span class="err">代表不限制的复用</span><span class="p">)</span>
+    <span class="n">单个连接的最大允许复用次数</span><span class="p">(</span><span class="n">缺省值</span> <span class="mi">0</span> <span class="n">或</span> <span class="kc">False</span> <span class="n">代表不限制的复用</span><span class="p">)</span>
 <span class="o">*</span> <span class="n">setsession</span><span class="p">:</span>
-    <span class="err">一个可选的</span><span class="n">SQL命令列表用于准备每个会话</span><span class="err">，如</span> <span class="p">[</span><span class="sa"></span><span class="s2">&#34;set datestyle to german&#34;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span></code></pre></div>
-
+    <span class="n">一个可选的SQL命令列表用于准备每个会话</span><span class="err">，</span><span class="n">如</span> <span class="p">[</span><span class="s2">&#34;set datestyle to german&#34;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span></code></pre></div>
 <p>creator 函数或可以生成连接的函数可以接受这里传入的其他参数，例如主机名、数据库、用户名、密码等。你还可以选择传入creator函数的其他参数，允许失败重连和负载均衡。</p>
-
 <p>具体可以参照下：<a href="http://www.webwareforpython.org/DBUtils/Docs/UsersGuide.zh.html">http://www.webwareforpython.org/DBUtils/Docs/UsersGuide.zh.html</a></p>
 
 </article>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2011s on smallfish&#39;s blog</title>
@@ -6,11 +6,7 @@
     <description>Recent content in 2011s on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 29 Dec 2011 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://chenxiaoyu.org/2011/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 29 Dec 2011 00:00:00 +0000</lastBuildDate><atom:link href="http://chenxiaoyu.org/2011/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>The Rose</title>
       <link>http://chenxiaoyu.org/2011/12/29/the-rose/</link>
@@ -46,8 +42,7 @@
 mac:~ smallfish$ curl http://127.0.0.1:8108/postgres [{&amp;#34;datname&amp;#34;:&amp;#34;postgres&amp;#34;,&amp;#34;datdba&amp;#34;:&amp;#34;10&amp;#34;,&amp;#34;encoding&amp;#34;:6,&amp;#34;datcollate&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datctype&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;, &amp;#34;datistemplate&amp;#34;:false,&amp;#34;datallowconn&amp;#34;:true,&amp;#34;datconnlimit&amp;#34;:-1,&amp;#34;datlastsysoid&amp;#34;:&amp;#34;12172&amp;#34;,&amp;#34;datfrozenxid&amp;#34;:&amp;#34;985&amp;#34;, &amp;#34;dattablespace&amp;#34;:&amp;#34;1663&amp;#34;,&amp;#34;datacl&amp;#34;:null},{&amp;#34;datname&amp;#34;:&amp;#34;smallfish&amp;#34;,&amp;#34;datdba&amp;#34;:&amp;#34;16384&amp;#34;,&amp;#34;encoding&amp;#34;:6, &amp;#34;datcollate&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datctype&amp;#34;:&amp;#34;zh_CN.UTF-8&amp;#34;,&amp;#34;datistemplate&amp;#34;:false,&amp;#34;datallowconn&amp;#34;:true, &amp;#34;datconnlimit&amp;#34;:-1,&amp;#34;datlastsysoid&amp;#34;:&amp;#34;12172&amp;#34;,&amp;#34;datfrozenxid&amp;#34;:&amp;#34;985&amp;#34;,&amp;#34;dattablespace&amp;#34;:&amp;#34;1663&amp;#34;,&amp;#34;datacl&amp;#34;:null}] 顺手 Google 了下，发现了两种浏览方式：命令行查看和浏览器查看。
 一、浏览器查看方式，需要安装 Chrome 插件：JSONView。
 二、命令行查看，需要安装 Python。
-mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool 
-是不是美观很多了？</description>
+mac:~ smallfish$ curl http://127.0.0.1:8108/postgres | python -mjson.tool  是不是美观很多了？</description>
     </item>
     
     <item>
@@ -94,9 +89,8 @@ encrypted_session_key &amp;#34;abcdefghijklmnopqrstuvwxyz123456&amp;#34;; encryp
 通过修改php.ini中的auto_prepend_file可以预加载auto-xhprof.php，自动打开xhprof功能。 ;php.ini auto_prepend_file = &amp;#39;/path/prepend.php&amp;#39; ; &amp;lt;?php ; include_once &amp;#39;/path/auto-xhprof.php&amp;#39;; ; ?&amp;gt; 主要功能点有如下：
  参数配置是否自动开启xhprof。 参数配置超时的阀值，比如2秒。 保存分析后的数据到MySQL中，供集中统一分析。 数据内容含：请求的URL、相应时间。 支持gearman异步保存数据。 提供封装的xhprof_start/xhprof_end对部分程序进行手动分析。 自动记录错误信息  图一（列表显示）： 图二（部分函数显示）： 源码文件说明：
 auto-xhprof.php 全局加载文件。 auto-xhprof-config.php 全局配置文件，设置MySQL数据库和参数等。 gearman-worker.php gearman后台处理worker进程。 web/ web显示目录，xhprof列表页面和原xhprof展示部分 xhprof_lib/ xhprof库文件。 &amp;mdash;&amp;mdash;&amp;mdash; 扩展安装步骤 &amp;mdash;&amp;mdash;&amp;mdash;
- 编译xhprof.so扩展 % cd &amp;lt;xhprof_source_directory&amp;gt;/extension/ % phpize % ./configure --with-php-config=&amp;lt;path to php-config&amp;gt; % make % make install
- 修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&amp;lt;directory&amp;gt; ; 需要有写入权限，可以写/tmp，或者不设置
- 从github上下载auto-xhprof，并配置。 1.</description>
+  编译xhprof.so扩展 % cd &amp;lt;xhprof_source_directory&amp;gt;/extension/ % phpize % ./configure --with-php-config=&amp;lt;path to php-config&amp;gt; % make % make install
+  修改php.ini中extension，以支持xhprof扩展 [xhprof] extension=xhprof.so xhprof.output_dir=&amp;lt;directory&amp;gt; ; 需要有写入权限，可以写/tmp，或者不设置</description>
     </item>
     
     <item>
@@ -134,8 +128,7 @@ shell&amp;gt; sudo /etc/init.</description>
 $ easy_install pythonbrew $ pythonbrew_install # 或手动下载 $ curl -kLO http://github.com/utahta/pythonbrew/raw/master/pythonbrew-install $ chmod +x pythonbrew-install $ ./pythonbrew-install 把 source /xxx/.pythonbrew/etc/bashrc 加入到自己profile或者bashrc中去（xxx是自己的用户目录）
 pythonbrew 常用命令如下：
 install 安装版本：
-$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6
-switch 选择版本：
+$ pythonbrew install 2.6.6 过程可以参考安装日志：~/.pythonbrew/log/build.log 如果最后看到make error失败，应该是test过程失败。可以采取： $ pythonbrew install --force 2.6.6 switch 选择版本：
 $ pythonbrew switch 2.6.6 list 查看版本：
 $ pythonbrew list # 列出目前已安装的版本 pythonbrew list -k # 列出可以下载和安装的版本 uninstall 卸载版本：
 $ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://pypi.python.org/pypi/pythonbrew/。</description>
@@ -156,7 +149,7 @@ $ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://p
 零点的钟声已过，回忆这一年，许许多多的人，给了自己很多很多的帮助，感谢一下。
 何伟平：很感谢何老师的推荐，才能有机会进入淘宝这样的大公司。何老师的谦虚和热心，很值得自己去学习。很遗憾，至今未有机会请何老师吃顿饭。 康伯：在淘宝时候我的主管。很感谢他跟自己多次的交流，有想法就说，就交流。给了自己很多机会。他是我至今为止唯一一个在系统方面很膜拜的人。 大舞：淘宝入职时候的师兄。试用期内给了自己很多建议和指导，一个很帅很帅的男人。@kemin_ukl 春哥：非芒果台的那位。感谢春哥推荐了自己来盛大，还混了不少饭，春哥工作和生活的太多很值得码农学习和借鉴。@mcspring 道神：灰常牛叉的DD，感谢刚来魔都时候收留了俺这个码农。回头还要多搭讪，求其在Debian方面的经验。@lidaobing 群众：鄙人群里那些哥们，你们都是神一样的男人！因为有了你们，才有了欢乐！@marchliu @xiaoxiaolu @guangfengio 等等大牛们。 话不多说，祝愿那些把帮助和关心过我的人，新年能够身体健康，幸福快乐！
 去迎接新的一年，我，继续在路上。
-&amp;nbsp;</description>
+ </description>
     </item>
     
     <item>
@@ -171,8 +164,7 @@ $ pythonbrew uninstall 2.6.6 参数还是很简单的。详见help或者http://p
 编译 hstore 扩展
 mac:~ smallfish$ cd Downloads/postgresql-9.0.1/contrib/hstore/ mac:hstore smallfish$ make ... 一堆编译信息 mac:hstore smallfish$ sudo make install 导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。
 mac:hstore smallfish$ ls /opt/postgresql/share/contrib/ hstore.sql	uninstall_hstore.sql mac:hstore smallfish$ psql -U postgres -f /opt/postgresql/share/contrib/hstore.sql ... 一堆导入命令 进入数据库，建一个测试表
-postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;#34;testhstore_id_seq&amp;#34; for serial column &amp;#34;testhstore.id&amp;#34; CREATE TABLE
-查看下表结构
+postgres=# CREATE TABLE testhstore (id SERIAL, value hstore); NOTICE: CREATE TABLE will create implicit sequence &amp;#34;testhstore_id_seq&amp;#34; for serial column &amp;#34;testhstore.id&amp;#34; CREATE TABLE 查看下表结构
 postgres=# \d List of relations Schema | Name | Type | Owner --------+-------------------+----------+---------- public | testhstore | table | postgres public | testhstore_id_seq | sequence | postgres (2 rows) postgres=# \d testhstore; Table &amp;#34;public.</description>
     </item>
     
@@ -196,8 +188,7 @@ mac:python smallfish$ paster create -t pylons hello mac:python smallfish$ cd hel
       <pubDate>Sat, 19 Feb 2011 00:00:00 +0000</pubDate>
       
       <guid>http://chenxiaoyu.org/2011/02/19/python-story/</guid>
-      <description>http://www.slideshare.net/nnfish/python-story
-http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-phpapp01&amp;amp;stripped_title=python-story&amp;amp;userName=nnfish</description>
+      <description>http://www.slideshare.net/nnfish/python-storyhttp://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-phpapp01&amp;amp;stripped_title=python-story&amp;amp;userName=nnfish</description>
     </item>
     
     <item>
@@ -219,7 +210,7 @@ http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-p
 实现。设计数据库，写类库，写页面。详细罗列的话估计一长串。然后就是拆分逻辑，拆分页面，拆分功能点，然后就是与之对应的整合和补充。说到这边，可能就有人会说，用某某类库，或者某某框架，某某工具。这一切都建立在对其了解的基础上。不要太迷信，同样的刀在不同人手上是不一样的，用的好才是好刀，用不好连茅草都不如。折腾的滋味自己尝把。不是用了啥就牛逼，而是解决了啥，针对性的解决才是牛逼的关键。所有的一切，都只不过是实现的一种手段。条条大路，都可以。不要太迷信××，那只是一个传说。没有万能的实现，只有不断的解决与重新审视。实现细节滤过。。。
 测试。不是写几个TestCase就是测试，那个只是证明你的代码看起来没啥问题，当然也不仅仅是用了啥测试框架，多专业。都只是辅助工具。除去功能性的测试，需要的是注意细节上。如果仅仅只是能用，没错没bug。这个不是产品，或许就是留言版。当然应该提供更多的可用性、流畅性以及体验。
 唉，一不小心快十二点了，洗洗睡吧。未完再补充。
-&amp;nbsp;</description>
+ </description>
     </item>
     
     <item>
@@ -231,8 +222,7 @@ http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonstory-100920035248-p
       <description>目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。
 系统：CentOS 5.5 官网：http://cutycapt.sourceforge.net/ 依赖：QT http://www.qtsoftware.com/
 首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下：
- 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm  安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel
- 安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10*  修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH  安装 cutycapt  svn co https://cutycapt.</description>
+ 下载RPM包  (64位) wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-x11-4.4.3-10_4.el5.x86_64.rpm wget http://dl.atrpms.net/el5-x86_64/atrpms/testing/qt44-devel-4.4.3-10_4.el5.x86_64.rpm (32位) wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-x11-4.4.3-10_4.el5.i386.rpm wget http://ftp.riken.go.jp/Linux/atrpms/el5-i386/atrpms/testing/qt44-devel-4.4.3-10_4.el5.i386.rpm 安装 qt-devel 依赖包  yum install libXi-devel yum install libXinerama-devel 安装 qt 相关  rpm -ivh qt44-4.4.3-10* rpm -ivh qt44-x11-4.4.3-10* # rpm -e qt-devel --nodeps --allmatches rpm -ivh qt44-devel-4.4.3-10* 修改 /etc/profile，最后并：source /etc/profile  export QTDIR=/usr/lib64/qt44 export QTLIB=/usr/lib64/qt44/lib export QTINC=/usr/lib64/qt44/include export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH export PATH=$QTDIR/bin:$PATH 安装 cutycapt  svn co https://cutycapt.</description>
     </item>
     
   </channel>

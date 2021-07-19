@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-10",
         "description": "",
-        "wordCount": 29
+        "wordCount":  29 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,42 +99,24 @@
     </div>
     <h1 class="post-title">emacs windows配置笔记</h1>
     <p>俺最新.emcas配置地址是：<a href="http://github.com/smallfish/editor/blob/master/emacs/.emacs">http://github.com/smallfish/editor/blob/master/emacs/.emacs</a></p>
-
 <p>最近手痒，看到不少牛x人物都是用emacs，遂在windows下装一个玩玩。</p>
-
 <p>下载地址：<a href="http://ftp.gnu.org/pub/gnu/emacs/windows/emacs-23.1-bin-i386.zip">http://ftp.gnu.org/pub/gnu/emacs/windows/emacs-23.1-bin-i386.zip</a></p>
-
 <p>解压到：D:\emacs-23.1</p>
-
 <p>可以看到bin、etc、lisp等目录。主要运行都在bin目录。</p>
-
 <p>runemacs.exe   这个就是运行文件拉，可以发送到桌面快捷方式。</p>
-
 <p>可以运行一下addpm.exe这个，其作用就是把emacs加入到开始程序菜单里。</p>
-
 <p>试着运行一下runemacs.exe，可以发现默认光标的位置，那是一个入门教程喔，还是中文的耶~</p>
-
 <p>建议都看下这个入门的教程，常用的快捷键都有说明。</p>
-
 <p>接下来加点常用的功能把，比如显示行号，goto line的功能。(俺也只配置了这个两项)</p>
-
 <p>配置文件主要是_emacs或者.emacs，win下建议_emacs，点号开头的文件需要到cmd下才行。</p>
-
 <p>_emacs文件放到哪儿呢？俺是直接修改了win注册表选项。</p>
-
 <p>选项是：HKEY_CURRENT_USER\Software\GNU\Emacs，注意GNU\Emacs是需要新建的。接下来在Emacs里新建一个HOME项，值是你的emacs路径，比如我的：D:\emacs-23.1\bin。</p>
-
 <p>然后需要做的就是把_emacs文件在这个bin目录下。</p>
-
 <p>经过几经周折，显示行号和goto功能的配置如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="n">linum</span><span class="o">-</span><span class="n">mode</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="nb">set</span><span class="o">-</span><span class="n">key</span> <span class="p">[(</span><span class="n">meta</span> <span class="n">g</span><span class="p">)]</span> <span class="sa"></span><span class="s1">&#39;goto-line)</span></code></pre></div>
-
+<span class="p">(</span><span class="k">global</span><span class="o">-</span><span class="nb">set</span><span class="o">-</span><span class="n">key</span> <span class="p">[(</span><span class="n">meta</span> <span class="n">g</span><span class="p">)]</span> <span class="s1">&#39;goto-line)</span></code></pre></div>
 <p>第一行是显示行号</p>
-
 <p>第二行是设置meta+g转到goto功能，meta在windows下可以用alt来操作。</p>
-
 <p>其他功能以后在后续补上，快捷键挺多，用了一会手指发酸。C-x 数字(1 2 3)挺好，可以开多窗口浏览了。</p>
 
 </article>

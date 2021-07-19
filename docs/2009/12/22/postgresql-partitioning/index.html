@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-22",
         "description": "",
-        "wordCount": 357
+        "wordCount":  357 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,35 +99,25 @@
     </div>
     <h1 class="post-title">PostgreSQL Partitioning 表分区</h1>
     <p>测试版本：pg 8.3 (ubuntu)</p>
-
 <p>在pg里表分区是通过表继承来实现的，一般都是建立一个主表，里面是空，然后每个分区都去继承它。</p>
-
 <p>创建表分区步骤如下：</p>
-
 <ol>
 <li>创建主表</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">users</span> <span class="p">(</span> <span class="n">uid</span> <span class="nb">int</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">primary</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span></code></pre></div>
-
-<ol>
+<ol start="2">
 <li>创建分区表(必须继承上面的主表)</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">users_0</span> <span class="p">(</span> <span class="n">check</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">uid</span><span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">)</span> <span class="n">INHERITS</span> <span class="p">(</span><span class="n">users</span><span class="p">);</span>
 <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">users_1</span> <span class="p">(</span> <span class="n">check</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">))</span> <span class="n">INHERITS</span> <span class="p">(</span><span class="n">users</span><span class="p">);</span></code></pre></div>
-
-<ol>
+<ol start="3">
 <li>在分区表上建立索引，其实这步可以省略的哦</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">CREATE</span> <span class="n">INDEX</span> <span class="n">users_0_uidindex</span> <span class="n">on</span> <span class="n">users_0</span><span class="p">(</span><span class="n">uid</span><span class="p">);</span>
-<span class="n">CREATE</span> <span class="n">INDEX</span> <span class="n">users_1_uidindex</span> <span class="n">on</span> <span class="n">users_1</span><span class="p">(</span><span class="n">uid</span><span class="p">);</span></code></pre></div></p>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">CREATE</span> <span class="n">INDEX</span> <span class="n">users_0_uidindex</span> <span class="n">on</span> <span class="n">users_0</span><span class="p">(</span><span class="n">uid</span><span class="p">);</span>
+<span class="n">CREATE</span> <span class="n">INDEX</span> <span class="n">users_1_uidindex</span> <span class="n">on</span> <span class="n">users_1</span><span class="p">(</span><span class="n">uid</span><span class="p">);</span></code></pre></div>
+<ol start="4">
 <li>创建规则RULE</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">CREATE</span> <span class="n">RULE</span> <span class="n">users_insert_0</span> <span class="n">AS</span>
     <span class="n">ON</span> <span class="n">INSERT</span> <span class="n">TO</span> <span class="n">users</span> <span class="n">WHERE</span>
         <span class="p">(</span><span class="n">uid</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
@@ -135,10 +129,8 @@
         <span class="p">(</span><span class="n">uid</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)</span>
     <span class="n">DO</span> <span class="n">INSTEAD</span>
         <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">users_1</span> <span class="n">VALUES</span> <span class="p">(</span><span class="n">NEW</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span><span class="n">NEW</span><span class="o">.</span><span class="n">name</span><span class="p">);</span></code></pre></div>
-
 <p>下面就可以测试写入数据啦：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO users VALUES (100,&#39;smallfish&#39;);</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO users VALUES (100,&#39;smallfish&#39;);</span>
 <span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">0</span>
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO users VALUES (20,&#39;aaaaa&#39;);</span>
 <span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">0</span>
@@ -147,60 +139,54 @@
 <span class="o">-----+-----------</span>
 <span class="mi">20</span>   <span class="o">|</span> <span class="n">aaaaa</span>
 <span class="mi">100</span>  <span class="o">|</span> <span class="n">smallfish</span>
-<span class="p">(</span><span class="mi">2</span> <span class="err">笔资料列</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">2</span> <span class="n">笔资料列</span><span class="p">)</span>
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># select * from users_0;</span>
 <span class="n">uid</span>  <span class="o">|</span> <span class="n">name</span>
 <span class="o">-----+-------</span>
 <span class="mi">20</span>   <span class="o">|</span> <span class="n">aaaaa</span>
-<span class="p">(</span><span class="mi">1</span> <span class="err">笔资料列</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">笔资料列</span><span class="p">)</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># select * from users_1;</span>
 <span class="n">uid</span>  <span class="o">|</span>   <span class="n">name</span>
 <span class="o">-----+-----------</span>
 <span class="mi">100</span>  <span class="o">|</span> <span class="n">smallfish</span>
-<span class="p">(</span><span class="mi">1</span> <span class="err">笔资料列</span><span class="p">)</span></code></pre></div></p>
-
+<span class="p">(</span><span class="mi">1</span> <span class="n">笔资料列</span><span class="p">)</span></code></pre></div>
 <p>到这里表分区已经可以算完了，不过还有个地方需要修改下，先看count查询把。</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># EXPLAIN SELECT count(*) FROM users where uid&lt;100;</span>
-<span class="n">QUERY</span> <span class="n">PLAN</span>
-<span class="o">------------------------------------------------</span>
-<span class="n">Aggregate</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">62.75</span><span class="o">..</span><span class="mf">62.76</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Append</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">60.55</span> <span class="n">rows</span><span class="o">=</span><span class="mi">879</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_pkey</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">..</span><span class="mf">6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0_uidindex</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">..</span><span class="mf">6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_1</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_1_uidindex</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">..</span><span class="mf">6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-<span class="p">(</span><span class="mi">14</span> <span class="err">笔资料列</span><span class="p">)</span></code></pre></div></p>
-
-<p>按照本来想法，uid小于100，理论上应该只是查询users_0表，通过EXPLAIN可以看到其他他扫描了所有分区的表。</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SET constraint_exclusion = on;</span>
-<span class="n">SET</span></code></pre></div></p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># EXPLAIN SELECT count(*) FROM users where uid&lt;100;</span>
 <span class="n">QUERY</span> <span class="n">PLAN</span>
 <span class="o">------------------------------------------------</span>
-<span class="n">Aggregate</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">41.83</span><span class="o">..</span><span class="mf">41.84</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Append</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">40.37</span> <span class="n">rows</span><span class="o">=</span><span class="mi">586</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Aggregate</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">62.75</span><span class="o">.</span><span class="mf">.62.76</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Append</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.60.55</span> <span class="n">rows</span><span class="o">=</span><span class="mi">879</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_pkey</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">..</span><span class="mf">6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_pkey</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">.</span><span class="mf">.6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">..</span><span class="mf">20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0_uidindex</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">..</span><span class="mf">6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0_uidindex</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">.</span><span class="mf">.6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
-<span class="p">(</span><span class="mi">10</span> <span class="err">笔资料列</span><span class="p">)</span></code></pre></div>
-
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_1</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_1_uidindex</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">.</span><span class="mf">.6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">14</span> <span class="n">笔资料列</span><span class="p">)</span></code></pre></div>
+<p>按照本来想法，uid小于100，理论上应该只是查询users_0表，通过EXPLAIN可以看到其他他扫描了所有分区的表。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SET constraint_exclusion = on;</span>
+<span class="n">SET</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># EXPLAIN SELECT count(*) FROM users where uid&lt;100;</span>
+<span class="n">QUERY</span> <span class="n">PLAN</span>
+<span class="o">------------------------------------------------</span>
+<span class="n">Aggregate</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">41.83</span><span class="o">.</span><span class="mf">.41.84</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Append</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.40.37</span> <span class="n">rows</span><span class="o">=</span><span class="mi">586</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_pkey</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">.</span><span class="mf">.6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Heap</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0</span> <span class="n">users</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">6.52</span><span class="o">.</span><span class="mf">.20.18</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Recheck</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="o">-&gt;</span>  <span class="n">Bitmap</span> <span class="n">Index</span> <span class="n">Scan</span> <span class="n">on</span> <span class="n">users_0_uidindex</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mf">0.00</span><span class="o">.</span><span class="mf">.6.45</span> <span class="n">rows</span><span class="o">=</span><span class="mi">293</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Index</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="n">uid</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">10</span> <span class="n">笔资料列</span><span class="p">)</span></code></pre></div>
 <p>到这里整个过程都OK啦！</p>
 
 </article>

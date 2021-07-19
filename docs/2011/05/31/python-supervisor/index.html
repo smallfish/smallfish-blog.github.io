@@ -57,7 +57,7 @@
         },
         "datePublished": "2011-05-31",
         "description": "",
-        "wordCount": 118
+        "wordCount":  118 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,78 +99,57 @@
     </div>
     <h1 class="post-title">supervisor - Python进程管理工具</h1>
     <p>经常会碰到要写一些守护进程，简单做法放入后台：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shell</span><span class="o">&gt;</span> <span class="n">nohup</span> <span class="n">python</span> <span class="n">xxx</span><span class="o">.</span><span class="n">py</span> <span class="o">&amp;</span></code></pre></div>
-
 <p>偶尔这么做还可以接受，如果一堆这样的呢？</p>
-
 <p>当然还有一个问题，就是各种服务，对应的命令或者路径都不太一致，比如Apache、MySQL或者其他自行编译的工具。</p>
-
 <p>如果可以统一管理这些应用，是不是很哈皮？</p>
-
 <p>按照惯例现Google一把，不失所望找到一个神奇的利器。supervisor！</p>
-
 <p>supervisor地址：<a href="http://supervisord.org">http://supervisord.org</a>，官方标语就是：一个进程管理工具。</p>
-
 <p>安装：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">supervisor</span> <span class="c1"># pip/easy_install</span></code></pre></div>
-
 <p>也可以通过其他包管理来安装，比如apt/yum等。</p>
-
 <p>安装好以后，有两个可执行文件和一个配置文件（平台差异，可能路径不一致）：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisord</span>             <span class="o">--</span>  <span class="n">supervisor服务守护进程</span>
-<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisorctl</span>           <span class="o">--</span>  <span class="n">supervisor服务控制程序</span><span class="err">，比如：</span><span class="n">status</span><span class="o">/</span><span class="n">start</span><span class="o">/</span><span class="n">stop</span><span class="o">/</span><span class="n">restart</span> <span class="n">xx</span> <span class="err">等</span>
-<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">supervisor</span><span class="o">/</span><span class="n">supervisord</span><span class="o">.</span><span class="n">conf</span> <span class="o">--</span>  <span class="err">配置文件，定义服务名称以及接口等等</span></code></pre></div>
-
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">supervisorctl</span>           <span class="o">--</span>  <span class="n">supervisor服务控制程序</span><span class="err">，</span><span class="n">比如</span><span class="err">：</span><span class="n">status</span><span class="o">/</span><span class="n">start</span><span class="o">/</span><span class="n">stop</span><span class="o">/</span><span class="n">restart</span> <span class="n">xx</span> <span class="n">等</span>
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">supervisor</span><span class="o">/</span><span class="n">supervisord</span><span class="o">.</span><span class="n">conf</span> <span class="o">--</span>  <span class="n">配置文件</span><span class="err">，</span><span class="n">定义服务名称以及接口等等</span></code></pre></div>
 <p>下面来一个示例，用web.py写一个hello的程序：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">web</span>
 
 <span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="sa"></span><span class="s1">&#39;/(.*)&#39;</span><span class="p">,</span><span class="sa"></span><span class="s1">&#39;hello&#39;</span>
+    <span class="s1">&#39;/(.*)&#39;</span><span class="p">,</span><span class="s1">&#39;hello&#39;</span>
 <span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
 
 <span class="k">class</span> <span class="nc">hello</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa"></span><span class="s1">&#39;hello: &#39;</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="s1">&#39;hello: &#39;</span> <span class="o">+</span> <span class="n">name</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> </code></pre></div>
-
 <p>这个时候可以直接启动这个程序了，下面来配置supervisor，加入管理。修改supervisord.conf，加入如下片段：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html">[program:hello]
 command=python /home/smallfish/hello.py
 autorstart=true
 stdout_logfile=/home/smallfish/hello.log</code></pre></div>
-
 <p>上面的意思应该很容易懂，program后面跟服务的名称，command是程序的执行路径，autorstart是表示自动启动，stdout_logfile是捕获标准输出。</p>
-
 <p>到这里，基本搞定了，下面就是启动管理：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">supervisor</span> <span class="n">start</span>   <span class="o">--</span> <span class="n">启动supervisor服务</span>
 
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">supervisor</span> <span class="n">start</span>   <span class="o">--</span> <span class="err">启动</span><span class="n">supervisor服务</span>
-
-<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">status</span> <span class="n">hello</span>     <span class="o">--</span> <span class="err">获取</span><span class="n">hello服务的状态</span><span class="err">，因为是</span><span class="n">autorstart</span><span class="err">，这里已经启动了</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">status</span> <span class="n">hello</span>     <span class="o">--</span> <span class="n">获取hello服务的状态</span><span class="err">，</span><span class="n">因为是autorstart</span><span class="err">，</span><span class="n">这里已经启动了</span>
 <span class="n">hello</span>  <span class="n">RUNNING</span>    <span class="n">pid</span> <span class="mi">1159</span><span class="p">,</span> <span class="n">uptime</span> <span class="mi">0</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">32</span>
 
-<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">stop</span> <span class="n">hello</span>       <span class="o">--</span> <span class="err">停止</span><span class="n">hello服务</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">stop</span> <span class="n">hello</span>       <span class="o">--</span> <span class="n">停止hello服务</span>
 <span class="n">hello</span><span class="p">:</span> <span class="n">stopped</span>
 
-<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">stop</span> <span class="n">hello</span>       <span class="o">--</span> <span class="err">再次停止</span><span class="n">hello</span><span class="err">，会有错误信息</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">stop</span> <span class="n">hello</span>       <span class="o">--</span> <span class="n">再次停止hello</span><span class="err">，</span><span class="n">会有错误信息</span>
 <span class="n">hello</span><span class="p">:</span> <span class="n">ERROR</span> <span class="p">(</span><span class="ow">not</span> <span class="n">running</span><span class="p">)</span>
 
-<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">start</span> <span class="n">hello</span>      <span class="o">--</span> <span class="err">启动</span><span class="n">hello服务</span>
+<span class="n">shell</span><span class="o">&gt;</span> <span class="n">sudo</span> <span class="n">supervisorctl</span> <span class="n">start</span> <span class="n">hello</span>      <span class="o">--</span> <span class="n">启动hello服务</span>
 <span class="n">hello</span><span class="p">:</span> <span class="n">started</span></code></pre></div>
-
 <p>OK，基本的操作就是类似这个了，仔细看supervisord.conf文件里会发现有一段[unix_http_server]的配置，默认是9001端口，可以输入用户名和密码，主要用于Basic Auth认证用的。</p>
-
-<p>填写一下，然后重启supervisor服务，打开浏览器输入：<a href="http://localhost:9001，如图：">http://localhost:9001，如图：</a></p>
-
-<p><img src="/images/supervisor-web.png" alt="" /></p>
+<p>填写一下，然后重启supervisor服务，打开浏览器输入：http://localhost:9001，如图：</p>
+<p><img src="/images/supervisor-web.png" alt=""></p>
 
 </article>
 

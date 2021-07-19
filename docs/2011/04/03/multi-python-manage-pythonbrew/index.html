@@ -57,7 +57,7 @@
         },
         "datePublished": "2011-04-03",
         "description": "",
-        "wordCount": 69
+        "wordCount":  69 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,13 +99,9 @@
     </div>
     <h1 class="post-title">pythonbrew - Python多版本管理利器</h1>
     <p>相信不少人在自己机器上有多个Python版本，我的机器上Python有四个版本：2.5.x、2.6.x、2.7和stackless。</p>
-
 <p>测试Google App Engine时候需要切换到2.5，正式调试时候回归到2.6，自己玩的时候会选择2.7或者stackless，每次都是通过bash profile来调整，或者手动加link。真麻烦那。。。</p>
-
 <p>无意间看到有一个Perl版本的brew工具：<a href="http://search.cpan.org/~gugod/App-perlbrew-0.18/bin/perlbrew">http://search.cpan.org/~gugod/App-perlbrew-0.18/bin/perlbrew</a>！</p>
-
 <p>安装：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">easy_install</span> <span class="n">pythonbrew</span>
 <span class="err">$</span> <span class="n">pythonbrew_install</span>
 
@@ -109,31 +109,20 @@
 <span class="err">$</span> <span class="n">curl</span> <span class="o">-</span><span class="n">kLO</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">utahta</span><span class="o">/</span><span class="n">pythonbrew</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">pythonbrew</span><span class="o">-</span><span class="n">install</span>
 <span class="err">$</span> <span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">pythonbrew</span><span class="o">-</span><span class="n">install</span>
 <span class="err">$</span> <span class="o">./</span><span class="n">pythonbrew</span><span class="o">-</span><span class="n">install</span></code></pre></div>
-
 <p>把 source /xxx/.pythonbrew/etc/bashrc 加入到自己profile或者bashrc中去（xxx是自己的用户目录）</p>
-
 <p>pythonbrew 常用命令如下：</p>
-
 <p>install 安装版本：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">install</span> <span class="mf">2.6</span><span class="o">.</span><span class="mi">6</span>
-<span class="err">过程可以参考安装日志：</span><span class="o">~/.</span><span class="n">pythonbrew</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">build</span><span class="o">.</span><span class="n">log</span>
-<span class="err">如果最后看到</span><span class="n">make</span> <span class="n">error失败</span><span class="err">，应该是</span><span class="n">test过程失败</span><span class="err">。可以采取：</span>
-<span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">install</span> <span class="o">--</span><span class="n">force</span> <span class="mf">2.6</span><span class="o">.</span><span class="mi">6</span></code></pre></div></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">install</span> <span class="mf">2.6.6</span>
+<span class="n">过程可以参考安装日志</span><span class="err">：</span><span class="o">~/.</span><span class="n">pythonbrew</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">build</span><span class="o">.</span><span class="n">log</span>
+<span class="n">如果最后看到make</span> <span class="n">error失败</span><span class="err">，</span><span class="n">应该是test过程失败</span><span class="err">。</span><span class="n">可以采取</span><span class="err">：</span>
+<span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">install</span> <span class="o">--</span><span class="n">force</span> <span class="mf">2.6.6</span></code></pre></div>
 <p>switch 选择版本：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">switch</span> <span class="mf">2.6</span><span class="o">.</span><span class="mi">6</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">switch</span> <span class="mf">2.6.6</span></code></pre></div>
 <p>list 查看版本：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="nb">list</span>       <span class="c1"># 列出目前已安装的版本</span>
 <span class="n">pythonbrew</span> <span class="nb">list</span> <span class="o">-</span><span class="n">k</span>  <span class="c1"># 列出可以下载和安装的版本</span></code></pre></div>
-
 <p>uninstall 卸载版本：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">uninstall</span> <span class="mf">2.6</span><span class="o">.</span><span class="mi">6</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">pythonbrew</span> <span class="n">uninstall</span> <span class="mf">2.6.6</span></code></pre></div>
 <p>参数还是很简单的。详见help或者<a href="http://pypi.python.org/pypi/pythonbrew/">http://pypi.python.org/pypi/pythonbrew/</a>。</p>
 
 </article>

@@ -57,7 +57,7 @@
         },
         "datePublished": "2012-11-25",
         "description": "",
-        "wordCount": 206
+        "wordCount":  206 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,27 +99,24 @@
     </div>
     <h1 class="post-title">lua-resty-beanstalkd 模块教程</h1>
     <p>本文涉及几个名词：</p>
-
 <ul>
-<li><p>ngx_lua <a href="http://wiki.nginx.org/HttpLuaModule">http://wiki.nginx.org/HttpLuaModule</a></p>
-
-<p>Embed the power of Lua into Nginx 摘自官方描述</p></li>
-
-<li><p>beanstalkd <a href="http://kr.github.com/beanstalkd/">http://kr.github.com/beanstalkd/</a></p>
-
-<p>一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。</p></li>
-
-<li><p>lua-resty-beanstalkd <a href="https://github.com/smallfish/lua-resty-beanstalkd">https://github.com/smallfish/lua-resty-beanstalkd</a></p>
-
-<p>基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。</p></li>
+<li>
+<p>ngx_lua <a href="http://wiki.nginx.org/HttpLuaModule">http://wiki.nginx.org/HttpLuaModule</a></p>
+<p>Embed the power of Lua into Nginx 摘自官方描述</p>
+</li>
+<li>
+<p>beanstalkd <a href="http://kr.github.com/beanstalkd/">http://kr.github.com/beanstalkd/</a></p>
+<p>一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。</p>
+</li>
+<li>
+<p>lua-resty-beanstalkd <a href="https://github.com/smallfish/lua-resty-beanstalkd">https://github.com/smallfish/lua-resty-beanstalkd</a></p>
+<p>基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。</p>
+</li>
 </ul>
-
 <p>下面是读写的示例：</p>
-
 <ol>
 <li>生产者（发布消息），主要那应用了两个协议：use/put，代码如下：</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /t <span class="o">{</span>
     content_by_lua <span class="s1">&#39;
 </span><span class="s1">        local beanstalkd = require &#34;resty.beanstalkd&#34;
@@ -145,12 +146,10 @@
 </span><span class="s1">        bean:close()
 </span><span class="s1">    &#39;</span><span class="p">;</span>
 <span class="o">}</span></code></pre></div>
-
-<ol>
+<ol start="2">
 <li>消费者（消费消息），主要用了三个协议：watch/reserve/delete，代码如下：</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /t <span class="o">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /t <span class="o">{</span>
     content_by_lua <span class="s1">&#39;
 </span><span class="s1">        local beanstalkd = require &#34;resty.beanstalkd&#34;
 </span><span class="s1">
@@ -184,10 +183,8 @@
 </span><span class="s1">
 </span><span class="s1">        bean:close()
 </span><span class="s1">    &#39;</span><span class="p">;</span>
-<span class="o">}</span></code></pre></div></p>
-
+<span class="o">}</span></code></pre></div>
 <p>为了提升性能，可以调用 set_keepalive（提升50%以上性能），需要注意：</p>
-
 <ol>
 <li>代码中不要调用 xx:close 主动关闭连接。</li>
 <li>在对象使用后调用 xx:set_keepalive，而不是初始化 new/connect 时候调用此方法。</li>

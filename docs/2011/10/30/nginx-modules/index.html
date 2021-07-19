@@ -57,7 +57,7 @@
         },
         "datePublished": "2011-10-30",
         "description": "",
-        "wordCount": 217
+        "wordCount":  217 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,18 +99,14 @@
     </div>
     <h1 class="post-title">Nginx 第三方模块试用记</h1>
     <p>最近试用了几个<a href="http://weibo.com/agentzh">@agentzh</a>写的第三方<a href="http://nginx.net">Nginx</a>模块，甚为愉悦，没想到在Nginx可以玩很多技巧和扩展，分享一下。</p>
-
 <p>本文尝试的几个模块大概分为：</p>
-
 <ul>
 <li>echo</li>
 <li>memcached</li>
 <li>nginx</li>
 <li>lua</li>
 </ul>
-
 <p>详细模块地址分别为：</p>
-
 <ul>
 <li>ngx_devel_kit <a href="https://github.com/simpl/ngx_devel_kit">https://github.com/simpl/ngx_devel_kit</a></li>
 <li>set-misc-nginx-module <a href="https://github.com/agentzh/set-misc-nginx-module">https://github.com/agentzh/set-misc-nginx-module</a></li>
@@ -117,11 +117,8 @@
 <li>drizzle-nginx-module <a href="https://github.com/chaoslawful/drizzle-nginx-module">https://github.com/chaoslawful/drizzle-nginx-module</a></li>
 <li>rds-json-nginx-module <a href="https://github.com/agentzh/rds-json-nginx-module">https://github.com/agentzh/rds-json-nginx-module</a></li>
 </ul>
-
 <p>为了省事这里一股脑把上面的module全部下载好，一起编译。PS：如果更懒惰的可以尝试下<a href="http://openresty.org">openresty</a>项目，它帮你打包好Nginx和一堆扩展模块，得感谢@agentzh。</p>
-
 <p>这里编译和drizzle和lua模块，在编译Nginx之前需要设置一下这两个库的LIB和INCLUDE文件地址：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">-- lua --
 <span class="nb">export</span> <span class="nv">LUA_LIB</span><span class="o">=</span>/path/to/lua/lib
 <span class="nb">export</span> <span class="nv">LUA_INC</span><span class="o">=</span>/path/to/lua/include
@@ -129,9 +126,7 @@
 -- drizzle --
 <span class="nb">export</span> <span class="nv">LIBDRIZZLE_INC</span><span class="o">=</span>/opt/drizzle/include/libdrizzle-1.0
 <span class="nb">export</span> <span class="nv">LIBDRIZZLE_LIB</span><span class="o">=</span>/opt/drizzle/lib</code></pre></div>
-
 <p>Nginx编译选项如下，请注意先后顺序：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./configure --prefix<span class="o">=</span>/opt/nginx <span class="se">\
 </span><span class="se"></span>    --with-pcre<span class="o">=</span>../pcre <span class="se">\
 </span><span class="se"></span>    --add-module<span class="o">=</span>../ngx_devel_kit <span class="se">\
@@ -142,32 +137,25 @@
 </span><span class="se"></span>    --add-module<span class="o">=</span>../srcache-nginx-module <span class="se">\
 </span><span class="se"></span>    --add-module<span class="o">=</span>../drizzle-nginx-module <span class="se">\
 </span><span class="se"></span>    --add-module<span class="o">=</span>../rds-json-nginx-module</code></pre></div>
-
 <p>重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">1</span>. <span class="nb">kill</span> -HUP <span class="sb">`</span>cat /path/nginx/logs/nginx.pid<span class="sb">`</span>
-<span class="m">2</span>. /path/nginx/sbin/nginx -s reload</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">1. <span class="nb">kill</span> -HUP <span class="sb">`</span>cat /path/nginx/logs/nginx.pid<span class="sb">`</span>
+2. /path/nginx/sbin/nginx -s reload</code></pre></div>
 <p>PS：详细的模块编译可以参考各自模块的文档说明。</p>
-
 <p>好吧，假设到这里已经安装和编译好Nginx以及一堆第三方扩展。下面开始尝试上面那些有趣的模块~</p>
-
 <p><strong>场景1：Helloworld</strong></p>
-
 <p>程序里helloworld很简单，nginx的hello如何实现呢？</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">1</span>. 最简单的helloworld
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">1. 最简单的helloworld
 location /hello1 <span class="o">{</span>
     <span class="nb">echo</span> <span class="s2">&#34;hello 1111!&#34;</span><span class="p">;</span>
 <span class="o">}</span>
 
-<span class="m">2</span>. 异步请求其他echo请求
+2. 异步请求其他echo请求
 location /hello2 <span class="o">{</span>
     <span class="nb">echo</span> <span class="s2">&#34;hello 2222!&#34;</span><span class="p">;</span>
     echo_location_async /hello1<span class="p">;</span>
 <span class="o">}</span>
 
-<span class="m">3</span>. 输出GET请求参数，假设参数名是name，这里并对name参数进行解码
+3. 输出GET请求参数，假设参数名是name，这里并对name参数进行解码
 location /hello3 <span class="o">{</span>
     set_unescape_uri <span class="nv">$name</span> <span class="nv">$arg_name</span><span class="p">;</span>
     set_if_empty <span class="nv">$name</span> <span class="s2">&#34;None&#34;</span><span class="p">;</span>
@@ -176,34 +164,28 @@ location /hello3 <span class="o">{</span>
 
 是不是很帅气有趣。例2中的subrequest是完全non-blocking的。
 echo模块还有timer扩展，页面输出加载时间也是小case了。</code></pre></div>
-
 <p><strong>场景2：Memcached HTTP 接口</strong></p>
-
 <p>想当年哥为了兼容不同语言的api，自己封装了memcached操作，真是挺苦逼的，当时还非常羡慕tokyotyrant的http接口来着，现在用memc模块效果一样，还有upstream和keepalive功能哦~</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /memcached <span class="o">{</span>
     <span class="nb">set</span> <span class="nv">$memc_cmd</span> <span class="nv">$arg_cmd</span><span class="p">;</span>
     <span class="nb">set</span> <span class="nv">$memc_key</span> <span class="nv">$arg_key</span><span class="p">;</span>
     <span class="nb">set</span> <span class="nv">$memc_value</span> <span class="nv">$arg_val</span><span class="p">;</span>
     <span class="nb">set</span> <span class="nv">$memc_exptime</span> <span class="nv">$arg_exptime</span><span class="p">;</span>
-    memc_pass <span class="m">127</span>.0.0.1:11211<span class="p">;</span>
+    memc_pass 127.0.0.1:11211<span class="p">;</span>
 <span class="o">}</span>
 
 URL访问类似 http://host:port/memcached?cmd<span class="o">=</span>aaa<span class="p">&amp;</span><span class="nv">key</span><span class="o">=</span>bbb<span class="p">&amp;</span><span class="nv">val</span><span class="o">=</span>ccc
 
 还需要自己封装么？完全的基于url编程了，不再考虑各自语言的memcached api，cluster也简化了。</code></pre></div>
-
 <p><strong>场景3：数据库查询</strong></p>
-
 <p>这里用了libdrizzle模块，兼容MySQL、Drizzle、SQLite数据库。有时候为了一些查询或者接口，还需要用语言来封装一些数据库查询操作，现在直接通过drizzle模块可以很轻松的做到~~</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 添加MySQL配置
-</span><span class="c1"></span>upstream mysql <span class="o">{</span>
-    drizzle_server <span class="m">127</span>.0.0.1:3306 <span class="nv">dbname</span><span class="o">=</span><span class="nb">test</span> <span class="nv">user</span><span class="o">=</span>smallfish <span class="nv">password</span><span class="o">=</span><span class="m">123</span> <span class="nv">protocol</span><span class="o">=</span>mysql<span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 添加MySQL配置</span>
+upstream mysql <span class="o">{</span>
+    drizzle_server 127.0.0.1:3306 <span class="nv">dbname</span><span class="o">=</span><span class="nb">test</span> <span class="nv">user</span><span class="o">=</span>smallfish <span class="nv">password</span><span class="o">=</span><span class="m">123</span> <span class="nv">protocol</span><span class="o">=</span>mysql<span class="p">;</span>
 <span class="o">}</span>
 
-<span class="c1"># 通过url匹配出name，并编码防止注入，最后以json格式输出结果。
-</span><span class="c1"></span>location ~ <span class="s1">&#39;^/mysql/(.*)&#39;</span> <span class="o">{</span>
+<span class="c1"># 通过url匹配出name，并编码防止注入，最后以json格式输出结果。</span>
+location ~ <span class="s1">&#39;^/mysql/(.*)&#39;</span> <span class="o">{</span>
     <span class="nb">set</span> <span class="nv">$name</span> <span class="nv">$1</span><span class="p">;</span>
     set_quote_sql_str <span class="nv">$quote_name</span> <span class="nv">$name</span><span class="p">;</span>
     <span class="nb">set</span> <span class="nv">$sql</span> <span class="s2">&#34;SELECT * FROM users WHERE name=</span><span class="nv">$quote_name</span><span class="s2">&#34;</span><span class="p">;</span>
@@ -212,22 +194,19 @@ URL访问类似 http://host:port/memcached?cmd<span class="o">=</span>aaa<span c
     rds_json on<span class="p">;</span>
 <span class="o">}</span>
 
-<span class="c1"># 查看MySQL服务状态，这个很实用哦。
-</span><span class="c1"></span>location /mysql-status <span class="o">{</span>
+<span class="c1"># 查看MySQL服务状态，这个很实用哦。</span>
+location /mysql-status <span class="o">{</span>
     drizzle_status<span class="p">;</span>
 <span class="o">}</span></code></pre></div>
-
 <p><strong>场景4：lua扩展</strong></p>
-
 <p>内嵌lua语言，超级牛力哦~~~想干啥都可以了，而且还可以充分发挥lua coroutine的风骚，淘宝量子统计完全是lua扩展。</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /lua1 <span class="o">{</span>
     default_type <span class="s1">&#39;text/plain&#39;</span><span class="p">;</span>
     content_by_lua <span class="s1">&#39;ngx.say(&#34;hello, lua&#34;)&#39;</span><span class="p">;</span>
 <span class="o">}</span>
 
-<span class="c1"># 请求另外的url
-</span><span class="c1"></span>location /lua2 <span class="o">{</span>
+<span class="c1"># 请求另外的url</span>
+location /lua2 <span class="o">{</span>
     content_by_lua <span class="s1">&#39;
 </span><span class="s1">        local res = ngx.location.capture(&#34;/hello1&#34;)
 </span><span class="s1">        ngx.say(&#34;data: &#34; .. res.body)
@@ -235,9 +214,7 @@ URL访问类似 http://host:port/memcached?cmd<span class="o">=</span>aaa<span c
 <span class="o">}</span>
 
 Lua支持的选项很多，具体可参考官网WIKI文档。</code></pre></div>
-
 <p>嗯，这里尝试玩了几个模块，详细的例子可以参考各自的模块文档，里面都有详细的说明和选项配置。</p>
-
 <p>可以看出和传统编程有些微不同之处，完全是基于URL的HTTP接口，比传统的方式更为简单，更为清晰。还有non-blocking的实现，更见轻便。</p>
 
 </article>

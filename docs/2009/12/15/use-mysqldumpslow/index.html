@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-15",
         "description": "",
-        "wordCount": 23
+        "wordCount":  23 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,21 +99,14 @@
     </div>
     <h1 class="post-title">mysqldumpslow 慢查询日志分析工具</h1>
     <p>mysql自带的这个玩意挺好使的，可以对慢查询里的sql进行排序、计算等操作。</p>
-
 <p>首先得配置my.cnf：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">log_slow_queries</span> <span class="o">=</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">slow</span><span class="o">.</span><span class="n">log</span> <span class="c1"># 定义log位置，注意要有写入的权限</span></code></pre></div>
-
 <p>具体的使法如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysqldumpslow</span> <span class="o">-</span><span class="n">s</span> <span class="n">c</span> <span class="o">-</span><span class="n">t</span> <span class="mi">40</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">slow</span><span class="o">.</span><span class="n">log</span></code></pre></div>
-
 <p>出来的结果是访问次数最多的40个sql，几个参数大概意思如下：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">-</span><span class="n">t</span> <span class="err">显示多少条</span>
-<span class="o">-</span><span class="n">s</span> <span class="err">排序，默认是</span><span class="n">at</span><span class="err">。</span><span class="n">c是次数</span><span class="err">，</span><span class="n">t是时间</span><span class="err">，</span><span class="n">l是lock时间</span><span class="err">，</span><span class="n">r是返回结果</span><span class="err">。如果是</span><span class="n">ac</span><span class="err">，</span><span class="n">at</span><span class="err">，</span><span class="n">al</span><span class="err">，</span><span class="n">ar则是倒序</span>
-<span class="o">-</span><span class="n">g</span> <span class="err">可以用正则匹配部分语句</span></code></pre></div></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">-</span><span class="n">t</span> <span class="n">显示多少条</span>
+<span class="o">-</span><span class="n">s</span> <span class="n">排序</span><span class="err">，</span><span class="n">默认是at</span><span class="err">。</span><span class="n">c是次数</span><span class="err">，</span><span class="n">t是时间</span><span class="err">，</span><span class="n">l是lock时间</span><span class="err">，</span><span class="n">r是返回结果</span><span class="err">。</span><span class="n">如果是ac</span><span class="err">，</span><span class="n">at</span><span class="err">，</span><span class="n">al</span><span class="err">，</span><span class="n">ar则是倒序</span>
+<span class="o">-</span><span class="n">g</span> <span class="n">可以用正则匹配部分语句</span></code></pre></div>
 <p>可以参考mysqldumpslow &ndash;help，通过这个工具可以看到哪些锁表，或者其他性能问题，还能看到某些SQL_NO_CACHE提示呢，去想办法优化把！</p>
 
 </article>

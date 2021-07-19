@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-11-20",
         "description": "",
-        "wordCount": 544
+        "wordCount":  544 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,220 +99,159 @@
     </div>
     <h1 class="post-title">Pysvn 程序员指南</h1>
     <p>这是一篇关于pysvn模块的指南.</p>
-
 <p>完整和详细的API请参考 <a href="http://pysvn.tigris.org/docs/pysvn_prog_ref.html">http://pysvn.tigris.org/docs/pysvn_prog_ref.html</a>.</p>
-
 <p>pysvn是操作Subversion版本控制的Python接口模块. 这个API接口可以管理一个工作副本, 查询档案库, 和同步两个.</p>
-
 <p>该API不能创建新的仓库; 只能作用在现有仓库上. 如果你需要创建一个仓库, 请使用Subversion的svnadmin命令.</p>
-
 <p>使用这个API, 你可以check out一份工作拷贝, 添加, 编辑, 和删除工作文件, 和check in, 比较, 或者放弃更改. 仓库属性, 如关键字扩展, 行字符结束, 或者忽略的列表也可以检查和控制.</p>
-
 <p>Subversion 模型</p>
-
 <p>Subversion是一个更新-编辑-提交的模型. 首先在本地建立一个工作副本. 在工作副本上进行修改, 最后提交到中央仓库 (可以是本地或者远程).</p>
-
 <p>这个模型允许多人偶尔会同时修改同一个文件. 大多情况下. Subversion不会干预合并这些不同修改, 如果一个提交失败, 用户或者应用则要重新检查和修改然后再次提交.</p>
-
 <p>常见任务</p>
-
 <p>本节给出一些使用pysvn接口的常用例子. 业务可以会递归的处理目录. 添加参数recurse=False以防止这种行为; 例如, 你可以需要添加内容没有增加一个目录.</p>
-
 <p>check out一份工作副本</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
 <span class="c1">#check out the current version of the pysvn project</span>
-<span class="n">client</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;http://localhost/example/trunk&#39;</span><span class="p">,</span>
-    <span class="sa"></span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s1">&#39;http://localhost/example/trunk&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">)</span>
 <span class="c1">#check out revision 11 of the pysvn project</span>
-<span class="n">client</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;http://localhost/example/trunk&#39;</span><span class="p">,</span>
-   <span class="sa"></span><span class="s1">&#39;./examples/pysvn-11&#39;</span><span class="p">,</span>
+<span class="n">client</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s1">&#39;http://localhost/example/trunk&#39;</span><span class="p">,</span>
+   <span class="s1">&#39;./examples/pysvn-11&#39;</span><span class="p">,</span>
    <span class="n">revision</span><span class="o">=</span><span class="n">pysvn</span><span class="o">.</span><span class="n">Revision</span><span class="p">(</span><span class="n">pysvn</span><span class="o">.</span><span class="n">opt_revision_kind</span><span class="o">.</span><span class="n">number</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span></code></pre></div>
-
 <p>这是一个建立example测试项目的例子，目录是examples/pysvn. 这个项目是用在剩下的例子.</p>
-
 <p>添加一个文件或者目录到仓库</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="c1"># write a file foo.txt</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;Sample versioned file via pithon</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Sample versioned file via pithon</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
 <span class="c1">#schedule the addition;</span>
 <span class="c1">#  the working copy will now track the file as a scheduled change</span>
-<span class="n">client</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">)</span>
 <span class="c1">#committing the change actually adds the file to the repository</span>
-<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;Adding a sample file&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">],</span> <span class="s1">&#39;Adding a sample file&#39;</span><span class="p">)</span></code></pre></div>
 <p>这个例子是在工作副本中创建了&rsquo;foo.txt&rsquo;文件, 然后添加到仓库. 请注意Client.import_()命令会同时增加和提交. 大多数应用, 会在许多修改后再提交.</p>
-
 <p>更新工作副本</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">)</span></code></pre></div>
 <p>从仓库中更新其他用户修改并保存到本地副本. 大多数应用应该经常这样做以防止冲突.</p>
-
 <p>提交更新到仓库</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="c1"># edit the file foo.txt</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;Sample versioned file via python</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Sample versioned file via python</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="c1"># checkin the change with a log message</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;Corrected spelling of python in foo.txt&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">],</span> <span class="s1">&#39;Corrected spelling of python in foo.txt&#39;</span><span class="p">)</span></code></pre></div>
 <p>提交到Subversion是原子的. 要么所有修改都成功提交, 要么提交失败. 大部分应用会提交工作副本所有修改, 如本例所示, 或者通过个别文件或者目录, 但必须是同一单位.</p>
-
 <p>放弃工作副本修改</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="c1"># edit the file foo.txt</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;This change will never be seen</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">file</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;This change will never be seen</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="c1">#discard the edits</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">revert</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">revert</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">)</span></code></pre></div>
 <p>这丢弃在工作拷贝和恢复的文件或目录的任何未提交的未经编辑的状态变化.</p>
-
 <p>正在计划增加或移除留无版本或恢复到工作拷贝.</p>
-
 <p>重命名或者移动文件</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
 <span class="c1">#rename the file client side</span>
-<span class="n">client</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">)</span>
 <span class="c1">#checkin the change removes the file from the repository</span>
-<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;Foo has become Foo2&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="s1">&#39;./examples/pysvn/foo.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">],</span> <span class="s1">&#39;Foo has become Foo2&#39;</span><span class="p">)</span></code></pre></div>
 <p>移动或重命名文件删除旧路径或名称的文件, 并增加了在新的位置, 同时保留以前的版本有关的信息.</p>
-
 <p>在这个例子里, 我们通过文件名Client.checkin()传递父目录也将是有效的.</p>
-
 <p>转移和合并可以在服务器端单步完成; 可以参见仓库任务的那节例子.</p>
-
 <p>从仓库中删除文件或目录</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
 <span class="c1">#schedule the removal;</span>
 <span class="c1">#  the file will be removed from the working copy</span>
-<span class="n">client</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">)</span>
 <span class="c1">#committing the change removes the file from the repository</span>
-<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">],</span> <span class="sa"></span><span class="s1">&#39;Removing sample file&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">checkin</span><span class="p">([</span><span class="s1">&#39;./examples/pysvn/foo2.txt&#39;</span><span class="p">],</span> <span class="s1">&#39;Removing sample file&#39;</span><span class="p">)</span></code></pre></div>
 <p>有些人把删除的文件, 或是用完全清除存储库目录. 该文件仍然存在于以前的版本, 可以通过检查或以其他方式进行审查以前修订的内容检索.</p>
-
 <p>确定等待变动</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="sa"></span><span class="s1">&#39;files to be added:&#39;</span>
-<span class="k">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">added</span><span class="p">]</span>
-<span class="k">print</span> <span class="sa"></span><span class="s1">&#39;files to be removed:&#39;</span>
-<span class="k">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">deleted</span><span class="p">]</span>
-<span class="k">print</span> <span class="sa"></span><span class="s1">&#39;files that have changed:&#39;</span>
-<span class="k">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">modified</span><span class="p">]</span>
-<span class="k">print</span> <span class="sa"></span><span class="s1">&#39;files with merge conflicts:&#39;</span>
-<span class="k">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">conflicted</span><span class="p">]</span>
-<span class="k">print</span> <span class="sa"></span><span class="s1">&#39;unversioned files:&#39;</span>
-<span class="k">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">unversioned</span><span class="p">]</span></code></pre></div>
-
+<span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="s1">&#39;./examples/pysvn&#39;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s1">&#39;files to be added:&#39;</span>
+<span class="nb">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">added</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s1">&#39;files to be removed:&#39;</span>
+<span class="nb">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">deleted</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s1">&#39;files that have changed:&#39;</span>
+<span class="nb">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">modified</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s1">&#39;files with merge conflicts:&#39;</span>
+<span class="nb">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">conflicted</span><span class="p">]</span>
+<span class="nb">print</span> <span class="s1">&#39;unversioned files:&#39;</span>
+<span class="nb">print</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">text_status</span> <span class="o">==</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">wc_status_kind</span><span class="o">.</span><span class="n">unversioned</span><span class="p">]</span></code></pre></div>
 <p>生成差异或补丁</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">diff_text</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;./tmp-file-prefix-&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;.&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">diff_text</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="s1">&#39;./tmp-file-prefix-&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span></code></pre></div>
 <p>获取仓库URL</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">entry</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="sa"></span><span class="s1">&#39;Url:&#39;</span><span class="p">,</span><span class="n">entry</span><span class="o">.</span><span class="n">url</span></code></pre></div>
-
+<span class="n">entry</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s1">&#39;Url:&#39;</span><span class="p">,</span><span class="n">entry</span><span class="o">.</span><span class="n">url</span></code></pre></div>
 <p>仓库任务</p>
-
 <p>本节说明任务的例子, 操纵或检查仓库.虽然共同任务, 通过本地工作副本时间的变化, 这些任务直接影响到库
 获取仓库目录的清单</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">entry_list</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;.&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">entry_list</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span></code></pre></div>
 <p>从仓库获取文件内容</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">file_content</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;file.txt&#39;</span><span class="p">)</span></code></pre></div>
-
+<span class="n">file_content</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">)</span></code></pre></div>
 <p>创建一个标记或分支</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">log_message</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;reason for change&#34;</span>
+<span class="n">log_message</span> <span class="o">=</span> <span class="s2">&#34;reason for change&#34;</span>
 <span class="k">def</span> <span class="nf">get_log_message</span><span class="p">():</span>
-    <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">log_message</span>
+    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_message</span>
 <span class="n">client</span><span class="o">.</span><span class="n">callback_get_log_message</span> <span class="o">=</span> <span class="n">get_log_message</span>
-<span class="n">client</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;http://svnrepo.com/svn/trunk&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;http://svnrepo.com/svn/tag/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tag_name</span> <span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s1">&#39;http://svnrepo.com/svn/trunk&#39;</span><span class="p">,</span> <span class="s1">&#39;http://svnrepo.com/svn/tag/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tag_name</span> <span class="p">)</span></code></pre></div>
 <p>从仓库中转移或者重命名</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">move</span><span class="p">(</span> <span class="sa"></span><span class="s1">&#39;file_old.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;file_new.txt&#39;</span> <span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">move</span><span class="p">(</span> <span class="s1">&#39;file_old.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file_new.txt&#39;</span> <span class="p">)</span></code></pre></div>
 <p>锁定文件</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span> <span class="sa"></span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;reason for locking&#39;</span> <span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span> <span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;reason for locking&#39;</span> <span class="p">)</span></code></pre></div>
 <p>锁定文件并锁定其他用户或者工作副本</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span> <span class="sa"></span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;reason for locking&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span> <span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;reason for locking&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span></code></pre></div>
 <p>解锁</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">unlock</span><span class="p">(</span> <span class="sa"></span><span class="s1">&#39;file.txt&#39;</span> <span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">unlock</span><span class="p">(</span> <span class="s1">&#39;file.txt&#39;</span> <span class="p">)</span></code></pre></div>
 <p>解锁文件并锁定其他用户或工作副本</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pysvn</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">pysvn</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">unlock</span><span class="p">(</span> <span class="sa"></span><span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span></code></pre></div>
-
+<span class="n">client</span><span class="o">.</span><span class="n">unlock</span><span class="p">(</span> <span class="s1">&#39;file.txt&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span></code></pre></div>
 <p>测试锁定文件</p>
-
 <p>Method 1:</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">all_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">info2</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="bp">False</span> <span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">all_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">info2</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
 <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">all_entries</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;lock&#39;</span><span class="p">][</span><span class="sa"></span><span class="s1">&#39;token&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="sa"></span><span class="s1">&#39;&#39;</span><span class="p">:</span>
-            <span class="k">print</span> <span class="sa"></span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is locked&#39;</span> <span class="o">%</span> <span class="n">path</span>
-        <span class="k">print</span> <span class="n">info</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;lock&#39;</span><span class="p">][</span><span class="sa"></span><span class="s1">&#39;comment&#39;</span><span class="p">]</span></code></pre></div>
-
+    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">][</span><span class="s1">&#39;token&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is locked&#39;</span> <span class="o">%</span> <span class="n">path</span>
+        <span class="nb">print</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">][</span><span class="s1">&#39;comment&#39;</span><span class="p">]</span></code></pre></div>
 <p>Method 2:</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">all_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">status</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">all_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">status</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
 <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">all_status</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">lock_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">print</span> <span class="sa"></span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is locked&#39;</span> <span class="o">%</span> <span class="n">status</span><span class="o">.</span><span class="n">path</span></code></pre></div>
+    <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">lock_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is locked&#39;</span> <span class="o">%</span> <span class="n">status</span><span class="o">.</span><span class="n">path</span></code></pre></div>
 
 </article>
 

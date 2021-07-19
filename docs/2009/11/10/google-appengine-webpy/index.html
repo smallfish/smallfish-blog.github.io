@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-11-10",
         "description": "",
-        "wordCount": 79
+        "wordCount":  79 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,18 +99,14 @@
     </div>
     <h1 class="post-title">Google App Engine 上试用 web.py 笔记</h1>
     <p>看到有人在坛子里询问在GAE如何发布web.py有关问题，就尝试了一把。具体安装和使用过程如下，请对照自己本地路径相应修改：</p>
-
 <ol>
 <li>复制本地对应web.py目录到GAE对应应用目录</li>
 </ol>
-
 <p>比如：D:\Python25\Lib\site-packages\web 到 e:\googleapp\pynotes</p>
-
-<ol>
+<ol start="2">
 <li>写测试代码
 app.yaml</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">application</span><span class="p">:</span> <span class="n">pynotes</span>
 <span class="n">version</span><span class="p">:</span> <span class="mi">1</span>
 <span class="n">runtime</span><span class="p">:</span> <span class="n">python</span>
@@ -115,40 +115,30 @@ app.yaml</li>
 <span class="n">handlers</span><span class="p">:</span>
 <span class="o">-</span>  <span class="n">url</span><span class="p">:</span> <span class="o">/.*</span>
    <span class="n">script</span><span class="p">:</span> <span class="n">home</span><span class="o">.</span><span class="n">py</span></code></pre></div>
-
 <p>home.py</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">web</span>
-<span class="n">render</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;templates/&#39;</span><span class="p">)</span>
+<span class="n">render</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;templates/&#39;</span><span class="p">)</span>
 <span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="sa"></span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;index&#39;</span>
+    <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span>
 <span class="p">)</span>
 <span class="k">class</span> <span class="nc">index</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">web</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;text/html&#39;</span><span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;smallfish&#39;</span>
+        <span class="n">web</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/html&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;smallfish&#39;</span>
         <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
 <span class="n">main</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">cgirun</span><span class="p">()</span> <span class="c1"># 这行是发布到GAE的关键</span></code></pre></div>
-
 <p>templates/index.html</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span><span class="k">def</span> <span class="nf">with</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
-<span class="n">hello</span><span class="p">,</span> <span class="err">$</span><span class="n">name</span><span class="o">.</span> <span class="n">test</span> <span class="n">by</span> <span class="n">web</span><span class="o">.</span><span class="n">py</span></code></pre></div></p>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span><span class="k">def</span> <span class="nf">with</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="n">hello</span><span class="p">,</span> <span class="err">$</span><span class="n">name</span><span class="o">.</span> <span class="n">test</span> <span class="n">by</span> <span class="n">web</span><span class="o">.</span><span class="n">py</span></code></pre></div>
+<ol start="3">
 <li>发布到GAE，测试</li>
 </ol>
-
 <p>e:\googleapp&gt;appcfg.py update pynotes/</p>
-
 <p>到这里，一个简单web.py应用就完成了，然后刷新。GAE显示500 Error！</p>
-
 <p>看后台GAE Log显示错误信息：”No module named templates“，去web.py官方溜达了一圈，发现在其cookbook里有一篇文档《<a href="http://webpy.org/cookbook/templates_on_gae">http://webpy.org/cookbook/templates_on_gae</a>》，里面说的很明白啦。</p>
-
-<p>因为web.py的模板在GAE上文件系统会有所限制，所有本地得compile一下，具体命令是：python web/template.py &ndash;compile templates 最后一个参数是本地对应模板目录templates，如果有多个模板目录则一次运行一次。运行完会在templates会生成一个<strong>init</strong>.py，里面内容有兴趣可以看看，很眼熟的哦。</p>
-
-<ol>
+<p>因为web.py的模板在GAE上文件系统会有所限制，所有本地得compile一下，具体命令是：python web/template.py &ndash;compile templates 最后一个参数是本地对应模板目录templates，如果有多个模板目录则一次运行一次。运行完会在templates会生成一个__init__.py，里面内容有兴趣可以看看，很眼熟的哦。</p>
+<ol start="4">
 <li>再次发布到GAE，可以看到OK拉！</li>
 </ol>
 

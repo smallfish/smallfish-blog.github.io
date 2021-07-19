@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-22",
         "description": "",
-        "wordCount": 84
+        "wordCount":  84 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,57 +99,38 @@
     </div>
     <h1 class="post-title">PostgreSQL tablespace 表空间</h1>
     <p>pgsql允许管理员在文件系统里定义表空间存储位置，这样创建数据库对象时候就可以引用这个表空间了。好处就不用多说了，可以把数据库对象存储到不同的分区上，比如更好的存储之类。默认initdb之后会有两个表空间pg_global和pg_default。</p>
-
 <p>查看pgsql当前表空间有哪些可以试试下面：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">SELECT</span> <span class="n">spcname</span> <span class="n">FROM</span> <span class="n">pg_tablespace</span><span class="p">;</span>
   <span class="n">spcname</span>
 <span class="o">------------</span>
  <span class="n">pg_default</span>
  <span class="n">pg_global</span>
 <span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span></code></pre></div>
-
 <p>或：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> \<span class="n">db</span>
     <span class="n">Name</span>    <span class="o">|</span>  <span class="n">Owner</span>   <span class="o">|</span> <span class="n">Location</span>
 <span class="o">------------+----------+----------</span>
  <span class="n">pg_default</span> <span class="o">|</span> <span class="n">postgres</span> <span class="o">|</span>
  <span class="n">pg_global</span>  <span class="o">|</span> <span class="n">postgres</span> <span class="o">|</span></code></pre></div>
-
 <p>建立表空间需要注意的主要的是权限问题，而且要在新的空目录上建立，权限属于数据库管理员比如默认postgres。</p>
-
 <ol>
 <li>建立目录</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">pgdata</span>
 <span class="err">$</span> <span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">postgres</span><span class="p">:</span><span class="n">postgres</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">pgdata</span></code></pre></div>
-
-<ol>
+<ol start="2">
 <li>进入psql</li>
 </ol>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.122</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="mf">192.168.0.122</span></code></pre></div>
 <p>如果权限没设置好下面语句会报错</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">space1</span> <span class="n">LOCATION</span> <span class="sa"></span><span class="s1">&#39;/home/smallfish/pgdata&#39;</span><span class="p">;</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">space1</span> <span class="n">LOCATION</span> <span class="s1">&#39;/home/smallfish/pgdata&#39;</span><span class="p">;</span></code></pre></div>
 <p>建测试表</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">)</span> <span class="n">TABLESPACE</span> <span class="n">space1</span><span class="p">;</span></code></pre></div>
-
 <p>可以查看表空间目录下多了文件</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> \<span class="err">!</span> <span class="n">ls</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">smallfish</span><span class="o">/</span><span class="n">pgdata</span></code></pre></div>
-
 <p>删除表空间，需要注意的是先要删除所有该表空间里的对象</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">DROP</span> <span class="n">TABLESPACE</span> <span class="n">space1</span><span class="p">;</span></code></pre></div>
-
 <p>ok，到这里已经建立好表空间了。当然每次建表都指定TABLESPACE也有点麻烦，来点默认的把。</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">SET</span> <span class="n">default_tablespace</span> <span class="o">=</span> <span class="n">space1</span><span class="p">;</span>
 <span class="n">postgres</span><span class="o">=&gt;</span> <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">);</span></code></pre></div>
 

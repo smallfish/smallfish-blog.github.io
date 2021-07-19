@@ -57,7 +57,7 @@
         },
         "datePublished": "2013-03-28",
         "description": "",
-        "wordCount": 149
+        "wordCount":  149 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,9 +99,7 @@
     </div>
     <h1 class="post-title">RabbitMQ REST API</h1>
     <p>最近造了一个轮子：<a href="https://github.com/smallfish/rabbitmq-http">rabbitmq-http</a>，源于内部项目的一个翻版。基于 <a href="http://golang.org">Go</a> 语言实现。</p>
-
 <p>先说说为什么要写 HTTP API，在使用 RabbitMQ 过程中碰到了以下几个问题：</p>
-
 <ul>
 <li>多语言，这样就要求每个语言都需要安装对应的 amqp 库。</li>
 <li>版本，“历史遗留”原因，对应的 amqp 库比较古老，升级不易。</li>
@@ -106,80 +108,58 @@
 <li>TCP，调试和跟踪不易啊。</li>
 <li>功能复杂，对于使用者来说曲线较高，大都数情况只是生产者消费者模型。</li>
 </ul>
-
 <p>其实也不算是问题，就是不爽的地方。也就是想找一个自由度略大的方案，然后使用起来也简单方便。</p>
-
 <p>就整出了一个 HTTP 的方案，刚好最近手痒，想用 Go 语言写点东西，遂趁着周末和晚上整了一下。</p>
-
 <p>仓库地址：<a href="https://github.com/smallfish/rabbitmq-http">https://github.com/smallfish/rabbitmq-http</a></p>
-
 <p>如何安装依赖、编译和启动这些操作，这里就不再赘述，直接参考项目里的 <a href="https://github.com/smallfish/rabbitmq-http/blob/master/README.md">README.md</a></p>
-
 <p>目前封装的接口大致分为一下几类：</p>
-
 <ul>
 <li>Exchange
-
 <ul>
 <li>新建</li>
 <li>删除</li>
-</ul></li>
+</ul>
+</li>
 <li>Queue
-
 <ul>
 <li>新建</li>
 <li>删除</li>
 <li>绑定/取消绑定</li>
 <li>读取消息</li>
-</ul></li>
+</ul>
+</li>
 <li>Message
-
 <ul>
 <li>发布新消息</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>上面的新建、删除、发送或者读取的行为对应 HTTP 请求中的几种方法，比如：POST、DELETE、GET等。</p>
-
 <p>整个 API 的返回值（HTTP状态码）有一下三类：</p>
-
 <ul>
 <li>200，操作 OK，返回的 Body 体中有简单描述字符。</li>
 <li>405，不支持的请求方式，比如接口尚未实现。</li>
 <li>500，服务器端错误，Body 体中会有错误的描述。比如队列不存在、删除错误等。</li>
 </ul>
-
 <p>好了，还是来一点实际的例子吧。完全是 curl 操作：</p>
-
 <p>新建一个 Exchange：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/exchange -d <span class="se">\
 </span><span class="se"></span><span class="s1">&#39;{&#34;name&#34;: &#34;e1&#34;, &#34;type&#34;: &#34;topic&#34;, &#34;durable&#34;: true, &#34;autodelete&#34;: false}&#39;</span></code></pre></div>
-
 <p>新建一个 Queue：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/queue -d <span class="se">\
 </span><span class="se"></span><span class="s1">&#39;{&#34;name&#34;: &#34;q1&#34;}&#39;</span></code></pre></div>
-
 <p>绑定 Queue 到 Exchange 上：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/queue/bind -d <span class="se">\
 </span><span class="se"></span><span class="s1">&#39;{&#34;queue&#34;: &#34;q1&#34;, &#34;exchange&#34;: &#34;e1&#34;, &#34;keys&#34;: [&#34;aa&#34;, &#34;bb&#34;, &#34;cc&#34;]}&#39;</span></code></pre></div>
-
 <p>发布消息到 Exchange，指定 Routing-key：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i -X POST http://127.0.0.1:8080/publish -d <span class="se">\
 </span><span class="se"></span><span class="s1">&#39;{&#34;exchange&#34;: &#34;e1&#34;, &#34;key&#34;: &#34;bb&#34;, &#34;body&#34;: &#34;hahaha&#34;}&#39;</span></code></pre></div>
-
 <p>读取一下刚才发送的消息，即消费某个 Queue：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ curl -i <span class="s2">&#34;http://127.0.0.1:8080/queue?name=q1&#34;</span>
         
 PS：消费的接口输出为 Chunked 模式，可以用类似文件的行读取方式，接口是 HTTP 长连接。
 同时这个接口也支持多个 Queue 一起消费，类似：“/queue?name<span class="o">=</span>q1<span class="p">&amp;</span><span class="nv">name</span><span class="o">=</span>q2” 即可。</code></pre></div>
-
 <p>基本常用的接口已经暴露出来， 后续还会封装一些其他语言的 SDK，其实都是普通的 HTTP 的请求。</p>
-
 <p>欢迎 fork，欢迎当小白鼠， ^_^</p>
 
 </article>

@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-15",
         "description": "",
-        "wordCount": 159
+        "wordCount":  159 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,21 +99,18 @@
     </div>
     <h1 class="post-title">Perl 批量跳过 MySQL Slave 复制错误</h1>
     <p>发现mysql slave服务器经常因为一些特殊字符或者符号产生的更新语句报错，整个同步也会因此而卡在那，最初的办法只是手动去出错的机器，执行下面三条sql语句，跳过错误即可。</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">slave</span> <span class="n">stop</span><span class="p">;</span>
 <span class="nb">set</span> <span class="n">GLOBAL</span> <span class="n">SQL_SLAVE_SKIP_COUNTER</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
 <span class="n">slave</span> <span class="n">start</span><span class="p">;</span></code></pre></div>
-
 <p>一台slave机器用这样方法还行，多台就麻烦了，就顺手写了个简单的perl脚本，方便统一跳过错误，代码如下：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env perl</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env perl</span>
 <span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
 <span class="n">use</span> <span class="n">warnings</span><span class="p">;</span>
 
 <span class="c1"># get slave status</span>
 <span class="n">sub</span> <span class="n">get_status</span> <span class="p">{</span>
     <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="nd">@_</span><span class="p">;</span>
-    <span class="n">my</span> <span class="err">$</span><span class="n">info</span> <span class="o">=</span> <span class="sb">`mysql -u$usr -p$pass -h$ip -e &#39;show slave status\\G;&#39;`</span><span class="p">;</span>
+    <span class="n">my</span> <span class="err">$</span><span class="n">info</span> <span class="o">=</span> <span class="err">`</span><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span><span class="err">$</span><span class="n">usr</span> <span class="o">-</span><span class="n">p</span><span class="err">$</span><span class="k">pass</span> <span class="o">-</span><span class="n">h</span><span class="err">$</span><span class="n">ip</span> <span class="o">-</span><span class="n">e</span> <span class="s1">&#39;show slave status</span><span class="se">\\</span><span class="s1">G;&#39;</span><span class="err">`</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">((</span><span class="err">$</span><span class="n">info</span> <span class="o">=~</span> <span class="o">/</span><span class="n">Slave_IO_Running</span><span class="p">:</span> <span class="n">Yes</span><span class="o">/</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="p">(</span><span class="err">$</span><span class="n">info</span> <span class="o">=~</span> <span class="o">/</span><span class="n">Slave_SQL_Running</span><span class="p">:</span> <span class="n">No</span><span class="o">/</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
     <span class="p">}</span>
@@ -118,33 +119,33 @@
 <span class="c1"># mysql slave skip</span>
 <span class="n">sub</span> <span class="n">slaveskip</span> <span class="p">{</span>
     <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="nd">@_</span><span class="p">;</span>
-    <span class="k">print</span> <span class="sa"></span><span class="s2">&#34;slave error **</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
-    <span class="n">system</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;mysql -u$usr -p$pass -h$ip -e &#39;slave stop;&#39;&#34;</span><span class="p">);</span>
-    <span class="n">system</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;mysql -u$usr -p$pass -h$ip -e &#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&#39;&#34;</span><span class="p">);</span>
-    <span class="n">system</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;mysql -u$usr -p$pass -h$ip -e &#39;slave start;&#39;&#34;</span><span class="p">);</span>
+    <span class="nb">print</span> <span class="s2">&#34;slave error **</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+    <span class="n">system</span><span class="p">(</span><span class="s2">&#34;mysql -u$usr -p$pass -h$ip -e &#39;slave stop;&#39;&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s2">&#34;mysql -u$usr -p$pass -h$ip -e &#39;set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;&#39;&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s2">&#34;mysql -u$usr -p$pass -h$ip -e &#39;slave start;&#39;&#34;</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="n">my</span> <span class="nd">@hosts</span> <span class="o">=</span> <span class="n">qw</span><span class="o">/</span>
-<span class="mf">192.168</span><span class="o">.</span><span class="mf">0.101</span><span class="p">:</span><span class="n">root</span><span class="p">:</span><span class="n">tt1234</span>
-<span class="mf">192.168</span><span class="o">.</span><span class="mf">0.102</span><span class="p">:</span><span class="n">root</span><span class="p">:</span> <span class="n">tt1234</span>
-<span class="mf">192.168</span><span class="o">.</span><span class="mf">0.103</span><span class="p">:</span><span class="n">root</span><span class="p">:</span> <span class="n">tt1234</span>
+<span class="mf">192.168.0.101</span><span class="p">:</span><span class="n">root</span><span class="p">:</span><span class="n">tt1234</span>
+<span class="mf">192.168.0.102</span><span class="p">:</span><span class="n">root</span><span class="p">:</span> <span class="n">tt1234</span>
+<span class="mf">192.168.0.103</span><span class="p">:</span><span class="n">root</span><span class="p">:</span> <span class="n">tt1234</span>
 <span class="o">/</span><span class="p">;</span>
 <span class="n">foreach</span> <span class="p">(</span><span class="nd">@hosts</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="n">split</span> <span class="sa"></span><span class="s1">&#39;:&#39;</span><span class="p">;</span>
-    <span class="k">print</span> <span class="sa"></span><span class="s2">&#34;// ----- $ip</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+    <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">)</span> <span class="o">=</span> <span class="n">split</span> <span class="s1">&#39;:&#39;</span><span class="p">;</span>
+    <span class="nb">print</span> <span class="s2">&#34;// ----- $ip</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
     <span class="n">my</span> <span class="err">$</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="k">while</span> <span class="p">(</span><span class="err">$</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">my</span> <span class="err">$</span><span class="n">status</span> <span class="o">=</span> <span class="n">get_status</span><span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">);</span>
-        <span class="k">print</span> <span class="sa"></span><span class="s2">&#34;i: $count status: $status</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+        <span class="nb">print</span> <span class="s2">&#34;i: $count status: $status</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
         <span class="n">last</span> <span class="k">if</span> <span class="err">$</span><span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
         <span class="n">slaveskip</span><span class="p">(</span><span class="err">$</span><span class="n">ip</span><span class="p">,</span> <span class="err">$</span><span class="n">usr</span><span class="p">,</span> <span class="err">$</span><span class="k">pass</span><span class="p">);</span>
         <span class="n">select</span><span class="p">(</span><span class="n">undef</span><span class="p">,</span> <span class="n">undef</span><span class="p">,</span> <span class="n">undef</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">);</span>
         <span class="err">$</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">print</span> <span class="sa"></span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+    <span class="nb">print</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="nb">exit</span><span class="p">;</span></code></pre></div></p>
+<span class="n">exit</span><span class="p">;</span></code></pre></div>
 
 </article>
 

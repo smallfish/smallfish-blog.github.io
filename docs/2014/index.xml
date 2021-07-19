@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2014s on smallfish&#39;s blog</title>
@@ -6,11 +6,7 @@
     <description>Recent content in 2014s on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 26 Dec 2014 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://chenxiaoyu.org/2014/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 26 Dec 2014 00:00:00 +0000</lastBuildDate><atom:link href="http://chenxiaoyu.org/2014/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker Volume 属主设置</title>
       <link>http://chenxiaoyu.org/2014/12/26/docker-volume-chown/</link>
@@ -54,11 +50,19 @@ hello world 第二行导入了 fmt 包，第四行 Println 是 fmt 包里的公�
 刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。
 常用的读取操作符目前大概有三类：-&amp;gt;、-&amp;gt;&amp;gt;和#&amp;gt;。还是直接看SQL查询的例子吧。
 先看-&amp;gt;类：
-postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2; ?column? ----------  3 (1 row) postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;; ?column? ----------  2 (1 row) 再来-&amp;gt;&amp;gt;例子：
-postgres=# select &amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2; ?column? ----------  3 (1 row) postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;; ?column? ----------  2 (1 row) 有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
+postgres=#select&amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;2;?column?---------- 3(1row)postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;#39;b&amp;#39;;?column?---------- 2(1row) 再来-&amp;gt;&amp;gt;例子：
+postgres=#select&amp;#39;[1,2,3]&amp;#39;::json-&amp;gt;&amp;gt;2;?column?---------- 3(1row)postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}&amp;#39;::json-&amp;gt;&amp;gt;&amp;#39;b&amp;#39;;?column?---------- 2(1row) 有没有发现其实-&amp;gt;和-&amp;gt;&amp;gt;出来的结果肉眼看起来是一样的？区别在于后者是返回text。
 上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：
-postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ----------  3 (1 row) postgres=# select &amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;; ?column? ----------  3 (1 row) 当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
-postgres=# create table testjson(id serial, data json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;#34;a&amp;#34;: 1, &amp;#34;b&amp;#34;: 2}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;#34;a&amp;#34;: 3, &amp;#34;b&amp;#34;: 4, &amp;#34;c&amp;#34;: 5}&amp;#39;::json); postgres=# insert into testjson (data) values(&amp;#39;{&amp;#34;a&amp;#34;: 6, &amp;#34;c&amp;#34;: 7}&amp;#39;::json); 插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：</description>
+postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;#39;{a,2}&amp;#39;;?column?---------- 3(1row)postgres=#select&amp;#39;{&amp;#34;a&amp;#34;:[1,2,3],&amp;#34;b&amp;#34;:[4,5,6]}&amp;#39;::json#&amp;gt;&amp;gt;&amp;#39;{a,2}&amp;#39;;?column?---------- 3(1row) 当然里面可以嵌套很多，比如{a,2,b,3}等等。下面再来点表的例子：
+postgres=#createtabletestjson(idserial,datajson);postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: 1, &amp;#34;b&amp;#34;: 2}&amp;#39;::json);postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: 3, &amp;#34;b&amp;#34;: 4, &amp;#34;c&amp;#34;: 5}&amp;#39;::json);postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: 6, &amp;#34;c&amp;#34;: 7}&amp;#39;::json); 插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下select结果：
+postgres=#select*fromtestjson;id|data----+-------------------------- 1|{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}2|{&amp;#34;a&amp;#34;:3,&amp;#34;b&amp;#34;:4,&amp;#34;c&amp;#34;:5}3|{&amp;#34;a&amp;#34;:6,&amp;#34;c&amp;#34;:7}(3rows) 很眼熟，where条件可以这么用：
+postgres=#select*fromtestjsonwhere(data-&amp;gt;&amp;gt;&amp;#39;a&amp;#39;)::int&amp;gt;1;id|data----+-------------------------- 2|{&amp;#34;a&amp;#34;:3,&amp;#34;b&amp;#34;:4,&amp;#34;c&amp;#34;:5}3|{&amp;#34;a&amp;#34;:6,&amp;#34;c&amp;#34;:7}(2rows) 注意这里是-&amp;gt;&amp;gt;转换成text然后在::int进行比较。
+不过这里有个坑，不知道怎么解决，比如：
+postgres=#insertintotestjson(data)values(&amp;#39;{&amp;#34;a&amp;#34;: &amp;#34;smallfish&amp;#34;}&amp;#39;);postgres=#select*fromtestjson;id|data----+-------------------------- 1|{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}2|{&amp;#34;a&amp;#34;:3,&amp;#34;b&amp;#34;:4,&amp;#34;c&amp;#34;:5}3|{&amp;#34;a&amp;#34;:6,&amp;#34;c&amp;#34;:7}5|{&amp;#34;a&amp;#34;:&amp;#34;smallfish&amp;#34;}(4rows) 这个时候上面的::int&amp;gt;1这样就报错了，因为最后一行a为字符串。
+mongodb这个问题解决的挺好，回头搜搜在Pg里怎么搞。
+话说，Pg里支持的JSON是不是和之前提到的hstore类型有的一相似的地方？
+两者优劣回头我再贴文吧。
+官方文档：http://www.postgresql.org/docs/9.3/static/functions-json.html</description>
     </item>
     
   </channel>

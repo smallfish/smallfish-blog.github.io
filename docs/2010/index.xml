@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2010s on smallfish&#39;s blog</title>
@@ -6,18 +6,14 @@
     <description>Recent content in 2010s on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 07 Aug 2010 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://chenxiaoyu.org/2010/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 07 Aug 2010 00:00:00 +0000</lastBuildDate><atom:link href="http://chenxiaoyu.org/2010/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Pythonic 分享</title>
       <link>http://chenxiaoyu.org/2010/08/07/pythonic-ppt/</link>
       <pubDate>Sat, 07 Aug 2010 00:00:00 +0000</pubDate>
       
       <guid>http://chenxiaoyu.org/2010/08/07/pythonic-ppt/</guid>
-      <description>很荣幸收到龙哥 @hoorace 邀请去参加了杭州第四期程序员圆桌会议，顺带介绍了下最近在公司内部做的关于《Pythonic》分享。喜欢Python的可以下载看看把。 Pythonichttp://static.slidesharecdn.com/swf/ssplayer2.swf?doc=pythonic-100807044344-phpapp02&amp;amp;stripped_title=pythonic&amp;amp;userName=nnfish&amp;nbsp; View more http://www.slideshare.net/.  收获还是颇丰，多接触了点其他工种的朋友。
+      <description>很荣幸收到龙哥 @hoorace 邀请去参加了杭州第四期程序员圆桌会议，顺带介绍了下最近在公司内部做的关于《Pythonic》分享。喜欢Python的可以下载看看把。
 话题比较宽泛，基本我就是纯酱油飘过。感谢网新的朋友做的Vim的分享，另外威猛的升哥topic也不错，对RedHat系统安装和启动加载有了更多的了解。
 另外很遗憾的就是威大师竟然没说点啥，可惜了那么好的水果茶啊。。。残念残念。。</description>
     </item>
@@ -130,7 +126,7 @@ COPY tablename [(column [, ...])] FROM {&amp;#39;filename&amp;#39; | STDIN} [[WI
       <description>一般情况完全可以在 Python 里导入 from math import sin 然后调用 sin() 函数。然而，调用C里面的 sin() 函数速度会更快，尤其在复杂的循环里。在 Cython 里可以这样声明和使用：
 cdef extern from &amp;#34;math.h&amp;#34;: double sin(double) cdef double f(double x): return sin(x*x) 请注意，上面的代码声明了 math.h 里的函数，提供给 Cython 使用。C编译器在编译时将会看到 math.h 的声明，但 Cython 不会去分析 math.h 和单独的定义。
 当调用一个C函数时，一定要注意引入适当的链接库。这个依赖于特定的平台；下面的例子可以在Linux和Mac OS X下运行：
-from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;#34;demo&amp;#34;, [&amp;#34;demo.pyx&amp;#34;], libraries=[&amp;#34;m&amp;#34;]) # Unix-like specific ] setup( name = &amp;#34;Demos&amp;#34;, cmdclass = {&amp;#34;build_ext&amp;#34;: build_ext}, ext_modules = ext_modules )</description>
+from distutils.core import setup from distutils.extension import Extension from Cython.Distutils import build_ext ext_modules=[ Extension(&amp;#34;demo&amp;#34;, [&amp;#34;demo.pyx&amp;#34;], libraries=[&amp;#34;m&amp;#34;]) # Unix-like specific ] setup( name = &amp;#34;Demos&amp;#34;, cmdclass = {&amp;#34;build_ext&amp;#34;: build_ext}, ext_modules = ext_modules ) 跟从 math 库里使用 sin() 函数一样，它可以声明和导入任何C库，Cython会生成正确的共享或者静态链接库。</description>
     </item>
     
     <item>
@@ -145,8 +141,7 @@ goinstall 主要是方便安装第三方模块，目前支持 hg(mercurial)，gi
 smallfish@debian:~$ goinstall -dashboard=true github.com/hoisie/web.go 根据网速快慢，过一段时间会结束。期间木有任何提示。（可以加上 -v=true 参数，可以显示安装过程和提示。）
 查看下安装的目录和路径：
 smallfish@debian:~$ ls $GOROOT/src/pkg/github.com/hoisie/web.go/ examples _go_.8 Makefile Readme.md scgi.go status.go web_test.go fcgi.go LICENSE _obj request.go servefile.go web.go 代码示例：
-import (web &amp;#34;github.com/hoisie/web.go&amp;#34;)
-另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</description>
+import (web &amp;#34;github.com/hoisie/web.go&amp;#34;) 另外注意点，官方文档里 -update 选项现在版本里已经缩写，改成 -u。</description>
     </item>
     
     <item>
@@ -175,11 +170,12 @@ import (web &amp;#34;github.com/hoisie/web.go&amp;#34;)
 目的：Win里ssh进Ubuntu，能访问里面提供的服务。
 主要是通过 VBoxManage setextradata 设置一些属性。
 先上几个步骤图把。注意一下修改，先得关闭虚拟机，修改完事以后再启动。
- 查看虚拟机中的名称：ubuntu9
- 进入本机Vbox目录，运行VBoxManage，查看下。
- 添加三个项目   下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。
+  查看虚拟机中的名称：ubuntu9
+  进入本机Vbox目录，运行VBoxManage，查看下。
+  添加三个项目
+  下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。
 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&amp;#34; TCP VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&amp;#34; 22 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&amp;#34; 22  启动虚拟机。
- 设置putty登陆之。
+  设置putty登陆之。
   到这里已经顺利ssh 到127.0.0.1，如果想访问虚拟机里的web服务器呢？同样很简单。
 只要如下设置，web端口为81，跟上面也雷同：
 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&amp;#34; TCP VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&amp;#34; 81 VBoxManage setextradata &amp;#34;ubuntu9&amp;#34; &amp;#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&amp;#34; 81 另外如果想清空上面设置的选项，只要不设置后面的值即可：
@@ -214,8 +210,7 @@ MongoDB shell version: 0.9.8 url: test connecting to: test type &amp;#34;help&am
       <guid>http://chenxiaoyu.org/2010/04/19/python-configparser-configobj/</guid>
       <description>默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：
 &amp;gt;&amp;gt;&amp;gt; from ConfigParser import ConfigParser &amp;gt;&amp;gt;&amp;gt; cf = ConfigParser() &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;d&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;d&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.add_section(&amp;#39;a&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.set(&amp;#39;a&amp;#39;, &amp;#39;name&amp;#39;, &amp;#39;smallfish2&amp;#39;) &amp;gt;&amp;gt;&amp;gt; cf.write(open(&amp;#39;d:/a.ini&amp;#39;, &amp;#39;w&amp;#39;)) &amp;gt;&amp;gt;&amp;gt; cf = None 生成配置如下：
-[a] name = smallfish2 [d] name = smallfish
-翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html
+[a] name = smallfish2 [d] name = smallfish 翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：http://www.voidspace.org.uk/python/configobj.html
 代码片段如下：
 &amp;gt;&amp;gt;&amp;gt; from configobj import ConfigObj &amp;gt;&amp;gt;&amp;gt; config = ConfigObj() &amp;gt;&amp;gt;&amp;gt; config.filename = &amp;#39;d:/a.ini&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;d&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish&amp;#39; &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;] = {} &amp;gt;&amp;gt;&amp;gt; config[&amp;#39;a&amp;#39;][&amp;#39;name&amp;#39;] = &amp;#39;smallfish2&amp;#39; &amp;gt;&amp;gt;&amp;gt; config.</description>
     </item>
@@ -244,7 +239,7 @@ MongoDB shell version: 0.9.8 url: test connecting to: test type &amp;#34;help&am
       <description>Nginx本身可以通过
 kill -HUP `cat /usr/local/nginx/logs/nginx.pid` 进行平滑重启的，可以通过ps进程查看一下。效果还是挺不错的。
 这里介绍的是另外一种方式service，适合RHEL/CentOS系列。
- kill nginx进程  kill `cat /usr/local/nginx/logs/nginx.pid`  建立 /etc/init.d/nginx 文件  #!/bin/sh # # nginx - this script starts and stops the nginx daemin # # chkconfig: - 85 15 # description: Nginx is an HTTP(S) server, HTTP(S) reverse \ # proxy and IMAP/POP3 proxy server # processname: nginx # config: /usr/local/nginx/conf/nginx.conf # pidfile: /usr/local/nginx/logs/nginx.pid # Source function library. . /etc/rc.d/init.d/functions # Source networking configuration.</description>
+ kill nginx进程  kill `cat /usr/local/nginx/logs/nginx.pid` 建立 /etc/init.d/nginx 文件  #!/bin/sh # # nginx - this script starts and stops the nginx daemin # # chkconfig: - 85 15 # description: Nginx is an HTTP(S) server, HTTP(S) reverse \ # proxy and IMAP/POP3 proxy server # processname: nginx # config: /usr/local/nginx/conf/nginx.conf # pidfile: /usr/local/nginx/logs/nginx.pid # Source function library. . /etc/rc.d/init.d/functions # Source networking configuration.</description>
     </item>
     
     <item>
@@ -257,9 +252,9 @@ kill -HUP `cat /usr/local/nginx/logs/nginx.pid` 进行平滑重启的，可以�
 web.py是一个小巧灵活的框架，最新稳定版是0.33。这里不介绍web开发部分，介绍下关于数据库的相关操作。
 很多Pyer一开始都喜欢自己封装数据库操作类，本人亦如此。不过后来通过观摩web.py的源码，发现其数据库操作部分相当紧凑实用。推荐懒人可以尝试一下。
 废话不多，先来安装，有两种方式：
- easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py  下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。
+ easy_install方式，如果木有此工具，可以参考：http://chenxiaoyu.org/blog/archives/23  easy_install web.py 下载源码编译。地址： http://webpy.org/static/web.py-0.33.tar.gz ，解压后执行：  python setup.py install web.py安装算到此结束，如果想使用其中的db功能，还得借助与相应数据库操作模块，比如MySQLdb、psycopg2。如果需要尝试连接池(database pool)功能，还得装下DBUtils。这几个模块都可以通过easy_install来安装。
 下面开始使用吧！
- 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;)  select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;#34;Bob&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;#34;name = $name&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;#34;id&amp;gt;100&amp;#34;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;#34;id,name&amp;#34;) # order by results = db.select(&amp;#39;mytable&amp;#39;, order=&amp;#34;post_date DESC&amp;#34;) # group results = db.</description>
+ 导入模块，定义数据库连接db。  import web db = web.database(dbn=&amp;#39;postgres&amp;#39;, db=&amp;#39;mydata&amp;#39;, user=&amp;#39;dbuser&amp;#39;, pw=&amp;#39;&amp;#39;) select 查询  # 查询表 entries = db.select(&amp;#39;mytable&amp;#39;) # where 条件 myvar = dict(name=&amp;#34;Bob&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, myvar, where=&amp;#34;name = $name&amp;#34;) results = db.select(&amp;#39;mytable&amp;#39;, where=&amp;#34;id&amp;gt;100&amp;#34;) # 查询具体列 results = db.select(&amp;#39;mytable&amp;#39;, what=&amp;#34;id,name&amp;#34;) # order by results = db.select(&amp;#39;mytable&amp;#39;, order=&amp;#34;post_date DESC&amp;#34;) # group results = db.</description>
     </item>
     
     <item>
@@ -275,7 +270,7 @@ Stackless可以简单的认为是Python一个增强版，最吸引眼球的非�
 本文除去上面提及到的两个软件，还需要安装pymongo模块。http://api.mongodb.org/python/
 模块安装方式有源码编译和easy_install，这里就不再累赘。
  从Apache日志中分析出需要保存的资料，比如IP，时间，GET/POST，返回状态码等。  fmt_str = &amp;#39;(?P&amp;lt;ip&amp;gt;[.\d]+) - - \[(?P&amp;lt;time&amp;gt;.*?)\] &amp;#34;(?P&amp;lt;method&amp;gt;.*?) (?P&amp;lt;uri&amp;gt;.*?) HTTP/1.\d&amp;#34; (?P&amp;lt;status&amp;gt;\d+) (?P&amp;lt;length&amp;gt;.*?) &amp;#34;(?P&amp;lt;referere&amp;gt;.*?)&amp;#34; &amp;#34;(?P&amp;lt;agent&amp;gt;.*?)&amp;#34;&amp;#39; fmt_name = re.findall(&amp;#39;\?P&amp;lt;(.*?)&amp;gt;&amp;#39;, fmt_str) fmt_re = re.compile(fmt_str) 定义了一个正则用于提取每行日志的内容。fmt_name就是提取尖括号中间的变量名。
- 定义MongoDB相关变量，包括需要存到collection名称。Connection采取的是默认Host和端口。  conn = Connection() apache = conn.apache logs = apache.logs  保存日志行  def make_line(line): m = fmt_re.search(line) if m: logs.insert(dict(zip(fmt_name, m.groups())))  读取Apache日志文件  def make_log(log_path): with open(log_path) as fp: for line in fp: make_line(line.</description>
+定义MongoDB相关变量，包括需要存到collection名称。Connection采取的是默认Host和端口。  conn = Connection() apache = conn.apache logs = apache.logs 保存日志行  def make_line(line): m = fmt_re.search(line) if m: logs.insert(dict(zip(fmt_name, m.groups()))) 读取Apache日志文件  def make_log(log_path): with open(log_path) as fp: for line in fp: make_line(line.strip()) 运行把。  if __name__ == &amp;#39;__main__&amp;#39;: make_log(&amp;#39;d:/apachelog.</description>
     </item>
     
     <item>
@@ -288,8 +283,7 @@ Stackless可以简单的认为是Python一个增强版，最吸引眼球的非�
 默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）
 导入很简单，下面是win下面测试，其他平台类似该操作：
 D:\&amp;gt;psql -U postgres -h localhost -f D:\PostgreSQL\8.4\share\contrib\uuid-ossp.sql Password for user postgres: SET CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION CREATE FUNCTION 进入psql，执行：
-postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row)
-主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。</description>
+postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------------------- 86811bd4-22a5-11df-b00e-ebd863f5f8a7 (1 row) postgres=# select uuid_generate_v4(); uuid_generate_v4 -------------------------------------- 5edbfcbb-1df8-48fa-853f-7917e4e346db (1 row) 主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 http://www.postgresql.org/docs/8.3/static/uuid-ossp.html。</description>
     </item>
     
     <item>
@@ -299,8 +293,7 @@ postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------
       
       <guid>http://chenxiaoyu.org/2010/02/06/postgresql-rpm-setup/</guid>
       <description>测试环境：REHL 5.3 PostgreSQL版本：8.4.2
- 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres  下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm  安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm
- RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb</description>
+ 首先检查下是否已经有PostgreSQL安装程序(俺的机器有pg-libs 8.1，无视之)  shell&amp;gt; rpm -qa | grep postgres 下载最新的8.4.2RPM安装包，这个FTP速度挺快的。:)  shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; wget http://ftp.easynet.be/postgresql/binary/v8.4.2/linux/rpms/redhat/rhel-5-x86_64/postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm 安装PostgreSQL(要注意下顺序)，首先需要更新pg-libs版本。 后面几个不需要的话可以不装。主要是一些扩展功能。  shell&amp;gt; rpm -ivh postgresql-libs-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-server-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-contrib-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-devel-8.4.2-1PGDG.rhel5.x86_64.rpm shell&amp;gt; rpm -ivh postgresql-plpython-8.4.2-1PGDG.rhel5.x86_64.rpm RPM安装完后，需要初始化PostgreSQL库。service初次启动会提示。 如果是源码安装这个过程就是对应的initdb -D，指定data目录。RPM默认对应目录是/var/lib/pgsql/data。  shell&amp;gt; service postgresql initdb service启动PostgreSQL  shell&amp;gt; service postgresql start 到上面这一步基本是安装完成了。下面的是修改数据库用户密码和登陆相关。</description>
     </item>
     
     <item>
@@ -312,9 +305,8 @@ postgres=# select uuid_generate_v1(); uuid_generate_v1 -------------------------
       <description>对比下一些两个数据库常用的操作。分别使用自带的client程序。
 MySQL命令行：
 mysql -u 用户名 -h 主机地址 -P 端口号 数据库名 -p PostgreSQL命令行：
-psql -U 用户名 -h 主机地址 -p 端口号 数据库名
-操作对比：
-mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS; \du SHOW COLUMNS; \d table-name SHOW PROCESSLIST; SELECT * FROM pg_stat_activity; SELECT now()\G \x 可以打开和关闭类似\G功能 SOURCE /path.sql \i /path.sql LOAD DATA INFILE ... \copy ... \h \?</description>
+psql -U 用户名 -h 主机地址 -p 端口号 数据库名 操作对比：
+mysql psql SHOW DATABASES; \l USE db-name; \c db-name SHOW TABLES; \d SHOW USERS; \du SHOW COLUMNS; \d table-name SHOW PROCESSLIST; SELECT * FROM pg_stat_activity; SELECT now()\G \x 可以打开和关闭类似\G功能 SOURCE /path.sql \i /path.sql LOAD DATA INFILE ... \copy ... \h \? </description>
     </item>
     
   </channel>

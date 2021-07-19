@@ -57,7 +57,7 @@
         },
         "datePublished": "2012-03-08",
         "description": "",
-        "wordCount": 121
+        "wordCount":  121 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,43 +99,34 @@
     </div>
     <h1 class="post-title">Nginx GZip 压缩</h1>
     <p>Nginx GZip 模块文档详见：<a href="http://wiki.nginx.org/HttpGzipModule">http://wiki.nginx.org/HttpGzipModule</a></p>
-
 <p>常用配置片段如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html">gzip             on;
 gzip_comp_level  2;                        # 压缩比例，比例越大，压缩时间越长。默认是1
 gzip_types       text/css text/javascript; # 哪些文件可以被压缩
 gzip_disable     &#34;MSIE [1-6]\.&#34;;           # 无视IE6这个笨蛋~</code></pre></div>
-
 <p>其中 gzip_types 选项默认只压缩 text/html，源码见：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">src</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">ngx_http_gzip_filter_module</span><span class="p">.</span><span class="n">c</span> <span class="err">行</span><span class="mi">152</span><span class="err">：</span>
     <span class="o">&amp;</span><span class="n">ngx_http_html_default_types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="n">src</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">ngx_http</span><span class="p">.</span><span class="n">c</span> <span class="err">行</span><span class="mi">77</span><span class="err">：</span>
     <span class="n">ngx_str_t</span>  <span class="n">ngx_http_html_default_types</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">ngx_string</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;text/html&#34;</span><span class="p">),</span></code></pre></div>
-
+        <span class="n">ngx_string</span><span class="p">(</span><span class="s">&#34;text/html&#34;</span><span class="p">),</span></code></pre></div>
 <p>常用的静态 type 有，看自己需要压缩的情况而定：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">text/html
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">text/html
 text/plain
 text/css
 application/x-javascript
 text/javascript
-application/xml</code></pre></div></p>
-
+application/xml</code></pre></div>
 <p>OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。</p>
-
 <p>下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">查看是否开启gzip，需要客户端加入：<span class="s2">&#34;Accept-Encoding: gzip, deflate&#34;</span> 头信息。
 
 $ curl -I -H <span class="s2">&#34;Accept-Encoding: gzip, deflate&#34;</span> <span class="s2">&#34;http://localhost/tag.php&#34;</span>
 
 HTTP/1.1 <span class="m">200</span> OK
 Server: nginx
-Date: Thu, <span class="m">08</span> Mar <span class="m">2012</span> <span class="m">07</span>:23:46 GMT
+Date: Thu, <span class="m">08</span> Mar <span class="m">2012</span> 07:23:46 GMT
 Content-Type: text/html
 Connection: close
 Content-Encoding: gzip
@@ -140,13 +135,12 @@ $ curl -I -H <span class="s2">&#34;Accept-Encoding: gzip, deflate&#34;</span> <s
 
 HTTP/1.1 <span class="m">200</span> OK
 Server: nginx
-Date: Thu, <span class="m">08</span> Mar <span class="m">2012</span> <span class="m">07</span>:23:54 GMT
+Date: Thu, <span class="m">08</span> Mar <span class="m">2012</span> 07:23:54 GMT
 Content-Type: text/css
 Connection: close
-Last-Modified: Tue, <span class="m">27</span> Dec <span class="m">2011</span> <span class="m">10</span>:00:51 GMT
+Last-Modified: Tue, <span class="m">27</span> Dec <span class="m">2011</span> 10:00:51 GMT
 ETag: <span class="s2">&#34;BC612352322D435769C4BDC03DDB2572&#34;</span>
 Content-Length: <span class="m">22834</span></code></pre></div>
-
 <p>可以看出来了把。第二个示例没有被压缩。</p>
 
 </article>

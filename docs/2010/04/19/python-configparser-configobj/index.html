@@ -57,7 +57,7 @@
         },
         "datePublished": "2010-04-19",
         "description": "",
-        "wordCount": 80
+        "wordCount":  80 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,42 +99,34 @@
     </div>
     <h1 class="post-title">Python ConfigParser 与 ConfigObj INI 配置读写顺序</h1>
     <p>默认的ConfigParser对于选项是按照字母顺序排列的。如下代码：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">ConfigParser</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="nb">set</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;smallfish&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="nb">set</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;smallfish2&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;d:/a.ini&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;w&#39;</span><span class="p">))</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span> <span class="o">=</span> <span class="bp">None</span></code></pre></div>
-
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;smallfish&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;smallfish2&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;d:/a.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span> <span class="o">=</span> <span class="kc">None</span></code></pre></div>
 <p>生成配置如下：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">a</span><span class="p">]</span>
 <span class="n">name</span> <span class="o">=</span> <span class="n">smallfish2</span>
 <span class="p">[</span><span class="n">d</span><span class="p">]</span>
-<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish</span></code></pre></div></p>
-
+<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish</span></code></pre></div>
 <p>翻阅了官方文档似乎对ConfigParser中section的顺序没啥解说，毕竟字典本身就是无序的，如果想修改估计只能从源码入手把。不过有一个ConfigObj库还不错，可以实现顺序，当然功能不仅仅如此啦。下载地址：<a href="http://www.voidspace.org.uk/python/configobj.html">http://www.voidspace.org.uk/python/configobj.html</a></p>
-
 <p>代码片段如下：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">configobj</span> <span class="kn">import</span> <span class="n">ConfigObj</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">configobj</span> <span class="kn">import</span> <span class="n">ConfigObj</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigObj</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;d:/a.ini&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;d&#39;</span><span class="p">][</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;smallfish&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="sa"></span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;smallfish2&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">()</span></code></pre></div></p>
-
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;d:/a.ini&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;smallfish&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;smallfish2&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">()</span></code></pre></div>
 <p>生成配置如下：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">d</span><span class="p">]</span>
 <span class="n">name</span> <span class="o">=</span> <span class="n">smallfish</span>
 <span class="p">[</span><span class="n">a</span><span class="p">]</span>
-<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish2</span></code></pre></div></p>
+<span class="n">name</span> <span class="o">=</span> <span class="n">smallfish2</span></code></pre></div>
 
 </article>
 

@@ -57,7 +57,7 @@
         },
         "datePublished": "2012-02-08",
         "description": "",
-        "wordCount": 128
+        "wordCount":  128 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,33 +99,23 @@
     </div>
     <h1 class="post-title">Nginx-Lua HTTP 401 认证校验</h1>
     <p>本文示例依赖模块：</p>
-
 <ul>
 <li><a href="https://github.com/chaoslawful/lua-nginx-module/tags">lua-nginx-module</a></li>
 <li><a href="https://github.com/FRiCKLE/ngx_coolkit">ngx_coolkit</a>（获取$remote_passwd 输入值）</li>
 </ul>
-
 <p>如何编译Nginx这些扩展模块，请参考以前<a href="http://chenxiaoyu.org/2011/10/30/nginx-modules.html">《Nginx 第三方模块试用记》</a>。</p>
-
 <p>基于 HTTP 401 认证其实很简单，语言或者 Web 服务器都可以在 Header 头里发送。</p>
-
 <p>比如 PHP <a href="http://php.net/manual/zh/features.http-auth.php">401发送示例</a>，或者 Apache 配置：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">Directory</span> <span class="err">&#34;/</span><span class="na">path</span><span class="err">/</span><span class="na">a</span><span class="err">&#34;</span><span class="p"></span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">Directory</span> <span class="err">&#34;/</span><span class="na">path</span><span class="err">/</span><span class="na">a</span><span class="err">&#34;</span><span class="p">&gt;</span>
   AuthType Basic
   AuthName &#34;localhost&#34;
   AuthUserFile /usr/local/apache/.htpasswd
   Require valid-user
-<span class="p">&lt;</span><span class="p">/</span><span class="nt">Directory</span><span class="p">&gt;</span></code></pre></div>
-
+<span class="p">&lt;/</span><span class="nt">Directory</span><span class="p">&gt;</span></code></pre></div>
 <p>这里 Apache 的认证是基于加密文件的认证，有点局限性。比如用户密码是存储在数据库中，这样的校验有点局限，当然可以通过扩展 C Apache 模块来解决（应该有类似的模块）。</p>
-
 <p>本文尝试用 Nginx 来扩展一下 HTTP 401 认证，验证部分是由 lua-nginx-module 代码完成。</p>
-
-<p><img src="/images/nginx-lua-401-auth.png" alt="" /></p>
-
+<p><img src="/images/nginx-lua-401-auth.png" alt=""></p>
 <p>nginx.conf 配置片段：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /ubuntu <span class="o">{</span>
     access_by_lua <span class="s1">&#39;
 </span><span class="s1">        -- 用户和密码正确 access 则通过，并转向 proxy 部分。
@@ -134,15 +128,10 @@
 </span><span class="s1">    &#39;</span><span class="p">;</span>
     proxy_pass http://127.0.0.1:8080/<span class="p">;</span>
 <span class="o">}</span></code></pre></div>
-
 <p>这里的校验部分只是简单的字符串匹配，当然可以扩展成数据库方式（此示例不完整）：<a href="http://forum.nginx.org/read.php?2,220692,220740">http://forum.nginx.org/read.php?2,220692,220740</a></p>
-
 <p>测试过程中刚好发现 <a href="https://github.com/FRiCKLE/ngx_coolkit">ngx_coolkit</a> 模块在处理 $remote_passwd 一个 bug，此变量在 lua 中不能直接用 ngx.var.remote_passwd 读取，原因是 remote_passwd 变量在模块设置的标志位 NGX_HTTP_VAR_NOHASH，<a href="http://weibo.com/agentzh">@agentzh</a> 已经在最新的 ngx_coolkit 中修复。</p>
-
 <p>NGX_HTTP_VAR_NOHASH 完整说明参考微博：<a href="http://weibo.com/1834459124/y4xzWzV2e">http://weibo.com/1834459124/y4xzWzV2e</a></p>
-
 <p>老版本的 ngx_coolkit 可以通过这样来绕过：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location / <span class="o">{</span>
     <span class="nb">set</span> <span class="nv">$passwd</span> <span class="nv">$remote_passwd</span><span class="p">;</span>
     access_by_lua <span class="err">&#39;</span>
@@ -151,7 +140,6 @@
         end
         ...
 <span class="o">}</span></code></pre></div>
-
 <p>建议更新到最新版，或者直接安装 <a href="http://openresty.org/">ngx-openresty</a> 包。</p>
 
 </article>

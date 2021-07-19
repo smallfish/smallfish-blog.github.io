@@ -57,7 +57,7 @@
         },
         "datePublished": "2010-05-10",
         "description": "",
-        "wordCount": 57
+        "wordCount":  57 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,49 +99,41 @@
     </div>
     <h1 class="post-title">[图文解说] Virtual Box 通过 NAT(默认) 共享虚拟机中的服务</h1>
     <p>Virtual Box 是个不错的虚拟机，小巧，功能也齐全。好像有点推销鸟。说正题，上次有个朋友就提到怎么能主机里访问虚拟机里的服务，昨晚实验了下，颇为顺利。记录下。这里利用的是默认的NAT上网，也就是共享主机上网，而不是设置独立的IP。</p>
-
 <p>主机：Win XP
 虚拟：Ubuntu 9.10</p>
-
 <p>目的：Win里ssh进Ubuntu，能访问里面提供的服务。</p>
-
 <p>主要是通过 VBoxManage setextradata 设置一些属性。</p>
-
 <p>先上几个步骤图把。注意一下修改，先得关闭虚拟机，修改完事以后再启动。</p>
-
 <ol>
-<li><p>查看虚拟机中的名称：ubuntu9</p></li>
-
-<li><p>进入本机Vbox目录，运行VBoxManage，查看下。</p>
-
-<ol>
-<li>添加三个项目</li>
-</ol></li>
+<li>
+<p>查看虚拟机中的名称：ubuntu9</p>
+</li>
+<li>
+<p>进入本机Vbox目录，运行VBoxManage，查看下。</p>
+</li>
+<li>
+<p>添加三个项目</p>
+</li>
 </ol>
-
 <p>下面的pcnet是vbox里的网络设置，0是表示第一个网卡，后面一次类推。22是ssh端口，映射到主机的22端口。</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span>  <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&#34;</span> <span class="n">TCP</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span>  <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&#34;</span> <span class="mi">22</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span>  <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&#34;</span> <span class="mi">22</span></code></pre></div>
-
-<ol>
-<li><p>启动虚拟机。</p></li>
-
-<li><p>设置putty登陆之。</p></li>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span>  <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/Protocol&#34;</span> <span class="n">TCP</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span>  <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/GuestPort&#34;</span> <span class="mi">22</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span>  <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/guestssh/HostPort&#34;</span> <span class="mi">22</span></code></pre></div>
+<ol start="5">
+<li>
+<p>启动虚拟机。</p>
+</li>
+<li>
+<p>设置putty登陆之。</p>
+</li>
 </ol>
-
 <p>到这里已经顺利ssh 到127.0.0.1，如果想访问虚拟机里的web服务器呢？同样很简单。</p>
-
 <p>只要如下设置，web端口为81，跟上面也雷同：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&#34;</span> <span class="n">TCP</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&#34;</span> <span class="mi">81</span>
-<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&#34;</span> <span class="mi">81</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span> <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&#34;</span> <span class="n">TCP</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span> <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/GuestPort&#34;</span> <span class="mi">81</span>
+<span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span> <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/HostPort&#34;</span> <span class="mi">81</span></code></pre></div>
 <p>另外如果想清空上面设置的选项，只要不设置后面的值即可：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="sa"></span><span class="s2">&#34;ubuntu9&#34;</span> <span class="sa"></span><span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&#34;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">VBoxManage</span> <span class="n">setextradata</span> <span class="s2">&#34;ubuntu9&#34;</span> <span class="s2">&#34;VBoxInternal/Devices/pcnet/0/LUN#0/Config/web/Protocol&#34;</span></code></pre></div>
 
 </article>
 

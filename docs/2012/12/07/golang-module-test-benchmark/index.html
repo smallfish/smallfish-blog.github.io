@@ -57,7 +57,7 @@
         },
         "datePublished": "2012-12-07",
         "description": "",
-        "wordCount": 121
+        "wordCount":  121 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,67 +99,52 @@
     </div>
     <h1 class="post-title">Go 模块测试</h1>
     <p>Go 很多地方都透露着“约定大于配置”的理论，比如测试、可见性、语法等等。</p>
-
 <p>本文示例模块为：foo.go，则对应的测试模块为：foo_test.go，测试版本为：go v1.0.3。</p>
-
 <p>先写好示例代码： foo.go</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">package foo
 
 func Add<span class="o">(</span>a, b int<span class="o">)</span> int <span class="o">{</span>
     <span class="k">return</span> a + b
 <span class="o">}</span></code></pre></div>
-
 <p>对应的测试代码：foo_test.go</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">package foo
 
 import <span class="s2">&#34;testing&#34;</span>
 
 func TestAdd<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span>Add<span class="o">(</span><span class="m">1</span>, <span class="m">2</span><span class="o">)</span> !<span class="o">=</span> <span class="m">3</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span>Add<span class="o">(</span>1, 2<span class="o">)</span> !<span class="o">=</span> 3<span class="o">)</span> <span class="o">{</span>
         t.Error<span class="o">(</span><span class="s2">&#34;test foo:Addr failed&#34;</span><span class="o">)</span>
     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
         t.Log<span class="o">(</span><span class="s2">&#34;test foo:Addr pass&#34;</span><span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span>   </code></pre></div>
-
 <p>到这里可以运行测试了：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ go <span class="nb">test</span>
 PASS
-ok      _/Users/smallfish/test/go/foo   <span class="m">0</span>.080s</code></pre></div>
-
+ok      _/Users/smallfish/test/go/foo   0.080s</code></pre></div>
 <p>或者详细一点的输出：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ go <span class="nb">test</span> -v
 <span class="o">===</span> RUN TestAdd
---- PASS: TestAdd <span class="o">(</span><span class="m">0</span>.00 seconds<span class="o">)</span>
+--- PASS: TestAdd <span class="o">(</span>0.00 seconds<span class="o">)</span>
 foo_test.go:9:  <span class="nb">test</span> foo:Addr pass
                 PASS
-ok      _/Users/smallfish/test/go/foo   <span class="m">0</span>.013s</code></pre></div>
-
+ok      _/Users/smallfish/test/go/foo   0.013s</code></pre></div>
 <p>默认测试函数是以“Test”开头，比如：TestXXX。而性能测试代码是以“Benchmark”开头。</p>
-
 <p>下面来简单一段性能测试代码：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">func BenchmarkAdd<span class="o">(</span>b *testing.B<span class="o">)</span> <span class="o">{</span>
     // 如果需要初始化，比较耗时的操作可以这样：
     // b.StopTimer<span class="o">()</span>
     // .... 一堆操作
     // b.StartTimer<span class="o">()</span>
-    <span class="k">for</span> i :<span class="o">=</span> <span class="m">0</span><span class="p">;</span> i &lt; b.N<span class="p">;</span> i++ <span class="o">{</span>
-        Add<span class="o">(</span><span class="m">1</span>, <span class="m">2</span><span class="o">)</span>
+    <span class="k">for</span> i :<span class="o">=</span> 0<span class="p">;</span> i &lt; b.N<span class="p">;</span> i++ <span class="o">{</span>
+        Add<span class="o">(</span>1, 2<span class="o">)</span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre></div>
-
 <p>跑一下性能测试：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ go <span class="nb">test</span> -test.bench<span class="o">=</span><span class="s2">&#34;.*&#34;</span>
 PASS
-BenchmarkAdd    <span class="m">2000000000</span>               <span class="m">1</span>.27 ns/op
-ok      _/Users/smallfish/test/go/foo   <span class="m">2</span>.702s</code></pre></div>
-
+BenchmarkAdd    <span class="m">2000000000</span>               1.27 ns/op
+ok      _/Users/smallfish/test/go/foo   2.702s</code></pre></div>
 <p>更多请参考：“<a href="http://golang.org/cmd/go/">go</a> help test” 命令和 <a href="http://golang.org/pkg/testing/">testing</a> 模块</p>
 
 </article>

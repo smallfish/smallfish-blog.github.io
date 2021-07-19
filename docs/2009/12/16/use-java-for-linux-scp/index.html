@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-16",
         "description": "",
-        "wordCount": 50
+        "wordCount":  50 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,36 +99,24 @@
     </div>
     <h1 class="post-title">Java调用Linux SCP操作</h1>
     <p>先来回顾下linux下scp命令的用法：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">shell</span> <span class="err">$</span><span class="p">]</span> <span class="n">scp</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="err">本地目录或文件</span> <span class="n">user</span><span class="nd">@192.168.0.110</span><span class="p">:</span><span class="o">/</span><span class="err">远程目录</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="n">shell</span> <span class="err">$</span><span class="p">]</span> <span class="n">scp</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">本地目录或文件</span> <span class="n">user</span><span class="o">@</span><span class="mf">192.168.0.110</span><span class="p">:</span><span class="o">/</span><span class="n">远程目录</span></code></pre></div>
 <p>这条命令是把本地的目录或者文件拷贝到远程192.168.0.110一个目录下，如果是从远程拷到本地，则反一下ip和目录。-r则是递归目录。更多参见scp &ndash;help</p>
-
 <p>最近在Java里调用scp，是通过一个JSP页面来触发。为了在调用系统命令时候不出现提示密码，两台机器配置好了信任关系，可以参考<a href="http://chenxiaoyu.org/blog/archives/133">http://chenxiaoyu.org/blog/archives/133</a>，大致代码如下：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">Runtime</span><span class="o">.</span><span class="n">getRuntime</span><span class="p">()</span><span class="o">.</span><span class="k">exec</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;scp /aa.txt root@192.168.0.110:/bb&#34;</span><span class="p">);</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">Runtime</span><span class="o">.</span><span class="n">getRuntime</span><span class="p">()</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="s2">&#34;scp /aa.txt root@192.168.0.110:/bb&#34;</span><span class="p">);</span></code></pre></div>
 <p>try时候也没任何异常，但是文件没拷贝过去，最后根据Process的waitFor()获取命令返回值是1。</p>
-
 <p>这下可以肯定的是调用系统命令失败，在System.out.println里打印出command，linux下运行是没错的。为何呢？</p>
-
 <p>后来发现原来是用户权限的问题，默认apache运行用户是nobody，根本没权限调用scp命令，配置的信任关系也是本机的root用户。</p>
-
 <p>那就重新加一个user把，adduser&hellip;到配置好信任关系，在scp -i 指定一个rsa文件，并把rsa文件复制到/tmp目录下，权限为0755，继续刷新，后台可以看到提示输入密码之类的output了。</p>
-
 <p>貌似还比较棘手，最后还是搜了下，发现有关Java scp的库，<a href="http://www.ganymed.ethz.ch/ssh2/">http://www.ganymed.ethz.ch/ssh2/</a>。貌似比较老，先来测试一下把。</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Connection</span><span class="p">(</span><span class="err">“</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">0.110</span><span class="err">”</span><span class="p">);</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Connection</span><span class="p">(</span><span class="err">“</span><span class="mf">192.168.0.110</span><span class="err">”</span><span class="p">);</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">connect</span><span class="p">();</span>
-<span class="n">boolean</span> <span class="n">isAuthenticated</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">authenticateWithPassword</span><span class="p">(</span><span class="err">“</span><span class="n">root</span><span class="err">”</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;***********&#34;</span><span class="p">);</span>
+<span class="n">boolean</span> <span class="n">isAuthenticated</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">authenticateWithPassword</span><span class="p">(</span><span class="err">“</span><span class="n">root</span><span class="err">”</span><span class="p">,</span> <span class="s2">&#34;***********&#34;</span><span class="p">);</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">isAuthenticated</span> <span class="o">==</span> <span class="n">false</span><span class="p">)</span>
-    <span class="n">throw</span> <span class="n">new</span> <span class="n">IOException</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;Authentication failed.&#34;</span><span class="p">);</span>
+    <span class="n">throw</span> <span class="n">new</span> <span class="n">IOException</span><span class="p">(</span><span class="s2">&#34;Authentication failed.&#34;</span><span class="p">);</span>
 <span class="n">SCPClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">new</span> <span class="n">SCPClient</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
-<span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;/aa.txt&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;/bb&#34;</span><span class="p">);</span>
+<span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&#34;/aa.txt&#34;</span><span class="p">,</span> <span class="s2">&#34;/bb&#34;</span><span class="p">);</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">();</span></code></pre></div>
-
 <p>OK！发现竟然可以一次运行了。算了就不调用系统命令了，直接使用这个库把。</p>
-
 <p>client.put方法第一个参数可以是个数组，即文件名的数组。暂时没找到整个目录的方法，就自己手动获取下目录文件列表把。</p>
 
 </article>

@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-15",
         "description": "",
-        "wordCount": 42
+        "wordCount":  42 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,15 +99,10 @@
     </div>
     <h1 class="post-title">Apache Mod_Perl实现 URL Rewrite</h1>
     <p>相信apache的mod_rewrite模块都很熟悉了，今天这儿换个思路，利用mod_perl来实现下，发现竟然是如此的简单！</p>
-
 <p>首先得保证apache已经安装了mod_perl模块，具体安装配置可以看上一篇文章哦。</p>
-
 <p>修改下http.conf配置，添加一下内容：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">PerlTransHandler</span> <span class="n">MyTrans</span> <span class="c1"># MyTrans 这个是自己添加的处理模块名</span></code></pre></div>
-
 <p>具体MyTrans.pm脚本如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">package</span> <span class="n">MyTrans</span><span class="p">;</span>
 
 <span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
@@ -113,12 +112,11 @@
     <span class="n">my</span> <span class="err">$</span><span class="n">r</span> <span class="o">=</span> <span class="n">shift</span><span class="p">;</span>
     <span class="n">my</span> <span class="err">$</span><span class="n">uri</span> <span class="o">=</span> <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">;</span>
     <span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="nb">id</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="err">$</span><span class="n">url</span> <span class="o">=~</span> <span class="n">m</span><span class="o">|^/</span><span class="n">news</span><span class="o">/</span><span class="p">(</span><span class="o">.*</span><span class="p">)</span>\<span class="o">.</span><span class="n">html</span><span class="o">|</span><span class="p">);</span>
-    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;/news.php&#34;</span><span class="p">);</span>
-    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;id=$id&#34;</span><span class="p">);</span>
+    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">uri</span><span class="p">(</span><span class="s2">&#34;/news.php&#34;</span><span class="p">);</span>
+    <span class="err">$</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">(</span><span class="s2">&#34;id=$id&#34;</span><span class="p">);</span>
     <span class="k">return</span> <span class="n">Apache2</span><span class="p">::</span><span class="n">Const</span><span class="p">::</span><span class="n">DECLINED</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="mi">1</span><span class="p">;</span></code></pre></div>
-
 <p>实现就是：/news/12345.html  =&gt; /news.php?id=12345</p>
 
 </article>

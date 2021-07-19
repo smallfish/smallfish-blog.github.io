@@ -57,7 +57,7 @@
         },
         "datePublished": "2014-12-26",
         "description": "",
-        "wordCount": 141
+        "wordCount":  141 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,46 +99,32 @@
     </div>
     <h1 class="post-title">Docker Volume 属主设置</h1>
     <p>最近在测试 Volume 挂载时候有点问题，描述如下：</p>
-
 <ol>
 <li>Docker 启动时候，设置挂载目录用户为 foo</li>
 <li>宿主机源目录属主为 smallfish</li>
 </ol>
-
 <p>尝试了几种办法，比如：</p>
-
 <ol>
 <li>container 启动后执行 <code>chown</code></li>
 <li>构建镜像时候加入 <code>RUN chown foo /data</code>，这里不仅仅是这种尝试</li>
 </ol>
-
 <p>不管是在 container 或者宿主机里进行设置，都会发现要么里面属主成数字或者宿主机的属主成数字。</p>
-
 <p>原因无非是两个系统里用户 <code>uid/gid</code> 不一样，也可以很猥琐的在 container 里面 <code>adduser</code> 指定 <code>--uid</code> 参数。</p>
-
 <p>百无聊赖的放狗继续搜啊搜，竟然搜到一篇：<a href="http://container-solutions.com/2014/12/understanding-volumes-docker/">Understanding Volumes in Docker</a></p>
-
 <p>尝试了下，竟然可以：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">RUN useradd foo
 RUN mkdir /data <span class="o">&amp;&amp;</span> touch /data/a.txt
 RUN chown foo:foo /data
 VOLUME /data</code></pre></div>
-
 <p>上面要注意 <code>VOLUME</code> 一定要放在最后，然后要先建立目录，再写个文件，文件随意。</p>
-
 <p>重新构建之后，进入交互式：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash
-</span><span class="c1"></span>root@527f8eceacca:/# ls -al /data
-drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">136</span> Dec <span class="m">26</span> <span class="m">06</span>:17 .
-drwxr-xr-x <span class="m">51</span> root root  <span class="m">4096</span> Dec <span class="m">26</span> <span class="m">06</span>:17 ..
-drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">170</span> Jul  <span class="m">4</span> <span class="m">15</span>:57 xxx</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># docker run -t -i -v /home/smallfish/xxx:/data testubuntu /bin/bash</span>
+root@527f8eceacca:/# ls -al /data
+drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">136</span> Dec <span class="m">26</span> 06:17 .
+drwxr-xr-x <span class="m">51</span> root root  <span class="m">4096</span> Dec <span class="m">26</span> 06:17 ..
+drwxr-xr-x  <span class="m">1</span> foo  staff  <span class="m">170</span> Jul  <span class="m">4</span> 15:57 xxx</code></pre></div>
 <p>很惊喜的发现竟然属主变成 foo 了，我了个呵呵。。。</p>
-
 <p>官方文档：<a href="https://docs.docker.com/userguide/dockervolumes/">https://docs.docker.com/userguide/dockervolumes/</a>，其实也有提到一些描述，还是贴下之前参考那篇博客的原文：</p>
-
 <pre><code>Docker is clever enough to copy any files that exist in the image under the volume mount into the volume and set the ownership correctly. This won’t happen if you specify a host directory for the volume (so that host files aren’t accidentally overwritten).
 </code></pre>
 

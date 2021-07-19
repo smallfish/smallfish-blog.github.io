@@ -57,7 +57,7 @@
         },
         "datePublished": "2013-11-28",
         "description": "",
-        "wordCount": 187
+        "wordCount":  42 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,96 +99,73 @@
     </div>
     <h1 class="post-title">PostgreSQL ARRAY 数据类型</h1>
     <p>刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。</p>
-
 <p>官方文档参考：</p>
-
 <ul>
 <li><a href="http://www.postgresql.org/docs/9.3/static/arrays.html">8.14. Arrays</a></li>
 <li><a href="http://www.postgresql.org/docs/9.3/static/functions-array.html">9.17. Array Functions and Operators</a></li>
 </ul>
-
 <p>这里简单的介绍下和一些示例，完整的还是推荐参考官方吧。测试版本为：PostgreSQL 9.3</p>
-
 <p>比如声明integer/varchar数组：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">x</span> <span class="nb">integer</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-<span class="n">y</span> <span class="nb">varchar</span><span class="p">[]</span>
-<span class="n">z</span> <span class="nb">varchar</span> <span class="nb">ARRAY</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">x</span><span class="w"> </span><span class="nb">integer</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w">
+</span><span class="w"></span><span class="n">y</span><span class="w"> </span><span class="nb">varchar</span><span class="p">[]</span><span class="w">
+</span><span class="w"></span><span class="n">z</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="nb">ARRAY</span></code></pre></div>
 <p>后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test1</span> <span class="p">(</span>
-  <span class="n">x</span> <span class="nb">integer</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
-  <span class="n">y</span> <span class="nb">varchar</span><span class="p">[],</span>
-  <span class="n">z</span> <span class="nb">varchar</span> <span class="nb">ARRAY</span>
-<span class="p">);</span>
-
-<span class="n">smallfish</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">test1</span>
-       <span class="k">Table</span> <span class="ss">&#34;public.test1&#34;</span>
- <span class="k">Column</span> <span class="o">|</span>        <span class="k">Type</span>         <span class="o">|</span> <span class="n">Modifiers</span>
-<span class="c1">--------+---------------------+-----------
-</span><span class="c1"></span> <span class="n">x</span>      <span class="o">|</span> <span class="nb">integer</span><span class="p">[]</span>           <span class="o">|</span>
- <span class="n">y</span>      <span class="o">|</span> <span class="nb">character</span> <span class="nb">varying</span><span class="p">[]</span> <span class="o">|</span>
- <span class="n">z</span>      <span class="o">|</span> <span class="nb">character</span> <span class="nb">varying</span><span class="p">[]</span> <span class="o">|</span>
- 
-<span class="err">没骗你们吧，后两者完全一样。</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">test1</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="nb">integer</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="w">
+</span><span class="w">  </span><span class="n">y</span><span class="w"> </span><span class="nb">varchar</span><span class="p">[],</span><span class="w">
+</span><span class="w">  </span><span class="n">z</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="nb">ARRAY</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="err">\</span><span class="n">d</span><span class="w"> </span><span class="n">test1</span><span class="w">
+</span><span class="w">       </span><span class="k">Table</span><span class="w"> </span><span class="s2">&#34;public.test1&#34;</span><span class="w">
+</span><span class="w"> </span><span class="k">Column</span><span class="w"> </span><span class="o">|</span><span class="w">        </span><span class="k">Type</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="n">Modifiers</span><span class="w">
+</span><span class="w"></span><span class="c1">--------+---------------------+-----------
+</span><span class="c1"></span><span class="w"> </span><span class="n">x</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nb">integer</span><span class="p">[]</span><span class="w">           </span><span class="o">|</span><span class="w">
+</span><span class="w"> </span><span class="n">y</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nb">character</span><span class="w"> </span><span class="nb">varying</span><span class="p">[]</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"> </span><span class="n">z</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nb">character</span><span class="w"> </span><span class="nb">varying</span><span class="p">[]</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"> 
+</span><span class="w"></span><span class="err">没骗你们吧，后两者完全一样。</span></code></pre></div>
 <p>写入ARRAY字段，有一下两种方式：</p>
-
 <ul>
 <li>显示声明，比如：ARRAY[11, 22]</li>
-<li>花括号，比如：&rsquo;{aa, bb}&rsquo;</li>
+<li>花括号，比如：'{aa, bb}'</li>
 </ul>
-
 <p>插入一条记录：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test1</span> <span class="k">VALUES</span> <span class="p">(</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span> <span class="s1">&#39;{aa, bb}&#39;</span><span class="p">,</span> <span class="nb">ARRAY</span><span class="p">[</span><span class="s1">&#39;cc&#39;</span><span class="p">,</span> <span class="s1">&#39;dd&#39;</span><span class="p">]);</span></code></pre></div></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">test1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="nb">ARRAY</span><span class="p">[</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">],</span><span class="w"> </span><span class="s1">&#39;{aa, bb}&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">ARRAY</span><span class="p">[</span><span class="s1">&#39;cc&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;dd&#39;</span><span class="p">]);</span></code></pre></div>
 <p>查询一下，看看表里出来是啥样子：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">test1</span><span class="p">;</span>
-    <span class="n">x</span>    <span class="o">|</span>    <span class="n">y</span>    <span class="o">|</span>    <span class="n">z</span>
-<span class="c1">---------+---------+---------
-</span><span class="c1"></span> <span class="err">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test1</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="n">x</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="n">y</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="n">z</span><span class="w">
+</span><span class="w"></span><span class="c1">---------+---------+---------
+</span><span class="c1"></span><span class="w"> </span><span class="err">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span></code></pre></div>
 <p>是不是看上去还挺帅的样子，这里的字符串没有特殊符号，比如空格斜杠之类的，可以双引号或用E来包一下。</p>
-
 <p>ARRAY索引是从1开始的，这点稍微区别下一般语言的数组，还支持类似切片的查询哦。</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="k">FROM</span> <span class="n">test1</span> <span class="k">WHERE</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">;</span>
- <span class="n">x</span>  <span class="o">|</span>    <span class="n">y</span>    <span class="o">|</span>    <span class="n">z</span>
-<span class="c1">----+---------+---------
-</span><span class="c1"></span> <span class="mi">11</span> <span class="o">|</span> <span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span>
- 
-<span class="n">smallfish</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="k">FROM</span> <span class="n">test1</span><span class="p">;</span>
-    <span class="n">x</span>
-<span class="c1">---------
-</span><span class="c1"></span> <span class="err">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="err">}</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test1</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="n">x</span><span class="w">  </span><span class="o">|</span><span class="w">    </span><span class="n">y</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="n">z</span><span class="w">
+</span><span class="w"></span><span class="c1">----+---------+---------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span><span class="w">
+</span><span class="w"> 
+</span><span class="w"></span><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test1</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="n">x</span><span class="w">
+</span><span class="w"></span><span class="c1">---------
+</span><span class="c1"></span><span class="w"> </span><span class="err">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="err">}</span></code></pre></div>
 <p>说了读，写，还有更新的例子：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span> <span class="k">UPDATE</span> <span class="n">test1</span> <span class="k">SET</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
-<span class="n">smallfish</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">test1</span><span class="p">;</span>
-    <span class="n">x</span>     <span class="o">|</span>    <span class="n">y</span>    <span class="o">|</span>    <span class="n">z</span>
-<span class="c1">----------+---------+---------
-</span><span class="c1"></span> <span class="err">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">22</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">test1</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test1</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="n">x</span><span class="w">     </span><span class="o">|</span><span class="w">    </span><span class="n">y</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="n">z</span><span class="w">
+</span><span class="w"></span><span class="c1">----------+---------+---------
+</span><span class="c1"></span><span class="w"> </span><span class="err">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">22</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span></code></pre></div>
 <p>给数组添加新元素：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span> <span class="k">UPDATE</span> <span class="n">test1</span> <span class="k">SET</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">999</span><span class="p">;</span>
-<span class="n">smallfish</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">test1</span><span class="p">;</span>
-      <span class="n">x</span>       <span class="o">|</span>    <span class="n">y</span>    <span class="o">|</span>    <span class="n">z</span>
-<span class="c1">--------------+---------+---------
-</span><span class="c1"></span> <span class="err">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">999</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span> <span class="o">|</span> <span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">test1</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">999</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test1</span><span class="p">;</span><span class="w">
+</span><span class="w">      </span><span class="n">x</span><span class="w">       </span><span class="o">|</span><span class="w">    </span><span class="n">y</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="n">z</span><span class="w">
+</span><span class="w"></span><span class="c1">--------------+---------+---------
+</span><span class="c1"></span><span class="w"> </span><span class="err">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">999</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="err">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="n">cc</span><span class="p">,</span><span class="n">dd</span><span class="err">}</span></code></pre></div>
 <p>按照索引删除的功能似乎要写函数来解决了，官方有一个array_remove的函数，不过这个是按照value来移除的，如：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span> <span class="k">UPDATE</span> <span class="n">test1</span> <span class="k">SET</span> <span class="n">x</span> <span class="o">=</span> <span class="n">array_remove</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">22</span><span class="p">);</span>
-<span class="n">smallfish</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="n">x</span> <span class="k">FROM</span> <span class="n">test1</span><span class="p">;</span>
-     <span class="n">x</span>
-<span class="c1">-----------
-</span><span class="c1"></span> <span class="err">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">999</span><span class="err">}</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">test1</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">array_remove</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="n">smallfish</span><span class="o">=#</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test1</span><span class="p">;</span><span class="w">
+</span><span class="w">     </span><span class="n">x</span><span class="w">
+</span><span class="w"></span><span class="c1">-----------
+</span><span class="c1"></span><span class="w"> </span><span class="err">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">999</span><span class="err">}</span></code></pre></div>
 <p>这年头能用上Pg真心不容易，用的还是9.x版本。谢天谢地~</p>
 
 </article>

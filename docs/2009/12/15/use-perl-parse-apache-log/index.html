@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-12-15",
         "description": "",
-        "wordCount": 77
+        "wordCount":  77 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,24 +99,17 @@
     </div>
     <h1 class="post-title">使用 Perl 快速解析 Apache Log</h1>
     <p>功能简述</p>
-
 <p>统计出日志里一个或多个页面总共访问的次数，比如aa.jsp, bb.jsp这样页面分别多少次。</p>
-
 <p>实现简述</p>
-
 <p>Apache单个日志文件800M。</p>
-
 <p>最初程序使用Python编写，按行来统计，分别使用in(最慢)和index方法去查找，然后使用了正则匹配，程序运行时间从最初的1分50多秒优化到1分10秒左右，参考了<a href="http://www.dup2.org/node/1006">http://www.dup2.org/node/1006</a>博客中提到的gc.disable()，有了一定的提升，最终还是需要1分左右。</p>
-
-<p>然后随意用了Perl写了一个，用了最土鳖的<LOG>这样的按行分析，最后正则匹配，然后++，速度竟然在40-50秒之间，惊叹！后来经过<a href="http://shucho.org/blog/">http://shucho.org/blog/</a>指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！</p>
-
+<p>然后随意用了Perl写了一个，用了最土鳖的<!-- raw HTML omitted -->这样的按行分析，最后正则匹配，然后++，速度竟然在40-50秒之间，惊叹！后来经过<a href="http://shucho.org/blog/">http://shucho.org/blog/</a>指点，在正则部分采用了预编译，效果那是相当惊人！800M文件只用了7秒左右。卧槽！</p>
 <p>程序片段</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># --------------------------------------------------------------------</span>
 <span class="n">use</span> <span class="n">strict</span><span class="p">;</span>
 <span class="n">use</span> <span class="n">Benchmark</span><span class="p">;</span>
 
-<span class="n">my</span> <span class="err">$</span><span class="n">LOG_FILE</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;/usr/local/apache/logs/access.log&#39;</span><span class="p">;</span>
+<span class="n">my</span> <span class="err">$</span><span class="n">LOG_FILE</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/apache/logs/access.log&#39;</span><span class="p">;</span>
 <span class="c1"># 下面qr部分起了关键作用，预编译了表达式</span>
 <span class="n">my</span> <span class="nd">@EXT_LIST</span> <span class="o">=</span> <span class="nb">map</span> <span class="p">{</span><span class="n">qr</span><span class="o">/</span><span class="err">$</span><span class="n">_</span><span class="o">/</span><span class="p">}</span> <span class="n">qw</span><span class="p">{</span>
 <span class="n">aaServlet</span>
@@ -132,10 +129,10 @@
 
 <span class="k">while</span> <span class="p">(</span><span class="n">my</span> <span class="p">(</span><span class="err">$</span><span class="n">key</span><span class="p">,</span> <span class="err">$</span><span class="n">value</span><span class="p">)</span> <span class="o">=</span> <span class="n">each</span><span class="p">(</span><span class="o">%</span><span class="n">result</span><span class="p">)){</span>
     <span class="err">$</span><span class="n">key</span> <span class="o">=~</span> <span class="n">s</span><span class="o">/</span>\<span class="p">(</span>\<span class="err">?</span><span class="o">-</span><span class="n">xism</span><span class="p">:(</span><span class="o">.*</span><span class="err">?</span><span class="p">)</span>\<span class="p">)</span><span class="o">/</span><span class="err">$</span><span class="mi">1</span><span class="o">/</span><span class="n">g</span><span class="p">;</span>
-    <span class="k">print</span> <span class="sa"></span><span class="s2">&#34;$key:</span><span class="se">\t</span><span class="s2">$value</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+    <span class="nb">print</span> <span class="s2">&#34;$key:</span><span class="se">\t</span><span class="s2">$value</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="n">printf</span> <span class="sa"></span><span class="s2">&#34;** </span><span class="si">%s</span><span class="se">\n\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">timestr</span><span class="p">(</span><span class="n">timediff</span><span class="p">(</span><span class="n">new</span> <span class="n">Benchmark</span><span class="p">,</span> <span class="err">$</span><span class="n">startime</span><span class="p">));</span></code></pre></div>
+<span class="n">printf</span> <span class="s2">&#34;** </span><span class="si">%s</span><span class="se">\n\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">timestr</span><span class="p">(</span><span class="n">timediff</span><span class="p">(</span><span class="n">new</span> <span class="n">Benchmark</span><span class="p">,</span> <span class="err">$</span><span class="n">startime</span><span class="p">));</span></code></pre></div>
 
 </article>
 

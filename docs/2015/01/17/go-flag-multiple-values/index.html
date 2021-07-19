@@ -52,14 +52,14 @@
     { 
         "@context": "http://schema.org",
         "@type": "Article",
-        "headline": "Go flag/kingpin 命令行解析多个同名参数",
+        "headline": "Go flag\/kingpin 命令行解析多个同名参数",
         "author": {
             "@type": "Person",
             "name": "http://profiles.google.com/?rel=author"
         },
         "datePublished": "2015-01-17",
         "description": "",
-        "wordCount": 76
+        "wordCount":  76 
     }
     </script>
     
@@ -80,7 +80,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -104,35 +108,22 @@
     </div>
     <h1 class="post-title">Go flag/kingpin 命令行解析多个同名参数</h1>
     <p>想了半天标题应该怎么写，都不太好表达，要的效果如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">xx --name<span class="o">=</span>aa --name<span class="o">=</span>bb</code></pre></div>
-
 <p>需要解析出 <code>name</code> 参数，默认 <code>flag</code> 解析后返回的是最后一个值，即：<code>bb</code></p>
-
 <p>放出 <code>Google</code> 大法，搜出一篇早期文字：<a href="https://codereview.appspot.com/842041">Issue 842041: Flags: add user-defined flag types</a></p>
-
 <p>代码示例已经久远，直接拷贝代码运行会报错，原因是 <code>Set()</code> 应该返回 <code>error</code> 类型，而不是 <code>bool</code> 啦。</p>
-
 <p>需要注意的是，如果想实现解析数组，需要：</p>
-
 <ul>
 <li>定义类型 <code>type xx</code></li>
 <li>类型 <code>xx</code> 实现 <code>String()</code> 和 <code>Set()</code> 函数</li>
 </ul>
-
 <p>示例输出：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ ./xx --name<span class="o">=</span>xx -name<span class="o">=</span>yy
 <span class="nv">v</span> <span class="o">=</span> <span class="o">[</span>xx yy<span class="o">]</span></code></pre></div>
-
 <p>上面的示例是基于 Go 语言自带的 <code>flag</code> 模块，这个稍繁琐了点，我自己用了另外一个模块：<a href="https://github.com/alecthomas/kingpin">alecthomas/kingpin</a></p>
-
 <p>作者在源码 <a href="https://github.com/alecthomas/kingpin/blob/master/values.go#L203">values.go#L203</a>里也有类似的封装，但是只有一个：<code>Strings</code>（注意末尾多了一个 <code>s</code>）</p>
-
 <p>同样也是实现了上述函数，另外还有一个：<code>IsCumulative()</code></p>
-
 <p>话不多说，还是上个示例：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
@@ -141,14 +132,13 @@
 <span class="p">)</span>
 
 <span class="kd">var</span> <span class="p">(</span>
-        <span class="nx">names</span> <span class="p">=</span> <span class="nx">kingpin</span><span class="p">.</span><span class="nx">Flag</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">).</span><span class="nx">Strings</span><span class="p">()</span>
+        <span class="nx">names</span> <span class="p">=</span> <span class="nx">kingpin</span><span class="p">.</span><span class="nf">Flag</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">).</span><span class="nf">Strings</span><span class="p">()</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">kingpin</span><span class="p">.</span><span class="nx">Parse</span><span class="p">()</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="o">*</span><span class="nx">names</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">kingpin</span><span class="p">.</span><span class="nf">Parse</span><span class="p">()</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="o">*</span><span class="nx">names</span><span class="p">)</span>
 <span class="p">}</span></code></pre></div>
-
 <p>效果同上。</p>
 
 </article>

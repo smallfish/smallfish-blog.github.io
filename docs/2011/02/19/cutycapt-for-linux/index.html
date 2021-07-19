@@ -57,7 +57,7 @@
         },
         "datePublished": "2011-02-19",
         "description": "",
-        "wordCount": 109
+        "wordCount":  109 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,94 +99,72 @@
     </div>
     <h1 class="post-title">开源网页截屏工具 CutyCapt Linux 下安装和使用</h1>
     <p>目的是想在服务器端生成某个网页的缩略图。Google了好久，发现一个好开源东西：CutyCapt。</p>
-
 <p>系统：CentOS 5.5
 官网：<a href="http://cutycapt.sourceforge.net/">http://cutycapt.sourceforge.net/</a>
 依赖：QT <a href="http://www.qtsoftware.com/">http://www.qtsoftware.com/</a></p>
-
 <p>首次是在Debian下测试的，很顺利。换了CentOS不是太爽。具体安装和使用步骤如下：</p>
-
 <ol>
 <li>下载RPM包</li>
 </ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">(</span><span class="mi">64</span><span class="n">位</span><span class="p">)</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mf">10_4.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mf">10_4.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mf">10_4.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
 
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">(</span><span class="mi">64</span><span class="err">位</span><span class="p">)</span>
-<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
-<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
-<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">atrpms</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
-
-<span class="p">(</span><span class="mi">32</span><span class="err">位</span><span class="p">)</span>
-<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
-<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
-<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="n">_4</span><span class="o">.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span></code></pre></div>
-
-<ol>
+<span class="p">(</span><span class="mi">32</span><span class="n">位</span><span class="p">)</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mf">10_4.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mf">10_4.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ftp</span><span class="o">.</span><span class="n">riken</span><span class="o">.</span><span class="n">go</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">Linux</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">el5</span><span class="o">-</span><span class="n">i386</span><span class="o">/</span><span class="n">atrpms</span><span class="o">/</span><span class="n">testing</span><span class="o">/</span><span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mf">10_4.</span><span class="n">el5</span><span class="o">.</span><span class="n">i386</span><span class="o">.</span><span class="n">rpm</span></code></pre></div>
+<ol start="2">
 <li>安装 qt-devel 依赖包</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">yum</span> <span class="n">install</span> <span class="n">libXi</span><span class="o">-</span><span class="n">devel</span>
-<span class="n">yum</span> <span class="n">install</span> <span class="n">libXinerama</span><span class="o">-</span><span class="n">devel</span></code></pre></div></p>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">yum</span> <span class="n">install</span> <span class="n">libXi</span><span class="o">-</span><span class="n">devel</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libXinerama</span><span class="o">-</span><span class="n">devel</span></code></pre></div>
+<ol start="3">
 <li>安装 qt 相关</li>
 </ol>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
-<span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
+<span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="n">x11</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span>
 <span class="c1"># rpm -e qt-devel --nodeps --allmatches</span>
-<span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span></code></pre></div>
-
-<ol>
+<span class="n">rpm</span> <span class="o">-</span><span class="n">ivh</span> <span class="n">qt44</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="mf">4.4.3</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span></code></pre></div>
+<ol start="4">
 <li>修改 /etc/profile，最后并：source /etc/profile</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">export</span> <span class="n">QTDIR</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">qt44</span>
 <span class="n">export</span> <span class="n">QTLIB</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">qt44</span><span class="o">/</span><span class="n">lib</span>
 <span class="n">export</span> <span class="n">QTINC</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">qt44</span><span class="o">/</span><span class="n">include</span>
 <span class="n">export</span> <span class="n">LD_LIBRARY_PATH</span><span class="o">=</span><span class="err">$</span><span class="n">QTDIR</span><span class="o">/</span><span class="n">lib</span><span class="p">:</span><span class="err">$</span><span class="n">LD_LIBRARY_PATH</span>
 <span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="err">$</span><span class="n">QTDIR</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="err">$</span><span class="n">PATH</span></code></pre></div>
-
-<ol>
+<ol start="5">
 <li>安装 cutycapt</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">svn</span> <span class="n">co</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cutycapt</span><span class="o">.</span><span class="n">svn</span><span class="o">.</span><span class="n">sourceforge</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">svnroot</span><span class="o">/</span><span class="n">cutycapt</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">svn</span> <span class="n">co</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cutycapt</span><span class="o">.</span><span class="n">svn</span><span class="o">.</span><span class="n">sourceforge</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">svnroot</span><span class="o">/</span><span class="n">cutycapt</span>
 <span class="n">mv</span> <span class="n">cutycapt</span><span class="o">/</span><span class="n">CutyCapt</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span>
 <span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span>
 <span class="n">qmake</span>
-<span class="n">make</span></code></pre></div></p>
-
-<ol>
+<span class="n">make</span></code></pre></div>
+<ol start="6">
 <li>安装模拟 x-server 服务端</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">flexthinker</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">wp</span><span class="o">-</span><span class="n">content</span><span class="o">/</span><span class="n">uploads</span><span class="o">/</span><span class="mi">2009</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">txt</span>
 <span class="n">mv</span> <span class="o">./</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">txt</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">chmod</span> <span class="n">u</span><span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span></code></pre></div>
-
-<ol>
+<ol start="7">
 <li>开始欢快的截图吧</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">server</span><span class="o">-</span><span class="n">args</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;-screen 0, 1024x768x24&#34;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">CutyCapt</span> <span class="o">--</span><span class="n">url</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="mf">163.</span><span class="n">com</span> <span class="o">--</span><span class="n">out</span><span class="o">=</span><span class="mf">163.j</span><span class="n">pg</span></code></pre></div></p>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">xvfb</span><span class="o">-</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">server</span><span class="o">-</span><span class="n">args</span><span class="o">=</span><span class="s2">&#34;-screen 0, 1024x768x24&#34;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">CutyCapt</span><span class="o">/</span><span class="n">CutyCapt</span> <span class="o">--</span><span class="n">url</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="mf">.163</span><span class="o">.</span><span class="n">com</span> <span class="o">--</span><span class="n">out</span><span class="o">=</span><span class="mf">163.</span><span class="n">jpg</span></code></pre></div>
+<ol start="8">
 <li>如果看不到汉字或乱码，需要安装chinese字体</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">yum</span> <span class="n">install</span> <span class="n">fonts</span><span class="o">-</span><span class="n">chinese</span></code></pre></div></p>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">yum</span> <span class="n">install</span> <span class="n">fonts</span><span class="o">-</span><span class="n">chinese</span></code></pre></div>
+<ol start="9">
 <li>由于截屏的是整个网站的页面，只需要第一屏幕</li>
 </ol>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">convert</span> <span class="o">-</span><span class="n">crop</span> <span class="mi">1024</span><span class="n">x768</span><span class="o">+</span><span class="mi">0</span><span class="o">+</span><span class="mi">0</span> <span class="mf">163.j</span><span class="n">pg</span> <span class="mf">1632.j</span><span class="n">pg</span></code></pre></div>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">convert</span> <span class="o">-</span><span class="n">crop</span> <span class="mi">1024</span><span class="n">x768</span><span class="o">+</span><span class="mi">0</span><span class="o">+</span><span class="mi">0</span> <span class="mf">163.</span><span class="n">jpg</span> <span class="mf">1632.</span><span class="n">jpg</span></code></pre></div>
+<ol start="10">
 <li>缩小图片</li>
 </ol>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">convert</span> <span class="o">-</span><span class="n">resize</span> <span class="mi">40</span><span class="o">%</span><span class="n">x40</span><span class="o">%</span> <span class="mf">1632.j</span><span class="n">pg</span> <span class="mf">1632.j</span><span class="n">pg</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">convert</span> <span class="o">-</span><span class="n">resize</span> <span class="mi">40</span><span class="o">%</span><span class="n">x40</span><span class="o">%</span> <span class="mf">1632.</span><span class="n">jpg</span> <span class="mf">1632.</span><span class="n">jpg</span></code></pre></div>
 
 </article>
 

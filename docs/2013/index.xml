@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2013s on smallfish&#39;s blog</title>
@@ -6,11 +6,7 @@
     <description>Recent content in 2013s on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 04 Dec 2013 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://chenxiaoyu.org/2013/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 04 Dec 2013 00:00:00 +0000</lastBuildDate><atom:link href="http://chenxiaoyu.org/2013/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Test::Nginx 模块介绍</title>
       <link>http://chenxiaoyu.org/2013/12/04/test-nginx/</link>
@@ -39,10 +35,16 @@ use Test::Nginx::Socket; repeat_each(1); plan tests =&amp;gt; 2 * repeat_each() 
 官方文档参考：
  8.14. Arrays 9.17. Array Functions and Operators  这里简单的介绍下和一些示例，完整的还是推荐参考官方吧。测试版本为：PostgreSQL 9.3
 比如声明integer/varchar数组：
-x integer[5] y varchar[] z varchar ARRAY 后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。
-CREATE TABLE test1 ( x integer[5], y varchar[], z varchar ARRAY ); smallfish=# \d test1 Table &amp;#34;public.test1&amp;#34; Column | Type | Modifiers --------+---------------------+-----------  x | integer[] | y | character varying[] | z | character varying[] | 没骗你们吧，后两者完全一样。 写入ARRAY字段，有一下两种方式：
- 显示声明，比如：ARRAY[11, 22] 花括号，比如：&amp;rsquo;{aa, bb}&amp;rsquo;  插入一条记录：
-INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;#39;cc&amp;#39;, &amp;#39;dd&amp;#39;]);</description>
+xinteger[5]yvarchar[]zvarcharARRAY 后两个声明等价，懒人的话就别指明ARRAY长度了，建一个表来玩玩吧。
+CREATETABLEtest1(xinteger[5],yvarchar[],zvarcharARRAY);smallfish=#\dtest1Table&amp;#34;public.test1&amp;#34;Column|Type|Modifiers--------+---------------------+----------- x|integer[]|y|charactervarying[]|z|charactervarying[]|没骗你们吧，后两者完全一样。 写入ARRAY字段，有一下两种方式：
+ 显示声明，比如：ARRAY[11, 22] 花括号，比如：&#39;{aa, bb}&#39;  插入一条记录：
+INSERTINTOtest1VALUES(ARRAY[11,22],&amp;#39;{aa, bb}&amp;#39;,ARRAY[&amp;#39;cc&amp;#39;,&amp;#39;dd&amp;#39;]); 查询一下，看看表里出来是啥样子：
+smallfish=#SELECT*FROMtest1;x|y|z---------+---------+--------- {11,22}|{aa,bb}|{cc,dd} 是不是看上去还挺帅的样子，这里的字符串没有特殊符号，比如空格斜杠之类的，可以双引号或用E来包一下。
+ARRAY索引是从1开始的，这点稍微区别下一般语言的数组，还支持类似切片的查询哦。
+smallfish=#SELECTx[1],y,zFROMtest1WHEREx[2]&amp;gt;10;x|y|z----+---------+--------- 11|{aa,bb}|{cc,dd}smallfish=#SELECTx[1:2]FROMtest1;x--------- {11,22} 说了读，写，还有更新的例子：
+smallfish=#UPDATEtest1SETx[1]=100;smallfish=#SELECT*FROMtest1;x|y|z----------+---------+--------- {100,22}|{aa,bb}|{cc,dd} 给数组添加新元素：
+smallfish=#UPDATEtest1SETx[3]=999;smallfish=#SELECT*FROMtest1;x|y|z--------------+---------+--------- {100,22,999}|{aa,bb}|{cc,dd} 按照索引删除的功能似乎要写函数来解决了，官方有一个array_remove的函数，不过这个是按照value来移除的，如：
+smallfish=#UPDATEtest1SETx=array_remove(x,22);smallfish=#SELECTxFROMtest1;x----------- {100,999} 这年头能用上Pg真心不容易，用的还是9.x版本。谢天谢地~</description>
     </item>
     
     <item>
@@ -56,9 +58,9 @@ INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;
 首先，说到准备。今天算起来今天准备阶段做的太差了，浪费了太多时间和体力。
  应该提前半小时到达赛场，换好和存放好衣服，然后做一些热身和拉伸动作，今天完全没热身就上场了。 马拉松由于人数众多，起跑阶段尽量选择道路边缘，可以避免被人来回挤和超出，影响自己。当然要注意路道情况，别崴脚什么的。 上下坡的速度调整，下坡虽然感觉快和轻松，其实是相对的，收不住的话，上坡会发觉很累。 轻装上阵，能不带的尽量不带，建议就带一个电子表，能看时间即可。手机啊，GPS啊什么的，虽然方便，跑到最后发现这些个玩意都是累赘，尤其是长距离跑。 小装备要准备充足，比如：创可贴（避免x处摩擦）、凡士林（同摩擦）、腰包（装点小东西）、面纸（防止中途意外xx）、吃喝能量（运动饮料，巧克力之类）补充。 合理安排跑步和休息计划，比如：大致距离的时速，休息时间等。 跑步节奏，身体和呼吸的调整。千万要稳住，不要和身边的人做比较，自己的身体只有自己知道。跑不动咱就快走来放松一下。  说了这么多，基本都是今天碰到的问题。有兴趣的朋友可以参考 @跑步指南 的一些微博，里面有备战马拉松的一些计划，写的相当不错。
 再说一下，关于跑步我自己的一些感受吧。
- 装备
- 鞋子，最最重要了。平时公路跑或者跑圈，推荐缓冲避震型的跑鞋。Asics有好多入门级的跑鞋，避免对膝盖造成过大的冲击，膝盖歇了，就可以回家躺着了。。。 衣服，速干衣，主要也是为了不吸汗。不要选择太紧或者太松的衣服，长距离时候要么摩擦太大，要么紧身勒的很累（光好看没P用啊）。 其他配件，袜子和护膝什么的。袜子选择稍微厚一些的运动袜，护膝不要买太紧，以免影响腿部肌肉和血液循环。  计划
- 跑步间隔，比如跑一休一，这个根据身体自己和运动程度来调节，一周跑个3-4次。“科学证明”跑步间隔不宜超过3天，碰到长假什么的，自己安排个短距离的跑步，找找状态。 运动量，初期可以选择5-10km的匀速跑。 LSD，这个就跟自己的目标有关，每周尽量来一次“长距离慢跑”，速度慢于平时，追求持久。距离大于平时距离的50%左右，初期不能太大，别翻倍。。。。 贵在坚持啊。。。。。三天打鱼两天晒网，有可能前面白跑了。 变速跑，如果只是一味的匀速跑，距离是远了。但是你有可能只是长距离慢跑者。。   半马跑完了，突然对两月后的厦门全马忧心忡忡啊。。亚历山大，看来要安排科学的计划了。</description>
+  装备
+ 鞋子，最最重要了。平时公路跑或者跑圈，推荐缓冲避震型的跑鞋。Asics有好多入门级的跑鞋，避免对膝盖造成过大的冲击，膝盖歇了，就可以回家躺着了。。。 衣服，速干衣，主要也是为了不吸汗。不要选择太紧或者太松的衣服，长距离时候要么摩擦太大，要么紧身勒的很累（光好看没P用啊）。 其他配件，袜子和护膝什么的。袜子选择稍微厚一些的运动袜，护膝不要买太紧，以免影响腿部肌肉和血液循环。    计划
+ 跑步间隔，比如跑一休一，这个根据身体自己和运动程度来调节，一周跑个3-4次。“科学证明”跑步间隔不宜超过3天，碰到长假什么的，自己安排个短距离的跑步，找找状态。 运动量，初期可以选择5-10km的匀速跑。 LSD，这个就跟自己的目标有关，每周尽量来一次“长距离慢跑”，速度慢于平时，追求持久。距离大于平时距离的50%左右，初期不能太大，别翻倍。。。。 贵在坚持啊。。。。。三天打鱼两天晒网，有可能前面白跑了。 变速跑，如果只是一味的匀速跑，距离是远了。但是你有可能只是长距离慢跑者。。    半马跑完了，突然对两月后的厦门全马忧心忡忡啊。。亚历山大，看来要安排科学的计划了。</description>
     </item>
     
     <item>
@@ -72,7 +74,7 @@ INSERT INTO test1 VALUES (ARRAY[11, 22], &amp;#39;{aa, bb}&amp;#39;, ARRAY[&amp;
 个人推荐nose，简单的话doctest也已经足够了。
 首先：
  代码要易于测试，代码写完对应的测试应该配套跟上。 测试要简单，轻便。  先说最简单的doctest吧，顾名思义，doctest就是在文档（docstring）里完成测试。看以下例子（/tmp/1.py）：
-def add(a, b): &amp;#34;&amp;#34;&amp;#34; &amp;gt;&amp;gt;&amp;gt; add(10, 20) 30 &amp;#34;&amp;#34;&amp;#34; return a + b if __name__ == &amp;#39;__main__&amp;#39;: import doctest doctest.testmod() 可以看出doctest是不是很简单？是不是想起了普通解释器（&amp;gt;&amp;gt;&amp;gt;），运行一下测试（注意-v选项）：
+def add(a, b): &amp;#34;&amp;#34;&amp;#34; &amp;gt;&amp;gt;&amp;gt; add(10, 20) 30 &amp;#34;&amp;#34;&amp;#34; return a + b if __name__ == &amp;#39;__main__&amp;#39;: import doctest doctest.testmod() 可以看出doctest是不是很简单？是不是想起了普通解释器（&amp;raquo;&amp;gt;），运行一下测试（注意-v选项）：
 smallfish@debian:~$ python /tmp/1.py -v Trying: add(10, 20) Expecting: 30 ok 1 items had no tests: __main__ 1 items passed all tests: 1 tests in __main__.add 1 tests in 2 items. 1 passed and 0 failed. Test passed. 作为简单的模块或者工具，main里实现测试已经足够了。但是稍大一些工程或应用，doctest太多的话，看上去会觉得有点臃肿。
 下面介绍下nose，偷偷的说下，nose是支持doctest、unittest测试的，所以嘛。先安装一下：
 smallfish@debian:~$ pip install nose 继续跑一下上面的例子：</description>
@@ -107,7 +109,7 @@ $ python -c &amp;#34;import pstats; p=pstats.Stats(&amp;#39;test1.out&amp;#39;);
 仓库地址：https://github.com/smallfish/rabbitmq-http
 如何安装依赖、编译和启动这些操作，这里就不再赘述，直接参考项目里的 README.md
 目前封装的接口大致分为一下几类：
- Exchange  新建 删除  Queue  新建 删除 绑定/取消绑定 读取消息  Message  发布新消息   上面的新建、删除、发送或者读取的行为对应 HTTP 请求中的几种方法，比如：POST、DELETE、GET等。
+ Exchange  新建 删除   Queue  新建 删除 绑定/取消绑定 读取消息   Message  发布新消息    上面的新建、删除、发送或者读取的行为对应 HTTP 请求中的几种方法，比如：POST、DELETE、GET等。
 整个 API 的返回值（HTTP状态码）有一下三类：
  200，操作 OK，返回的 Body 体中有简单描述字符。 405，不支持的请求方式，比如接口尚未实现。 500，服务器端错误，Body 体中会有错误的描述。比如队列不存在、删除错误等。  好了，还是来一点实际的例子吧。完全是 curl 操作：</description>
     </item>

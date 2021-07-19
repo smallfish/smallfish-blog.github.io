@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-11-16",
         "description": "",
-        "wordCount": 657
+        "wordCount":  657 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,38 +99,29 @@
     </div>
     <h1 class="post-title">MySQL Query Profile 简单使用</h1>
     <p>MySQL Query Profile MySQL 5.0.37 以上开始支持 MySQL Query Profiler, 可以查询到此 SQL 会执行多少时间, 并看出 CPU/Memory 使用量, 执行过程中 System lock, Table lock 花多少时间等等.</p>
-
 <p>详细可以参见官方文档：<a href="http://dev.mysql.com/tech-resources/articles/using-new-query-profiler.html">http://dev.mysql.com/tech-resources/articles/using-new-query-profiler.html</a></p>
-
 <p>启动</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">profiling</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
 <span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="n">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
-
 <p>测试查询</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">select</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">client</span> <span class="nn">where</span> <span class="nn">broker_id</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">select</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">client</span> <span class="n">where</span> <span class="n">broker_id</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
 <span class="o">+----------+</span>
 <span class="o">|</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">|</span>
 <span class="o">+----------+</span>
 <span class="o">|</span>      <span class="mi">200</span> <span class="o">|</span>
 <span class="o">+----------+</span>
 <span class="mi">1</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
-
 <p>查看profiles</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">profiles</span><span class="p">;</span>
 <span class="o">+----------+------------+-----------------------------------------------+</span>
 <span class="o">|</span> <span class="n">Query_ID</span> <span class="o">|</span> <span class="n">Duration</span>   <span class="o">|</span> <span class="n">Query</span>                                         <span class="o">|</span>
 <span class="o">+----------+------------+-----------------------------------------------+</span>
 <span class="o">|</span>        <span class="mi">0</span> <span class="o">|</span> <span class="mf">0.00007300</span> <span class="o">|</span> <span class="nb">set</span> <span class="n">profiling</span><span class="o">=</span><span class="mi">1</span>                               <span class="o">|</span>
-<span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span> <span class="mf">0.00044700</span> <span class="o">|</span> <span class="n">select</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">client</span> <span class="nn">where</span> <span class="nn">broker_id</span><span class="o">=</span><span class="mi">2</span> <span class="o">|</span>
+<span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span> <span class="mf">0.00044700</span> <span class="o">|</span> <span class="n">select</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">client</span> <span class="n">where</span> <span class="n">broker_id</span><span class="o">=</span><span class="mi">2</span> <span class="o">|</span>
 <span class="o">+----------+------------+-----------------------------------------------+</span>
 <span class="mi">2</span> <span class="n">rows</span> <span class="ow">in</span> <span class="nb">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
-
 <p>查看单条profile</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">profile</span> <span class="k">for</span> <span class="n">query</span> <span class="mi">1</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">profile</span> <span class="k">for</span> <span class="n">query</span> <span class="mi">1</span><span class="p">;</span>
 <span class="o">+--------------------+------------+</span>
 <span class="o">|</span> <span class="n">Status</span>             <span class="o">|</span> <span class="n">Duration</span>   <span class="o">|</span>
 <span class="o">+--------------------+------------+</span>
@@ -157,7 +152,7 @@
 <span class="o">|</span> <span class="n">Query_ID</span> <span class="o">|</span> <span class="n">Duration</span>   <span class="o">|</span> <span class="n">Query</span>                                         <span class="o">|</span>
 <span class="o">+----------+------------+-----------------------------------------------+</span>
 <span class="o">|</span>        <span class="mi">0</span> <span class="o">|</span> <span class="mf">0.00007300</span> <span class="o">|</span> <span class="nb">set</span> <span class="n">profiling</span><span class="o">=</span><span class="mi">1</span>                               <span class="o">|</span>
-<span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span> <span class="mf">0.00044700</span> <span class="o">|</span> <span class="n">select</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">client</span> <span class="nn">where</span> <span class="nn">broker_id</span><span class="o">=</span><span class="mi">2</span> <span class="o">|</span>
+<span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span> <span class="mf">0.00044700</span> <span class="o">|</span> <span class="n">select</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">client</span> <span class="n">where</span> <span class="n">broker_id</span><span class="o">=</span><span class="mi">2</span> <span class="o">|</span>
 <span class="o">|</span>        <span class="mi">2</span> <span class="o">|</span> <span class="mf">0.00003400</span> <span class="o">|</span> <span class="nb">set</span> <span class="n">profiling</span><span class="o">=</span><span class="mi">0</span>                               <span class="o">|</span>
 <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span> <span class="mf">0.00007400</span> <span class="o">|</span> <span class="nb">set</span> <span class="n">profiling</span><span class="o">=</span><span class="mi">1</span>                               <span class="o">|</span>
 <span class="o">|</span>        <span class="mi">4</span> <span class="o">|</span> <span class="mf">0.63789700</span> <span class="o">|</span> <span class="n">alter</span> <span class="n">table</span> <span class="n">t</span> <span class="n">engine</span><span class="o">=</span><span class="n">myisam</span>                   <span class="o">|</span>
@@ -184,11 +179,9 @@
 <span class="o">|</span> <span class="n">query</span> <span class="n">end</span>            <span class="o">|</span> <span class="mf">0.00000700</span> <span class="o">|</span>
 <span class="o">|</span> <span class="n">freeing</span> <span class="n">items</span>        <span class="o">|</span> <span class="mf">0.00001300</span> <span class="o">|</span>
 <span class="o">+----------------------+------------+</span>
-<span class="mi">14</span> <span class="n">rows</span> <span class="ow">in</span> <span class="nb">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div></p>
-
+<span class="mi">14</span> <span class="n">rows</span> <span class="ow">in</span> <span class="nb">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
 <p>查看cpu资源等信息</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">profile</span> <span class="n">cpu</span> <span class="k">for</span> <span class="n">query</span> <span class="mi">4</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">profile</span> <span class="n">cpu</span> <span class="k">for</span> <span class="n">query</span> <span class="mi">4</span><span class="p">;</span>
 <span class="o">+----------------------+------------+------------+------------+</span>
 <span class="o">|</span> <span class="n">Status</span>               <span class="o">|</span> <span class="n">Duration</span>   <span class="o">|</span> <span class="n">CPU_user</span>   <span class="o">|</span> <span class="n">CPU_system</span> <span class="o">|</span>
 <span class="o">+----------------------+------------+------------+------------+</span>
@@ -207,10 +200,8 @@
 <span class="o">|</span> <span class="n">query</span> <span class="n">end</span>            <span class="o">|</span> <span class="mf">0.00000700</span> <span class="o">|</span> <span class="mf">0.00000000</span> <span class="o">|</span> <span class="mf">0.00000000</span> <span class="o">|</span>
 <span class="o">|</span> <span class="n">freeing</span> <span class="n">items</span>        <span class="o">|</span> <span class="mf">0.00001300</span> <span class="o">|</span> <span class="mf">0.00000000</span> <span class="o">|</span> <span class="mf">0.00000000</span> <span class="o">|</span>
 <span class="o">+----------------------+------------+------------+------------+</span>
-<span class="mi">14</span> <span class="n">rows</span> <span class="ow">in</span> <span class="nb">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div></p>
-
+<span class="mi">14</span> <span class="n">rows</span> <span class="ow">in</span> <span class="nb">set</span> <span class="p">(</span><span class="mf">0.00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
 <p>其他属性列表</p>
-
 <ul>
 <li>ALL - displays all information</li>
 <li>BLOCK IO - displays counts for block input and output operations</li>
@@ -221,13 +212,9 @@
 <li>SOURCE - displays the names of functions from the source code, together with the name and line number of the file in which the function occurs</li>
 <li>SWAPS - displays swap counts</li>
 </ul>
-
 <p>设定profiling保存size</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">variables</span> <span class="n">where</span> <span class="n">variable_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;profiling_history_size&#39;</span><span class="p">;</span> <span class="c1"># 默认15条</span></code></pre></div></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">show</span> <span class="n">variables</span> <span class="n">where</span> <span class="n">variable_name</span><span class="o">=</span><span class="s1">&#39;profiling_history_size&#39;</span><span class="p">;</span> <span class="c1"># 默认15条</span></code></pre></div>
 <p>关闭</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mysql</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">profiling</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span></code></pre></div>
 
 </article>

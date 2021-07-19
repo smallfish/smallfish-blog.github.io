@@ -50,14 +50,14 @@
     { 
         "@context": "http://schema.org",
         "@type": "Article",
-        "headline": "Nginx 启动/重启脚本笔记",
+        "headline": "Nginx 启动\/重启脚本笔记",
         "author": {
             "@type": "Person",
             "name": "http://profiles.google.com/?rel=author"
         },
         "datePublished": "2010-03-27",
         "description": "",
-        "wordCount": 288
+        "wordCount":  287 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,23 +99,16 @@
     </div>
     <h1 class="post-title">Nginx 启动/重启脚本笔记</h1>
     <p>Nginx本身可以通过</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">kill</span> <span class="o">-</span><span class="n">HUP</span> <span class="sb">`cat /usr/local/nginx/logs/nginx.pid`</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">kill</span> <span class="o">-</span><span class="n">HUP</span> <span class="err">`</span><span class="n">cat</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">pid</span><span class="err">`</span></code></pre></div>
 <p>进行平滑重启的，可以通过ps进程查看一下。效果还是挺不错的。</p>
-
 <p>这里介绍的是另外一种方式service，适合RHEL/CentOS系列。</p>
-
 <ol>
 <li>kill nginx进程</li>
 </ol>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">kill</span> <span class="sb">`cat /usr/local/nginx/logs/nginx.pid`</span></code></pre></div>
-
-<ol>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">kill</span> <span class="err">`</span><span class="n">cat</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">.</span><span class="n">pid</span><span class="err">`</span></code></pre></div>
+<ol start="2">
 <li>建立 /etc/init.d/nginx 文件</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/bin/sh</span>
 <span class="c1">#</span>
 <span class="c1"># nginx - this script starts and stops the nginx daemin</span>
@@ -130,19 +127,19 @@
 <span class="o">.</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">network</span>
 
 <span class="c1"># Check that networking is up.</span>
-<span class="p">[</span> <span class="sa"></span><span class="s2">&#34;$NETWORKING&#34;</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;no&#34;</span> <span class="p">]</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="nb">exit</span> <span class="mi">0</span>
+<span class="p">[</span> <span class="s2">&#34;$NETWORKING&#34;</span> <span class="o">=</span> <span class="s2">&#34;no&#34;</span> <span class="p">]</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">exit</span> <span class="mi">0</span>
 
-<span class="n">nginx</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;/usr/local/nginx/sbin/nginx&#34;</span>
+<span class="n">nginx</span><span class="o">=</span><span class="s2">&#34;/usr/local/nginx/sbin/nginx&#34;</span>
 <span class="n">prog</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">basename</span> <span class="err">$</span><span class="n">nginx</span><span class="p">)</span>
 
-<span class="n">NGINX_CONF_FILE</span><span class="o">=</span><span class="sa"></span><span class="s2">&#34;/usr/local/nginx/conf/nginx.conf&#34;</span>
+<span class="n">NGINX_CONF_FILE</span><span class="o">=</span><span class="s2">&#34;/usr/local/nginx/conf/nginx.conf&#34;</span>
 
 <span class="n">lockfile</span><span class="o">=/</span><span class="n">var</span><span class="o">/</span><span class="n">lock</span><span class="o">/</span><span class="n">subsys</span><span class="o">/</span><span class="n">nginx</span>
 
 <span class="n">start</span><span class="p">()</span> <span class="p">{</span>
-    <span class="p">[</span> <span class="o">-</span><span class="n">x</span> <span class="err">$</span><span class="n">nginx</span> <span class="p">]</span> <span class="o">||</span> <span class="nb">exit</span> <span class="mi">5</span>
-    <span class="p">[</span> <span class="o">-</span><span class="n">f</span> <span class="err">$</span><span class="n">NGINX_CONF_FILE</span> <span class="p">]</span> <span class="o">||</span> <span class="nb">exit</span> <span class="mi">6</span>
-    <span class="n">echo</span> <span class="o">-</span><span class="n">n</span> <span class="err">$</span><span class="sa"></span><span class="s2">&#34;Starting $prog: &#34;</span>
+    <span class="p">[</span> <span class="o">-</span><span class="n">x</span> <span class="err">$</span><span class="n">nginx</span> <span class="p">]</span> <span class="o">||</span> <span class="n">exit</span> <span class="mi">5</span>
+    <span class="p">[</span> <span class="o">-</span><span class="n">f</span> <span class="err">$</span><span class="n">NGINX_CONF_FILE</span> <span class="p">]</span> <span class="o">||</span> <span class="n">exit</span> <span class="mi">6</span>
+    <span class="n">echo</span> <span class="o">-</span><span class="n">n</span> <span class="err">$</span><span class="s2">&#34;Starting $prog: &#34;</span>
     <span class="n">daemon</span> <span class="err">$</span><span class="n">nginx</span> <span class="o">-</span><span class="n">c</span> <span class="err">$</span><span class="n">NGINX_CONF_FILE</span>
     <span class="n">retval</span><span class="o">=</span><span class="err">$?</span>
     <span class="n">echo</span>
@@ -151,7 +148,7 @@
 <span class="p">}</span>
 
 <span class="n">stop</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">echo</span> <span class="o">-</span><span class="n">n</span> <span class="err">$</span><span class="sa"></span><span class="s2">&#34;Stopping $prog: &#34;</span>
+    <span class="n">echo</span> <span class="o">-</span><span class="n">n</span> <span class="err">$</span><span class="s2">&#34;Stopping $prog: &#34;</span>
     <span class="n">killproc</span> <span class="err">$</span><span class="n">prog</span> <span class="o">-</span><span class="n">QUIT</span>
     <span class="n">retval</span><span class="o">=</span><span class="err">$?</span>
     <span class="n">echo</span>
@@ -165,9 +162,9 @@
     <span class="n">start</span>
 <span class="p">}</span>
 
-<span class="nb">reload</span><span class="p">()</span> <span class="p">{</span>
+<span class="n">reload</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">configtest</span> <span class="o">||</span> <span class="k">return</span> <span class="err">$?</span>
-    <span class="n">echo</span> <span class="o">-</span><span class="n">n</span> <span class="err">$</span><span class="sa"></span><span class="s2">&#34;Reloading $prog: &#34;</span>
+    <span class="n">echo</span> <span class="o">-</span><span class="n">n</span> <span class="err">$</span><span class="s2">&#34;Reloading $prog: &#34;</span>
     <span class="n">killproc</span> <span class="err">$</span><span class="n">nginx</span> <span class="o">-</span><span class="n">HUP</span>
     <span class="n">RETVAL</span><span class="o">=</span><span class="err">$?</span>
     <span class="n">echo</span>
@@ -189,64 +186,58 @@
     <span class="n">rh_status</span> <span class="o">&gt;/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="n">amp</span><span class="p">;</span><span class="mi">1</span>
 <span class="p">}</span>
 
-<span class="n">case</span> <span class="sa"></span><span class="s2">&#34;$1&#34;</span> <span class="ow">in</span>
+<span class="n">case</span> <span class="s2">&#34;$1&#34;</span> <span class="ow">in</span>
     <span class="n">start</span><span class="p">)</span>
-        <span class="n">rh_status_q</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="nb">exit</span> <span class="mi">0</span>
+        <span class="n">rh_status_q</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">exit</span> <span class="mi">0</span>
         <span class="err">$</span><span class="mi">1</span>
         <span class="p">;;</span>
     <span class="n">stop</span><span class="p">)</span>
-        <span class="n">rh_status_q</span> <span class="o">||</span> <span class="nb">exit</span> <span class="mi">0</span>
+        <span class="n">rh_status_q</span> <span class="o">||</span> <span class="n">exit</span> <span class="mi">0</span>
         <span class="err">$</span><span class="mi">1</span>
         <span class="p">;;</span>
     <span class="n">restart</span><span class="o">|</span><span class="n">configtest</span><span class="p">)</span>
         <span class="err">$</span><span class="mi">1</span>
         <span class="p">;;</span>
-    <span class="nb">reload</span><span class="p">)</span>
-        <span class="n">rh_status_q</span> <span class="o">||</span> <span class="nb">exit</span> <span class="mi">7</span>
+    <span class="n">reload</span><span class="p">)</span>
+        <span class="n">rh_status_q</span> <span class="o">||</span> <span class="n">exit</span> <span class="mi">7</span>
         <span class="err">$</span><span class="mi">1</span>
         <span class="p">;;</span>
-    <span class="n">force</span><span class="o">-</span><span class="nb">reload</span><span class="p">)</span>
+    <span class="n">force</span><span class="o">-</span><span class="n">reload</span><span class="p">)</span>
         <span class="n">force_reload</span>
         <span class="p">;;</span>
     <span class="n">status</span><span class="p">)</span>
         <span class="n">rh_status</span>
         <span class="p">;;</span>
     <span class="n">condrestart</span><span class="o">|</span><span class="k">try</span><span class="o">-</span><span class="n">restart</span><span class="p">)</span>
-        <span class="n">rh_status_q</span> <span class="o">||</span> <span class="nb">exit</span> <span class="mi">0</span>
+        <span class="n">rh_status_q</span> <span class="o">||</span> <span class="n">exit</span> <span class="mi">0</span>
             <span class="p">;;</span>
     <span class="o">*</span><span class="p">)</span>
-        <span class="n">echo</span> <span class="err">$</span><span class="sa"></span><span class="s2">&#34;Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}&#34;</span>
-        <span class="nb">exit</span> <span class="mi">2</span>
+        <span class="n">echo</span> <span class="err">$</span><span class="s2">&#34;Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}&#34;</span>
+        <span class="n">exit</span> <span class="mi">2</span>
 <span class="n">esac</span></code></pre></div>
-
-<ol>
+<ol start="3">
 <li>设置脚本为可执行</li>
 </ol>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span></code></pre></div></p>
-
-<p>4.</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span></code></pre></div>
+<ol start="4">
+<li></li>
+</ol>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">chkconfig</span> <span class="n">nginx</span> <span class="n">on</span></code></pre></div>
-
-<ol>
+<ol start="5">
 <li>检查下</li>
 </ol>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">chkconfig</span> <span class="o">--</span><span class="nb">list</span> <span class="n">nginx</span>
 <span class="n">nginx</span>           <span class="mi">0</span><span class="p">:</span><span class="n">off</span>   <span class="mi">1</span><span class="p">:</span><span class="n">off</span>   <span class="mi">2</span><span class="p">:</span><span class="n">on</span>    <span class="mi">3</span><span class="p">:</span><span class="n">on</span>    <span class="mi">4</span><span class="p">:</span><span class="n">on</span>    <span class="mi">5</span><span class="p">:</span><span class="n">on</span>    <span class="mi">6</span><span class="p">:</span><span class="n">off</span></code></pre></div>
-
 <p>完成咯~可以尝试下面方式启动或者重启</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">service</span> <span class="n">nginx</span> <span class="n">start</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">service</span> <span class="n">nginx</span> <span class="n">start</span>
 <span class="n">service</span> <span class="n">nginx</span> <span class="n">stop</span>
 <span class="n">service</span> <span class="n">nginx</span> <span class="n">restart</span>
-<span class="n">service</span> <span class="n">nginx</span> <span class="nb">reload</span>
+<span class="n">service</span> <span class="n">nginx</span> <span class="n">reload</span>
 
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="n">start</span>
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="n">stop</span>
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="n">restart</span>
-<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="nb">reload</span></code></pre></div></p>
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">nginx</span> <span class="n">reload</span></code></pre></div>
 
 </article>
 

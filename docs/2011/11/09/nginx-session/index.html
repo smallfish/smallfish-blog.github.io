@@ -57,7 +57,7 @@
         },
         "datePublished": "2011-11-09",
         "description": "",
-        "wordCount": 66
+        "wordCount":  66 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,37 +99,26 @@
     </div>
     <h1 class="post-title">Nginx Session 模块</h1>
     <p>上一篇<a href="http://chenxiaoyu.org/2011/10/30/nginx-modules.html">《Nginx第三方模块》</a>涉及了数据库、Memcached以及Lua的扩展，但是相对于Web开发是不是还缺点什么呢？答案是回话（Session）模块。</p>
-
 <p>这里还是需要感谢一下<a href="http://weibo.com/agentzh">@agentzh</a>，已经封装好了encrypted-session模块。模块依赖ngx_devel_kit包。模块地址如下：</p>
-
 <ul>
 <li><a href="https://github.com/simpl/ngx_devel_kit">ngx_devel_kit</a></li>
 <li><a href="https://github.com/agentzh/encrypted-session-nginx-module">encrypted-session-nginx-module</a></li>
 </ul>
-
 <p>编译很简单，类似如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./configure --prefix<span class="o">=</span>/opt/nginx <span class="se">\
 </span><span class="se"></span>    --add-module<span class="o">=</span>../ngx_devel_kit <span class="se">\
 </span><span class="se"></span>    --add-module<span class="o">=</span>../encrypted-session-nginx-module</code></pre></div>
-
 <p>重新编译Nginx二进制，Nginx需要quit再启动。而普通配置更新则reload即可：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">1</span>. <span class="nb">kill</span> -HUP <span class="sb">`</span>cat /path/nginx/logs/nginx.pid<span class="sb">`</span>
-<span class="m">2</span>. /path/nginx/sbin/nginx -s reload</code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">1. <span class="nb">kill</span> -HUP <span class="sb">`</span>cat /path/nginx/logs/nginx.pid<span class="sb">`</span>
+2. /path/nginx/sbin/nginx -s reload</code></pre></div>
 <p>在测试之前，需要配置encrypted_session_key（长度32位）和encrypted_session_iv（长度16位）。</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">encrypted_session_key <span class="s2">&#34;abcdefghijklmnopqrstuvwxyz123456&#34;</span><span class="p">;</span>
 encrypted_session_iv <span class="s2">&#34;1234567812345678&#34;</span><span class="p">;</span>
-encrypted_session_expires <span class="m">5</span><span class="p">;</span> # 默认过期时间是1d（一天）</code></pre></div>
-
+encrypted_session_expires 5<span class="p">;</span> <span class="c1"># 默认过期时间是1d（一天）</span></code></pre></div>
 <p>话不到多说，直接来读写示例：</p>
-
 <ul>
 <li>写入session，测试session名为name，值是smallfish。</li>
 </ul>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /session-write <span class="o">{</span>
     <span class="nb">set</span> <span class="nv">$name</span> <span class="s1">&#39;smallfish&#39;</span><span class="p">;</span>
     set_encrypt_session <span class="nv">$session_name</span> <span class="nv">$name</span><span class="p">;</span>
@@ -133,11 +126,9 @@ encrypted_session_expires <span class="m">5</span><span class="p">;</span> # 默
     add_header <span class="s2">&#34;Set-Cookie&#34;</span> <span class="s2">&#34;name=</span><span class="nv">$session_name</span><span class="s2">&#34;</span><span class="p">;</span>
     <span class="nb">echo</span> <span class="s2">&#34;write name: </span><span class="nv">$session_name</span><span class="s2">&#34;</span><span class="p">;</span>
 <span class="o">}</span></code></pre></div>
-
 <ul>
 <li>读取session，Nginx读取Cookie方式为：$cookie_xxx。xxx为cookie的名称。</li>
 </ul>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">location /session-read <span class="o">{</span>
     set_decode_base32 <span class="nv">$session_name</span> <span class="nv">$cookie_name</span><span class="p">;</span>
     set_decrypt_session <span class="nv">$name</span> <span class="nv">$session_name</span><span class="p">;</span>

@@ -57,7 +57,7 @@
         },
         "datePublished": "2009-11-10",
         "description": "",
-        "wordCount": 80
+        "wordCount":  80 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,35 +99,29 @@
     </div>
     <h1 class="post-title">Python MySQLdb 查询返回字典结构</h1>
     <p>MySQLdb默认查询结果都是返回tuple，输出时候不是很方便，必须按照0，1这样读取，无意中在网上找到简单的修改方法，就是传递一个cursors.DictCursor就行。</p>
-
 <p>默认程序：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">MySQLdb</span>
-<span class="n">db</span>  <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="n">db</span>  <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
 <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-<span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;select * from user&#39;</span><span class="p">)</span>
+<span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;select * from user&#39;</span><span class="p">)</span>
 <span class="n">rs</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
-<span class="k">print</span> <span class="n">rs</span>
+<span class="nb">print</span> <span class="n">rs</span>
 <span class="c1"># 返回类似如下</span>
 <span class="c1"># ((1000L, 0L), (2000L, 0L), (3000L, 0L))</span></code></pre></div>
-
 <p>修改后：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">MySQLdb</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">MySQLdb</span>
 <span class="kn">import</span> <span class="nn">MySQLdb.cursors</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
                      <span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">DictCursor</span><span class="p">)</span>
 <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-<span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;select * from user&#39;</span><span class="p">)</span>
+<span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;select * from user&#39;</span><span class="p">)</span>
 <span class="n">rs</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
-<span class="k">print</span> <span class="n">rs</span>
+<span class="nb">print</span> <span class="n">rs</span>
 <span class="c1"># 返回类似如下</span>
-<span class="c1"># ({&#39;age&#39;: 0L, &#39;num&#39;: 1000L}, {&#39;age&#39;: 0L, &#39;num&#39;: 2000L}, {&#39;age&#39;: 0L, &#39;num&#39;: 3000L})</span></code></pre></div></p>
-
+<span class="c1"># ({&#39;age&#39;: 0L, &#39;num&#39;: 1000L}, {&#39;age&#39;: 0L, &#39;num&#39;: 2000L}, {&#39;age&#39;: 0L, &#39;num&#39;: 3000L})</span></code></pre></div>
 <p>或者也可以用下面替换connect和cursor部分</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">db</span>  <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
-<span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">(</span><span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">DictCursor</span><span class="p">)</span></code></pre></div></p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">db</span>  <span class="o">=</span> <span class="n">MySQLdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">(</span><span class="n">cursorclass</span><span class="o">=</span><span class="n">MySQLdb</span><span class="o">.</span><span class="n">cursors</span><span class="o">.</span><span class="n">DictCursor</span><span class="p">)</span></code></pre></div>
 
 </article>
 

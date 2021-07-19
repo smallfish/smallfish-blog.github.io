@@ -57,7 +57,7 @@
         },
         "datePublished": "2010-02-26",
         "description": "",
-        "wordCount": 55
+        "wordCount":  55 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,11 +99,8 @@
     </div>
     <h1 class="post-title">PostgreSQL UUID 函数</h1>
     <p>测试环境：PostgreSQL 8.4</p>
-
 <p>默认PostgreSQL是木有UUID函数可使用，而不像MySQL提供uuid()函数，不过在contrib里有，只需要导入一下uuid-ossp.sql即可。（PS：注意权限问题，要Pg可读改文件。）</p>
-
 <p>导入很简单，下面是win下面测试，其他平台类似该操作：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">D</span><span class="p">:</span>\<span class="o">&gt;</span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">f</span> <span class="n">D</span><span class="p">:</span>\<span class="n">PostgreSQL</span>\<span class="mf">8.4</span>\<span class="n">share</span>\<span class="n">contrib</span>\<span class="n">uuid</span><span class="o">-</span><span class="n">ossp</span><span class="o">.</span><span class="n">sql</span>
 <span class="n">Password</span> <span class="k">for</span> <span class="n">user</span> <span class="n">postgres</span><span class="p">:</span>
 <span class="n">SET</span>
@@ -113,10 +114,8 @@
 <span class="n">CREATE</span> <span class="n">FUNCTION</span>
 <span class="n">CREATE</span> <span class="n">FUNCTION</span>
 <span class="n">CREATE</span> <span class="n">FUNCTION</span></code></pre></div>
-
 <p>进入psql，执行：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># select uuid_generate_v1();</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># select uuid_generate_v1();</span>
            <span class="n">uuid_generate_v1</span>
 <span class="o">--------------------------------------</span>
  <span class="mi">86811</span><span class="n">bd4</span><span class="o">-</span><span class="mi">22</span><span class="n">a5</span><span class="o">-</span><span class="mi">11</span><span class="n">df</span><span class="o">-</span><span class="n">b00e</span><span class="o">-</span><span class="n">ebd863f5f8a7</span>
@@ -126,8 +125,7 @@
            <span class="n">uuid_generate_v4</span>
 <span class="o">--------------------------------------</span>
  <span class="mi">5</span><span class="n">edbfcbb</span><span class="o">-</span><span class="mi">1</span><span class="n">df8</span><span class="o">-</span><span class="mi">48</span><span class="n">fa</span><span class="o">-</span><span class="mi">853</span><span class="n">f</span><span class="o">-</span><span class="mf">7917e4</span><span class="n">e346db</span>
-<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span></code></pre></div></p>
-
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span></code></pre></div>
 <p>主要就是uuid_generate_v1和uuid_generate_v4，当然还有uuid_generate_v3和uuid_generate_v5。其他使用可以参见PostgreSQL官方文档 <a href="http://www.postgresql.org/docs/8.3/static/uuid-ossp.html">http://www.postgresql.org/docs/8.3/static/uuid-ossp.html</a>。</p>
 
 </article>

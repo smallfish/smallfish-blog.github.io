@@ -59,7 +59,7 @@
         },
         "datePublished": "2017-12-12",
         "description": "",
-        "wordCount": 98
+        "wordCount":  98 
     }
     </script>
     
@@ -80,7 +80,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -103,36 +107,21 @@
         </span>
     </div>
     <h1 class="post-title">docker supervisord 管理多进程的一些建议</h1>
-    
-
-<p>上一次提到 supervisord 还是 2011 年 <a href="http://chenxiaoyu.org/2011/05/31/python-supervisor/">http://chenxiaoyu.org/2011/05/31/python-supervisor/</a> 这里再补充一篇，基本上是这几年在 docker 里面的一些用法和建议。在容器里面是不太建议里面跑多个进程（服务）的玩法，但是有的时候实际业务在所难免</p>
-
+    <p>上一次提到 supervisord 还是 2011 年 <a href="http://chenxiaoyu.org/2011/05/31/python-supervisor/">http://chenxiaoyu.org/2011/05/31/python-supervisor/</a> 这里再补充一篇，基本上是这几年在 docker 里面的一些用法和建议。在容器里面是不太建议里面跑多个进程（服务）的玩法，但是有的时候实际业务在所难免</p>
 <h4 id="配置使用绝对路径">配置使用绝对路径</h4>
-
 <p>启动参数 <code>-c</code> 指定配置 supervisord.conf 绝对路径。比如 Dockerfile 最后这么写：</p>
-
 <pre><code>ENTRYPOINT [&quot;/usr/bin/supervisord&quot;, &quot;-c&quot;, &quot;/etc/supervisor/supervisord.conf&quot;]
-</code></pre>
-
-<h4 id="多个启动项配置文件统一目录">多个启动项配置文件统一目录</h4>
-
+</code></pre><h4 id="多个启动项配置文件统一目录">多个启动项配置文件统一目录</h4>
 <p>如 <code>/etc/supervisor/conf.d/</code>，并且在 supervisord.conf include 这里目录</p>
-
 <pre><code>[include]
 files = /etc/supervisor/conf.d/*.conf
-</code></pre>
-
-<h4 id="每个启动项日志统一">每个启动项日志统一</h4>
-
+</code></pre><h4 id="每个启动项日志统一">每个启动项日志统一</h4>
 <p>统一放入目录，如：<code>/tmp/xxx_stdout.log</code>，并设置日志滚动大小和保留份数</p>
-
 <h4 id="supervisord-配置">supervisord 配置</h4>
-
 <ul>
 <li>需要配置 <code>nodaemon=true</code>，默认输出扔给 docker</li>
 <li>supervisorctl 使用 <code>http server</code> 方式管理，这里涉及 docker overlayfs unix sockets 一个问题，无法管理启动项，不知道现在是否解决</li>
 </ul>
-
 <pre><code>[inet_http_server]
 port=127.0.0.1:9001
 username=user
@@ -142,24 +131,15 @@ password=123
 serverurl=http://127.0.0.1:9001
 username=user
 password=123
-</code></pre>
-
-<p>缺点就是多监听本地一个端口，并注意不能和应用端口冲突</p>
-
+</code></pre><p>缺点就是多监听本地一个端口，并注意不能和应用端口冲突</p>
 <h4 id="一次性程序">一次性程序</h4>
-
 <p>比如要执行初始化，可以：</p>
-
 <pre><code>[program:xxx]
 command=sh /xxx.sh
 startretries=0
 autorestart=false
-</code></pre>
-
-<h4 id="传递环境变量">传递环境变量</h4>
-
+</code></pre><h4 id="传递环境变量">传递环境变量</h4>
 <p>针对非 root 用户启动，并且需要读取容器启动时候环境变量（env）传递，新写 ENTRYPOINT 脚本中获取环境变量，写入文件，最后再运行 supervisord</p>
-
 <pre><code>$ cat Dockerfile
 # ...
 ENTRYPOINT [&quot;/entrypoint.sh&quot;]
@@ -171,12 +151,8 @@ $ cat /entrypoint.sh
 # ...
 
 /usr/bin/supervisord -c xx.conf
-</code></pre>
-
-<h4 id="重启或者重加载配置">重启或者重加载配置</h4>
-
+</code></pre><h4 id="重启或者重加载配置">重启或者重加载配置</h4>
 <p>在容器内 <code>kill -HUP 1</code> 即可</p>
-
 <p>-EOF-</p>
 
 </article>

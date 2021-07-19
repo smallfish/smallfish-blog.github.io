@@ -57,7 +57,7 @@
         },
         "datePublished": "2011-02-19",
         "description": "",
-        "wordCount": 396
+        "wordCount":  395 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,33 +99,23 @@
     </div>
     <h1 class="post-title">PostgreSQL Key-Value 数据类型 hstore 使用教程</h1>
     <p>现在满地都是KV数据库的文字，PostgreSQL 也有类似的结构。不过是通过其强大的扩展方式实现的。</p>
-
 <p>官网文档请参考：<a href="http://www.postgresql.org/docs/current/static/hstore.html">http://www.postgresql.org/docs/current/static/hstore.html</a></p>
-
 <p>本文测试环境在 Mac OS 下，Pg采用源码编译。</p>
-
 <p>编译 hstore 扩展</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mac</span><span class="p">:</span><span class="o">~</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">cd</span> <span class="n">Downloads</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="mf">9.0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">hstore</span><span class="o">/</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mac</span><span class="p">:</span><span class="o">~</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">cd</span> <span class="n">Downloads</span><span class="o">/</span><span class="n">postgresql</span><span class="o">-</span><span class="mf">9.0.1</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">hstore</span><span class="o">/</span>
 <span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">make</span>
-<span class="o">...</span> <span class="err">一堆编译信息</span>
+<span class="o">...</span> <span class="n">一堆编译信息</span>
 <span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span></code></pre></div>
-
 <p>导入到数据库中，注意必须以 postgres 用户，如果需要装入到指定数据库，请指明。这里采用默认数据库。</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">ls</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span>
 <span class="n">hstore</span><span class="o">.</span><span class="n">sql</span>		<span class="n">uninstall_hstore</span><span class="o">.</span><span class="n">sql</span>
 <span class="n">mac</span><span class="p">:</span><span class="n">hstore</span> <span class="n">smallfish</span><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">hstore</span><span class="o">.</span><span class="n">sql</span>
-<span class="o">...</span> <span class="err">一堆导入命令</span></code></pre></div>
-
+<span class="o">...</span> <span class="n">一堆导入命令</span></code></pre></div>
 <p>进入数据库，建一个测试表</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># CREATE TABLE testhstore (id SERIAL, value hstore);</span>
-<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">will</span> <span class="n">create</span> <span class="n">implicit</span> <span class="n">sequence</span> <span class="sa"></span><span class="s2">&#34;testhstore_id_seq&#34;</span> <span class="k">for</span> <span class="n">serial</span> <span class="n">column</span> <span class="sa"></span><span class="s2">&#34;testhstore.id&#34;</span>
-<span class="n">CREATE</span> <span class="n">TABLE</span></code></pre></div></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># CREATE TABLE testhstore (id SERIAL, value hstore);</span>
+<span class="n">NOTICE</span><span class="p">:</span>  <span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">will</span> <span class="n">create</span> <span class="n">implicit</span> <span class="n">sequence</span> <span class="s2">&#34;testhstore_id_seq&#34;</span> <span class="k">for</span> <span class="n">serial</span> <span class="n">column</span> <span class="s2">&#34;testhstore.id&#34;</span>
+<span class="n">CREATE</span> <span class="n">TABLE</span></code></pre></div>
 <p>查看下表结构</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># \d</span>
                 <span class="n">List</span> <span class="n">of</span> <span class="n">relations</span>
  <span class="n">Schema</span> <span class="o">|</span>       <span class="n">Name</span>        <span class="o">|</span>   <span class="n">Type</span>   <span class="o">|</span>  <span class="n">Owner</span>
@@ -131,54 +125,46 @@
 <span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># \d testhstore;</span>
-                         <span class="n">Table</span> <span class="sa"></span><span class="s2">&#34;public.testhstore&#34;</span>
+                         <span class="n">Table</span> <span class="s2">&#34;public.testhstore&#34;</span>
  <span class="n">Column</span> <span class="o">|</span>  <span class="n">Type</span>   <span class="o">|</span>                        <span class="n">Modifiers</span>
 <span class="o">--------+---------+---------------------------------------------------------</span>
- <span class="nb">id</span>     <span class="o">|</span> <span class="n">integer</span> <span class="o">|</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">default</span> <span class="n">nextval</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;testhstore_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+ <span class="nb">id</span>     <span class="o">|</span> <span class="n">integer</span> <span class="o">|</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;testhstore_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
  <span class="n">value</span>  <span class="o">|</span> <span class="n">hstore</span>  <span class="o">|</span></code></pre></div>
-
 <p>尝试下简单 hstore类型</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># select &#39;a=&gt;1, b=&gt;2&#39;::hstore;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># select &#39;a=&gt;1, b=&gt;2&#39;::hstore;</span>
        <span class="n">hstore</span>
 <span class="o">--------------------</span>
- <span class="sa"></span><span class="s2">&#34;a&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;b&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;2&#34;</span>
+ <span class="s2">&#34;a&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="s2">&#34;b&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;2&#34;</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># select &#39;a=&gt;1, b=&gt;a&#39;::hstore;</span>
        <span class="n">hstore</span>
 <span class="o">--------------------</span>
- <span class="sa"></span><span class="s2">&#34;a&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;b&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;a&#34;</span>
-<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span></code></pre></div></p>
-
+ <span class="s2">&#34;a&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="s2">&#34;b&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;a&#34;</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span></code></pre></div>
 <p>写几条测试数据先</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;smallfish, age=&gt;29&#39;::hstore);</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;smallfish, age=&gt;29&#39;::hstore);</span>
 <span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span>
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
  <span class="nb">id</span> <span class="o">|</span>              <span class="n">value</span>
 <span class="o">----+----------------------------------</span>
-  <span class="mi">1</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;smallfish&#34;</span>
 <span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;nnfish, age=&gt;20&#39;::hstore);</span>
 <span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span>
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># INSERT INTO testhstore (value) VALUES (&#39;name=&gt;aaa, age=&gt;30, addr=&gt;China&#39;::hstore);</span>
-<span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span></code></pre></div></p>
-
+<span class="n">INSERT</span> <span class="mi">0</span> <span class="mi">1</span></code></pre></div>
 <p>查看下所有数据</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
  <span class="nb">id</span> <span class="o">|</span>                    <span class="n">value</span>
 <span class="o">----+---------------------------------------------</span>
-  <span class="mi">1</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
-  <span class="mi">2</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;20&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;nnfish&#34;</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;China&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;aaa&#34;</span>
-<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div></p>
-
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;smallfish&#34;</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;20&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;nnfish&#34;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;China&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;aaa&#34;</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div>
 <p>查询列里面的指定 key</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT id, value-&gt;&#39;name&#39; AS name FROM testhstore;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT id, value-&gt;&#39;name&#39; AS name FROM testhstore;</span>
  <span class="nb">id</span> <span class="o">|</span>   <span class="n">name</span>
 <span class="o">----+-----------</span>
   <span class="mi">1</span> <span class="o">|</span> <span class="n">smallfish</span>
@@ -192,50 +178,43 @@
   <span class="mi">1</span> <span class="o">|</span> <span class="n">smallfish</span> <span class="o">|</span> <span class="mi">29</span>
   <span class="mi">2</span> <span class="o">|</span> <span class="n">nnfish</span>    <span class="o">|</span> <span class="mi">20</span>
   <span class="mi">3</span> <span class="o">|</span> <span class="n">aaa</span>       <span class="o">|</span> <span class="mi">30</span>
-<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div></p>
-
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div>
 <p>修改列某 key 值</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># UPDATE testhstore SET value=value||(&#39;addr=&gt;Shanghai&#39;) WHERE id = 2;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># UPDATE testhstore SET value=value||(&#39;addr=&gt;Shanghai&#39;) WHERE id = 2;</span>
 <span class="n">UPDATE</span> <span class="mi">1</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
  <span class="nb">id</span> <span class="o">|</span>                       <span class="n">value</span>
 <span class="o">----+---------------------------------------------------</span>
-  <span class="mi">1</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;China&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;aaa&#34;</span>
-  <span class="mi">2</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;20&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;Shanghai&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;nnfish&#34;</span>
-<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div></p>
-
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;smallfish&#34;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;China&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;aaa&#34;</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;20&#34;</span><span class="p">,</span> <span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;Shanghai&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;nnfish&#34;</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div>
 <p>删除列里某 key</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># UPDATE testhstore SET value=delete(value, &#39;addr&#39;) WHERE id = 3;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># UPDATE testhstore SET value=delete(value, &#39;addr&#39;) WHERE id = 3;</span>
 <span class="n">UPDATE</span> <span class="mi">1</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore;</span>
  <span class="nb">id</span> <span class="o">|</span>                       <span class="n">value</span>
 <span class="o">----+---------------------------------------------------</span>
-  <span class="mi">1</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
-  <span class="mi">2</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;20&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;Shanghai&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;nnfish&#34;</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;aaa&#34;</span>
-<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div></p>
-
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;smallfish&#34;</span>
+  <span class="mi">2</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;20&#34;</span><span class="p">,</span> <span class="s2">&#34;addr&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;Shanghai&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;nnfish&#34;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;aaa&#34;</span>
+<span class="p">(</span><span class="mi">3</span> <span class="n">rows</span><span class="p">)</span></code></pre></div>
 <p>按条件查询列里某 key ，注意要数据类型，CAST 强转。默认都是字符串的值。</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore WHERE (value-&gt;&#39;age&#39;)::INT &gt; 20;</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore WHERE (value-&gt;&#39;age&#39;)::INT &gt; 20;</span>
  <span class="nb">id</span> <span class="o">|</span>              <span class="n">value</span>
 <span class="o">----+----------------------------------</span>
-  <span class="mi">1</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;aaa&#34;</span>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;smallfish&#34;</span>
+  <span class="mi">3</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;30&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;aaa&#34;</span>
 <span class="p">(</span><span class="mi">2</span> <span class="n">rows</span><span class="p">)</span>
 
 <span class="n">postgres</span><span class="o">=</span><span class="c1"># SELECT * FROM testhstore WHERE value-&gt;&#39;name&#39; = &#39;smallfish&#39;;</span>
  <span class="nb">id</span> <span class="o">|</span>              <span class="n">value</span>
 <span class="o">----+----------------------------------</span>
-  <span class="mi">1</span> <span class="o">|</span> <span class="sa"></span><span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
-<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span></code></pre></div></p>
-
-<p>&nbsp;</p>
+  <span class="mi">1</span> <span class="o">|</span> <span class="s2">&#34;age&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;29&#34;</span><span class="p">,</span> <span class="s2">&#34;name&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;smallfish&#34;</span>
+<span class="p">(</span><span class="mi">1</span> <span class="n">row</span><span class="p">)</span></code></pre></div>
+<p> </p>
 
 </article>
 

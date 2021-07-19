@@ -57,7 +57,7 @@
         },
         "datePublished": "2014-07-25",
         "description": "",
-        "wordCount": 203
+        "wordCount":  47 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,105 +99,81 @@
     </div>
     <h1 class="post-title">PostgreSQL JSON 数据类型</h1>
     <p>从PostgreSQL 9.3版本开始，JSON已经成为内置数据类型，“一等公民”啦。</p>
-
 <p>还在羡慕什么文档数据库或者BSON么，赶紧玩玩吧。另外9.4版本，提供JSONB（Binary），提供更多JSON函数和索引支持。</p>
-
 <p>刚好手头有一个需求，是涉及到数组类型的，懒的插入多条数据库记录，想起了ARRAY数据类型。</p>
-
 <p>常用的读取操作符目前大概有三类：<code>-&gt;</code>、<code>-&gt;&gt;</code>和<code>#&gt;</code>。还是直接看SQL查询的例子吧。</p>
-
 <p>先看<code>-&gt;</code>类：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;[1,2,3]&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;</span><span class="mi">2</span><span class="p">;</span>
- <span class="o">?</span><span class="k">column</span><span class="o">?</span>
-<span class="c1">----------
-</span><span class="c1"></span> <span class="mi">3</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
-
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&#34;a&#34;:1,&#34;b&#34;:2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;</span><span class="s1">&#39;b&#39;</span><span class="p">;</span>
- <span class="o">?</span><span class="k">column</span><span class="o">?</span>
-<span class="c1">----------
-</span><span class="c1"></span> <span class="mi">2</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;[1,2,3]&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;</span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="o">?</span><span class="k">column</span><span class="o">?</span><span class="w">
+</span><span class="w"></span><span class="c1">----------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;{&#34;a&#34;:1,&#34;b&#34;:2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;</span><span class="s1">&#39;b&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="o">?</span><span class="k">column</span><span class="o">?</span><span class="w">
+</span><span class="w"></span><span class="c1">----------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span></code></pre></div>
 <p>再来<code>-&gt;&gt;</code>例子：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;[1,2,3]&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;&gt;</span><span class="mi">2</span><span class="p">;</span>
- <span class="o">?</span><span class="k">column</span><span class="o">?</span>
-<span class="c1">----------
-</span><span class="c1"></span> <span class="mi">3</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
-
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&#34;a&#34;:1,&#34;b&#34;:2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;b&#39;</span><span class="p">;</span>
- <span class="o">?</span><span class="k">column</span><span class="o">?</span>
-<span class="c1">----------
-</span><span class="c1"></span> <span class="mi">2</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;[1,2,3]&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;&gt;</span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="o">?</span><span class="k">column</span><span class="o">?</span><span class="w">
+</span><span class="w"></span><span class="c1">----------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;{&#34;a&#34;:1,&#34;b&#34;:2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;b&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="o">?</span><span class="k">column</span><span class="o">?</span><span class="w">
+</span><span class="w"></span><span class="c1">----------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span></code></pre></div>
 <p>有没有发现其实<code>-&gt;</code>和<code>-&gt;&gt;</code>出来的结果肉眼看起来是一样的？区别在于后者是返回text。</p>
-
 <p>上面两个操作符实现了读取，其实大部分时候我们的JSON不是这么简单，会内嵌各种数组和哈希，这么读下去会死人的吧。当然，有一种类似path的读取，看例子吧：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&#34;a&#34;:[1,2,3],&#34;b&#34;:[4,5,6]}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">#&gt;</span><span class="s1">&#39;{a,2}&#39;</span><span class="p">;</span>
- <span class="o">?</span><span class="k">column</span><span class="o">?</span>
-<span class="c1">----------
-</span><span class="c1"></span> <span class="mi">3</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
-
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="s1">&#39;{&#34;a&#34;:[1,2,3],&#34;b&#34;:[4,5,6]}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">#&gt;&gt;</span><span class="s1">&#39;{a,2}&#39;</span><span class="p">;</span>
- <span class="o">?</span><span class="k">column</span><span class="o">?</span>
-<span class="c1">----------
-</span><span class="c1"></span> <span class="mi">3</span>
-<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;{&#34;a&#34;:[1,2,3],&#34;b&#34;:[4,5,6]}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">#&gt;</span><span class="s1">&#39;{a,2}&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="o">?</span><span class="k">column</span><span class="o">?</span><span class="w">
+</span><span class="w"></span><span class="c1">----------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;{&#34;a&#34;:[1,2,3],&#34;b&#34;:[4,5,6]}&#39;</span><span class="p">::</span><span class="n">json</span><span class="o">#&gt;&gt;</span><span class="s1">&#39;{a,2}&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="o">?</span><span class="k">column</span><span class="o">?</span><span class="w">
+</span><span class="w"></span><span class="c1">----------
+</span><span class="c1"></span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="p">)</span></code></pre></div>
 <p>当然里面可以嵌套很多，比如<code>{a,2,b,3}</code>等等。下面再来点表的例子：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">testjson</span><span class="p">(</span><span class="n">id</span> <span class="nb">serial</span><span class="p">,</span> <span class="k">data</span> <span class="n">json</span><span class="p">);</span>
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: 1, &#34;b&#34;: 2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span>
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: 3, &#34;b&#34;: 4, &#34;c&#34;: 5}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span>
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: 6, &#34;c&#34;: 7}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">testjson</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">serial</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="n">json</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">testjson</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: 1, &#34;b&#34;: 2}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">testjson</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: 3, &#34;b&#34;: 4, &#34;c&#34;: 5}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">testjson</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: 6, &#34;c&#34;: 7}&#39;</span><span class="p">::</span><span class="n">json</span><span class="p">);</span></code></pre></div>
 <p>插入数据是不是很熟悉，基本和普通使用JSON一致，初窥下<code>select</code>结果：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">testjson</span><span class="p">;</span>
- <span class="n">id</span> <span class="o">|</span>           <span class="k">data</span>
-<span class="c1">----+--------------------------
-</span><span class="c1"></span>  <span class="mi">1</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">&#34;b&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="err">}</span>
-  <span class="mi">2</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">&#34;b&#34;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="ss">&#34;c&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="err">}</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="ss">&#34;c&#34;</span><span class="p">:</span> <span class="mi">7</span><span class="err">}</span>
-<span class="p">(</span><span class="mi">3</span> <span class="k">rows</span><span class="p">)</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">testjson</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">|</span><span class="w">           </span><span class="k">data</span><span class="w">
+</span><span class="w"></span><span class="c1">----+--------------------------
+</span><span class="c1"></span><span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;b&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="err">}</span><span class="w">
+</span><span class="w">  </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;b&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;c&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="err">}</span><span class="w">
+</span><span class="w">  </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;c&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="err">}</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">rows</span><span class="p">)</span></code></pre></div>
 <p>很眼熟，<code>where</code>条件可以这么用：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">testjson</span> <span class="k">where</span> <span class="p">(</span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;a&#39;</span><span class="p">)::</span><span class="nb">int</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">;</span>
- <span class="n">id</span> <span class="o">|</span>           <span class="k">data</span>
-<span class="c1">----+--------------------------
-</span><span class="c1"></span>  <span class="mi">2</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">&#34;b&#34;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="ss">&#34;c&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="err">}</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="ss">&#34;c&#34;</span><span class="p">:</span> <span class="mi">7</span><span class="err">}</span>
-<span class="p">(</span><span class="mi">2</span> <span class="k">rows</span><span class="p">)</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">testjson</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;a&#39;</span><span class="p">)::</span><span class="nb">int</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">|</span><span class="w">           </span><span class="k">data</span><span class="w">
+</span><span class="w"></span><span class="c1">----+--------------------------
+</span><span class="c1"></span><span class="w">  </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;b&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;c&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="err">}</span><span class="w">
+</span><span class="w">  </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;c&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="err">}</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="k">rows</span><span class="p">)</span></code></pre></div>
 <p>注意这里是<code>-&gt;&gt;</code>转换成text然后在<code>::int</code>进行比较。</p>
-
 <p>不过这里有个坑，不知道怎么解决，比如：</p>
-
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">testjson</span> <span class="p">(</span><span class="k">data</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: &#34;smallfish&#34;}&#39;</span><span class="p">);</span>
-<span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">testjson</span><span class="p">;</span>
- <span class="n">id</span> <span class="o">|</span>           <span class="k">data</span>
-<span class="c1">----+--------------------------
-</span><span class="c1"></span>  <span class="mi">1</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">&#34;b&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="err">}</span>
-  <span class="mi">2</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">&#34;b&#34;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="ss">&#34;c&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="err">}</span>
-  <span class="mi">3</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="ss">&#34;c&#34;</span><span class="p">:</span> <span class="mi">7</span><span class="err">}</span>
-  <span class="mi">5</span> <span class="o">|</span> <span class="err">{</span><span class="ss">&#34;a&#34;</span><span class="p">:</span> <span class="ss">&#34;smallfish&#34;</span><span class="err">}</span>
-<span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span></code></pre></div>
-
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">testjson</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;{&#34;a&#34;: &#34;smallfish&#34;}&#39;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="n">postgres</span><span class="o">=#</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">testjson</span><span class="p">;</span><span class="w">
+</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">|</span><span class="w">           </span><span class="k">data</span><span class="w">
+</span><span class="w"></span><span class="c1">----+--------------------------
+</span><span class="c1"></span><span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;b&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="err">}</span><span class="w">
+</span><span class="w">  </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;b&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;c&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="err">}</span><span class="w">
+</span><span class="w">  </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;c&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="err">}</span><span class="w">
+</span><span class="w">  </span><span class="mi">5</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;a&#34;</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;smallfish&#34;</span><span class="err">}</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="k">rows</span><span class="p">)</span></code></pre></div>
 <p>这个时候上面的<code>::int&gt;1</code>这样就报错了，因为最后一行<code>a</code>为字符串。</p>
-
 <p>mongodb这个问题解决的挺好，回头搜搜在Pg里怎么搞。</p>
-
 <p>话说，Pg里支持的JSON是不是和之前提到的<a href="http://chenxiaoyu.org/2011/02/19/postgresql-key-value-hstore.html">hstore</a>类型有的一相似的地方？</p>
-
 <p>两者优劣回头我再贴文吧。</p>
-
 <p>官方文档：<a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">http://www.postgresql.org/docs/9.3/static/functions-json.html</a></p>
 
 </article>

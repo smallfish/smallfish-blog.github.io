@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2012s on smallfish&#39;s blog</title>
@@ -6,11 +6,7 @@
     <description>Recent content in 2012s on smallfish&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 19 Dec 2012 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://chenxiaoyu.org/2012/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 19 Dec 2012 00:00:00 +0000</lastBuildDate><atom:link href="http://chenxiaoyu.org/2012/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RabbitMQ trace 日志调试</title>
       <link>http://chenxiaoyu.org/2012/12/19/rabbitmq-trace/</link>
@@ -50,11 +46,11 @@ $ go test -v === RUN TestAdd --- PASS: TestAdd (0.00 seconds) foo_test.go:9: tes
       
       <guid>http://chenxiaoyu.org/2012/11/25/lua-resty-beanstalkd/</guid>
       <description>本文涉及几个名词：
- ngx_lua http://wiki.nginx.org/HttpLuaModule
+  ngx_lua http://wiki.nginx.org/HttpLuaModule
 Embed the power of Lua into Nginx 摘自官方描述
- beanstalkd http://kr.github.com/beanstalkd/
+  beanstalkd http://kr.github.com/beanstalkd/
 一个轻量级的队列系统，实现了生产者消费者模型。协议类似 Memcached，相当简单易用。
- lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
+  lua-resty-beanstalkd https://github.com/smallfish/lua-resty-beanstalkd
 基于 ngx_lua cosocket 模块封装，目前已支持 beanstalkd 协议有：put/reserve/delete/use/watch，其他协议持续更新中。类似的模块有：lua-resty-redis/memcached 等。
   下面是读写的示例：
  生产者（发布消息），主要那应用了两个协议：use/put，代码如下：  location /t { content_by_lua &amp;#39; local beanstalkd = require &amp;#34;resty.beanstalkd&amp;#34; local bean, err = beanstalkd:new() local ok, err = bean:connect(&amp;#34;127.0.0.1&amp;#34;, 11300) if not ok then ngx.say(&amp;#34;1: failed to connect: &amp;#34;, err) return end local ok, err = bean:use(&amp;#34;default&amp;#34;) if not ok then ngx.</description>
@@ -119,8 +115,7 @@ GOPATH=/home/user/ext:/home/user/mygo Windows 系统请注意分隔符，是分�
 常用配置片段如下：
 gzip on; gzip_comp_level 2; # 压缩比例，比例越大，压缩时间越长。默认是1 gzip_types text/css text/javascript; # 哪些文件可以被压缩 gzip_disable &amp;#34;MSIE [1-6]\.&amp;#34;; # 无视IE6这个笨蛋~ 其中 gzip_types 选项默认只压缩 text/html，源码见：
 src/http/modules/ngx_http_gzip_filter_module.c 行152： &amp;amp;ngx_http_html_default_types[0] src/http/ngx_http.c 行77： ngx_str_t ngx_http_html_default_types[] = { ngx_string(&amp;#34;text/html&amp;#34;), 常用的静态 type 有，看自己需要压缩的情况而定：
-text/html text/plain text/css application/x-javascript text/javascript application/xml
-OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
+text/html text/plain text/css application/x-javascript text/javascript application/xml OK，到这里基本服务端已经配置完毕，Nginx 只需要 reload 一下即可。
 下面来测试一下，用 curl 来如何测试服务端已经开启 gzip（测试条件是默认gzip_types，即只压缩 text.html ，其他 type 未压缩）：
 查看是否开启gzip，需要客户端加入：&amp;#34;Accept-Encoding: gzip, deflate&amp;#34; 头信息。 $ curl -I -H &amp;#34;Accept-Encoding: gzip, deflate&amp;#34; &amp;#34;http://localhost/tag.php&amp;#34; HTTP/1.1 200 OK Server: nginx Date: Thu, 08 Mar 2012 07:23:46 GMT Content-Type: text/html Connection: close Content-Encoding: gzip $ curl -I -H &amp;#34;Accept-Encoding: gzip, deflate&amp;#34; &amp;#34;http://localhost/style.</description>
     </item>

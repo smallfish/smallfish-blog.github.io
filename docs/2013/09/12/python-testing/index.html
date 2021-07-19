@@ -57,7 +57,7 @@
         },
         "datePublished": "2013-09-12",
         "description": "",
-        "wordCount": 272
+        "wordCount":  272 
     }
     </script>
     
@@ -78,7 +78,11 @@
 	<a href="http://chenxiaoyu.org/index.xml" rel="me"><i class="fa fa-rss-square fa-2x"></i></a> 
 </div>  
 
-            Engineer@Alibaba, Alipay
+            Engineer #golang #rust
+
+<li>2021~ Tencent</li>
+<li>2019~2021 Didi</li>
+<li>2010~2019 Alibaba, Alipay</li>
 
         </header>
 
@@ -95,36 +99,28 @@
     </div>
     <h1 class="post-title">Python Testing</h1>
     <p>代码写多了越发觉得测试的重要性，之前一直喜欢“目测”的做法已经不值得推荐了。当然，这只是一个玩笑。</p>
-
 <p>在Python代码里测试大概有这么几种：<a href="http://docs.python.org/2/library/doctest.html">doctest</a>、<a href="http://docs.python.org/2/library/unittest.html">unittest</a>和<a href="http://nose.readthedocs.org/en/latest/">nose</a>（第三方工具）。</p>
-
 <p>个人推荐nose，简单的话doctest也已经足够了。</p>
-
 <p>首先：</p>
-
 <ul>
 <li>代码要易于测试，代码写完对应的测试应该配套跟上。</li>
 <li>测试要简单，轻便。</li>
 </ul>
-
 <p>先说最简单的doctest吧，顾名思义，doctest就是在文档（docstring）里完成测试。看以下例子（/tmp/1.py）：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="sa"></span><span class="s2">&#34;&#34;&#34;
+    <span class="s2">&#34;&#34;&#34;
 </span><span class="s2">    &gt;&gt;&gt; add(10, 20)
 </span><span class="s2">    30
 </span><span class="s2">    &#34;&#34;&#34;</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">doctest</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span></code></pre></div>
-
-<p>可以看出doctest是不是很简单？是不是想起了普通解释器（&gt;&gt;&gt;），运行一下测试（注意-v选项）：</p>
-
+<p>可以看出doctest是不是很简单？是不是想起了普通解释器（&raquo;&gt;），运行一下测试（注意-v选项）：</p>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">smallfish@debian:~$ python /tmp/1.py -v
 Trying:
-    add<span class="o">(</span><span class="m">10</span>, <span class="m">20</span><span class="o">)</span>
+    add<span class="o">(</span>10, 20<span class="o">)</span>
 Expecting:
     <span class="m">30</span>
 ok
@@ -135,25 +131,18 @@ ok
 <span class="m">1</span> tests in <span class="m">2</span> items.
 <span class="m">1</span> passed and <span class="m">0</span> failed.
 Test passed.</code></pre></div>
-
 <p>作为简单的模块或者工具，main里实现测试已经足够了。但是稍大一些工程或应用，doctest太多的话，看上去会觉得有点臃肿。</p>
-
 <p>下面介绍下nose，偷偷的说下，nose是支持doctest、unittest测试的，所以嘛。先安装一下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">smallfish@debian:~$ pip install nose</code></pre></div>
-
 <p>继续跑一下上面的例子：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">smallfish@debian:~$ nosetests /tmp/1.py --with-doctest -v
-Doctest: <span class="m">1</span>.add ... ok
+Doctest: 1.add ... ok
 
 ----------------------------------------------------------------------
-Ran <span class="m">1</span> <span class="nb">test</span> in <span class="m">0</span>.006s
+Ran <span class="m">1</span> <span class="nb">test</span> in 0.006s
 
 OK</code></pre></div>
-
 <p>好吧，写点常见的例子，目录结构如下（foo模块以及foo的测试代码）：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">smallfish@debian:~$ tree /tmp/foomodule/
 /tmp/foomodule/
 <span class="p">|</span>-- foo
@@ -163,9 +152,7 @@ OK</code></pre></div>
 <span class="sb">`</span>-- tests
     <span class="p">|</span>-- test_a.py
     <span class="sb">`</span>-- test_b.py</code></pre></div>
-
 <p>模块代码如下：</p>
-
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># /tmp/foomodule/foo/a.py </span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
@@ -185,17 +172,15 @@ OK</code></pre></div>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="nb">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">disconnect_all</span><span class="p">()</span></code></pre></div>
-
 <p>对应的测试代码：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># /tmp/foomodule/tests/test_a.py </span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># /tmp/foomodule/tests/test_a.py </span>
 <span class="kn">from</span> <span class="nn">foo.a</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">double</span>
 
 <span class="k">def</span> <span class="nf">test_add</span><span class="p">():</span>
@@ -212,30 +197,28 @@ OK</code></pre></div>
 <span class="k">class</span> <span class="nc">TestCache</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;127.0.0.1:11211&#34;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">key</span>   <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;name&#34;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;smallfish&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="p">(</span><span class="s2">&#34;127.0.0.1:11211&#34;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span>   <span class="o">=</span> <span class="s2">&#34;name&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&#34;smallfish&#34;</span>
 
     <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">test_00_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="bp">None</span>
+        <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">test_01_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="bp">True</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="kc">True</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">test_02_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="bp">True</span></code></pre></div></p>
-
+        <span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="kc">True</span></code></pre></div>
 <p>先不解释，跑一跑（-v -s选项，针对当前路径下tests目录测试）：</p>
-
-<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">smallfish@debian:/tmp/foomodule$ nosetests -s -v
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">smallfish@debian:/tmp/foomodule$ nosetests -s -v
 test_a.test_add ... ok
 test_a.test_double ... ok
 test_b.TestCache.test_00_get ... ok
@@ -243,12 +226,10 @@ test_b.TestCache.test_01_set ... ok
 test_b.TestCache.test_02_delete ... ok
 
 ----------------------------------------------------------------------
-Ran <span class="m">5</span> tests in <span class="m">0</span>.024s
+Ran <span class="m">5</span> tests in 0.024s
 
-OK</code></pre></div></p>
-
+OK</code></pre></div>
 <p>简单吧？nose默认是当前目录下tests目录进行测试，默认规则：文件（含有test），函数（test_开头），类（Test开头）。</p>
-
 <p>nose完整文档请参考：<a href="http://nose.readthedocs.org/en/latest/">http://nose.readthedocs.org/en/latest/</a></p>
 
 </article>
